@@ -3,10 +3,8 @@ import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
 export const CreationContainer = ({ children }: { children: ReactNode }) => (
-  <main className="flex h-screen items-center justify-center">
-    <div className="flex h-full flex-col-reverse overflow-scroll max-w-2xl mx-auto px-6 py-6 lg:px-24 ">
-      {children}
-    </div>
+  <main className="flex h-screen flex-col-reverse overflow-scroll max-w-2xl mx-auto px-6 py-6 lg:px-24 ">
+    {children}
   </main>
 );
 

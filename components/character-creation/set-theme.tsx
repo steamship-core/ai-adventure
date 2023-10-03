@@ -17,8 +17,8 @@ const CharacterCreationTheme = ({
   const { currentText, isFinished } = useTypeWriter({
     text: `Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.`,
   });
-  const [didFocus, setDidFocus] = useState(false);
   const [value, setValue] = useState("");
+  const [didFocus, setDidFocus] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
