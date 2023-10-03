@@ -9,6 +9,11 @@ const pixel = Pixelify_Sans({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 export default function RootLayout({
@@ -19,10 +24,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
         <body className={pixel.className}>
           <ThemeProvider
             attribute="class"
