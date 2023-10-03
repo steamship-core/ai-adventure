@@ -10,7 +10,7 @@ export default function Home() {
 
       <TypographyH1>AI Adventure</TypographyH1>
       <Button asChild>
-        <Link href="/game">Get Started</Link>
+        <Link href="/play">Get Started</Link>
       </Button>
     </main>
   );

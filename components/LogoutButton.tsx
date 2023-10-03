@@ -8,7 +8,7 @@ export default function LogoutButton() {
   const router = useRouter();
   return (
     <SignOutButton signOutCallback={() => router.push("/")}>
-      <Button>Logout</Button>
+      <Button variant="link">Logout</Button>
     </SignOutButton>
   );
 }
