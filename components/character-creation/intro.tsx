@@ -1,13 +1,8 @@
 import GAME_INFO from "@/lib/game-info";
-import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
-import {
-  CreationActions,
-  CreationContainer,
-  CreationContent,
-  useTypeWriter,
-} from "./components";
+import { CreationActions, CreationContent } from "./utils/components";
+import { useTypeWriter } from "./utils/use-typewriter";
 
 const CharacterCreationIntro = ({
   onContinue,
@@ -17,14 +12,14 @@ const CharacterCreationIntro = ({
   isCurrent: boolean;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text: `${GAME_INFO.name} ${GAME_INFO.description} To get started, answer a few questions about your character.`,
+    text: `${GAME_INFO.description} Let's get started by creating your character.`,
   });
 
   return (
     <CreationContent isCurrent={isCurrent}>
       <TypographyP>{currentText}</TypographyP>
       <CreationActions isFinished={isFinished}>
-        <Button onClick={onContinue} className="w-full">
+        <Button onClick={onContinue} disabled={!isFinished} className="w-full">
           Start
         </Button>
       </CreationActions>

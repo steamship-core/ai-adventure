@@ -10,7 +10,7 @@ import CharacterCreationTheme from "./set-theme";
 import CharacterCreationName from "./set-name";
 import CharacterCreationAppearance from "./set-appearance";
 import { useState } from "react";
-import { CreationContainer } from "./components";
+import { CreationContainer } from "./utils/components";
 import CharacterCreationBackground from "./set-background";
 import CharacterCreationComplete from "./complete-character";
 
@@ -55,6 +55,13 @@ export const characterCreationMachine = createMachine({
   },
 });
 
+export type CharacterConfig = {
+  name: string;
+  theme: string;
+  background: string;
+  appearance: string;
+};
+
 export default function CharacterCreation() {
   const [activeStep, setActiveStep] = useState(0);
   const [showTheme, setShowTheme] = useState(false);
@@ -63,7 +70,7 @@ export default function CharacterCreation() {
   const [showBackground, setShowBackground] = useState(false);
   const [showFinalStep, setShowFinalStep] = useState(false);
 
-  const [configuration, setConfiguration] = useState({
+  const [configuration, setConfiguration] = useState<CharacterConfig>({
     name: "",
     theme: "",
     appearance: "",

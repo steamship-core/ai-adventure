@@ -8,13 +8,18 @@ import {
   CreationActions,
   CreationContainer,
   CreationContent,
-  useTypeWriter,
-} from "./components";
+} from "./utils/components";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { CharacterConfig } from ".";
+import { useTypeWriter } from "./utils/use-typewriter";
+
+const allValuesAreSet = (config: CharacterConfig) => {
+  return Object.values(config).every((value) => value.length > 1);
+};
 
 const CharacterCreationComplete = ({
   config,
@@ -91,7 +96,9 @@ const CharacterCreationComplete = ({
       </div>
 
       <CreationActions isFinished={true}>
-        <Button className="w-full">Create Character</Button>
+        <Button disabled={!allValuesAreSet(config)} className="w-full">
+          Create Character
+        </Button>
       </CreationActions>
     </CreationContent>
   );

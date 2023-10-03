@@ -1,10 +1,10 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import type { Metadata } from "next";
-import { AR_One_Sans } from "next/font/google";
+import { Pixelify_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const oneSans = AR_One_Sans({ subsets: ["latin"] });
+const pixel = Pixelify_Sans({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "AI Adventure",
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={oneSans.className}>
+        <body className={pixel.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

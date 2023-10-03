@@ -1,16 +1,9 @@
-import GAME_INFO from "@/lib/game-info";
-import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
-import { TypographyMuted } from "../ui/typography/TypographyMuted";
-import {
-  CreationActions,
-  CreationContainer,
-  CreationContent,
-  useTypeWriter,
-} from "./components";
-import { useState } from "react";
+import { CreationActions, CreationContent } from "./utils/components";
+import { useEffect, useRef, useState } from "react";
+import { useTypeWriter } from "./utils/use-typewriter";
 
 const CharacterCreationTheme = ({
   onContinue,
@@ -24,27 +17,43 @@ const CharacterCreationTheme = ({
   const { currentText, isFinished } = useTypeWriter({
     text: `Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.`,
   });
+  const [didFocus, setDidFocus] = useState(false);
   const [value, setValue] = useState("");
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isFinished && !didFocus) {
+      ref.current?.focus();
+      setDidFocus(true);
+    }
+  }, [didFocus, isFinished]);
+
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
       <TypographyP>{currentText}</TypographyP>
       <CreationActions isFinished={isFinished}>
-        <Input
-          className="w-full"
-          placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
-          onFocus={onFocus}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <Button
-          className="w-full"
-          onClick={(e) => {
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             onContinue(value);
           }}
+          className="flex gap-2 flex-col"
         >
-          Set Theme
-        </Button>
+          <Input
+            ref={ref}
+            className="w-full disabled:cursor-default"
+            placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
+            onFocus={onFocus}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            disabled={!isFinished}
+            autoFocus
+          />
+          <Button disabled={value.length < 1} className="w-full" type="submit">
+            Set Theme
+          </Button>
+        </form>
       </CreationActions>
     </CreationContent>
   );
