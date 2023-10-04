@@ -1,32 +1,22 @@
 import {
   QuestContainer,
   QuestContentContainer,
-  QuestNarrativeContainer,
 } from "@/components/quest/shared/components";
-import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import InventorySheet from "../inventory-sheet";
-import EndSheet from "./shared/end-sheet";
+import QuestNarrative from "./quest-narrative";
 
 export default async function Quest() {
   return (
     <QuestContainer>
-      <QuestContentContainer>
-        <div className="flex justify-between items-center border-b border-b-foreground/10 pb-4">
-          <Button asChild variant="link" className="pl-0">
-            <Link href="/play/camp">Back to Camp</Link>
-          </Button>
-          <InventorySheet buttonText="View Inventory" />
-        </div>
-        <QuestNarrativeContainer>
-          <div>I am a quest thing</div>
-        </QuestNarrativeContainer>
-        <div className="flex flex-col gap-2">
-          <Input className="w-full" />
-          <EndSheet />
-        </div>
-      </QuestContentContainer>
+      <div className="flex justify-between items-center border-b border-b-foreground/10 pb-4 basis-1/12">
+        <Button asChild variant="link" className="pl-0">
+          <Link href="/play/camp">Back to Camp</Link>
+        </Button>
+        <InventorySheet buttonText="View Inventory" />
+      </div>
+      <QuestNarrative />
     </QuestContainer>
   );
 }

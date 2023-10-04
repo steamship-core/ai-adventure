@@ -16,10 +16,10 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { AwardIcon, BadgeDollarSignIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
 
-const EndSheet = () => (
+const EndSheet = ({ isEnd }: { isEnd: boolean }) => (
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant="ghost">End your journey</Button>
+      <Button variant={isEnd ? "default" : "ghost"}>End your journey</Button>
     </SheetTrigger>
     <SheetContent
       side="bottom"
