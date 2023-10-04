@@ -1,9 +1,9 @@
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
-import { CreationActions, CreationContent } from "./utils/components";
+import { CreationActions, CreationContent } from "./shared/components";
 import { useEffect, useRef, useState } from "react";
-import { useTypeWriter } from "./utils/use-typewriter";
+import { useTypeWriter } from "./hooks/use-typewriter";
 
 const TEXT = `Choose a name for your character. This can be anything you want!`;
 

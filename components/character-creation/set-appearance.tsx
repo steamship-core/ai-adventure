@@ -1,9 +1,9 @@
 import { Button } from "../ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CreationActions, CreationContent } from "./utils/components";
+import { CreationActions, CreationContent } from "./shared/components";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
-import { useTypeWriter } from "./utils/use-typewriter";
+import { useTypeWriter } from "./hooks/use-typewriter";
 
 const TEXT = `Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!`;
 const CharacterCreationAppearance = ({

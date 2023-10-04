@@ -1,9 +1,9 @@
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
-import { CreationActions, CreationContent } from "./utils/components";
+import { CreationActions, CreationContent } from "./shared/components";
 import { useEffect, useRef, useState } from "react";
-import { useTypeWriter } from "./utils/use-typewriter";
+import { useTypeWriter } from "./hooks/use-typewriter";
 
 const TEXT = `Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.`;
 

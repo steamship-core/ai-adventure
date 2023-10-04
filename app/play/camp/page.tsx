@@ -1,3 +1,4 @@
+import InventorySheet from "@/components/inventory-sheet";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -13,7 +14,13 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import prisma from "@/lib/db";
 import { UserButton, auth } from "@clerk/nextjs";
-import { StarIcon } from "lucide-react";
+import {
+  ActivityIcon,
+  BadgeDollarSignIcon,
+  CompassIcon,
+  FootprintsIcon,
+  StarIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -48,7 +55,7 @@ export default async function CampPages() {
         className="object-cover -z-10"
       />
       <div className="h-full flex flex-col">
-        <div className="w-full flex items-center justify-end pt-6 pb-2 gap-3">
+        <div className="w-full flex items-center justify-end pt-6 pb-2 gap-3 max-w-5xl w-full mx-auto">
           <Button variant="link" size="sm" asChild>
             <Link
               target="_blank"
@@ -59,7 +66,7 @@ export default async function CampPages() {
           </Button>
           <UserButton afterSignOutUrl="/" />
         </div>
-        <div className="flex flex-col flex-grow justify-between">
+        <div className="flex flex-col flex-grow justify-between max-w-5xl w-full mx-auto">
           <ContentBox>
             <div className="flex justify-between">
               <div className="flex gap-4">
@@ -80,45 +87,34 @@ export default async function CampPages() {
                   <TypographyMuted>Explorer</TypographyMuted>
                 </div>
               </div>
-              <div className="flex flex-col items-end">
-                <TypographySmall>Energy: 100/100</TypographySmall>
-                <TypographySmall>Gold: 100</TypographySmall>
+              <div className="flex flex-col items-end gap-2">
+                <TypographySmall className="flex items-center">
+                  <ActivityIcon size={16} className="mr-2 text-indigo-400" />
+                  100/100
+                </TypographySmall>
+                <TypographySmall className="flex items-center">
+                  <BadgeDollarSignIcon
+                    size={16}
+                    className="mr-2 text-yellow-400"
+                  />
+                  100
+                </TypographySmall>
               </div>
             </div>
           </ContentBox>
           <ContentBox>
             <div className="flex flex-col gap-2">
-              <Button>Go on an adventure</Button>
-              <Button>Send on an adventure</Button>
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button>View Inventory</Button>
-                </SheetTrigger>
-                <SheetContent
-                  side="bottom"
-                  className="w-100% h-[100dvh] flex flex-col pb-0"
-                >
-                  <SheetHeader>
-                    <SheetTitle>Inventory</SheetTitle>
-                    <SheetDescription>
-                      Items you&apos;e collected on your adventures. They might
-                      just be junk, or they might be useful.
-                    </SheetDescription>
-                  </SheetHeader>
-                  <div className="flex w-full overflow-hidden">
-                    <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
-                      {[...Array(30)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-center"
-                        >
-                          <div className="border rounded-md border-foreground/20 h-12 aspect-square" />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </SheetContent>
-              </Sheet>
+              <Button asChild>
+                <Link href="/play/quest/1">
+                  <CompassIcon className="mr-2" size={16} />
+                  Go on an adventure
+                </Link>
+              </Button>
+              <Button variant="outline">
+                <FootprintsIcon className="mr-2" size={16} />
+                Send on an adventure
+              </Button>
+              <InventorySheet buttonText="View Inventory" />
             </div>
           </ContentBox>
         </div>

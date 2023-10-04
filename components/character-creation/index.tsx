@@ -10,7 +10,7 @@ import CharacterCreationTheme from "./set-theme";
 import CharacterCreationName from "./set-name";
 import CharacterCreationAppearance from "./set-appearance";
 import { useState } from "react";
-import { CreationContainer } from "./utils/components";
+import { CreationContainer } from "./shared/components";
 import CharacterCreationBackground from "./set-background";
 import CharacterCreationComplete from "./complete-character";
 
@@ -149,19 +149,5 @@ export default function CharacterCreation() {
       />
     </CreationContainer>
   );
-  // if (state.value === "start") {
-  //   return <CharacterCreationIntro onContinue={() => send("START_CREATION")} />;
-  // }
-  // if (state.value === "settingTheme") {
-  //   return <CharacterCreationTheme onContinue={() => send("SET_THEME")} />;
-  // }
-  // if (state.value === "settingName") {
-  //   return <CharacterCreationName onContinue={() => send("SET_NAME")} />;
-  // }
-  // if (state.value === "settingAppearance") {
-  //   return (
-  //     <CharacterCreationAppearance onContinue={() => send("SET_APPEARANCE")} />
-  //   );
-  // }
   return null;
 }

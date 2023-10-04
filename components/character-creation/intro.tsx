@@ -1,8 +1,8 @@
 import GAME_INFO from "@/lib/game-info";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
-import { CreationActions, CreationContent } from "./utils/components";
-import { useTypeWriter } from "./utils/use-typewriter";
+import { CreationActions, CreationContent } from "./shared/components";
+import { useTypeWriter } from "./hooks/use-typewriter";
 
 const CharacterCreationIntro = ({
   onContinue,

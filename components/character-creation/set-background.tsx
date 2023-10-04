@@ -1,9 +1,9 @@
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
-import { CreationActions, CreationContent } from "./utils/components";
+import { CreationActions, CreationContent } from "./shared/components";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
-import { useTypeWriter } from "./utils/use-typewriter";
+import { useTypeWriter } from "./hooks/use-typewriter";
 
 const TEXT = `Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?`;
 const CharacterCreationBackground = ({
