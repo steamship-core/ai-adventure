@@ -16,6 +16,7 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { CharacterConfig } from ".";
 import { useTypeWriter } from "./utils/use-typewriter";
+import Link from "next/link";
 
 const allValuesAreSet = (config: CharacterConfig) => {
   return Object.values(config).every((value) => value.length > 1);
@@ -96,8 +97,8 @@ const CharacterCreationComplete = ({
       </div>
 
       <CreationActions isFinished={true}>
-        <Button disabled={!allValuesAreSet(config)} className="w-full">
-          Create Character
+        <Button disabled={!allValuesAreSet(config)} className="w-full" asChild>
+          <Link href="/play/camp">Create Character</Link>
         </Button>
       </CreationActions>
     </CreationContent>
