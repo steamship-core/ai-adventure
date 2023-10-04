@@ -1,5 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
@@ -68,7 +76,27 @@ export default function CampPages() {
             <div className="flex flex-col gap-2">
               <Button>Go on an adventure</Button>
               <Button>Send on an adventure</Button>
-              <Button>View Inventory</Button>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button>View Inventory</Button>
+                </SheetTrigger>
+                <SheetContent side="bottom" className="w-100% h-[100dvh]">
+                  <SheetHeader>
+                    <SheetTitle>Inventory</SheetTitle>
+                    <SheetDescription>
+                      Items you&apos;e collected on your adventures. They might
+                      just be junk, or they might be useful.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 ">
+                    {[...Array(30)].map((_, i) => (
+                      <div key={i} className="flex items-center justify-center">
+                        <div className="border rounded-md border-foreground/20 h-12 aspect-square" />
+                      </div>
+                    ))}
+                  </div>
+                </SheetContent>
+              </Sheet>
             </div>
           </ContentBox>
         </div>
