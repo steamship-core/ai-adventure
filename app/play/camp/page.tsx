@@ -11,10 +11,12 @@ import {
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { UserButton } from "@clerk/nextjs";
+import prisma from "@/lib/db";
+import { UserButton, auth } from "@clerk/nextjs";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
@@ -23,7 +25,19 @@ const ContentBox = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-export default function CampPages() {
+export default async function CampPages() {
+  const { userId } = auth();
+
+  const agent = await prisma.agents.findFirst({
+    where: {
+      ownerId: userId!,
+    },
+  });
+
+  if (!agent) {
+    redirect("/play/character-creation");
+  }
+
   return (
     <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">
       <Image

@@ -5,6 +5,8 @@ import { CreationActions, CreationContent } from "./utils/components";
 import { useEffect, useRef, useState } from "react";
 import { useTypeWriter } from "./utils/use-typewriter";
 
+const TEXT = `Choose a name for your character. This can be anything you want!`;
+
 const CharacterCreationName = ({
   onContinue,
   isCurrent,
@@ -15,7 +17,7 @@ const CharacterCreationName = ({
   onFocus: () => any;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text: `Choose a name for your character. This can be anything you want!`,
+    text: TEXT,
   });
   const [value, setValue] = useState("");
   const [didFocus, setDidFocus] = useState(false);
@@ -27,9 +29,18 @@ const CharacterCreationName = ({
       setDidFocus(true);
     }
   }, [didFocus, isFinished]);
+
+  useEffect(() => {
+    if (isCurrent) {
+      ref.current?.focus();
+    }
+  }, [isCurrent]);
+
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-      <TypographyP>{currentText}</TypographyP>
+      <div>
+        <TypographyP>{currentText}</TypographyP>
+      </div>
       <CreationActions isFinished={isFinished}>
         <form
           onSubmit={(e) => {

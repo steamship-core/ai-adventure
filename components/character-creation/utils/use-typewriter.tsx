@@ -9,7 +9,15 @@ export const useTypeWriter = ({
   text: string;
   delay?: number;
 }) => {
-  const [currentText, setCurrentText] = useState("");
+  // HACK: For most browsers we could just grow the string,
+  // but for ios devices we need to mask the text. This is so
+  // the device can compute the correct height of the text. Without
+  // this, the text height will be incorrectly computed and will
+  // overflow into the buttons below. Scroll behavior also behaves oddly.
+  const [maskedText, setMaskedText] = useState(
+    <span className="opacity-0">{text}</span>
+  );
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
@@ -17,7 +25,6 @@ export const useTypeWriter = ({
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
-        setCurrentText((prevText) => prevText + text[currentIndex]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
       }, delay);
 
@@ -33,5 +40,15 @@ export const useTypeWriter = ({
     }
   }, [currentIndex, delay, text]);
 
-  return { currentText, isFinished };
+  useEffect(() => {
+    const maskedText = (
+      <>
+        {text.substring(0, currentIndex)}
+        <span className="opacity-0">{text.substring(currentIndex)}</span>
+      </>
+    );
+    setMaskedText(maskedText);
+  }, [currentIndex, text]);
+
+  return { currentText: maskedText, isFinished };
 };

@@ -1,10 +1,11 @@
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
 import { CreationActions, CreationContent } from "./utils/components";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { useTypeWriter } from "./utils/use-typewriter";
 
+const TEXT = `Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?`;
 const CharacterCreationBackground = ({
   onContinue,
   isCurrent,
@@ -15,11 +16,12 @@ const CharacterCreationBackground = ({
   onFocus: () => any;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text: `Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?`,
+    text: TEXT,
   });
   const [value, setValue] = useState("");
   const [didFocus, setDidFocus] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (isFinished && !didFocus) {
@@ -28,12 +30,30 @@ const CharacterCreationBackground = ({
     }
   }, [didFocus, isFinished]);
 
+  useEffect(() => {
+    if (isCurrent) {
+      ref.current?.focus();
+    }
+  }, [isCurrent]);
+
+  const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.code === "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      e.stopPropagation();
+      formRef.current?.requestSubmit();
+    }
+  };
+
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-      <TypographyP>{currentText}</TypographyP>
+      <div>
+        <TypographyP>{currentText}</TypographyP>
+      </div>
       <CreationActions isFinished={isFinished}>
         <form
+          ref={formRef}
           onSubmit={(e) => {
+            console.log("submitting!");
             e.preventDefault();
             e.stopPropagation();
             onContinue(value);
@@ -49,6 +69,7 @@ const CharacterCreationBackground = ({
             onChange={(e) => setValue(e.target.value)}
             disabled={!isFinished}
             autoFocus
+            onKeyDown={onEnterPress}
           />
           <Button disabled={value.length < 1} className="w-full" type="submit">
             Set Background

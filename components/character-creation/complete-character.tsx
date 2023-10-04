@@ -1,26 +1,20 @@
-import GAME_INFO from "@/lib/game-info";
-import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { Button } from "../ui/button";
-import { Input } from "@/components/ui/input";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
-import {
-  CreationActions,
-  CreationContainer,
-  CreationContent,
-} from "./utils/components";
+import { CreationActions, CreationContent } from "./utils/components";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TypographySmall } from "../ui/typography/TypographySmall";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { CharacterConfig } from ".";
 import { useTypeWriter } from "./utils/use-typewriter";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const allValuesAreSet = (config: CharacterConfig) => {
   return Object.values(config).every((value) => value.length > 1);
 };
+
+const TEXT = `Creating an image of your character...`;
 
 const CharacterCreationComplete = ({
   config,
@@ -36,17 +30,13 @@ const CharacterCreationComplete = ({
   isCurrent: boolean;
   onFocus: () => any;
 }) => {
-  const characterDescription = `
-    Name: ${config.name}
-    Theme: ${config.theme}\n
-    Background: ${config.background}\n
-    Appearance: ${config.appearance}\n
-  `;
   const { currentText, isFinished } = useTypeWriter({
-    text: `Creating an image of your character...`,
+    text: TEXT,
   });
 
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -58,9 +48,16 @@ const CharacterCreationComplete = ({
     };
   }, []);
 
+  const onComplete = async () => {
+    await fetch("/api/agent", { method: "POST", body: JSON.stringify(config) });
+    router.push("/play/camp");
+  };
+
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-      <TypographyP>{currentText}</TypographyP>
+      <div>
+        <TypographyP>{currentText}</TypographyP>
+      </div>
       <div className="w-full flex items-center justify-center mt-4">
         <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
           {imageLoaded ? (
@@ -97,8 +94,12 @@ const CharacterCreationComplete = ({
       </div>
 
       <CreationActions isFinished={true}>
-        <Button disabled={!allValuesAreSet(config)} className="w-full" asChild>
-          <Link href="/play/camp">Create Character</Link>
+        <Button
+          disabled={!allValuesAreSet(config)}
+          className="w-full"
+          onClick={onComplete}
+        >
+          Create Character
         </Button>
       </CreationActions>
     </CreationContent>

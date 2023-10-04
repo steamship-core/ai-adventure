@@ -79,71 +79,74 @@ export default function CharacterCreation() {
 
   return (
     <CreationContainer>
-      <div className="flex flex-col gap-12">
-        <CharacterCreationIntro
-          onContinue={() => {
-            setShowTheme(true);
+      {showFinalStep && (
+        <CharacterCreationComplete
+          config={configuration}
+          onFocus={() => setActiveStep(5)}
+          isCurrent={activeStep === 5}
+        />
+      )}
+      {showBackground && (
+        <CharacterCreationBackground
+          onContinue={(background) => {
+            setShowFinalStep(true);
+            setActiveStep(5);
+            setConfiguration({ ...configuration, background });
+          }}
+          onFocus={() => setActiveStep(4)}
+          isCurrent={activeStep === 4}
+        />
+      )}
+      {showAppearance && (
+        <CharacterCreationAppearance
+          onContinue={(appearance) => {
+            setShowBackground(true);
+            setActiveStep(4);
+            setConfiguration({ ...configuration, appearance });
+          }}
+          onFocus={() => setActiveStep(3)}
+          isCurrent={activeStep === 3}
+        />
+      )}
+      {showName && (
+        <CharacterCreationName
+          onContinue={(name) => {
+            setShowAppearance(true);
+            setActiveStep(3);
+            setConfiguration({ ...configuration, name });
+          }}
+          onFocus={() => setActiveStep(2)}
+          isCurrent={activeStep === 2}
+        />
+      )}
+      {showTheme && (
+        <CharacterCreationTheme
+          onContinue={(theme) => {
+            setShowName(true);
+            console.log("continue");
+            setActiveStep(2);
+            setConfiguration({ ...configuration, theme });
+          }}
+          onFocus={() => {
+            console.log("focus");
             setActiveStep(1);
           }}
-          isCurrent={activeStep === 0}
+          isCurrent={activeStep === 1}
         />
-        {showTheme && (
-          <CharacterCreationTheme
-            onContinue={(theme) => {
-              setShowName(true);
-              console.log("continue");
-              setActiveStep(2);
-              setConfiguration({ ...configuration, theme });
-            }}
-            onFocus={() => {
-              console.log("focus");
-              setActiveStep(1);
-            }}
-            isCurrent={activeStep === 1}
-          />
-        )}
-        {showName && (
-          <CharacterCreationName
-            onContinue={(name) => {
-              setShowAppearance(true);
-              setActiveStep(3);
-              setConfiguration({ ...configuration, name });
-            }}
-            onFocus={() => setActiveStep(2)}
-            isCurrent={activeStep === 2}
-          />
-        )}
-        {showAppearance && (
-          <CharacterCreationAppearance
-            onContinue={(appearance) => {
-              setShowBackground(true);
-              setActiveStep(4);
-              setConfiguration({ ...configuration, appearance });
-            }}
-            onFocus={() => setActiveStep(3)}
-            isCurrent={activeStep === 3}
-          />
-        )}
-
-        {showBackground && (
-          <CharacterCreationBackground
-            onContinue={(background) => {
-              setShowFinalStep(true);
-              setActiveStep(5);
-              setConfiguration({ ...configuration, background });
-            }}
-            onFocus={() => setActiveStep(4)}
-            isCurrent={activeStep === 4}
-          />
-        )}
-        {showFinalStep && (
-          <CharacterCreationComplete
-            config={configuration}
-            onFocus={() => setActiveStep(5)}
-            isCurrent={activeStep === 5}
-          />
-        )}
-      </div>
+      )}
+      <CharacterCreationIntro
+        onContinue={() => {
+          setShowTheme(true);
+          setActiveStep(1);
+        }}
+        isCurrent={activeStep === 0}
+      />
+      <div
+        className="h-[1px]"
+        style={{
+          overflowAnchor: "auto",
+        }}
+      />
     </CreationContainer>
   );
   // if (state.value === "start") {

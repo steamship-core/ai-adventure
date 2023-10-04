@@ -2,9 +2,10 @@ import { Button } from "../ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CreationActions, CreationContent } from "./utils/components";
 import { TypographyP } from "../ui/typography/TypographyP";
-import { useEffect, useRef, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useTypeWriter } from "./utils/use-typewriter";
 
+const TEXT = `Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!`;
 const CharacterCreationAppearance = ({
   onContinue,
   isCurrent,
@@ -15,11 +16,12 @@ const CharacterCreationAppearance = ({
   onFocus: () => any;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text: `Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!`,
+    text: TEXT,
   });
   const [value, setValue] = useState("");
   const [didFocus, setDidFocus] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (isFinished && !didFocus) {
@@ -27,11 +29,28 @@ const CharacterCreationAppearance = ({
       setDidFocus(true);
     }
   }, [didFocus, isFinished]);
+
+  useEffect(() => {
+    if (isCurrent) {
+      ref.current?.focus();
+    }
+  }, [isCurrent]);
+
+  const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.code === "Enter" && e.shiftKey == false) {
+      e.preventDefault();
+      formRef.current?.requestSubmit();
+    }
+  };
+
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-      <TypographyP>{currentText}</TypographyP>
+      <div>
+        <TypographyP>{currentText}</TypographyP>
+      </div>
       <CreationActions isFinished={isFinished}>
         <form
+          ref={formRef}
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -47,6 +66,7 @@ const CharacterCreationAppearance = ({
             value={value}
             onChange={(e) => setValue(e.target.value)}
             disabled={!isFinished}
+            onKeyDown={onEnterPress}
             autoFocus
           />
           <Button disabled={value.length < 1} className="w-full" type="submit">

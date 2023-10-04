@@ -6,10 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:db-push": "dotenv -e .env.local prisma db push",
+    "prod:db-push": "dotenv -e .env.production.local prisma db push",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.25.1",
+    "@prisma/client": "^5.3.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
@@ -19,10 +23,12 @@
     "lucide-react": "^0.284.0",
     "next": "13.5.4",
     "next-themes": "^0.2.1",
+    "prisma": "^5.3.1",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1",
     "xstate": "^4.38.2"
   },
   "devDependencies": {
@@ -30,6 +36,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8",
     "eslint-config-next": "13.5.4",
     "postcss": "^8",
