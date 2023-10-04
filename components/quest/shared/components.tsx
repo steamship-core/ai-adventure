@@ -9,7 +9,7 @@ export const QuestNarrativeContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <main className="flex flex-grow flex-col-reverse overflow-scroll gap-12">
+  <main className="flex flex-grow flex-col-reverse overflow-scroll gap-12 pb-4">
     {children}
   </main>
 );
