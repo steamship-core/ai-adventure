@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export const QuestContainer = ({ children }: { children: ReactNode }) => (
-  <main className="h-[100dvh] max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
+  <main className="h-[100dvh] max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-0 px-4">
     {children}
   </main>
 );

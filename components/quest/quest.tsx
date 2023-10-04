@@ -10,7 +10,7 @@ import QuestNarrative from "./quest-narrative";
 export default async function Quest() {
   return (
     <QuestContainer>
-      <div className="flex justify-between items-center border-b border-b-foreground/10 pb-4 basis-1/12">
+      <div className="flex justify-between items-center border-b border-b-foreground/10 pb-2 basis-1/12">
         <Button asChild variant="link" className="pl-0">
           <Link href="/play/camp">Back to Camp</Link>
         </Button>
