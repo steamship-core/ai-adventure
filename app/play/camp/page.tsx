@@ -65,6 +65,13 @@ const campMembers: CampMember[] = [
   },
 ];
 
+const bgImages = [
+  "/campfire-dark.png",
+  "/campfire.png",
+  "/campfire-pixel.png",
+  "/campfire-art.png",
+];
+
 export default async function CampPage() {
   const { userId } = auth();
 
@@ -78,12 +85,17 @@ export default async function CampPage() {
     redirect("/play/character-creation");
   }
 
+  const randomlyGetBackground = () => {
+    const randomIndex = Math.floor(Math.random() * bgImages.length);
+    return bgImages[randomIndex];
+  };
+
   return (
     <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">
       <Image
         fill
         sizes="100vw"
-        src="/campfire.png"
+        src={randomlyGetBackground()}
         alt="background"
         className="object-cover -z-10"
       />
