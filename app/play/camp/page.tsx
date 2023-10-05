@@ -1,14 +1,7 @@
 import InventorySheet from "@/components/inventory-sheet";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
@@ -25,14 +18,54 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
+import InteractionSheet, { CampMember } from "@/components/interaction-sheet";
+import { TypographyP } from "@/components/ui/typography/TypographyP";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
   <div>
-    <div className="bg-background/50 px-4 py-2 rounded-sm">{children}</div>
+    <div className="bg-background/80 px-4 py-2 rounded-sm">{children}</div>
   </div>
 );
 
-export default async function CampPages() {
+const campMembers: CampMember[] = [
+  // {
+  //   name: "The Merchant",
+  //   image: "/merchant.png",
+  //   id: "the-merchant",
+  //   description:
+  //     "A merchant who sells items. He heard of your adventures and offers to sell you some items or buy those you don't need.",
+  //   inventory: [
+  //     {
+  //       id: "1",
+  //       name: "Mysterious Orb",
+  //       image: "/orb.png",
+  //       description: "A mysterious orb. It glows with a strange energy.",
+  //     },
+  //     {
+  //       id: "2",
+  //       name: "Mysterious Orb",
+  //       image: "/orb.png",
+  //       description: "A mysterious orb. It glows with a strange energy.",
+  //     },
+  //     {
+  //       id: "3",
+  //       name: "Mysterious Orb",
+  //       image: "/orb.png",
+  //       description: "A mysterious orb. It glows with a strange energy.",
+  //     },
+  //     {
+  //       id: "4",
+  //       name: "Mysterious Orb",
+  //       image: "/orb.png",
+  //       description: "A mysterious orb. It glows with a strange energy.",
+  //     },
+  //   ],
+  //   actionTitle: "Finalize Trade",
+  //   actionDescription: "Confirm the exchange of goods",
+  // },
+];
+
+export default async function CampPage() {
   const { userId } = auth();
 
   const agent = await prisma.agents.findFirst({
@@ -55,7 +88,7 @@ export default async function CampPages() {
         className="object-cover -z-10"
       />
       <div className="h-full flex flex-col">
-        <div className="w-full flex items-center justify-end pt-6 pb-2 gap-3 max-w-5xl w-full mx-auto">
+        <div className="w-full flex items-center justify-end pt-6 pb-2 gap-3 max-w-5xl mx-auto">
           <Button variant="link" size="sm" asChild>
             <Link
               target="_blank"
@@ -103,6 +136,24 @@ export default async function CampPages() {
             </div>
           </ContentBox>
           <ContentBox>
+            <TypographyH3>Camp Members</TypographyH3>
+            {campMembers.length > 0 && (
+              <div className="mt-8 flex">
+                {campMembers.map((member) => (
+                  <InteractionSheet key={member.id} member={member} />
+                ))}
+              </div>
+            )}
+            {campMembers.length === 0 && (
+              <div className="flex flex-col text-center items-center justify-center w-full h-full mt-4">
+                <TypographyP>You have no camp members yet.</TypographyP>
+                <TypographySmall>
+                  Go on some more adventures and you might find some!
+                </TypographySmall>
+              </div>
+            )}
+          </ContentBox>
+          <ContentBox>
             <div className="flex flex-col gap-2">
               <Button asChild>
                 <Link href="/play/quest/1">
@@ -114,7 +165,7 @@ export default async function CampPages() {
                 <FootprintsIcon className="mr-2" size={16} />
                 Send on an adventure
               </Button>
-              <InventorySheet buttonText="View Inventory" />
+              <InventorySheet />
             </div>
           </ContentBox>
         </div>

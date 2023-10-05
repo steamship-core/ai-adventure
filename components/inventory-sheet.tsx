@@ -9,7 +9,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 
-const InventorySheet = ({ buttonText }: { buttonText: string }) => (
+const InventorySheet = () => (
   <Sheet>
     <SheetTrigger asChild>
       <Button variant="outline">

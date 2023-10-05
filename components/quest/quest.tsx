@@ -14,7 +14,7 @@ export default async function Quest() {
         <Button asChild variant="link" className="pl-0">
           <Link href="/play/camp">Back to Camp</Link>
         </Button>
-        <InventorySheet buttonText="View Inventory" />
+        <InventorySheet />
       </div>
       <QuestNarrative />
     </QuestContainer>
