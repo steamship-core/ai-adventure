@@ -119,7 +119,7 @@ const MerchantSheet = ({ member }: { member: CampMember }) => {
           </div>
         )}
         Wares for sale
-        <TypographyMuted>Select an item to view it's cost</TypographyMuted>
+        <TypographyMuted>Select an item to view it&apos;s cost</TypographyMuted>
         <div className="flex w-full overflow-hidden">
           <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
             {member.inventory.map((item, i) => (
@@ -166,7 +166,9 @@ const MerchantSheet = ({ member }: { member: CampMember }) => {
           </div>
         </div>
         Your Inventory
-        <TypographyMuted>Select an item to view it's value</TypographyMuted>
+        <TypographyMuted>
+          Select an item to view it&apos;s value
+        </TypographyMuted>
         <div className="flex w-full overflow-hidden">
           <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
             {[...Array(10)].map((_, i) => (

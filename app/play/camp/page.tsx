@@ -28,41 +28,41 @@ const ContentBox = ({ children }: { children: ReactNode }) => (
 );
 
 const campMembers: CampMember[] = [
-  // {
-  //   name: "The Merchant",
-  //   image: "/merchant.png",
-  //   id: "the-merchant",
-  //   description:
-  //     "A merchant who sells items. He heard of your adventures and offers to sell you some items or buy those you don't need.",
-  //   inventory: [
-  //     {
-  //       id: "1",
-  //       name: "Mysterious Orb",
-  //       image: "/orb.png",
-  //       description: "A mysterious orb. It glows with a strange energy.",
-  //     },
-  //     {
-  //       id: "2",
-  //       name: "Mysterious Orb",
-  //       image: "/orb.png",
-  //       description: "A mysterious orb. It glows with a strange energy.",
-  //     },
-  //     {
-  //       id: "3",
-  //       name: "Mysterious Orb",
-  //       image: "/orb.png",
-  //       description: "A mysterious orb. It glows with a strange energy.",
-  //     },
-  //     {
-  //       id: "4",
-  //       name: "Mysterious Orb",
-  //       image: "/orb.png",
-  //       description: "A mysterious orb. It glows with a strange energy.",
-  //     },
-  //   ],
-  //   actionTitle: "Finalize Trade",
-  //   actionDescription: "Confirm the exchange of goods",
-  // },
+  {
+    name: "The Merchant",
+    image: "/merchant.png",
+    id: "the-merchant",
+    description:
+      "A merchant who sells items. He heard of your adventures and offers to sell you some items or buy those you don't need.",
+    inventory: [
+      {
+        id: "1",
+        name: "Mysterious Orb",
+        image: "/orb.png",
+        description: "A mysterious orb. It glows with a strange energy.",
+      },
+      {
+        id: "2",
+        name: "Mysterious Orb",
+        image: "/orb.png",
+        description: "A mysterious orb. It glows with a strange energy.",
+      },
+      {
+        id: "3",
+        name: "Mysterious Orb",
+        image: "/orb.png",
+        description: "A mysterious orb. It glows with a strange energy.",
+      },
+      {
+        id: "4",
+        name: "Mysterious Orb",
+        image: "/orb.png",
+        description: "A mysterious orb. It glows with a strange energy.",
+      },
+    ],
+    actionTitle: "Finalize Trade",
+    actionDescription: "Confirm the exchange of goods",
+  },
 ];
 
 export default async function CampPage() {
