@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   // - The BASE_URL where your running Agent lives
   // - The context_id which mediates your Agent's server-side chat history
   const response = await steamship.agent.respondAsync({
-    url: "https://viable-house.steamship.run/ai-adventure-game-beta-9df-7h6syd/ai-adventure-game-beta-9df",
+    url: "https://viable-house.steamship.run/ai-adventure-game-beta-hed-2yksc6/ai-adventure-game-beta-hed",
     input: {
       prompt,
       context_id,

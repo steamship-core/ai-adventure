@@ -18,21 +18,28 @@ import { Message } from "ai";
 import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
 import { Block } from "@steamship/client";
 
-const TextBlock = ({ block }: { block: Block }) => {
+const TextBlock = ({ text }: { text: string }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text: block.text!,
+    text,
+    useMask: false,
   });
   return <div>{currentText}</div>;
 };
 
 const NarrativeBlock = ({ message }: { message: Message }) => {
   try {
-    console.log(message.content.split(/\r?\n|\r|\n/g));
-    const block = JSON.parse(
-      message.content.split(/\r?\n|\r|\n/g).join(",")
-    ) as Block;
-    console.log(block);
-    return <TextBlock block={block} />;
+    const blocks = message.content.split(/\r?\n|\r|\n/g).map((block) => {
+      return block ? (JSON.parse(block) as Block) : null;
+    });
+
+    const concattenatedText = blocks.reduce((acc, block) => {
+      if (block?.text) {
+        acc += " ";
+        acc += block.text;
+      }
+      return acc;
+    }, "");
+    return <TextBlock text={concattenatedText} />;
   } catch (e) {
     console.log(e);
     return <div>{message.content}</div>;
