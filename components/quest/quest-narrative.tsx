@@ -6,7 +6,7 @@ import {
 } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import EndSheet from "./shared/end-sheet";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { TypographyP } from "../ui/typography/TypographyP";
@@ -47,6 +47,7 @@ export default function QuestNarrative() {
   >([EXAMPLE_QUEST[1], EXAMPLE_QUEST[0]]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(2);
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -93,7 +94,13 @@ export default function QuestNarrative() {
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            // TODO: Update this to detecte if we are beyond the final message
             if (currentMessageIndex >= EXAMPLE_QUEST.length) return;
+            // Only refocus if we are not the final message
+            // TODO: Update this to detect if we are on the final message
+            if (currentMessageIndex !== EXAMPLE_QUEST.length - 1) {
+              inputRef?.current?.focus();
+            }
             setMessages((prev) => [
               EXAMPLE_QUEST[currentMessageIndex],
               { type: "user", content: message },
@@ -108,6 +115,7 @@ export default function QuestNarrative() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             disabled={currentMessageIndex >= EXAMPLE_QUEST.length}
+            ref={inputRef}
           />
           <Button
             type="submit"

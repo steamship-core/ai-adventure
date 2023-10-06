@@ -141,12 +141,6 @@ export default function CharacterCreation() {
         }}
         isCurrent={activeStep === 0}
       />
-      <div
-        className="h-[1px]"
-        style={{
-          overflowAnchor: "auto",
-        }}
-      />
     </CreationContainer>
   );
   return null;

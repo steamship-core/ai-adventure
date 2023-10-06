@@ -85,7 +85,7 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
-
+  console.log(userId);
   const agent = await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
