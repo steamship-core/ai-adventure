@@ -23,7 +23,7 @@ const TextBlock = ({ text }: { text: string }) => {
     text,
     useMask: false,
   });
-  return <div>{currentText}</div>;
+  return <p className="whitespace-pre-wrap">{currentText}</p>;
 };
 
 const NarrativeBlock = ({ message }: { message: Message }) => {
@@ -34,11 +34,11 @@ const NarrativeBlock = ({ message }: { message: Message }) => {
 
     const concattenatedText = blocks.reduce((acc, block) => {
       if (block?.text) {
-        acc += " ";
-        acc += block.text;
+        acc = `${acc}\n\n${block.text}`;
       }
       return acc;
     }, "");
+    console.log(concattenatedText);
     return <TextBlock text={concattenatedText} />;
   } catch (e) {
     console.log(e);
