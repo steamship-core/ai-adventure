@@ -37,7 +37,7 @@ const MerchantSheet = ({ member }: { member: CampMember }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="flex flex-col items-center">
+        <button className="flex flex-col items-center">
           <div className="h-28 w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
             <Image
               src={member.image}
@@ -47,7 +47,7 @@ const MerchantSheet = ({ member }: { member: CampMember }) => {
             />
           </div>
           {member.name}
-        </div>
+        </button>
       </SheetTrigger>
       <SheetContent
         side="bottom"
