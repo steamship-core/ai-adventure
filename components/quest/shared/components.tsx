@@ -11,7 +11,7 @@ export const QuestNarrativeContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <main className="flex flex-col-reverse overflow-auto gap-12 pb-4 h-full">
+  <main className="flex flex-col-reverse overflow-auto gap-8 pt-8 pb-4 h-full">
     {children}
   </main>
 );

@@ -6,7 +6,7 @@ import {
 } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import EndSheet from "./shared/end-sheet";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { TypographyP } from "../ui/typography/TypographyP";
@@ -24,7 +24,19 @@ export default function QuestNarrative() {
       <div className="flex basis-10/12 overflow-hidden">
         <QuestNarrativeContainer>
           {messages
-            .map((message, i) => <div key={i}>{message.content}</div>)
+            .map((message, i) => {
+              if (message.role === "user") {
+                return (
+                  <div
+                    key={message.id}
+                    className="px-4 py-2 border-l-2 border-foreground/20 text-muted-foreground"
+                  >
+                    {message.content}
+                  </div>
+                );
+              }
+              return <div key={message.id}>{message.content}</div>;
+            })
             .reverse()}
         </QuestNarrativeContainer>
       </div>
