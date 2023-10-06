@@ -24,7 +24,7 @@ export default async function Home() {
       <TypographyH1>AI Adventure</TypographyH1>
       <div className="flex flex-col mt-8">
         <Button asChild>
-          <Link href="/play/character-creation">Create Character</Link>
+          <Link href="/play/character-creation">Create your own Character</Link>
         </Button>
         <LogoutButton />
       </div>

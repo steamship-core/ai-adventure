@@ -13,6 +13,7 @@ import { useState } from "react";
 import { CreationContainer } from "./shared/components";
 import CharacterCreationBackground from "./set-background";
 import CharacterCreationComplete from "./complete-character";
+import { useSearchParams } from "next/navigation";
 
 export const characterCreationMachine = createMachine({
   id: "characterCreation",
@@ -63,18 +64,31 @@ export type CharacterConfig = {
 };
 
 export default function CharacterCreation() {
-  const [activeStep, setActiveStep] = useState(0);
-  const [showTheme, setShowTheme] = useState(false);
-  const [showName, setShowName] = useState(false);
-  const [showAppearance, setShowAppearance] = useState(false);
-  const [showBackground, setShowBackground] = useState(false);
-  const [showFinalStep, setShowFinalStep] = useState(false);
+  const searchParams = useSearchParams();
+  const isCompleteConfig =
+    searchParams.has("theme") &&
+    searchParams.has("name") &&
+    searchParams.has("appearance") &&
+    searchParams.has("background");
+
+  const [activeStep, setActiveStep] = useState(isCompleteConfig ? 5 : 0);
+  const [showTheme, setShowTheme] = useState(isCompleteConfig ? true : false);
+  const [showName, setShowName] = useState(isCompleteConfig ? true : false);
+  const [showAppearance, setShowAppearance] = useState(
+    isCompleteConfig ? true : false
+  );
+  const [showBackground, setShowBackground] = useState(
+    isCompleteConfig ? true : false
+  );
+  const [showFinalStep, setShowFinalStep] = useState(
+    isCompleteConfig ? true : false
+  );
 
   const [configuration, setConfiguration] = useState<CharacterConfig>({
-    name: "",
-    theme: "",
-    appearance: "",
-    background: "",
+    name: isCompleteConfig ? searchParams.get("name")! : "",
+    theme: isCompleteConfig ? searchParams.get("theme")! : "",
+    appearance: isCompleteConfig ? searchParams.get("appearance")! : "",
+    background: isCompleteConfig ? searchParams.get("background")! : "",
   });
 
   return (
