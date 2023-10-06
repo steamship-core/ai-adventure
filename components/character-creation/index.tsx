@@ -63,6 +63,20 @@ export type CharacterConfig = {
   appearance: string;
 };
 
+/*
+// configurable
+name
+description
+background
+motivation
+tone
+theme
+
+// configurable by game
+inventory
+mission_summaries
+*/
+
 export default function CharacterCreation() {
   const searchParams = useSearchParams();
   const isCompleteConfig =

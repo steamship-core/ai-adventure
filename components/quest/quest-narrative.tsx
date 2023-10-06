@@ -14,10 +14,35 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { Skeleton } from "../ui/skeleton";
 import Image from "next/image";
 import { useChat, useCompletion } from "ai/react";
+import { Message } from "ai";
+import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
+import { Block } from "@steamship/client";
+
+const TextBlock = ({ block }: { block: Block }) => {
+  const { currentText, isFinished } = useTypeWriter({
+    text: block.text!,
+  });
+  return <div>{currentText}</div>;
+};
+
+const NarrativeBlock = ({ message }: { message: Message }) => {
+  try {
+    console.log(message.content.split(/\r?\n|\r|\n/g));
+    const block = JSON.parse(
+      message.content.split(/\r?\n|\r|\n/g).join(",")
+    ) as Block;
+    console.log(block);
+    return <TextBlock block={block} />;
+  } catch (e) {
+    console.log(e);
+    return <div>{message.content}</div>;
+  }
+};
 
 export default function QuestNarrative() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat();
   console.log(messages);
   return (
     <>
@@ -35,7 +60,7 @@ export default function QuestNarrative() {
                   </div>
                 );
               }
-              return <div key={message.id}>{message.content}</div>;
+              return <NarrativeBlock key={message.id} message={message} />;
             })
             .reverse()}
         </QuestNarrativeContainer>
@@ -55,8 +80,9 @@ export default function QuestNarrative() {
             value={input}
             onChange={handleInputChange}
             ref={inputRef}
+            disabled={isLoading}
           />
-          <Button type="submit">
+          <Button type="submit" disabled={isLoading}>
             <SendIcon size={16} />
           </Button>
         </form>

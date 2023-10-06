@@ -14,7 +14,7 @@ export async function POST(req: Request) {
   // - The BASE_URL where your running Agent lives
   // - The context_id which mediates your Agent's server-side chat history
   const response = await steamship.agent.respondAsync({
-    url: "https://viable-house.steamship.run/ai-adventure-game-beta-j04-bmhj3n/ai-adventure-game-beta-j04",
+    url: "https://viable-house.steamship.run/ai-adventure-game-beta-9df-7h6syd/ai-adventure-game-beta-9df",
     input: {
       prompt,
       context_id,
@@ -22,7 +22,11 @@ export async function POST(req: Request) {
   });
 
   // Adapt the Streamship Blockstream into a Markdown Stream
-  const stream = await SteamshipStream(response, steamship);
+  const stream = await SteamshipStream(response, steamship, {
+    streamTimeoutSeconds: 30,
+    // Use: "markdown" | "json"
+    format: "json",
+  });
 
   // Respond with a stream of Markdown
   return new StreamingTextResponse(stream);

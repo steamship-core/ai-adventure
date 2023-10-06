@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 export const useTypeWriter = ({
   text,
   delay = 25,
+  useMask = true,
 }: {
   text: string;
   delay?: number;
+  useMask?: boolean;
 }) => {
   // HACK: For most browsers we could just grow the string,
   // but for ios devices we need to mask the text. This is so
@@ -15,7 +17,7 @@ export const useTypeWriter = ({
   // this, the text height will be incorrectly computed and will
   // overflow into the buttons below. Scroll behavior also behaves oddly.
   const [maskedText, setMaskedText] = useState(
-    <span className="opacity-0">{text}</span>
+    useMask ? <span className="opacity-0">{text}</span> : ""
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -44,7 +46,9 @@ export const useTypeWriter = ({
     const maskedText = (
       <>
         {text.substring(0, currentIndex)}
-        <span className="opacity-0">{text.substring(currentIndex)}</span>
+        {useMask ? (
+          <span className="opacity-0">{text.substring(currentIndex)}</span>
+        ) : null}
       </>
     );
     setMaskedText(maskedText);
