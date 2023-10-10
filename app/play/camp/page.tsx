@@ -20,20 +20,9 @@ import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import InteractionSheet, { CampMember } from "@/components/interaction-sheet";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Steamship from "@steamship/client";
 import { getGameState, saveGameState } from "@/lib/game/game-state";
-import { mockGameState } from "@/lib/game/mocks";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
   <div>
@@ -93,13 +82,7 @@ export default async function CampPage() {
       ownerId: userId!,
     },
   });
-  const gameState = await getGameState();
-  console.log(gameState.camp.npcs);
-  const resp = await saveGameState({ ...gameState, tone: "dark" });
-  console.log(resp.statusText);
-  const newGameState = await getGameState();
-  console.log(gameState);
-  // console.log(gameState);
+
   if (!agent) {
     redirect("/play/character-creation");
   }

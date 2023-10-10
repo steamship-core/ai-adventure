@@ -1,30 +1,12 @@
 "use client";
 import CharacterCreationIntro from "./intro";
-import CharacterCreationGenre from "./set-genre";
-import CharacterCreationName from "./set-name";
-import CharacterCreationAppearance from "./set-appearance";
 import { useState } from "react";
 import { CreationContainer } from "./shared/components";
-import CharacterCreationBackground from "./set-background";
 import CharacterCreationComplete, {
   CharacterConfig,
 } from "./complete-character";
 import { useSearchParams } from "next/navigation";
-import CharacterCreationTone from "./set-tone";
-
-/*
-// configurable
-name
-description
-background
-motivation
-tone
-theme
-
-// configurable by game
-inventory
-mission_summaries
-*/
+import OnboardingPrompt from "./onboarding-prompt";
 
 export default function CharacterCreation() {
   const searchParams = useSearchParams();
@@ -55,7 +37,6 @@ export default function CharacterCreation() {
       human_players: [],
       npcs: [],
       name: "Camp",
-      chat_file_id: null,
     },
     quests: [],
   });
@@ -70,7 +51,7 @@ export default function CharacterCreation() {
         />
       )}
       {step > 4 && (
-        <CharacterCreationBackground
+        <OnboardingPrompt
           onContinue={(background) => {
             setStep(6);
             setActiveStep(6);
@@ -84,10 +65,13 @@ export default function CharacterCreation() {
           }}
           onFocus={() => setActiveStep(5)}
           isCurrent={activeStep === 5}
+          placeholder="Born to a noble family, your character has always had everything they wanted... until now."
+          text="Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?"
+          isTextarea
         />
       )}
       {step > 3 && (
-        <CharacterCreationAppearance
+        <OnboardingPrompt
           onContinue={(description) => {
             setStep(5);
             setActiveStep(5);
@@ -101,10 +85,13 @@ export default function CharacterCreation() {
           }}
           onFocus={() => setActiveStep(4)}
           isCurrent={activeStep === 4}
+          placeholder="An old, wise, wizard with a long white beard and a pointy hat."
+          text="Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!"
+          isTextarea
         />
       )}
       {step > 2 && (
-        <CharacterCreationName
+        <OnboardingPrompt
           onContinue={(name) => {
             setStep(4);
             setActiveStep(4);
@@ -118,10 +105,12 @@ export default function CharacterCreation() {
           }}
           onFocus={() => setActiveStep(3)}
           isCurrent={activeStep === 3}
+          text="Choose a name for your character. This can be anything you want!"
+          placeholder="Professor Chaos"
         />
       )}
       {step > 1 && (
-        <CharacterCreationTone
+        <OnboardingPrompt
           onContinue={(tone) => {
             setStep(3);
             setActiveStep(3);
@@ -131,10 +120,12 @@ export default function CharacterCreation() {
             setActiveStep(2);
           }}
           isCurrent={activeStep === 2}
+          placeholder="Serious, silly, dark, light, etc.."
+          text="What is the tone of the story? Serious, silly, dark, light, etc.."
         />
       )}
       {step > 0 && (
-        <CharacterCreationGenre
+        <OnboardingPrompt
           onContinue={(genre) => {
             setStep(2);
             setActiveStep(2);
@@ -144,6 +135,8 @@ export default function CharacterCreation() {
             setActiveStep(1);
           }}
           isCurrent={activeStep === 1}
+          placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
+          text="Set the theme of the adventure. This will determine the setting and genre of the story you will be playing."
         />
       )}
       <CharacterCreationIntro

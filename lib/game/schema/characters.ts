@@ -2,19 +2,19 @@ import { Item } from "./objects";
 
 export type Character = {
   /** The name of the character. */
-  name?: string;
+  name: string;
 
   /** The description of the character. */
-  description?: string;
+  description: string;
 
   /** The background of the character. */
-  background?: string;
+  background: string;
 
   /** The inventory of the character. */
-  inventory?: Item[];
+  inventory: Item[];
 
   /** The motivation of the character */
-  motivation?: string;
+  motivation: string;
 };
 
 export type NpcCharacter = Character & {

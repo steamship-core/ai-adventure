@@ -3,19 +3,19 @@ import { HumanCharacter } from "./characters";
 import { Quest } from "./quest";
 
 export type GameState = {
-  player?: HumanCharacter;
+  player: HumanCharacter;
 
   /** The tone of the story being told */
-  tone?: string;
+  tone: string;
 
   /** The genre of the story being told */
-  genre?: string;
+  genre: string;
 
   /** The quests the player has been on */
-  quests?: Quest[];
+  quests: Quest[];
 
   /** The player's camp. This is where they are when they're not on a quest. */
-  camp?: Camp;
+  camp: Camp;
 
   /** Set this to a quest chat_file_id in order to signal that the player is on that quest right now. */
   current_quest?: string;

@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { useTypeWriter } from "./hooks/use-typewriter";
 import { useRouter } from "next/navigation";
-import { GameState, saveGameState } from "@/lib/game/game-state";
+import { GameState } from "@/lib/game/schema/game_state";
 
 const allValuesAreSet = (config: CharacterConfig) => {
   return (

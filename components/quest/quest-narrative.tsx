@@ -1,19 +1,11 @@
 "use client";
-import {
-  QuestContainer,
-  QuestContentContainer,
-  QuestNarrativeContainer,
-} from "@/components/quest/shared/components";
+import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import EndSheet from "./shared/end-sheet";
-import { Fragment, useRef, useState } from "react";
+import { useRef } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { TypographyP } from "../ui/typography/TypographyP";
-import { TypographyMuted } from "../ui/typography/TypographyMuted";
-import { Skeleton } from "../ui/skeleton";
-import Image from "next/image";
-import { useChat, useCompletion } from "ai/react";
+import { useChat } from "ai/react";
 import { Message } from "ai";
 import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
 import { Block } from "@steamship/client";
@@ -50,7 +42,7 @@ export default function QuestNarrative() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat();
-  console.log(messages);
+
   return (
     <>
       <div className="flex basis-10/12 overflow-hidden">
