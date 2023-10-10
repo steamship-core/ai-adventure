@@ -31,6 +31,9 @@ import {
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Steamship from "@steamship/client";
+import { getGameState, saveGameState } from "@/lib/game/game-state";
+import { mockGameState } from "@/lib/game/mocks";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
   <div>
@@ -85,13 +88,18 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
-  console.log(userId);
   const agent = await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
     },
   });
-
+  const gameState = await getGameState();
+  console.log(gameState.camp.npcs);
+  const resp = await saveGameState({ ...gameState, tone: "dark" });
+  console.log(resp.statusText);
+  const newGameState = await getGameState();
+  console.log(gameState);
+  // console.log(gameState);
   if (!agent) {
     redirect("/play/character-creation");
   }

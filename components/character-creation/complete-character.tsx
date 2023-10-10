@@ -6,27 +6,32 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
-import { CharacterConfig } from ".";
 import { useTypeWriter } from "./hooks/use-typewriter";
 import { useRouter } from "next/navigation";
+import { GameState, saveGameState } from "@/lib/game/game-state";
 
 const allValuesAreSet = (config: CharacterConfig) => {
-  return Object.values(config).every((value) => value.length > 1);
+  return (
+    config.player?.name &&
+    config.player?.description &&
+    config.player?.background &&
+    config.genre
+  );
 };
 
 const TEXT = `Creating an image of your character...`;
+
+export type CharacterConfig =
+  | Partial<GameState> & {
+      player: Partial<GameState["player"]>;
+    };
 
 const CharacterCreationComplete = ({
   config,
   isCurrent,
   onFocus,
 }: {
-  config: {
-    name: string;
-    theme: string;
-    background: string;
-    appearance: string;
-  };
+  config: CharacterConfig;
   isCurrent: boolean;
   onFocus: () => any;
 }) => {
@@ -77,19 +82,23 @@ const CharacterCreationComplete = ({
           <TypographyMuted className="text-muted-foreground">
             Name:
           </TypographyMuted>
-          <TypographyLarge>{config.name}</TypographyLarge>
+          <TypographyLarge>{config.player?.name}</TypographyLarge>
         </div>
         <div>
           <TypographyMuted>Theme:</TypographyMuted>
-          <TypographyLarge>{config.theme}</TypographyLarge>
+          <TypographyLarge>{config.genre}</TypographyLarge>
+        </div>
+        <div>
+          <TypographyMuted>Tone:</TypographyMuted>
+          <TypographyLarge>{config.tone}</TypographyLarge>
         </div>
         <div>
           <TypographyMuted>Background:</TypographyMuted>
-          <TypographyLarge>{config.background}</TypographyLarge>
+          <TypographyLarge>{config.player.background}</TypographyLarge>
         </div>
         <div>
           <TypographyMuted>Appearance:</TypographyMuted>
-          <TypographyLarge>{config.appearance}</TypographyLarge>
+          <TypographyLarge>{config.player.description}</TypographyLarge>
         </div>
       </div>
 

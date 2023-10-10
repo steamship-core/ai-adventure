@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
-
-const HARDCODED_STEAMSHIP_AGENT_URL =
-  "https://viable-house.steamship.run/ai-adventure-game-beta-ag1-0178tj/ai-adventure-game-beta-ag1";
+import { GameState, saveGameState } from "@/lib/game/game-state";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -11,13 +9,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
+  const config = await request.json();
+
   try {
     const agent = await prisma.agents.create({
       data: {
         ownerId: userId!,
-        agentUrl: HARDCODED_STEAMSHIP_AGENT_URL,
+        agentUrl: process.env.PLACEHOLDER_STEAMSHIP_AGENT_URL!,
       },
     });
+    console.log("saving game state", config);
+    await saveGameState(config as GameState);
     return NextResponse.json({ agent }, { status: 200 });
   } catch (e) {
     console.error(e);

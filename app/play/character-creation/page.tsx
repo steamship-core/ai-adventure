@@ -6,15 +6,15 @@ import { redirect } from "next/navigation";
 export default async function CharacterCreationPage() {
   const { userId } = auth();
 
-  const agent = await prisma.agents.findFirst({
-    where: {
-      ownerId: userId!,
-    },
-  });
+  // const agent = await prisma.agents.findFirst({
+  //   where: {
+  //     ownerId: userId!,
+  //   },
+  // });
 
-  if (agent) {
-    redirect("/play/camp");
-  }
+  // if (agent) {
+  //   redirect("/play/camp");
+  // }
 
   return <CharacterCreation />;
 }
