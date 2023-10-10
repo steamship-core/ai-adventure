@@ -1,18 +1,29 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 const LoadingScreen = () => {
   const funnyLoadingMessages = [
-    "Cleaning up the mess at camp ...",
-    "Sharpening swords ...",
-    "Polishing armor ...",
-    "Preparing the horses ...",
-    "Consulting the AI oracles ...",
-    "Reading the stars ...",
-    "Reading the tea leaves ...",
-    "Conjuring the AI spirits ...",
+    "Rolling the dice...",
+    "Training the goblins...",
+    "Stoking the dungeon fires...",
+    "Calibrating the catapults...",
+    "Charging the crystal balls...",
+    "Upgrading the goblins to version 2.0...",
+    "Rebooting the matrix...",
+    "Hiring more elves for faster loading...",
+    "Consulting the oracle for optimal performance...",
+    "Making sure the zombies are still in their cages...",
+    "Asking the wizards for Wi-Fi passwords...",
+    "Teaching dragons about fire safety...",
+    "Bribing the game characters...",
+    "Asking the old wise turtle for advice...",
+    "Mixing potions and circuit boards...",
+    "Blending the old scrolls with new code...",
+    "Dialing up the interdimensional modem...",
+    "Reminding the AI that it's loved (in a totally platonic, digital way)...",
+    "Bribing goblins with shiny objects for better performance...",
+    "Balrog's taking the elevator. Please wait...",
   ];
 
   const pickRandomMessage = () => {
@@ -32,14 +43,17 @@ const LoadingScreen = () => {
     };
   }, []);
 
-  return createPortal(
-    <div className="fixed top-0 left-0 h-full w-full bg-[rgb(14,18,23)] flex items-center justify-center flex-col">
-      <div className="h-44 w-44">
-        <Image src="/cfire.gif" width={640} height={640} alt="fire" />
-      </div>
+  return (
+    <div className="fixed top-0 left-0 h-full w-full bg-background flex items-center justify-center flex-col">
+      <Player
+        autoplay
+        loop
+        src="/fire-lottie.json"
+        style={{ height: "600px", width: "600px" }}
+      />
+
       {loadingMessage}
-    </div>,
-    window.document.body
+    </div>
   );
 };
 

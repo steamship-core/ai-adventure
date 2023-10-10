@@ -3,6 +3,7 @@ import Steamship, { SteamshipStream } from "@steamship/client";
 import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
+import { getSteamshipClient } from "@/lib/utils";
 
 // IMPORTANT! Set the runtime to edgew
 export const runtime = "edge";
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
     .reverse()
     .find((message) => message.role === "user");
 
-  const steamship = new Steamship({ apiKey: process.env.STEAMSHIP_API_KEY });
+  const steamship = getSteamshipClient();
   console.log("payload", {
     prompt: mostRecentUserMessage?.content || "",
     context_id,
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
       context_id,
     },
   });
+
+  console.log(response);
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {

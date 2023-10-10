@@ -2,7 +2,7 @@
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import EndSheet from "./shared/end-sheet";
-import { useRef } from "react";
+import { Fragment, useId, useRef } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useChat } from "ai/react";
@@ -10,32 +10,108 @@ import { Message } from "ai";
 import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
 import { Block } from "@steamship/client";
 import { useParams } from "next/navigation";
+import { TypographySmall } from "../ui/typography/TypographySmall";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 const TextBlock = ({ text }: { text: string }) => {
   const { currentText, isFinished } = useTypeWriter({
-    text,
+    text: text.trim(),
     useMask: false,
   });
   return <p className="whitespace-pre-wrap">{currentText}</p>;
 };
 
-const NarrativeBlock = ({ message }: { message: Message }) => {
-  try {
-    const blocks = message.content.split(/\r?\n|\r|\n/g).map((block) => {
-      return block ? (JSON.parse(block) as Block) : null;
-    });
+const getMessageType = (block: Block) => {
+  if (block?.tags?.find((tag) => tag.kind === "status-message")) {
+    return "STATUS_MESSAGE";
+  }
+  return "TEXT";
+};
 
-    const concattenatedText = blocks.reduce((acc, block) => {
+const getFormattedBlock = (message: Message) => {
+  const blocks = message.content
+    .split(/\r?\n|\r|\n/g)
+    .map((block) => {
+      return block ? (JSON.parse(block) as Block) : null;
+    })
+    .filter((block) => block) as Block[];
+
+  const uniqueBlocks = blocks.reduce((acc, block) => {
+    const existingBlock = acc.find((b) => b.id === block.id);
+    if (!existingBlock) {
+      acc.push(block);
+    }
+    return acc;
+  }, [] as Block[]);
+  return uniqueBlocks;
+};
+
+const DisplayBlock = ({ message }: { message: Message }) => {
+  const id = useId();
+  try {
+    const blocks = getFormattedBlock(message);
+
+    const textBlocks = blocks.filter((b) => getMessageType(b) === "TEXT");
+
+    const concattenatedText = textBlocks.reduce((acc, block) => {
       if (block?.text) {
         acc = `${acc}\n\n${block.text}`;
       }
       return acc;
     }, "");
-    return <TextBlock text={concattenatedText} />;
+
+    return <TextBlock key={id} text={concattenatedText} />;
   } catch (e) {
     console.log(e);
     return <div>{message.content}</div>;
   }
+};
+
+const StatusMessage = ({ message }: { message: Message }) => {
+  try {
+    const blocks = getFormattedBlock(message);
+
+    const statusBlocks = blocks.filter(
+      (b) => getMessageType(b) === "STATUS_MESSAGE"
+    );
+
+    return statusBlocks.length > 0 ? (
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger className="px-4 border rounded-md border-yellow-600 text-muted-foreground w-full">
+            View Status Messages
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex gap-8 w-full flex-col">
+              {statusBlocks.map((block) => (
+                <div key={block.id} className="px-4 py-2">
+                  <TypographySmall>Status Message</TypographySmall>
+                  <p>{block.text}</p>
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    ) : null;
+  } catch (e) {
+    console.log(e);
+    return <div>{message.content}</div>;
+  }
+};
+
+const NarrativeBlock = ({ message }: { message: Message }) => {
+  return (
+    <>
+      <StatusMessage message={message} />
+      <DisplayBlock message={message} />
+    </>
+  );
 };
 
 export default function QuestNarrative() {

@@ -13,6 +13,7 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
+import { Player } from "@lottiefiles/react-lottie-player";
 import { AwardIcon, BadgeDollarSignIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -36,7 +37,12 @@ const EndSheet = ({ isEnd }: { isEnd: boolean }) => (
           Quest Completed
         </TypographyH1>
         <div className="flex items-center justify-center my-12 flex-col gap-6">
-          <AwardIcon className="text-yellow-400" size={100} />
+          <Player
+            autoplay
+            src="/award-lottie.json"
+            keepLastFrame
+            style={{ height: "300px", width: "300px" }}
+          />
           <TypographyLarge>You did it!</TypographyLarge>
           <div className="flex gap-6">
             <TypographySmall className="flex items-center">

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import dynamic from "next/dynamic";
-const LoadingScreen = dynamic(() => import("./loading-screen"), {
+const LoadingScreen = dynamic(() => import("./loading-screen-portal"), {
   ssr: false,
 });
 

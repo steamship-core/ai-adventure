@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export const useTypeWriter = ({
   text,
-  delay = 0,
+  delay = 25,
   useMask = true,
 }: {
   text: string;

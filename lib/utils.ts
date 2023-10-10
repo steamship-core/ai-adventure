@@ -6,9 +6,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getSteamshipClient(apiBase: string) {
+export function getSteamshipClient(apiBase?: string) {
+  // return new Steamship({
+  //   apiKey: process.env.STEAMSHIP_API_KEY,
+  //   apiBase,
+  // });
   return new Steamship({
     apiKey: process.env.STEAMSHIP_API_KEY,
-    apiBase,
+    appBase: "https://apps.staging.steamship.com/",
+    apiBase: apiBase ? apiBase : "https://api.staging.steamship.com/api/v1/",
   });
 }
