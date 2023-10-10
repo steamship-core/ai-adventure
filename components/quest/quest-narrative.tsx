@@ -9,6 +9,7 @@ import { useChat } from "ai/react";
 import { Message } from "ai";
 import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
 import { Block } from "@steamship/client";
+import { useParams } from "next/navigation";
 
 const TextBlock = ({ text }: { text: string }) => {
   const { currentText, isFinished } = useTypeWriter({
@@ -30,7 +31,6 @@ const NarrativeBlock = ({ message }: { message: Message }) => {
       }
       return acc;
     }, "");
-    console.log(concattenatedText);
     return <TextBlock text={concattenatedText} />;
   } catch (e) {
     console.log(e);
@@ -40,9 +40,10 @@ const NarrativeBlock = ({ message }: { message: Message }) => {
 
 export default function QuestNarrative() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { questId } = useParams();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat();
-
+    useChat({ body: { context_id: questId } });
+  console.log(messages);
   return (
     <>
       <div className="flex basis-10/12 overflow-hidden">

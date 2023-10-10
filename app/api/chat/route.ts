@@ -1,22 +1,38 @@
-import { StreamingTextResponse } from "ai";
+import { Message, StreamingTextResponse } from "ai";
 import Steamship, { SteamshipStream } from "@steamship/client";
+import prisma from "@/lib/db";
+import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
 
 // IMPORTANT! Set the runtime to edgew
 export const runtime = "edge";
 
 export async function POST(req: Request) {
+  const { userId } = auth();
+  if (!userId) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
   // Extract the `prompt` from the body of the request
-  const { prompt, context_id } = await req.json();
+  const { context_id, messages } = (await req.json()) as {
+    context_id: string;
+    messages: Message[];
+  };
+  const mostRecentUserMessage = messages
+    .reverse()
+    .find((message) => message.role === "user");
 
   const steamship = new Steamship({ apiKey: process.env.STEAMSHIP_API_KEY });
-
+  console.log("payload", {
+    prompt: mostRecentUserMessage?.content || "",
+    context_id,
+  });
   // See https://docs.steamship.com/javascript_client for information about:
   // - The BASE_URL where your running Agent lives
   // - The context_id which mediates your Agent's server-side chat history
   const response = await steamship.agent.respondAsync({
     url: process.env.PLACEHOLDER_STEAMSHIP_AGENT_URL!,
     input: {
-      prompt,
+      prompt: mostRecentUserMessage?.content || "",
       context_id,
     },
   });

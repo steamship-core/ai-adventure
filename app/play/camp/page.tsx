@@ -17,13 +17,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import InteractionSheet, { CampMember } from "@/components/interaction-sheet";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getGameState, saveGameState } from "@/lib/game/game-state";
 import StartAdventureButton from "@/components/camp/start-adventure-button";
+import LoadingScreen from "@/components/loading/use-loading-screen";
+import useLoadingScreen from "@/components/loading/use-loading-screen";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
   <div>

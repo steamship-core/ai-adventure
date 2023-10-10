@@ -60,19 +60,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        <>
-          {isLoading ? (
-            <div
-              className="animate-spin inline-block w-5 h-5 border-[2px] border-current border-t-transparent text-primary-foreground rounded-full"
-              role="status"
-              aria-label="loading"
-            >
-              <span className="sr-only">Loading...</span>
-            </div>
-          ) : (
-            children
-          )}
-        </>
+        {isLoading ? (
+          <div
+            className="animate-spin inline-block w-5 h-5 border-[2px] border-current border-t-transparent text-primary-foreground rounded-full"
+            role="status"
+            aria-label="loading"
+          >
+            <span className="sr-only">Loading...</span>
+          </div>
+        ) : (
+          children
+        )}
       </Comp>
     );
   }

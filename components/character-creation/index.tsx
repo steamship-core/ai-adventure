@@ -18,7 +18,7 @@ export default function CharacterCreation() {
     searchParams.has("background");
 
   const [activeStep, setActiveStep] = useState(isCompleteConfig ? 6 : 0);
-  const [step, setStep] = useState(isCompleteConfig ? 6 : 0);
+  const [step, setStep] = useState(isCompleteConfig ? 7 : 0);
 
   const [configuration, setConfiguration] = useState<CharacterConfig>({
     player: {
@@ -43,11 +43,31 @@ export default function CharacterCreation() {
 
   return (
     <CreationContainer>
-      {step > 5 && (
+      {step > 6 && (
         <CharacterCreationComplete
           config={configuration}
+          onFocus={() => setActiveStep(7)}
+          isCurrent={activeStep === 7}
+        />
+      )}
+      {step > 5 && (
+        <OnboardingPrompt
+          onContinue={(motivation) => {
+            setStep(7);
+            setActiveStep(7);
+            setConfiguration({
+              ...configuration,
+              player: {
+                ...configuration.player,
+                motivation,
+              },
+            });
+          }}
           onFocus={() => setActiveStep(6)}
           isCurrent={activeStep === 6}
+          placeholder="To become the most powerful wizard in the land."
+          text="What primary motivation does your character have? This will be used to generate quests and storylines for your character."
+          isTextarea
         />
       )}
       {step > 4 && (

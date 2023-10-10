@@ -9,6 +9,7 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { useTypeWriter } from "./hooks/use-typewriter";
 import { useRouter } from "next/navigation";
 import { GameState } from "@/lib/game/schema/game_state";
+import useLoadingScreen from "../loading/use-loading-screen";
 
 const allValuesAreSet = (config: CharacterConfig) => {
   return (
@@ -35,9 +36,10 @@ const CharacterCreationComplete = ({
   isCurrent: boolean;
   onFocus: () => any;
 }) => {
-  const { currentText, isFinished } = useTypeWriter({
+  const { currentText } = useTypeWriter({
     text: TEXT,
   });
+  const { loadingScreen, setIsVisible } = useLoadingScreen();
 
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -54,64 +56,68 @@ const CharacterCreationComplete = ({
   }, []);
 
   const onComplete = async () => {
+    setIsVisible(true);
     await fetch("/api/agent", { method: "POST", body: JSON.stringify(config) });
     router.push("/play/camp");
   };
 
   return (
-    <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-      <div>
-        <TypographyP>{currentText}</TypographyP>
-      </div>
-      <div className="w-full flex items-center justify-center mt-4">
-        <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
-          {imageLoaded ? (
-            <Image
-              src={"/orc.png"}
-              height={1024}
-              width={1024}
-              alt="Character"
-            />
-          ) : (
-            <Skeleton className="h-full w-full" />
-          )}
-        </div>
-      </div>
-      <div className="mt-6 flex flex-col gap-4">
+    <>
+      {loadingScreen}
+      <CreationContent isCurrent={isCurrent} onClick={onFocus}>
         <div>
-          <TypographyMuted className="text-muted-foreground">
-            Name:
-          </TypographyMuted>
-          <TypographyLarge>{config.player?.name}</TypographyLarge>
+          <TypographyP>{currentText}</TypographyP>
         </div>
-        <div>
-          <TypographyMuted>Theme:</TypographyMuted>
-          <TypographyLarge>{config.genre}</TypographyLarge>
+        <div className="w-full flex items-center justify-center mt-4">
+          <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
+            {imageLoaded ? (
+              <Image
+                src={"/orc.png"}
+                height={1024}
+                width={1024}
+                alt="Character"
+              />
+            ) : (
+              <Skeleton className="h-full w-full" />
+            )}
+          </div>
         </div>
-        <div>
-          <TypographyMuted>Tone:</TypographyMuted>
-          <TypographyLarge>{config.tone}</TypographyLarge>
+        <div className="mt-6 flex flex-col gap-4">
+          <div>
+            <TypographyMuted className="text-muted-foreground">
+              Name:
+            </TypographyMuted>
+            <TypographyLarge>{config.player?.name}</TypographyLarge>
+          </div>
+          <div>
+            <TypographyMuted>Theme:</TypographyMuted>
+            <TypographyLarge>{config.genre}</TypographyLarge>
+          </div>
+          <div>
+            <TypographyMuted>Tone:</TypographyMuted>
+            <TypographyLarge>{config.tone}</TypographyLarge>
+          </div>
+          <div>
+            <TypographyMuted>Background:</TypographyMuted>
+            <TypographyLarge>{config.player.background}</TypographyLarge>
+          </div>
+          <div>
+            <TypographyMuted>Appearance:</TypographyMuted>
+            <TypographyLarge>{config.player.description}</TypographyLarge>
+          </div>
         </div>
-        <div>
-          <TypographyMuted>Background:</TypographyMuted>
-          <TypographyLarge>{config.player.background}</TypographyLarge>
-        </div>
-        <div>
-          <TypographyMuted>Appearance:</TypographyMuted>
-          <TypographyLarge>{config.player.description}</TypographyLarge>
-        </div>
-      </div>
 
-      <CreationActions isFinished={true}>
-        <Button
-          disabled={!allValuesAreSet(config)}
-          className="w-full"
-          onClick={onComplete}
-        >
-          Create Character
-        </Button>
-      </CreationActions>
-    </CreationContent>
+        <CreationActions isFinished={true}>
+          <Button
+            disabled={!allValuesAreSet(config)}
+            className="w-full"
+            onClick={onComplete}
+          >
+            Create Character
+          </Button>
+        </CreationActions>
+      </CreationContent>
+    </>
   );
 };
 
