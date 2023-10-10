@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { getSteamshipClient } from "@/lib/utils";
 
-// IMPORTANT! Set the runtime to edgew
+// IMPORTANT! Set the runtime to edge
 export const runtime = "edge";
 
 export async function POST(req: Request) {
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {
-    streamTimeoutSeconds: 30,
+    streamTimeoutSeconds: 60,
     // Use: "markdown" | "json"
     format: "json",
   });
