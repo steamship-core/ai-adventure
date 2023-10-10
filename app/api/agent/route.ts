@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
-import { GameState, saveGameState } from "@/lib/game/game-state";
+import { saveGameState } from "@/lib/game/game-state";
+import { GameState } from "@/lib/game/schema/game_state";
 
 export async function POST(request: Request) {
   const { userId } = auth();

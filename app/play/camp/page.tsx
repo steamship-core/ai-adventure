@@ -23,6 +23,7 @@ import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getGameState, saveGameState } from "@/lib/game/game-state";
+import StartAdventureButton from "@/components/camp/start-adventure-button";
 
 const ContentBox = ({ children }: { children: ReactNode }) => (
   <div>
@@ -234,12 +235,7 @@ export default async function CampPage() {
           </ContentBox>
           <ContentBox>
             <div className="flex flex-col gap-2">
-              <Button asChild>
-                <Link href="/play/quest/1">
-                  <CompassIcon className="mr-2" size={16} />
-                  Go on an adventure
-                </Link>
-              </Button>
+              <StartAdventureButton />
               <Button variant="outline">
                 <FootprintsIcon className="mr-2" size={16} />
                 Send on an adventure
