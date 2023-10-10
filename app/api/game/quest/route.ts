@@ -3,24 +3,26 @@ import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
 import { saveGameState } from "@/lib/game/game-state";
 import { GameState } from "@/lib/game/schema/game_state";
+import { startQuest } from "@/lib/game/quest";
 
 export async function POST(request: Request) {
   const { userId } = auth();
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+  const agent = await prisma.agents.findFirst({
+    where: {
+      ownerId: userId!,
+    },
+  });
 
-  const config = await request.json();
+  if (!agent) {
+    return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+  }
 
   try {
-    const agent = await prisma.agents.create({
-      data: {
-        ownerId: userId!,
-        agentUrl: process.env.PLACEHOLDER_STEAMSHIP_AGENT_URL!,
-      },
-    });
-    await saveGameState(agent.agentUrl, config as GameState);
-    return NextResponse.json({ agent }, { status: 200 });
+    const quest = await startQuest(agent!.agentUrl);
+    return NextResponse.json({ quest }, { status: 200 });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
