@@ -1,4 +1,6 @@
+import { Camp } from "./camp";
 import { HumanCharacter } from "./characters";
+import { Quest } from "./quest";
 
 export type GameState = {
   player?: HumanCharacter;
