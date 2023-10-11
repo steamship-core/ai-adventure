@@ -78,15 +78,21 @@ export const CharacterSheet = () => {
             </div>
             <div>
               <TypographyH3>Background</TypographyH3>
-              <TypographyMuted>{gameState.player.background}</TypographyMuted>
+              <TypographyMuted className=" whitespace-pre-wrap">
+                {gameState.player.background}
+              </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Description</TypographyH3>
-              <TypographyMuted>{gameState.player.description}</TypographyMuted>
+              <TypographyMuted className=" whitespace-pre-wrap">
+                {gameState.player.description}
+              </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Motivation</TypographyH3>
-              <TypographyMuted>{gameState.player.motivation}</TypographyMuted>
+              <TypographyMuted className=" whitespace-pre-wrap">
+                {gameState.player.motivation}
+              </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Stats</TypographyH3>

@@ -1,31 +1,14 @@
 import InventorySheet from "@/components/inventory-sheet";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
-import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
-import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
-import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import prisma from "@/lib/db";
 import { UserButton, auth } from "@clerk/nextjs";
-import {
-  ActivityIcon,
-  BadgeDollarSignIcon,
-  CompassIcon,
-  FootprintsIcon,
-  StarIcon,
-} from "lucide-react";
+import { FootprintsIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ReactNode, useState } from "react";
-import InteractionSheet from "@/components/interaction-sheet";
-import { TypographyP } from "@/components/ui/typography/TypographyP";
-import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { getGameState, saveGameState } from "@/lib/game/game-state";
+import { ReactNode } from "react";
+import { getGameState } from "@/lib/game/game-state";
 import StartAdventureButton from "@/components/camp/start-adventure-button";
-import LoadingScreen from "@/components/loading/use-loading-screen";
-import useLoadingScreen from "@/components/loading/use-loading-screen";
 import RecoilProvider from "@/components/recoil-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
@@ -46,6 +29,7 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
+  console.log(userId);
   const agent = await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
