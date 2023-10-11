@@ -28,7 +28,13 @@ const TextBlock = ({ text }: { text: string }) => {
 
 const getMessageType = (
   block: Block
-): "status" | "chat:player" | "chat:other" => {
+):
+  | "status"
+  | "chat:player"
+  | "chat:other"
+  | "agent:system"
+  | "chat:system"
+  | "agent:function" => {
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
     return "status";
   }
@@ -37,7 +43,16 @@ const getMessageType = (
   );
   if ((roleTag?.value || {})["string-value"] == "user") {
     return "chat:player";
+  } else if ((roleTag?.value || {})["string-value"] == "system") {
+    return "agent:system";
   }
+  let functionTag: Tag | undefined = block?.tags?.find(
+    (tag) => tag.kind === "function-selection"
+  );
+  if (functionTag) {
+    return "agent:function";
+  }
+
   return "chat:other";
 };
 
