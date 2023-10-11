@@ -9,7 +9,6 @@ import { ContentBox } from "./content-box";
 
 export const CampMembers = () => {
   const gameState = useRecoilValue(recoilGameState);
-  console.log(gameState.camp.npcs);
   return (
     <>
       {gameState.camp.npcs.length > 0 && (
