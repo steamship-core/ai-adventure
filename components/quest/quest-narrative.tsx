@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { useChat } from "ai/react";
 import { Message } from "ai";
 import { useTypeWriter } from "../character-creation/hooks/use-typewriter";
-import { Block } from "@steamship/client";
+import { Block, Tag } from "@steamship/client";
 import { useParams } from "next/navigation";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 import {
@@ -26,11 +26,34 @@ const TextBlock = ({ text }: { text: string }) => {
   return <p className="whitespace-pre-wrap">{currentText}</p>;
 };
 
-const getMessageType = (block: Block) => {
+const getMessageType = (
+  block: Block
+):
+  | "status"
+  | "chat:player"
+  | "chat:other"
+  | "agent:system"
+  | "chat:system"
+  | "agent:function" => {
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
-    return "STATUS_MESSAGE";
+    return "status";
   }
-  return "TEXT";
+  let roleTag: Tag | undefined = block?.tags?.find(
+    (tag) => tag.kind === "chat" && tag.name == "role"
+  );
+  if ((roleTag?.value || {})["string-value"] == "user") {
+    return "chat:player";
+  } else if ((roleTag?.value || {})["string-value"] == "system") {
+    return "agent:system";
+  }
+  let functionTag: Tag | undefined = block?.tags?.find(
+    (tag) => tag.kind === "function-selection"
+  );
+  if (functionTag) {
+    return "agent:function";
+  }
+
+  return "chat:other";
 };
 
 const getFormattedBlock = (message: Message) => {
@@ -56,7 +79,7 @@ const DisplayBlock = ({ message }: { message: Message }) => {
   try {
     const blocks = getFormattedBlock(message);
 
-    const textBlocks = blocks.filter((b) => getMessageType(b) === "TEXT");
+    const textBlocks = blocks.filter((b) => getMessageType(b) === "chat:other");
     const concattenatedText = textBlocks.reduce((acc, block) => {
       if (block?.text) {
         acc = `${acc}\n\n${block.text}`;
@@ -75,9 +98,7 @@ const StatusMessage = ({ message }: { message: Message }) => {
   try {
     const blocks = getFormattedBlock(message);
 
-    const statusBlocks = blocks.filter(
-      (b) => getMessageType(b) === "STATUS_MESSAGE"
-    );
+    const statusBlocks = blocks.filter((b) => getMessageType(b) === "status");
 
     return statusBlocks.length > 0 ? (
       <Accordion type="single" collapsible>
