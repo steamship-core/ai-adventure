@@ -59,5 +59,5 @@ export const getFormattedBlock = (message: Message) => {
     return acc;
   }, [] as Block[]);
 
-  return combinedBlocks;
+  return combinedBlocks.reverse();
 };
