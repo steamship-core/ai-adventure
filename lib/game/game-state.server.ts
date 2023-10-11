@@ -1,4 +1,3 @@
-import Steamship from "@steamship/client";
 import { getSteamshipClient } from "../utils";
 import { GameState } from "./schema/game_state";
 

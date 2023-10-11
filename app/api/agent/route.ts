@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
-import { saveGameState } from "@/lib/game/game-state";
+import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
 
 export async function POST(request: Request) {

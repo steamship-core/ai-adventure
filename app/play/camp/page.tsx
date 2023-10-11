@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { getGameState } from "@/lib/game/game-state";
+import { getGameState } from "@/lib/game/game-state.server";
 import StartAdventureButton from "@/components/camp/start-adventure-button";
 import RecoilProvider from "@/components/recoil-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";

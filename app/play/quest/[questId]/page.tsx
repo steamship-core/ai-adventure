@@ -1,6 +1,6 @@
 import Quest from "@/components/quest/quest";
 import prisma from "@/lib/db";
-import { getGameState } from "@/lib/game/game-state";
+import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 

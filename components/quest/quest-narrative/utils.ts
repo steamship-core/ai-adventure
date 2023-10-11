@@ -41,6 +41,7 @@ export const getMessageType = (block: Block) => {
   return MessageTypes.TEXT;
 };
 
+// 🤮
 export const getFormattedBlock = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
@@ -49,12 +50,14 @@ export const getFormattedBlock = (message: Message) => {
     })
     .filter((block) => block) as Block[];
 
-  const uniqueBlocks = blocks.reduce((acc, block) => {
+  const combinedBlocks = blocks.reduce((acc, block) => {
     const existingBlock = acc.find((b) => b.id === block.id);
-    if (!existingBlock) {
-      acc.push(block);
+    if (existingBlock) {
+      acc.splice(acc.indexOf(existingBlock), 1);
     }
+    acc.push(block);
     return acc;
   }, [] as Block[]);
-  return uniqueBlocks;
+
+  return combinedBlocks;
 };

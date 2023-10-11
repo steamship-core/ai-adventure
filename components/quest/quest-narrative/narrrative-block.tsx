@@ -11,12 +11,11 @@ import {
   UserMessageBlock,
 } from "./debug-blocks";
 
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 export const NarrativeBlock = ({ message }: { message: Message }) => {
   try {
     const blocks = getFormattedBlock(message);
-    console.log(blocks);
     // const textBlocks = blocks.filter(
     //   (b) => getMessageType(b) === MessageTypes.TEXT
     // );
