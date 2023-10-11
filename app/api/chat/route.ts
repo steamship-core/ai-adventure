@@ -23,10 +23,6 @@ export async function POST(req: Request) {
     .find((message) => message.role === "user");
 
   const steamship = getSteamshipClient();
-  console.log("payload", {
-    prompt: mostRecentUserMessage?.content || "",
-    context_id,
-  });
   // See https://docs.steamship.com/javascript_client for information about:
   // - The BASE_URL where your running Agent lives
   // - The context_id which mediates your Agent's server-side chat history
@@ -37,8 +33,6 @@ export async function POST(req: Request) {
       context_id,
     },
   });
-
-  console.log(response);
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {

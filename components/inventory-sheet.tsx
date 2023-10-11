@@ -15,16 +15,17 @@ import { TypographySmall } from "./ui/typography/TypographySmall";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
 import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { Switch } from "@/components/ui/switch";
-import { use, useEffect, useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+import { useEffect, useState } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { cn } from "@/lib/utils";
 
-const InventorySheet = ({ gameState }: { gameState: GameState }) => {
+const InventorySheet = ({
+  gameState,
+  text = "View Inventory",
+}: {
+  gameState: GameState;
+  text?: string;
+}) => {
   const [useGridView, setUseGridView] = useState(false);
 
   useEffect(() => {
@@ -43,7 +44,8 @@ const InventorySheet = ({ gameState }: { gameState: GameState }) => {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">
-          <PackageIcon size={16} className="mr-2" /> View Inventory
+          <PackageIcon size={16} className={cn(text && "mr-2")} />
+          {text}
         </Button>
       </SheetTrigger>
       <SheetContent
