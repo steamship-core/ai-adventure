@@ -10,20 +10,20 @@ import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { NarrativeBlock } from "./narrrative-block";
 
-export default function QuestNarrative() {
+export default function QuestNarrative({ id }: { id: string }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
       body: { context_id: questId },
-      id: questId as string,
-      initialInput: "Let's go on an adventure!",
+      id,
+      // initialInput: "Let's go on an adventure!",
     });
 
-  useEffect(() => {
-    // Manually submit a message of   "Let's go on an adventure!" when the quest narrative loads
-    inputRef?.current?.form?.requestSubmit();
-  }, []);
+  // useEffect(() => {
+  //   // Manually submit a message of   "Let's go on an adventure!" when the quest narrative loads
+  //   inputRef?.current?.form?.requestSubmit();
+  // }, []);
 
   return (
     <>

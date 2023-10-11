@@ -5,14 +5,18 @@ import { ArrowLeftIcon } from "lucide-react";
 import EndSheet from "./shared/end-sheet";
 import InventorySheet from "../inventory-sheet";
 import { GameState } from "@/lib/game/schema/game_state";
-import { useParams } from "next/navigation";
 import { useChat } from "ai/react";
 
 const MINIUM_MESSAGE_COUNT = 1;
 
-export const QuestHeader = ({ gameState }: { gameState: GameState }) => {
-  const { questId } = useParams();
-  const { messages } = useChat({ id: questId as string });
+export const QuestHeader = ({
+  gameState,
+  id,
+}: {
+  gameState: GameState;
+  id: string;
+}) => {
+  const { messages } = useChat({ id });
 
   const userMessages = messages.filter((message) => message.role === "user");
 

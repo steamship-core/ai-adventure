@@ -11,7 +11,7 @@ import {
   UserMessageBlock,
 } from "./debug-blocks";
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 export const NarrativeBlock = ({ message }: { message: Message }) => {
   try {
