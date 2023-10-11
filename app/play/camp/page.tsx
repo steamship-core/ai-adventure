@@ -80,7 +80,6 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
-  console.log(userId);
   const agent = await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
@@ -90,6 +89,8 @@ export default async function CampPage() {
   if (!agent) {
     redirect("/play/character-creation");
   }
+
+  const gameState = await getGameState(agent?.agentUrl);
 
   const randomlyGetBackground = () => {
     const randomIndex = Math.floor(Math.random() * bgImages.length);
@@ -243,7 +244,7 @@ export default async function CampPage() {
                 <FootprintsIcon className="mr-2" size={16} />
                 Send on an adventure
               </Button>
-              <InventorySheet />
+              <InventorySheet gameState={gameState} />
             </div>
           </ContentBox>
         </div>

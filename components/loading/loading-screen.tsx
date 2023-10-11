@@ -44,15 +44,11 @@ const LoadingScreen = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 h-full w-full bg-background flex items-center justify-center flex-col">
-      <Player
-        autoplay
-        loop
-        src="/fire-lottie.json"
-        style={{ height: "600px", width: "600px" }}
-      />
-
-      {loadingMessage}
+    <div className="fixed top-0 left-0 h-[100dvh] w-full bg-background flex flex-col">
+      <div className="h-3/5 flex items-center justify-center">
+        <Player autoplay loop src="/fire-lottie.json" className="w-96" />
+      </div>
+      <div className="px-8 text-center w-full">{loadingMessage}</div>
     </div>
   );
 };

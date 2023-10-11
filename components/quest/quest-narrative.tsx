@@ -2,7 +2,7 @@
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import EndSheet from "./shared/end-sheet";
-import { Fragment, useId, useRef } from "react";
+import { useId, useRef } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useChat } from "ai/react";
@@ -57,7 +57,6 @@ const DisplayBlock = ({ message }: { message: Message }) => {
     const blocks = getFormattedBlock(message);
 
     const textBlocks = blocks.filter((b) => getMessageType(b) === "TEXT");
-
     const concattenatedText = textBlocks.reduce((acc, block) => {
       if (block?.text) {
         acc = `${acc}\n\n${block.text}`;

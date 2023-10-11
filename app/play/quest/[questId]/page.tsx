@@ -1,5 +1,6 @@
 import Quest from "@/components/quest/quest";
 import prisma from "@/lib/db";
+import { getGameState } from "@/lib/game/game-state";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -16,5 +17,7 @@ export default async function QuestPage() {
     redirect("/play/character-creation");
   }
 
-  return <Quest />;
+  const gameState = await getGameState(agent?.agentUrl);
+
+  return <Quest gameState={gameState} />;
 }
