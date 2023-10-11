@@ -16,7 +16,7 @@ export const SummaryStats = () => {
       </TypographySmall>
       <TypographySmall className="flex items-center">
         <BadgeDollarSignIcon size={16} className="mr-2 text-yellow-400" />
-        {gameState.player.gold || 0}
+        {gameState?.player?.gold || 0}
       </TypographySmall>
     </div>
   );

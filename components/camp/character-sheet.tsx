@@ -30,9 +30,9 @@ export const CharacterSheet = () => {
             </div>
           </div>
           <div className="w-28 sm:w-44 lg:w-56">
-            <TypographyLarge>{gameState.player.name}</TypographyLarge>
+            <TypographyLarge>{gameState?.player?.name}</TypographyLarge>
             <Progress value={33} className="h-2 border border-foreground/20" />
-            <TypographyMuted>{gameState.player.rank}</TypographyMuted>
+            <TypographyMuted>{gameState?.player?.rank}</TypographyMuted>
           </div>
         </button>
       </SheetTrigger>
@@ -42,7 +42,7 @@ export const CharacterSheet = () => {
       >
         <div className="flex flex-col gap-4 max-w-xl mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2">
-            <TypographyH1>{gameState.player.name}</TypographyH1>
+            <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
               <Image
                 src={"/orc.png"}
@@ -61,7 +61,7 @@ export const CharacterSheet = () => {
                   size={20}
                   className="mr-2 text-yellow-400"
                 />
-                {gameState.player.gold || 0}
+                {gameState?.player?.gold || 0}
               </TypographyP>
             </div>
           </div>
@@ -79,19 +79,19 @@ export const CharacterSheet = () => {
             <div>
               <TypographyH3>Background</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState.player.background}
+                {gameState?.player?.background}
               </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Description</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState.player.description}
+                {gameState?.player?.description}
               </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Motivation</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState.player.motivation}
+                {gameState?.player?.motivation}
               </TypographyMuted>
             </div>
             <div>
@@ -99,12 +99,12 @@ export const CharacterSheet = () => {
               <ul className="flex flex-col gap-2 list-disc pl-6">
                 <li>
                   <TypographyMuted>
-                    {gameState.quests.length} quests completed
+                    {gameState?.quests?.length} quests completed
                   </TypographyMuted>
                 </li>
                 <li>
                   <TypographyMuted>
-                    {gameState.player.inventory.length} items found
+                    {gameState?.player?.inventory?.length} items found
                   </TypographyMuted>
                 </li>
               </ul>

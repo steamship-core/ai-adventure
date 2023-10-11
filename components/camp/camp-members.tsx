@@ -11,16 +11,16 @@ export const CampMembers = () => {
   const gameState = useRecoilValue(recoilGameState);
   return (
     <>
-      {gameState.camp.npcs.length > 0 && (
+      {gameState?.camp?.npcs?.length > 0 && (
         <div className="flex gap-2 flex-wrap">
-          {gameState.camp.npcs.map((member) => (
+          {gameState?.camp?.npcs.map((member) => (
             <ContentBox key={member.name}>
               <InteractionSheet member={member} />
             </ContentBox>
           ))}
         </div>
       )}
-      {gameState.camp.npcs.length === 0 && (
+      {gameState?.camp?.npcs?.length === 0 && (
         <div className="flex flex-col text-center items-center justify-center w-full h-full mt-4">
           <TypographyP>You have no camp members yet.</TypographyP>
           <TypographySmall>
