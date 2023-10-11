@@ -12,13 +12,8 @@ import StartAdventureButton from "@/components/camp/start-adventure-button";
 import RecoilProvider from "@/components/recoil-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
-import { CampMembers } from "@/components/camp/camp-memberts";
-
-const ContentBox = ({ children }: { children: ReactNode }) => (
-  <div>
-    <div className="bg-background/80 px-4 py-2 rounded-sm">{children}</div>
-  </div>
-);
+import { CampMembers } from "@/components/camp/camp-members";
+import { ContentBox } from "@/components/camp/content-box";
 
 const bgImages = [
   "/campfire-dark.png",
@@ -78,9 +73,7 @@ export default async function CampPage() {
                 <SummaryStats />
               </div>
             </ContentBox>
-            <ContentBox>
-              <CampMembers />
-            </ContentBox>
+            <CampMembers />
             <ContentBox>
               <div className="flex flex-col gap-2">
                 <StartAdventureButton />

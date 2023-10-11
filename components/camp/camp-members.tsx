@@ -2,21 +2,22 @@
 
 import { useRecoilValue } from "recoil";
 import InteractionSheet from "../interaction-sheet";
-import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 import { recoilGameState } from "../recoil-provider";
+import { ContentBox } from "./content-box";
 
 export const CampMembers = () => {
   const gameState = useRecoilValue(recoilGameState);
-
+  console.log(gameState.camp.npcs);
   return (
     <>
-      <TypographyH3>Camp Members</TypographyH3>
       {gameState.camp.npcs.length > 0 && (
-        <div className="mt-8 flex">
+        <div className="flex gap-2 flex-wrap">
           {gameState.camp.npcs.map((member) => (
-            <InteractionSheet key={member.name} member={member} />
+            <ContentBox key={member.name}>
+              <InteractionSheet member={member} />
+            </ContentBox>
           ))}
         </div>
       )}

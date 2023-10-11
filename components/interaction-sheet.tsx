@@ -244,6 +244,21 @@ const InteractionSheet = ({ member }: { member: NpcCharacter }) => {
   if (member.name === "The Merchant") {
     return <MerchantSheet member={member} />;
   }
+  if (member.name === "Logan") {
+    return (
+      <div className="flex flex-col items-center">
+        <div className="h-28 w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
+          <Image
+            src={"/merchant.png"}
+            fill
+            alt="A merchant"
+            className="object-cover"
+          />
+        </div>
+        {member.name}
+      </div>
+    );
+  }
   return null;
 };
 
