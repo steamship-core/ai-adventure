@@ -26,7 +26,6 @@ export const CharacterSheet = () => {
       if (rank >= 100) {
         levels[99];
       }
-      console.log(Math.ceil(rank / 4));
       return levels[Math.ceil(rank / 4)];
     } catch (e) {
       return "Unknown";

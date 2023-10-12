@@ -61,7 +61,6 @@ export const getMessageType = (block: Block) => {
   return MessageTypes.TEXT;
 };
 
-// 🤮
 export const getFormattedBlock = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
@@ -69,7 +68,6 @@ export const getFormattedBlock = (message: Message) => {
       return block ? (JSON.parse(block) as Block) : null;
     })
     .filter((block) => block) as Block[];
-  console.log(blocks.find((b) => b.mimeType === "image/png"));
 
   const combinedBlocks = blocks.reduce((acc, block) => {
     const existingBlock = acc.find((b) => b.id === block.id);

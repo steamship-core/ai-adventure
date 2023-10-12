@@ -28,6 +28,7 @@ export const NarrativeBlock = ({
 }) => {
   try {
     const blocks = getFormattedBlock(message);
+    console.log(blocks);
     return blocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
