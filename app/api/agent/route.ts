@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
 import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
+import { completeOnboarding } from "@/lib/game/onboarding";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -19,7 +20,9 @@ export async function POST(request: Request) {
         agentUrl: process.env.PLACEHOLDER_STEAMSHIP_AGENT_URL!,
       },
     });
+
     await saveGameState(agent.agentUrl, config as GameState);
+    await completeOnboarding(agent.agentUrl);
     return NextResponse.json({ agent }, { status: 200 });
   } catch (e) {
     console.error(e);

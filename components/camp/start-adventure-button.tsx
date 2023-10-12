@@ -17,7 +17,6 @@ const StartAdventureButton = () => {
     setIsVisible(true);
     setIsLoading(true);
     const resp = await fetch("/api/game/quest", { method: "POST" });
-    console.log("resp", resp);
     if (!resp.ok) {
       setIsLoading(false);
       setIsVisible(false);
@@ -26,7 +25,6 @@ const StartAdventureButton = () => {
     const json = (await resp.json()) as {
       quest: Quest & { status: { state: string; statusMessage: string } };
     };
-    console.log(json);
     if (json?.quest?.status?.state === "failed") {
       setIsLoading(false);
       setIsVisible(false);
@@ -37,7 +35,7 @@ const StartAdventureButton = () => {
     }
     setIsLoading(false);
   };
-
+  console.log(gameState);
   const lowEnergy = (gameState.player.energy || 0) < 10;
 
   return (
