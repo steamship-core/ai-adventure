@@ -25,4 +25,7 @@ export type GameState = {
 
   /** For agent-side use. Indicates the agent is awaiting an answer to a specific question keyed by this value. */
   await_ask_key?: string;
+
+  /** The active mode of the game */
+  active_mode: "onboarding" | "camp" | "quest" | "npc-conversation";
 };
