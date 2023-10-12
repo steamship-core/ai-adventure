@@ -1,9 +1,8 @@
 import { Message, StreamingTextResponse } from "ai";
-import Steamship, { SteamshipStream } from "@steamship/client";
-import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { getSteamshipClient } from "@/lib/utils";
+import { SteamshipStream } from "@/lib/streaming-client/src";
 
 // IMPORTANT! Set the runtime to edgew
 export const runtime = "edge";

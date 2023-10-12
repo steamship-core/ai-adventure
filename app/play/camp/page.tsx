@@ -36,11 +36,11 @@ export default async function CampPage() {
   }
 
   let gameState = await getGameState(agent?.agentUrl);
-  // await saveGameState(agent?.agentUrl, {
-  //   ...gameState,
-  //   player: { ...gameState.player, energy: 100 },
-  // });
-  // gameState = await getGameState(agent?.agentUrl);
+  await saveGameState(agent?.agentUrl, {
+    ...gameState,
+    player: { ...gameState.player, energy: 100 },
+  });
+  gameState = await getGameState(agent?.agentUrl);
 
   const randomlyGetBackground = () => {
     const randomIndex = Math.floor(Math.random() * bgImages.length);
