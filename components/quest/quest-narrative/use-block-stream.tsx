@@ -41,7 +41,6 @@ export const useBlockStream = ({ block }: { block: Block }) => {
           try {
             const newBlock = JSON.parse(mostRecentChunk);
             if (newBlock.text && newBlock.text.trim() !== "") {
-              console.log("new block.text", newBlock.text);
               setInnerBlock((prev) => ({ ...prev, text: newBlock.text }));
             }
           } catch (e) {

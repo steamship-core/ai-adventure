@@ -6,19 +6,21 @@ export const ImageBlock = ({ block }: { block: Block }) => {
   const [url, setUrl] = useState<string | undefined>();
   useEffect(() => {
     const fetchImage = async () => {
-      const res = await fetch(`/block/${block.id}`);
-      const body = await res.blob();
-      setUrl(URL.createObjectURL(body));
+      const res = await fetch(`/api/block/${block.id}`);
+      const respBody = await res.blob();
+      setUrl(URL.createObjectURL(respBody));
     };
-    if (!url) {
-      fetchImage();
-    }
+    fetchImage();
   }, [block.id]);
 
   return (
     <div>
-      image block
-      {url && <img src={url} height={500} width={500} alt="generated image" />}
+      <div className="overflow-hidden h-44 w-44 rounded-md">
+        {url && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={url} className="h-full w-full" alt="generated image" />
+        )}
+      </div>
     </div>
   );
 };
