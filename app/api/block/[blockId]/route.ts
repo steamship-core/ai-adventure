@@ -8,8 +8,6 @@ const GET = async (req: Request, context: { params: any }) => {
     apiBase: "https://api.staging.steamship.com/api/v1/",
   });
 
-  const decoder = new TextDecoder();
-  let str = "";
   const response = await steamship.block.raw({ id: blockId });
   return response;
 };
