@@ -31,6 +31,7 @@
     "clsx": "^2.0.0",
     "lucide-react": "^0.284.0",
     "next": "13.5.4",
+    "next-axiom": "^1.0.0",
     "next-themes": "^0.2.1",
     "package": "^1.0.1",
     "prisma": "^5.3.1",
