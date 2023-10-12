@@ -14,7 +14,6 @@ import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import { CampMembers } from "@/components/camp/camp-members";
 import { ContentBox } from "@/components/camp/content-box";
-import { Logger } from "next-axiom";
 
 const bgImages = [
   "/campfire-dark.png",
@@ -25,9 +24,7 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
-  const log = new Logger();
-  log.info("User logged in", { userId });
-
+  console.log(userId);
   const agent = await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
