@@ -8,10 +8,22 @@ export const MessageTypes = {
   STREAMED_TO_CHAT_HISTORY: "STREAMED_TO_CHAT_HISTORY",
   FUNCTION_SELECTION: "FUNCTION_SELECTION",
   STREAMING_BLOCK: "STREAMING_BLOCK",
+  QUEST_SUMMARY: "QUEST_SUMMARY",
+  QUEST_COMPLETE: "QUEST_COMPLETE",
+  ITEM_GENERATION_CONTENT: "ITEM_GENERATION_CONTENT",
   TEXT: "TEXT",
 } as const;
 
 export const getMessageType = (block: Block) => {
+  if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
+    return MessageTypes.ITEM_GENERATION_CONTENT;
+  }
+  if (block.tags?.find((tag) => tag.name === "quest-complete")) {
+    return MessageTypes.QUEST_COMPLETE;
+  }
+  if (block.tags?.find((tag) => tag.name === "quest_summary")) {
+    return MessageTypes.QUEST_SUMMARY;
+  }
   if (block.streamState === "started") {
     return MessageTypes.STREAMING_BLOCK;
   }

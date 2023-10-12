@@ -11,43 +11,59 @@ import {
   UserMessageBlock,
 } from "./debug-blocks";
 import { StreamingBlock } from "./streaming-block";
+import { QuestSummaryBlock } from "./quest-summary-block";
+import { Block } from "@steamship/client";
+import { CompletionBlock } from "./completion-block";
+import { ItemGenerationBlock } from "./item-generation-block";
 
-const DEBUG_MODE = false;
-
-export const NarrativeBlock = ({ message }: { message: Message }) => {
+export const NarrativeBlock = ({
+  message,
+  onSummary,
+  onComplete,
+}: {
+  message: Message;
+  onSummary: (block: Block) => void;
+  onComplete: () => void;
+}) => {
   try {
     const blocks = getFormattedBlock(message);
-
+    console.log(blocks);
     return blocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return <TextBlock key={block.id} text={block.text!} />;
         case MessageTypes.STATUS_MESSAGE:
-          return DEBUG_MODE ? (
-            <StatusBlock key={block.id} block={block} />
-          ) : null;
+          return <StatusBlock key={block.id} block={block} />;
         case MessageTypes.SYSTEM_MESSAGE:
-          return DEBUG_MODE ? (
-            <SystemBlock key={block.id} block={block} />
-          ) : null;
+          return <SystemBlock key={block.id} block={block} />;
         case MessageTypes.STREAMED_TO_CHAT_HISTORY:
-          return DEBUG_MODE ? (
-            <ChatHistoryBlock key={block.id} block={block} />
-          ) : null;
+          return <ChatHistoryBlock key={block.id} block={block} />;
         case MessageTypes.FUNCTION_SELECTION:
-          return DEBUG_MODE ? (
-            <FunctionCallBlock key={block.id} block={block} />
-          ) : null;
+          return <FunctionCallBlock key={block.id} block={block} />;
         case MessageTypes.USER_MESSAGE:
-          return DEBUG_MODE ? (
-            <UserMessageBlock key={block.id} block={block} />
-          ) : null;
+          return <UserMessageBlock key={block.id} block={block} />;
         case MessageTypes.STREAMING_BLOCK:
           return <StreamingBlock key={block.id} block={block} />;
+        case MessageTypes.QUEST_COMPLETE:
+          return (
+            <CompletionBlock
+              key={block.id}
+              block={block}
+              onComplete={onComplete}
+            />
+          );
+        case MessageTypes.QUEST_SUMMARY:
+          return (
+            <QuestSummaryBlock
+              key={block.id}
+              block={block}
+              onSummary={onSummary}
+            />
+          );
+        case MessageTypes.ITEM_GENERATION_CONTENT:
+          return <ItemGenerationBlock key={block.id} block={block} />;
         default:
-          return DEBUG_MODE ? (
-            <FallbackBlock key={block.id} block={block} />
-          ) : null;
+          return <FallbackBlock key={block.id} block={block} />;
       }
     });
   } catch (e) {

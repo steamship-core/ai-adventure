@@ -9,21 +9,34 @@ import { Button } from "../../ui/button";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { NarrativeBlock } from "./narrrative-block";
+import { Block } from "@steamship/client";
 
-export default function QuestNarrative({ id }: { id: string }) {
+export default function QuestNarrative({
+  id,
+  onSummary,
+  onComplete,
+  isComplete,
+  summary,
+}: {
+  id: string;
+  summary: Block | null;
+  onSummary: (block: Block) => void;
+  onComplete: () => void;
+  isComplete: boolean;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
       body: { context_id: questId },
       id,
-      // initialInput: "Let's go on an adventure!",
+      initialInput: "Start a Quest",
     });
 
-  // useEffect(() => {
-  //   // Manually submit a message of   "Let's go on an adventure!" when the quest narrative loads
-  //   inputRef?.current?.form?.requestSubmit();
-  // }, []);
+  useEffect(() => {
+    // Manually submit a message of   "Let's go on an adventure!" when the quest narrative loads
+    inputRef?.current?.form?.requestSubmit();
+  }, []);
 
   return (
     <>
@@ -41,32 +54,48 @@ export default function QuestNarrative({ id }: { id: string }) {
                   </div>
                 );
               }
-              return <NarrativeBlock key={message.id} message={message} />;
+              return (
+                <NarrativeBlock
+                  key={message.id}
+                  message={message}
+                  onSummary={onSummary}
+                  onComplete={onComplete}
+                />
+              );
             })
             .reverse()}
         </QuestNarrativeContainer>
       </div>
-      <div className="flex items-end w-full gap-2 basis-1/12 pb-4">
-        <form
-          className="flex gap-2 w-full"
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            inputRef?.current?.focus();
-            handleSubmit(e);
-          }}
-        >
-          <Input
-            className="w-full"
-            value={input}
-            onChange={handleInputChange}
-            ref={inputRef}
-            disabled={isLoading}
-          />
-          <Button type="submit" disabled={isLoading}>
-            <SendIcon size={16} />
-          </Button>
-        </form>
+      <div className="flex items-end w-full gap-2 basis-1/12 pb-4 relative">
+        {isLoading && (
+          <div className="flex items-center justify-center absolute top-0 left-0">
+            <div className="w-6 h-6 rounded-full animate-spin border-2 border-dashed border-green-500 border-t-transparent"></div>
+          </div>
+        )}
+        {isComplete ? (
+          <EndSheet isEnd={true} summary={summary} />
+        ) : (
+          <form
+            className="flex gap-2 w-full"
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              inputRef?.current?.focus();
+              handleSubmit(e);
+            }}
+          >
+            <Input
+              className="w-full"
+              value={input}
+              onChange={handleInputChange}
+              ref={inputRef}
+              disabled={isLoading || isComplete}
+            />
+            <Button type="submit" disabled={isLoading || isComplete}>
+              <SendIcon size={16} />
+            </Button>
+          </form>
+        )}
       </div>
     </>
   );

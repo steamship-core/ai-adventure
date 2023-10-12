@@ -2,6 +2,8 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { cn } from "@/lib/utils";
 import { Block } from "@steamship/client";
 
+const DEBUG_MODE = true;
+
 export const DebugBlock = ({
   block,
   className,
@@ -11,6 +13,7 @@ export const DebugBlock = ({
   className: string;
   title: string;
 }) => {
+  if (!process.env.NEXT_PUBLIC_DEBUG_MODE) return null;
   return (
     <div
       className={cn(
