@@ -7,10 +7,14 @@ export const MessageTypes = {
   USER_MESSAGE: "USER_MESSAGE",
   STREAMED_TO_CHAT_HISTORY: "STREAMED_TO_CHAT_HISTORY",
   FUNCTION_SELECTION: "FUNCTION_SELECTION",
+  STREAMING_BLOCK: "STREAMING_BLOCK",
   TEXT: "TEXT",
 } as const;
 
 export const getMessageType = (block: Block) => {
+  if (block.streamState === "started") {
+    return MessageTypes.STREAMING_BLOCK;
+  }
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
     return MessageTypes.STATUS_MESSAGE;
   }

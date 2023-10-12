@@ -10,22 +10,13 @@ import {
   SystemBlock,
   UserMessageBlock,
 } from "./debug-blocks";
+import { StreamingBlock } from "./streaming-block";
 
 const DEBUG_MODE = false;
 
 export const NarrativeBlock = ({ message }: { message: Message }) => {
   try {
     const blocks = getFormattedBlock(message);
-    console.log(blocks);
-    // const textBlocks = blocks.filter(
-    //   (b) => getMessageType(b) === MessageTypes.TEXT
-    // );
-    // const concattenatedText = textBlocks.reduce((acc, block) => {
-    //   if (block?.text) {
-    //     acc = `${acc}\n\n${block.text}`;
-    //   }
-    //   return acc;
-    // }, "");
 
     return blocks.map((block) => {
       switch (getMessageType(block)) {
@@ -51,6 +42,8 @@ export const NarrativeBlock = ({ message }: { message: Message }) => {
           return DEBUG_MODE ? (
             <UserMessageBlock key={block.id} block={block} />
           ) : null;
+        case MessageTypes.STREAMING_BLOCK:
+          return <StreamingBlock key={block.id} block={block} />;
         default:
           return DEBUG_MODE ? (
             <FallbackBlock key={block.id} block={block} />

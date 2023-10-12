@@ -21,7 +21,7 @@ import Link from "next/link";
 const EndSheet = ({ isEnd }: { isEnd: boolean }) => (
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant={isEnd ? "default" : "ghost"}>End your journey</Button>
+      <Button variant={isEnd ? "default" : "ghost"}>Complete Quest</Button>
     </SheetTrigger>
     <SheetContent
       side="bottom"

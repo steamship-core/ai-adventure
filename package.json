@@ -23,7 +23,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-spring/web": "^9.7.3",
-    "@steamship/client": "^3.1.0",
+    "@steamship/client": "^3.3.2",
     "@vercel/analytics": "^1.0.2",
     "@xstate/react": "^3.2.2",
     "ai": "^2.2.14",
