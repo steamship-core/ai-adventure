@@ -18,14 +18,11 @@ export async function POST(req: Request) {
 
   const decoder = new TextDecoder();
   let str = "";
-  console.log("making request for block ", blockId);
   const response = await steamship.block.raw({ id: blockId });
-  console.log("response", response);
   return new StreamingTextResponse(
     new ReadableStream({
       async pull(controller): Promise<void> {
         for await (const chunk of response.body as any) {
-          console.log("chunk", chunk);
           str += decoder.decode(chunk);
           controller.enqueue(
             JSON.stringify({

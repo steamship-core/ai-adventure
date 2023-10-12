@@ -61,8 +61,10 @@ export default async function CampPage() {
                 </div>
                 <SummaryStats />
               </div>
+              <div className="mt-4">
+                <CampMembers />
+              </div>
             </ContentBox>
-            <CampMembers />
             <ContentBox>
               <div className="flex flex-col gap-2">
                 <StartAdventureButton />
