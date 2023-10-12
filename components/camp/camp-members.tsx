@@ -15,9 +15,7 @@ export const CampMembers = () => {
       {gameState?.camp?.npcs?.length > 0 && (
         <div className="flex gap-2 flex-wrap">
           {gameState?.camp?.npcs.map((member) => (
-            <ContentBox key={member.name}>
-              <InteractionSheet member={member} />
-            </ContentBox>
+            <InteractionSheet member={member} key={member.name} />
           ))}
         </div>
       )}

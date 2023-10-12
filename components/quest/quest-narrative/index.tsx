@@ -66,9 +66,9 @@ export default function QuestNarrative({
             .reverse()}
         </QuestNarrativeContainer>
       </div>
-      <div className="flex items-end w-full gap-2 basis-1/12 pb-4 relative">
+      <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
         {isLoading && (
-          <div className="flex items-center justify-center absolute top-0 left-0">
+          <div className="flex items-center justify-center">
             <div className="w-6 h-6 rounded-full animate-spin border-2 border-dashed border-green-500 border-t-transparent"></div>
           </div>
         )}
