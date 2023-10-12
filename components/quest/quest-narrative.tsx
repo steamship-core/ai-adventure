@@ -30,12 +30,22 @@ const getMessageType = (
   block: Block
 ):
   | "status"
+  | "status:quest-end"
   | "chat:player"
   | "chat:other"
-  | "agent:system"
   | "chat:system"
+  | "agent:system"
   | "agent:function" => {
-  if (block?.tags?.find((tag) => tag.kind === "status-message")) {
+  if (
+    block?.tags?.find(
+      (tag) =>
+        tag.kind === "status-message" || tag.kind === "agent-status-message"
+    )
+  ) {
+    if (block?.tags?.find((tag) => tag.name === "quest-complete")) {
+      console.log("Hey the quest is over!"); // TODO: For max to handle as best fits into the game.
+      return "status:quest-end";
+    }
     return "status";
   }
   let roleTag: Tag | undefined = block?.tags?.find(
