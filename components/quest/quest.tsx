@@ -1,23 +1,48 @@
-import {
-  QuestContainer,
-  QuestContentContainer,
-} from "@/components/quest/shared/components";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import InventorySheet from "../inventory-sheet";
+"use client";
+import { QuestContainer } from "@/components/quest/shared/components";
 import QuestNarrative from "./quest-narrative";
 import { GameState } from "@/lib/game/schema/game_state";
+import { QuestHeader } from "./quest-header";
+import { useEffect, useState } from "react";
+import { v4 } from "uuid";
+import { Block } from "@steamship/client";
 
-export default async function Quest({ gameState }: { gameState: GameState }) {
+export default function Quest({ gameState }: { gameState: GameState }) {
+  const [id, setId] = useState<string | null>(null);
+  const [summary, setSummary] = useState<Block | null>(null);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    setId(v4());
+  }, []);
+
+  const onSummary = (summary: Block) => {
+    setSummary(summary);
+  };
+
+  const onComplete = () => {
+    setIsComplete(true);
+  };
+
   return (
     <QuestContainer>
-      <div className="flex justify-between items-center border-b border-b-foreground/10 pb-2 basis-1/12">
-        <Button asChild variant="link" className="pl-0">
-          <Link href="/play/camp">Back to Camp</Link>
-        </Button>
-        <InventorySheet gameState={gameState} />
-      </div>
-      <QuestNarrative />
+      {id && (
+        <>
+          <QuestHeader
+            gameState={gameState}
+            id={id}
+            summary={summary}
+            isComplete={isComplete}
+          />
+          <QuestNarrative
+            id={id}
+            onSummary={onSummary}
+            onComplete={onComplete}
+            isComplete={isComplete}
+            summary={summary}
+          />
+        </>
+      )}
     </QuestContainer>
   );
 }

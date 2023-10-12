@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,13 +15,22 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { Block } from "@steamship/client";
 import { AwardIcon, BadgeDollarSignIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
 
-const EndSheet = ({ isEnd }: { isEnd: boolean }) => (
+const EndSheet = ({
+  isEnd,
+  summary,
+}: {
+  isEnd: boolean;
+  summary: Block | null;
+}) => (
   <Sheet>
     <SheetTrigger asChild>
-      <Button variant={isEnd ? "default" : "ghost"}>End your journey</Button>
+      <Button variant={isEnd ? "default" : "ghost"} className="w-full">
+        Complete Quest
+      </Button>
     </SheetTrigger>
     <SheetContent
       side="bottom"
@@ -59,9 +69,7 @@ const EndSheet = ({ isEnd }: { isEnd: boolean }) => (
         </div>
         <TypographyH3>Journey Overview</TypographyH3>
         <TypographyMuted className="text-lg mb-12">
-          You traveled through the forest, and then you went to the mountains.
-          Where you found a cave and went inside - only to find a dragon! But
-          you defeated the dragon and saved the princess.
+          {summary && summary.text}
         </TypographyMuted>
         <TypographyH3>Items Gained</TypographyH3>
         <div className="flex w-full overflow-hidden">

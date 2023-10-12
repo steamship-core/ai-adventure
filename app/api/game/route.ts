@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import prisma from "@/lib/db";
-import { saveGameState } from "@/lib/game/game-state.server";
-import { GameState } from "@/lib/game/schema/game_state";
-import { startQuest } from "@/lib/game/quest";
+import { getGameState } from "@/lib/game/game-state.server";
 
-export async function POST(request: Request) {
+export async function GET() {
   const { userId } = auth();
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -21,8 +19,8 @@ export async function POST(request: Request) {
   }
 
   try {
-    const quest = await startQuest(agent!.agentUrl);
-    return NextResponse.json({ quest }, { status: 200 });
+    const gameState = await getGameState(agent!.agentUrl);
+    return NextResponse.json({ gameState }, { status: 200 });
   } catch (e) {
     console.error(e);
     return NextResponse.json(

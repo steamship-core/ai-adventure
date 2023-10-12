@@ -105,6 +105,10 @@ const CharacterCreationComplete = ({
             <TypographyMuted>Appearance:</TypographyMuted>
             <TypographyLarge>{config.player.description}</TypographyLarge>
           </div>
+          <div>
+            <TypographyMuted>Motivation:</TypographyMuted>
+            <TypographyLarge>{config.player.motivation}</TypographyLarge>
+          </div>
         </div>
 
         <CreationActions isFinished={true}>

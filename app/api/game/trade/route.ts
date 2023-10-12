@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
 import { startQuest } from "@/lib/game/quest";
+import { tradeItems } from "@/lib/game/trade";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -20,9 +21,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   }
 
+  const { counter_party, sell, buy } = await request.json();
+
   try {
-    const quest = await startQuest(agent!.agentUrl);
-    return NextResponse.json({ quest }, { status: 200 });
+    const tradeResult = await tradeItems(agent!.agentUrl, {
+      counter_party,
+      sell,
+      buy,
+    });
+    return tradeResult;
   } catch (e) {
     console.error(e);
     return NextResponse.json(
