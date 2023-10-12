@@ -21,6 +21,7 @@ import { recoilGameState } from "./recoil-provider";
 import { useRecoilState } from "recoil";
 import { InventoryList } from "./inventory-list";
 import { getGameState } from "@/lib/game/game-state.client";
+import { TypographySmall } from "./ui/typography/TypographySmall";
 
 const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
@@ -52,16 +53,16 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex flex-col items-center">
-          <div className="h-28 w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
-            <Image
-              src={"/merchant.png"}
-              fill
-              alt="A merchant"
-              className="object-cover"
-            />
-          </div>
-          {member.name}
+        <button className="flex flex-col justify-end items-center relative overflow-hidden h-24 w-24 rounded-md border border-yellow-600/90">
+          <Image
+            src={"/merchant.png"}
+            fill
+            alt="A merchant"
+            className="object-cover z-10"
+          />
+          <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1">
+            {member.name}
+          </TypographySmall>
         </button>
       </SheetTrigger>
       <SheetContent
@@ -71,20 +72,20 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
         <SheetHeader>
           <SheetDescription>
             <div className="flex gap-6">
-              <div className="flex flex-col items-center">
-                <div className="h-28 w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
+              <div>
+                <div className="flex flex-col justify-end items-center relative overflow-hidden h-32 w-32 rounded-md border border-yellow-600/90">
                   <Image
                     src={"/merchant.png"}
                     fill
                     alt="A merchant"
-                    className="object-cover"
+                    className="object-cover z-10"
                   />
+                  <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1 w-full text-primary">
+                    {member.name}
+                  </TypographySmall>
                 </div>
               </div>
-              <div>
-                <TypographyLarge>{member.name}</TypographyLarge>
-                {member.description}
-              </div>
+              <div className="text-left">{member.description}</div>
             </div>
           </SheetDescription>
         </SheetHeader>
@@ -252,7 +253,7 @@ const InteractionSheet = ({ member }: { member: NpcCharacter }) => {
   if (member.name === "Logan") {
     return (
       <div className="flex flex-col items-center">
-        <div className="h-28 w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
+        <div className="w-16 h-16 md:h-28 md:w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
           <Image
             src={"/merchant.png"}
             fill
