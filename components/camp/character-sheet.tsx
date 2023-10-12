@@ -12,7 +12,6 @@ import { TypographyP } from "../ui/typography/TypographyP";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
-import { FocusableInputArea } from "../character-creation/onboarding-prompt";
 
 export const CharacterSheet = () => {
   const gameState = useRecoilValue(recoilGameState);
