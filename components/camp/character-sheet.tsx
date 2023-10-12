@@ -97,31 +97,6 @@ export const CharacterSheet = () => {
               </TypographyMuted>
             </div>
             <div>
-              <TypographyH3>Settings</TypographyH3>
-              <div className="mb-2">
-                <TypographyMuted>Story LLM</TypographyMuted>
-                <FocusableInputArea
-                  placeholder={"Image"}
-                  onFocus={() => {}}
-                  value={gameState?.player?.rank}
-                  setValue={(val: any) => {}}
-                  isFinished={false}
-                  isCurrent={true}
-                />
-              </div>
-              <div className="mb-2">
-                <TypographyMuted>Character Image</TypographyMuted>
-                <FocusableInputArea
-                  placeholder={"Image"}
-                  onFocus={() => {}}
-                  value={"Value"}
-                  setValue={(val: any) => {}}
-                  isFinished={false}
-                  isCurrent={true}
-                />
-              </div>
-            </div>
-            <div>
               <TypographyH3>Stats</TypographyH3>
               <ul className="flex flex-col gap-2 list-disc pl-6">
                 <li>
