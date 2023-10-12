@@ -11,6 +11,7 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
+import { UserButton } from "@clerk/nextjs";
 
 export const CharacterSheet = () => {
   const gameState = useRecoilValue(recoilGameState);
@@ -32,7 +33,7 @@ export const CharacterSheet = () => {
           <div className="w-28 sm:w-44 lg:w-56">
             <TypographyLarge>{gameState?.player?.name}</TypographyLarge>
             <Progress value={33} className="h-2 border border-foreground/20" />
-            <TypographyMuted>{gameState?.player?.rank}</TypographyMuted>
+            <TypographyMuted>Rank: {gameState?.player?.rank}</TypographyMuted>
           </div>
         </button>
       </SheetTrigger>
@@ -108,6 +109,12 @@ export const CharacterSheet = () => {
                   </TypographyMuted>
                 </li>
               </ul>
+            </div>
+            <div>
+              <TypographyH3>Account</TypographyH3>
+              <div className="mt-2">
+                <UserButton afterSignOutUrl="/" />
+              </div>
             </div>
           </div>
         </div>

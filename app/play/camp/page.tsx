@@ -53,17 +53,6 @@ export default async function CampPage() {
           className="object-cover -z-10"
         />
         <div className="h-full flex flex-col">
-          <div className="w-full flex items-center justify-end pt-6 pb-2 gap-3 max-w-5xl mx-auto">
-            <Button variant="link" size="sm" asChild>
-              <Link
-                target="_blank"
-                href="https://github.com/steamship-core/ai-adventure"
-              >
-                <StarIcon className="w-4 h-4 mr-2" /> Star
-              </Link>
-            </Button>
-            <UserButton afterSignOutUrl="/" />
-          </div>
           <div className="flex flex-col flex-grow justify-between max-w-5xl w-full mx-auto">
             <ContentBox>
               <div className="flex justify-between">
