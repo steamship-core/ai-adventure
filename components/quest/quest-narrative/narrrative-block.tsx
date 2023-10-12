@@ -15,6 +15,7 @@ import { QuestSummaryBlock } from "./quest-summary-block";
 import { Block } from "@steamship/client";
 import { CompletionBlock } from "./completion-block";
 import { ItemGenerationBlock } from "./item-generation-block";
+import { ImageBlock } from "./image-block";
 
 export const NarrativeBlock = ({
   message,
@@ -27,7 +28,6 @@ export const NarrativeBlock = ({
 }) => {
   try {
     const blocks = getFormattedBlock(message);
-    console.log(blocks);
     return blocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
@@ -62,6 +62,8 @@ export const NarrativeBlock = ({
           );
         case MessageTypes.ITEM_GENERATION_CONTENT:
           return <ItemGenerationBlock key={block.id} block={block} />;
+        case MessageTypes.IMAGE:
+          return <ImageBlock key={block.id} block={block} />;
         default:
           return <FallbackBlock key={block.id} block={block} />;
       }

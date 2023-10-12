@@ -64,7 +64,7 @@ const EndSheet = ({
             </TypographySmall>
           </div>
           <Button asChild>
-            <Link href="/play/camp">Back to camp</Link>
+            <a href="/play/camp">Back to camp</a>
           </Button>
         </div>
         <TypographyH3>Journey Overview</TypographyH3>

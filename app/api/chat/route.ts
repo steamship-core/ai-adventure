@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {
-    streamTimeoutSeconds: 60,
+    streamTimeoutSeconds: 600,
     // Use: "markdown" | "json"
     format: "json-no-inner-stream",
   });

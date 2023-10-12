@@ -12,10 +12,26 @@ import { TypographyP } from "../ui/typography/TypographyP";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
+import { levels } from "@/lib/game/levels";
 
 export const CharacterSheet = () => {
   const gameState = useRecoilValue(recoilGameState);
+  const rank = gameState?.player?.rank || 0;
 
+  const getLevel = () => {
+    try {
+      if (rank === 1) {
+        levels[0];
+      }
+      if (rank >= 100) {
+        levels[99];
+      }
+      console.log(Math.ceil(rank / 4));
+      return levels[Math.ceil(rank / 4)];
+    } catch (e) {
+      return "Unknown";
+    }
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -32,8 +48,13 @@ export const CharacterSheet = () => {
           </div>
           <div className="w-28 sm:w-44 lg:w-56">
             <TypographyLarge>{gameState?.player?.name}</TypographyLarge>
-            <Progress value={33} className="h-2 border border-foreground/20" />
-            <TypographyMuted>Rank: {gameState?.player?.rank}</TypographyMuted>
+            <Progress
+              value={(((rank - 1) % 4) / 4) * 100}
+              className="h-2 border border-foreground/20"
+            />
+            <TypographyMuted>
+              Rank: {getLevel()} ({gameState.player.rank})
+            </TypographyMuted>
           </div>
         </button>
       </SheetTrigger>

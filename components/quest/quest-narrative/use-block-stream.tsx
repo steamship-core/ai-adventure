@@ -50,7 +50,10 @@ export const useBlockStream = ({ block }: { block: Block }) => {
         }
       }
     };
-    readStream();
+    if (!isComplete) {
+      console.log("reading stream");
+      readStream();
+    }
   }, [block.id]);
 
   return { streamedBlock: innerBlock, isComplete };

@@ -36,7 +36,7 @@ const LoadingScreen = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setLoadingMessage(pickRandomMessage());
-    }, 3000);
+    }, 4000);
 
     return () => {
       clearInterval(interval);

@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import { getGameState } from "@/lib/game/game-state.server";
+import { getGameState, saveGameState } from "@/lib/game/game-state.server";
 import StartAdventureButton from "@/components/camp/start-adventure-button";
 import RecoilProvider from "@/components/recoil-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
@@ -35,7 +35,12 @@ export default async function CampPage() {
     redirect("/play/character-creation");
   }
 
-  const gameState = await getGameState(agent?.agentUrl);
+  let gameState = await getGameState(agent?.agentUrl);
+  // await saveGameState(agent?.agentUrl, {
+  //   ...gameState,
+  //   player: { ...gameState.player, energy: 100 },
+  // });
+  // gameState = await getGameState(agent?.agentUrl);
 
   const randomlyGetBackground = () => {
     const randomIndex = Math.floor(Math.random() * bgImages.length);
