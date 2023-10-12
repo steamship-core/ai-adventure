@@ -12,6 +12,7 @@ import { TypographyP } from "../ui/typography/TypographyP";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
+import { FocusableInputArea } from "../character-creation/onboarding-prompt";
 
 export const CharacterSheet = () => {
   const gameState = useRecoilValue(recoilGameState);
@@ -94,6 +95,31 @@ export const CharacterSheet = () => {
               <TypographyMuted className=" whitespace-pre-wrap">
                 {gameState?.player?.motivation}
               </TypographyMuted>
+            </div>
+            <div>
+              <TypographyH3>Settings</TypographyH3>
+              <div className="mb-2">
+                <TypographyMuted>Story LLM</TypographyMuted>
+                <FocusableInputArea
+                  placeholder={"Image"}
+                  onFocus={() => {}}
+                  value={gameState?.player?.rank}
+                  setValue={(val: any) => {}}
+                  isFinished={false}
+                  isCurrent={true}
+                />
+              </div>
+              <div className="mb-2">
+                <TypographyMuted>Character Image</TypographyMuted>
+                <FocusableInputArea
+                  placeholder={"Image"}
+                  onFocus={() => {}}
+                  value={"Value"}
+                  setValue={(val: any) => {}}
+                  isFinished={false}
+                  isCurrent={true}
+                />
+              </div>
             </div>
             <div>
               <TypographyH3>Stats</TypographyH3>
