@@ -96,7 +96,7 @@ export default function QuestNarrative({
 
   // Filter and sort them.
   blocks = [...priorBlocks, ...blocks].filter((block) => {
-    const type = getMessageType(block);
+    const type = getMessageType(block as Block);
     return (
       block.id &&
       (showDebugInformation ||
@@ -123,7 +123,8 @@ export default function QuestNarrative({
   let elements = [];
 
   // Finally wrap them in elements
-  for (let block of blocks || []) {
+  for (let _block of blocks || []) {
+    let block = _block as Block;
     switch (getMessageType(block)) {
       case MessageTypes.TEXT:
         elements.push(<TextBlock key={block.id} text={block.text!} />);
@@ -141,7 +142,7 @@ export default function QuestNarrative({
         elements.push(<FunctionCallBlock key={block.id} block={block} />);
         break;
       case MessageTypes.USER_MESSAGE:
-        elements.push(<TextBlock key={block.id} text={block.text} />);
+        elements.push(<TextBlock key={block.id} text={block.text || ""} />);
         break;
       case MessageTypes.STREAMING_BLOCK:
         elements.push(<StreamingBlock key={block.id} block={block} />);
