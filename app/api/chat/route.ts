@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   const { context_id, messages, agentBaseUrl } = (await req.json()) as {
     context_id: string;
     messages: Message[];
+    agentBaseUrl: string;
   };
 
   log.debug(`Agent base url: ${agentBaseUrl}`);
