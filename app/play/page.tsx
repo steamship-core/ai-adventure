@@ -5,15 +5,18 @@ import prisma from "@/lib/db";
 import { SignOutButton, UserButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getAgent } from "@/lib/agent/agent.server";
+import { log } from "next-axiom";
 
 export default async function Home() {
   const { userId } = auth();
 
-  const agent = await prisma.agents.findFirst({
-    where: {
-      ownerId: userId!,
-    },
-  });
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+
+  const agent = await getAgent(userId);
 
   if (agent) {
     redirect("/play/camp");

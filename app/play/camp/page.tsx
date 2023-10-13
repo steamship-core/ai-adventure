@@ -14,6 +14,9 @@ import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import { CampMembers } from "@/components/camp/camp-members";
 import { ContentBox } from "@/components/camp/content-box";
+import { completeOnboarding } from "@/lib/game/onboarding";
+import { getAgent } from "@/lib/agent/agent.server";
+import { log } from "next-axiom";
 
 const bgImages = [
   "/campfire-dark.png",
@@ -24,22 +27,23 @@ const bgImages = [
 
 export default async function CampPage() {
   const { userId } = auth();
-  const agent = await prisma.agents.findFirst({
-    where: {
-      ownerId: userId!,
-    },
-  });
+
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+
+  console.log(userId);
+  const agent = await getAgent(userId);
 
   if (!agent) {
     redirect("/play/character-creation");
   }
 
   let gameState = await getGameState(agent?.agentUrl);
-  await saveGameState(agent?.agentUrl, {
-    ...gameState,
-    player: { ...(gameState?.player || {}), energy: 100 },
-  });
-  gameState = await getGameState(agent?.agentUrl);
+  if (gameState.active_mode == "onboarding") {
+    redirect("/play/character-creation");
+  }
 
   const randomlyGetBackground = () => {
     const randomIndex = Math.floor(Math.random() * bgImages.length);

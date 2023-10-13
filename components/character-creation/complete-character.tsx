@@ -57,7 +57,14 @@ const CharacterCreationComplete = ({
 
   const onComplete = async () => {
     setIsVisible(true);
-    await fetch("/api/agent", { method: "POST", body: JSON.stringify(config) });
+    let resp = await fetch("/api/agent/update", {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+    resp = await fetch("/api/agent/completeOnboarding", {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
     router.push("/play/camp");
   };
 

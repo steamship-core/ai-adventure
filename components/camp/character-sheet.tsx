@@ -10,15 +10,17 @@ import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
 import { levels } from "@/lib/game/levels";
 import { Switch } from "../ui/switch";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export const CharacterSheet = () => {
-  const gameState = useRecoilValue(recoilGameState);
+  const [gameState, setGameState] = useRecoilState(recoilGameState);
+
   const rank = gameState?.player?.rank || 0;
 
   // Begin Debug Information State Management
@@ -50,6 +52,21 @@ export const CharacterSheet = () => {
     localStorage.setItem(runDiagnosticTestKey, value);
   };
   // End Diagnostic Test State Management
+
+  const setEnergyTo100 = async () => {
+    const response = await fetch("/api/game/debug", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "top-up-energy",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let newGameState = await response.json();
+      setGameState(newGameState);
+    }
+  };
 
   const getLevel = () => {
     try {
@@ -180,10 +197,23 @@ export const CharacterSheet = () => {
                 onChange={(e) => setAndSaveRunDiagnosticTest(e.target.value)}
                 disabled={false}
               />
+              <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
+
               <div className="mt-2">
                 <UserButton afterSignOutUrl="/" />
               </div>
             </div>
+          </div>
+          <div>
+            <TypographyH3>Diagnostics</TypographyH3>
+            <TypographyMuted>Current Quest</TypographyMuted>
+            <TypographyMuted>
+              {gameState?.current_quest || "None"}
+            </TypographyMuted>
+            <TypographyMuted>Current NPC Conversation</TypographyMuted>
+            <TypographyMuted>
+              {gameState?.in_conversation_with || "None"}
+            </TypographyMuted>
           </div>
         </div>
       </SheetContent>

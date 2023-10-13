@@ -7,6 +7,7 @@ import { useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
+import { log } from "next-axiom";
 
 const StartAdventureButton = () => {
   const router = useRouter();
@@ -16,10 +17,25 @@ const StartAdventureButton = () => {
   const onClick = async () => {
     setIsVisible(true);
     setIsLoading(true);
+
+    // If the game state says we're currently in a quest, then we should re-direct ot that quest.
+    if (gameState?.active_mode == "quest" && gameState?.current_quest) {
+      console.log(`Activating existing quest: ${gameState?.current_quest}`);
+      log.debug(`Activating existing quest: ${gameState?.current_quest}`);
+      router.push(`/play/quest/${gameState?.current_quest}`);
+      setIsLoading(false);
+      return;
+    }
+
     const resp = await fetch("/api/game/quest", { method: "POST" });
     if (!resp.ok) {
       setIsLoading(false);
       setIsVisible(false);
+      let res = "";
+      try {
+        res = await resp.text();
+      } catch {}
+      log.error(`Failed to start quest: ${res}`);
       return;
     }
     const json = (await resp.json()) as {
@@ -30,6 +46,8 @@ const StartAdventureButton = () => {
       setIsVisible(false);
       return;
     }
+
+    log.debug(`Activating new quest: ${json.quest.chat_file_id}`);
     if (json.quest.chat_file_id) {
       router.push(`/play/quest/${json.quest.chat_file_id}`);
     }

@@ -14,7 +14,14 @@ import { UserInputBlock } from "./user-input-block";
 import { MessageTypes, getFormattedBlock, getMessageType } from "./utils";
 import block from "@/lib/streaming-client/src/operations/block";
 import { CompletionBlock } from "./completion-block";
-import { StatusBlock, SystemBlock, ChatHistoryBlock, FunctionCallBlock, UserMessageBlock, FallbackBlock } from "./debug-blocks";
+import {
+  StatusBlock,
+  SystemBlock,
+  ChatHistoryBlock,
+  FunctionCallBlock,
+  UserMessageBlock,
+  FallbackBlock,
+} from "./debug-blocks";
 import { ImageBlock } from "./image-block";
 import { ItemGenerationBlock } from "./item-generation-block";
 import { QuestSummaryBlock } from "./quest-summary-block";
@@ -65,83 +72,90 @@ export default function QuestNarrative({
   }, []);
 
   let blocks = [];
-  
+
   for (let message of messages || []) {
     // If we're supposed to show debug information, show everything
     if (showDebugInformation) return true;
 
     // Else, filter out system messages
     if (message.role == "user") {
-        blocks.push(<UserInputBlock key={message.id} text={message.content} />)
+      blocks.push(<UserInputBlock key={message.id} text={message.content} />);
     } else {
       // It's a narrative block
       const _subBlocks = getFormattedBlock(message);
       for (let subBlock of _subBlocks) {
         switch (getMessageType(subBlock)) {
           case MessageTypes.TEXT:
-            blocks.push(<TextBlock key={subBlock.id} text={subBlock.text!} />)
+            blocks.push(<TextBlock key={subBlock.id} text={subBlock.text!} />);
             break;
           case MessageTypes.STATUS_MESSAGE:
             if (showDebugInformation) {
-              blocks.push(<StatusBlock key={subBlock.id} block={subBlock} />)
+              blocks.push(<StatusBlock key={subBlock.id} block={subBlock} />);
             }
             break;
           case MessageTypes.SYSTEM_MESSAGE:
             if (showDebugInformation) {
-              blocks.push(<SystemBlock key={subBlock.id} block={subBlock} />)
+              blocks.push(<SystemBlock key={subBlock.id} block={subBlock} />);
             }
             break;
           case MessageTypes.STREAMED_TO_CHAT_HISTORY:
-            blocks.push(<ChatHistoryBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(
+              <ChatHistoryBlock key={subBlock.id} block={subBlock} />
+            );
             break;
           case MessageTypes.FUNCTION_SELECTION:
             if (showDebugInformation) {
-              blocks.push(<FunctionCallBlock key={subBlock.id} block={subBlock} />)
+              blocks.push(
+                <FunctionCallBlock key={subBlock.id} block={subBlock} />
+              );
             }
             break;
           case MessageTypes.USER_MESSAGE:
-            blocks.push(<UserMessageBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(
+              <UserMessageBlock key={subBlock.id} block={subBlock} />
+            );
             break;
           case MessageTypes.STREAMING_BLOCK:
-            blocks.push(<StreamingBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(<StreamingBlock key={subBlock.id} block={subBlock} />);
             break;
           case MessageTypes.QUEST_COMPLETE:
-            blocks.push((
+            blocks.push(
               <CompletionBlock
                 key={subBlock.id}
                 block={subBlock}
                 onComplete={onComplete}
               />
-            ))
+            );
             break;
           case MessageTypes.QUEST_SUMMARY:
-            blocks.push((
+            blocks.push(
               <QuestSummaryBlock
                 key={subBlock.id}
                 block={subBlock}
                 onSummary={onSummary}
               />
-            ))
+            );
             break;
           case MessageTypes.ITEM_GENERATION_CONTENT:
-            blocks.push(<ItemGenerationBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(
+              <ItemGenerationBlock key={subBlock.id} block={subBlock} />
+            );
             break;
           case MessageTypes.IMAGE:
-            blocks.push(<ImageBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(<ImageBlock key={subBlock.id} block={subBlock} />);
             break;
           default:
-            blocks.push(<FallbackBlock key={subBlock.id} block={subBlock} />)
+            blocks.push(<FallbackBlock key={subBlock.id} block={subBlock} />);
             break;
         }
+      }
     }
-  };
+  }
 
   return (
     <>
       <div className="flex basis-11/12 overflow-hidden">
-        <QuestNarrativeContainer>
-          {blocks.reverse()}
-        </QuestNarrativeContainer>
+        <QuestNarrativeContainer>{blocks.reverse()}</QuestNarrativeContainer>
       </div>
       <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
         {isLoading && (
