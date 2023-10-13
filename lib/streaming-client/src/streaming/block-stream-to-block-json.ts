@@ -10,10 +10,11 @@ function BlockStreamToBlockJsonStream(): TransformStream<Block, Uint8Array> {
   return new TransformStream<Block, Uint8Array>({
     transform(block: Block, controller) {
       const str = JSON.stringify(block) + "\n";
+      console.log(`[Debug] Streaming ${str}`);
       controller.enqueue(new TextEncoder().encode(str));
       // If this block signals termination, hang up!
       if (isStreamTerminatingBlock(block)) {
-        console.log("terminating block");
+        console.log(`[Debug] Terminating Block`);
         controller.terminate();
         return;
       }

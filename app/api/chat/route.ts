@@ -10,18 +10,22 @@ export const runtime = "edge";
 export async function POST(req: Request) {
   const { userId } = auth();
   if (!userId) {
-    console.debug("No user");
+    console.log("[Error] No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  console.debug("Begin POST");
+  console.log("[Debug] Begin POST /api/chat");
   // Extract the `prompt` from the body of the request
   const { context_id, messages } = (await req.json()) as {
     context_id: string;
     messages: Message[];
   };
+  console.log(
+    `[Debug] Begin message length=${messages?.length} context_id=${context_id}`
+  );
   const mostRecentUserMessage = messages
     .reverse()
     .find((message) => message.role === "user");
+  console.log(`[Debug] Begin message=${mostRecentUserMessage}`);
 
   const steamship = getSteamshipClient();
   // See https://docs.steamship.com/javascript_client for information about:
@@ -35,7 +39,7 @@ export async function POST(req: Request) {
     },
   });
 
-  console.debug("test output");
+  console.log(`[Debug] Steamship response ${response}`);
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {

@@ -73,6 +73,8 @@ export async function SteamshipStream(
     const queryArgs = _dictToURI(filterDict);
     const _url = `file/${chatFileId}/stream?${queryArgs}`;
 
+    console.log(`[Debug] Stream URL ${_url}`);
+
     // 2. Create a stream of markdown wrapping.
     const eventStream = await client.eventStream(_url, {});
 
@@ -80,8 +82,11 @@ export async function SteamshipStream(
       FileEventStreamToBlockStream(client)
     );
 
+    console.log(`[Debug] Output Format ${opts?.format}`);
+
     if (opts?.format == "json") {
       // This is a stream of blocks, and if the blocks themselves are streaming, we stream updates.
+
       return blockStream.pipeThrough(BlockStreamToStreamingBlockStream(client));
     } else if (opts?.format == "json-no-inner-stream") {
       // This is a stream of blocks as they are created -- we do not stream the inner content.
