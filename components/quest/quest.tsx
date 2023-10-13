@@ -30,8 +30,6 @@ export default function Quest({
     setIsComplete(true);
   };
 
-  console.log(gameState);
-
   return (
     <QuestContainer>
       {id && (

@@ -14,7 +14,10 @@ export const startQuest = async (agentBase: string) => {
   return quest as Quest;
 };
 
-export const loadQuest = async (agentBase: string, questId: string) => {
+export const loadExistingQuestBlocks = async (
+  agentBase: string,
+  questId: string
+) => {
   const steamship = getSteamshipClient();
   const resp = await steamship.agent.post({
     url: agentBase,

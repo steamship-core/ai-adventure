@@ -4,7 +4,7 @@ import prisma from "../db";
 import { clerkIdToSteamshipHandle, getSteamshipClient } from "../utils";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
-
+import { v4 as uuidv4 } from "uuid";
 export const getAgent = async (
   userId: string
 ): Promise<Prisma.Prisma__AgentsClient<
@@ -49,8 +49,8 @@ export const createAgent = async (
   );
 
   try {
-    // Switch into the web user's workspace.
-    const workspaceHandle = clerkIdToSteamshipHandle(userId);
+    // Create a unique workspace handle for this user.
+    const workspaceHandle = `${uuidv4()}`.toLowerCase();
 
     // Create a new agent instance.
     const steamship = await getSteamshipClient().switchWorkspace({
