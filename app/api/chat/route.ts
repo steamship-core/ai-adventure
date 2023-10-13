@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { getSteamshipClient } from "@/lib/utils";
 import { SteamshipStream } from "@/lib/streaming-client/src";
+import { log } from "next-axiom";
 
 // IMPORTANT! Set the runtime to edgew
 export const runtime = "edge";
@@ -25,7 +26,7 @@ export async function POST(req: Request) {
   const mostRecentUserMessage = messages
     .reverse()
     .find((message) => message.role === "user");
-  console.log(`[Debug] Begin message=${mostRecentUserMessage}`);
+  log.debug(`Begin message=${mostRecentUserMessage}`);
 
   const steamship = getSteamshipClient();
   // See https://docs.steamship.com/javascript_client for information about:
@@ -39,7 +40,7 @@ export async function POST(req: Request) {
     },
   });
 
-  console.log(`[Debug] Steamship response ${response}`);
+  log.debug(`Steamship response ${response}`);
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {
