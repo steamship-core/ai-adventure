@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
 import { completeOnboarding } from "@/lib/game/onboarding";
+import { getSteamshipClient } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -11,13 +12,40 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
+  if (!process.env.STEAMSHIP_AGENT_VERSION) {
+    return NextResponse.json(
+      { error: "Please set the STEAMSHIP_AGENT_VERSION environment variable." },
+      { status: 404 }
+    );
+  }
+
+  var [_package, _version] = process.env.STEAMSHIP_AGENT_VERSION.split("@");
+
+  console.log(
+    `Creating instance of Steamship Package ${_package} at version ${_version}`
+  );
+
   const config = await request.json();
 
   try {
+    // Create a new agent instance.
+    const steamship = getSteamshipClient();
+
+    // Switch into the web user's workspace.
+    steamship.switchWorkspace({ workspace: userId });
+
+    const packageInstance = await steamship.package.createInstance({
+      package: _package,
+      version: _version,
+      handle: userId,
+    });
+
+    const agentUrl = await steamship.package.getBaseUrl(packageInstance);
+
     const agent = await prisma.agents.create({
       data: {
         ownerId: userId!,
-        agentUrl: process.env.PLACEHOLDER_STEAMSHIP_AGENT_URL!,
+        agentUrl: agentUrl,
       },
     });
 

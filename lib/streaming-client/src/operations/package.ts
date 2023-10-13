@@ -68,6 +68,18 @@ export class PackageClient implements IPackageClient {
     return json?.packageInstance as PackageInstance;
   }
 
+  public async getBaseUrl(pkg: PackageInstance): Promise<string> {
+    const user = await this.client.user.current();
+
+    const urlParts = this.client.config.appBase?.split("//");
+    if (!urlParts) {
+      throw new Error("appBase is not set in the Configuration");
+    }
+
+    const url = `${urlParts[0]}//${user.handle}.${urlParts[1]}}/${pkg.workspaceHandle}/${pkg.handle}/`;
+    return url;
+  }
+
   /**
    * Invoke a method on a package using its base_url.
    *

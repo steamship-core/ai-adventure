@@ -1,7 +1,7 @@
 import { createParser } from "eventsource-parser";
 import { ClientBase } from "./base";
 import { Client } from "./schema";
-import { Configuration, DEFAULT_CONFIGURATION } from "./schema/client";
+import { Configuration } from "./schema/client";
 
 /**
  * Steamship API client.
@@ -9,16 +9,13 @@ import { Configuration, DEFAULT_CONFIGURATION } from "./schema/client";
  * Intended for use consuming Steamship's API.
  */
 export class Steamship extends ClientBase implements Client {
-  config: Configuration;
-
   /**
    * Create a new Steamship API client.
    *
    * @param config
    */
   constructor(config: Configuration) {
-    super();
-    this.config = { ...DEFAULT_CONFIGURATION, ...config };
+    super(config);
   }
 
   private workspaceHandleFromBaseUrl(baseUrl: string): string {

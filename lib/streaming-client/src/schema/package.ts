@@ -47,6 +47,11 @@ export type PackageInstance = IsSteamshipModel &
      * The ID of the workspace this instance resides within.
      */
     workspaceId: string;
+
+    /**
+     * The ID of the workspace this instance resides within.
+     */
+    workspaceHandle: string;
   };
 
 export type PartialPackageInstance = Partial<PackageInstance>;
@@ -59,4 +64,5 @@ export interface IPackageClient {
     payload?: Record<string, any>;
     verb?: "GET" | "POST";
   }): Promise<Response>;
+  getBaseUrl(pkg: PackageInstance): Promise<string>;
 }
