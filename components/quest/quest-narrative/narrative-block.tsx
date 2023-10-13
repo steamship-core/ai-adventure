@@ -26,6 +26,7 @@ export const NarrativeBlock = ({
   onSummary: (block: Block) => void;
   onComplete: () => void;
 }) => {
+  console.log("blocks", blocks);
   // Begin Debug Information State Management
   try {
     const formattedBlocks = blocks.sort((a, b) => {
@@ -56,6 +57,7 @@ export const NarrativeBlock = ({
         case MessageTypes.USER_MESSAGE:
           return <UserMessageBlock key={block.id} block={block} />;
         case MessageTypes.STREAMING_BLOCK:
+          console.log("streaming block", block);
           return <StreamingBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_COMPLETE:
           return (
