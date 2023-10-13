@@ -70,11 +70,12 @@ export const getFormattedBlocks = (message: Message) => {
           return JSON.parse(block) as Block;
         } catch (e) {
           console.log("getFormattedBlock error", e);
+          console.log("failed to parse block", block);
 
-          return block;
+          return null;
         }
       }
-      return block;
+      return null;
     })
     .filter((block) => block) as Block[];
 
