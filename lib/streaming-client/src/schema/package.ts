@@ -69,5 +69,4 @@ export interface IPackageClient {
     payload?: Record<string, any>;
     verb?: "GET" | "POST";
   }): Promise<Response>;
-  getBaseUrl(pkg: PackageInstance): Promise<string>;
 }
