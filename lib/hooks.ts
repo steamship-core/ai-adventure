@@ -12,8 +12,13 @@ export const useDebugMode = () => {
   }, []);
 
   const setIsDebugMode = (isEnabled: boolean) => {
-    localStorage.removeItem(showDebugInformationKey);
+    if (!isEnabled) {
+      localStorage.removeItem(showDebugInformationKey);
+    } else {
+      localStorage.setItem(showDebugInformationKey, "true");
+    }
     _setIsDebugMode(isEnabled);
   };
+
   return { isDebugMode, setIsDebugMode };
 };
