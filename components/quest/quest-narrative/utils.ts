@@ -28,7 +28,7 @@ export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "image")) {
     return MessageTypes.IMAGE;
   }
-  if (block.streamState === "started") {
+  if (block.streamState) {
     return MessageTypes.STREAMING_BLOCK;
   }
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
