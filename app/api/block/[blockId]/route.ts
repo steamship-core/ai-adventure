@@ -1,12 +1,9 @@
-import Steamship from "@steamship/client";
+import Steamship from "@/lib/streaming-client/src";
+import { getSteamshipClient } from "@/lib/utils";
 
 const GET = async (req: Request, context: { params: any }) => {
   const blockId = context.params.blockId;
-  const steamship = new Steamship({
-    apiKey: process.env.STEAMSHIP_API_KEY,
-    appBase: "https://apps.staging.steamship.com/",
-    apiBase: "https://api.staging.steamship.com/api/v1/",
-  });
+  const steamship = getSteamshipClient();
 
   const response = await steamship.block.raw({ id: blockId });
   return response;

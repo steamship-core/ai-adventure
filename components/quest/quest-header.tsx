@@ -6,7 +6,7 @@ import EndSheet from "./shared/end-sheet";
 import InventorySheet from "../inventory-sheet";
 import { GameState } from "@/lib/game/schema/game_state";
 import { useChat } from "ai/react";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 
 const MINIUM_MESSAGE_COUNT = 2;
 

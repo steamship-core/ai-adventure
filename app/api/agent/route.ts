@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
 import { completeOnboarding } from "@/lib/game/onboarding";
-import { getSteamshipClient } from "@/lib/utils";
+import { clerkIdToSteamshipHandle, getSteamshipClient } from "@/lib/utils";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -32,15 +32,23 @@ export async function POST(request: Request) {
     const steamship = getSteamshipClient();
 
     // Switch into the web user's workspace.
-    steamship.switchWorkspace({ workspace: userId });
+    const workspaceHandle = clerkIdToSteamshipHandle(userId);
+
+    steamship.switchWorkspace({ workspace: workspaceHandle });
+
+    console.log(`Switching to workspace: ${userId}`);
 
     const packageInstance = await steamship.package.createInstance({
       package: _package,
       version: _version,
-      handle: userId,
+      handle: workspaceHandle,
     });
 
+    console.log(`New agent package instance: ${packageInstance}`);
+
     const agentUrl = await steamship.package.getBaseUrl(packageInstance);
+
+    console.log(`New agent URL: ${agentUrl}`);
 
     const agent = await prisma.agents.create({
       data: {

@@ -76,7 +76,6 @@ export class AgentClient implements IAgentClient {
     return await this.client.package.invoke({
       base_url: params.url,
       method: params.path,
-      payload: params.arguments,
       verb: "GET",
     });
   }

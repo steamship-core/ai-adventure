@@ -1,4 +1,4 @@
-import Steamship from "@steamship/client";
+import Steamship from "@/lib/streaming-client/src";
 import { getSteamshipClient } from "../utils";
 import { GameState } from "./schema/game_state";
 import { Quest } from "./schema/quest";

@@ -1,4 +1,4 @@
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { Message } from "ai";
 
 export const MessageTypes = {

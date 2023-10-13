@@ -15,7 +15,7 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { AwardIcon, BadgeDollarSignIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
 

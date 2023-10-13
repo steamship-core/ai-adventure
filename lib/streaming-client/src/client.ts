@@ -118,6 +118,10 @@ export class Steamship extends ClientBase implements Client {
       baseUrl: opts.baseUrl,
     });
 
+    if (opts.method.toUpperCase() != "POST") {
+      delete opts["body"];
+    }
+
     const resp = await fetch(_url, opts);
     return resp;
   }

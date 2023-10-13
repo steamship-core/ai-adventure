@@ -9,7 +9,7 @@ import { Button } from "../../ui/button";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { NarrativeBlock } from "./narrrative-block";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 
 export default function QuestNarrative({
   id,

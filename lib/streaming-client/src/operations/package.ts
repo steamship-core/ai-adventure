@@ -102,7 +102,10 @@ export class PackageClient implements IPackageClient {
     }
     return await this.client.invokePackageMethod(base_url, params.method, {
       method: params.verb || "POST",
-      body: JSON.stringify(params.payload || {}),
+      body:
+        params.verb == "POST"
+          ? JSON.stringify(params.payload || {})
+          : undefined,
       json: true,
     });
   }

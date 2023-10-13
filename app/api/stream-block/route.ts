@@ -1,5 +1,5 @@
 import { StreamingTextResponse } from "ai";
-import Steamship, { SteamshipStream } from "@steamship/client";
+import Steamship, { SteamshipStream } from "@/lib/streaming-client/src";
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = "edge";
@@ -9,12 +9,7 @@ export async function POST(req: Request) {
   const { blockId } = (await req.json()) as {
     blockId: string;
   };
-
-  const steamship = new Steamship({
-    apiKey: process.env.STEAMSHIP_API_KEY,
-    appBase: "https://apps.staging.steamship.com/",
-    apiBase: "https://api.staging.steamship.com/api/v1/",
-  });
+  const steamship = getSteamshipClient();
 
   const decoder = new TextDecoder();
   let str = "";
