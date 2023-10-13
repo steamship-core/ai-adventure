@@ -11,21 +11,18 @@ export async function POST(req: Request) {
     blockId: string;
   };
   const steamship = getSteamshipClient();
+  const response = await steamship.block.raw({ id: blockId });
+
+  // return new StreamingTextResponse(response.body!);
 
   const decoder = new TextDecoder();
   let str = "";
-  const response = await steamship.block.raw({ id: blockId });
   return new StreamingTextResponse(
     new ReadableStream({
       async pull(controller): Promise<void> {
         for await (const chunk of response.body as any) {
           str += decoder.decode(chunk);
-          controller.enqueue(
-            JSON.stringify({
-              id: blockId,
-              text: str,
-            }) + "\n"
-          );
+          controller.enqueue(str);
         }
         controller.close();
       },
