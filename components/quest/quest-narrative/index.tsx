@@ -134,16 +134,3 @@ export default function QuestNarrative({
     </>
   );
 }
-
-/*
-* Existing chat widget
-* When encountering a new block, may be a chat block or may not be
-* Need a getBlockType helper to look through all tags and determine block
-
-Block Types
-* new background
-* background audio
-* narration (of a text block you already have!)
-* character image
-* Anything else, if it’s role assistant should be shown as text
-*/

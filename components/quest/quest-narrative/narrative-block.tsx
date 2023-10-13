@@ -27,41 +27,21 @@ export const NarrativeBlock = ({
   onComplete: () => void;
 }) => {
   // Begin Debug Information State Management
-  const showDebugInformationKey = "showDebugInformation";
-  const [showDebugInformation, setShowDebugInformation] = useState(false);
-  useEffect(() => {
-    const preference = localStorage.getItem(showDebugInformationKey);
-    if (preference) {
-      setShowDebugInformation(JSON.parse(preference));
-    }
-  }, [showDebugInformationKey, showDebugInformation]);
-
   try {
-    const formattedBlocks = blocks
-      .filter((block) => {
-        const type = getMessageType(block as Block);
-        return (
-          block.id &&
-          (showDebugInformation ||
-            (type != MessageTypes.STATUS_MESSAGE &&
-              type != MessageTypes.SYSTEM_MESSAGE &&
-              type != MessageTypes.FUNCTION_SELECTION))
-        );
-      })
-      .sort((a, b) => {
-        if (typeof a.index == "undefined") {
-          return -1;
-        }
-        if (typeof b.index == "undefined") {
-          return 1;
-        }
-        if (a.index == b.index) {
-          return 0;
-        }
-        return a.index > b.index ? -1 : 1;
-      });
+    const formattedBlocks = blocks.sort((a, b) => {
+      if (typeof a.index == "undefined") {
+        return -1;
+      }
+      if (typeof b.index == "undefined") {
+        return 1;
+      }
+      if (a.index == b.index) {
+        return 0;
+      }
+      return a.index > b.index ? -1 : 1;
+    });
 
-    return blocks.map((block) => {
+    return formattedBlocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return <TextBlock key={block.id} text={block.text!} />;
@@ -76,6 +56,7 @@ export const NarrativeBlock = ({
         case MessageTypes.USER_MESSAGE:
           return <UserMessageBlock key={block.id} block={block} />;
         case MessageTypes.STREAMING_BLOCK:
+          console.log("streaming block", block);
           return <StreamingBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_COMPLETE:
           return (

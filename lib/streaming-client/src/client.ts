@@ -2,6 +2,7 @@ import { createParser } from "eventsource-parser";
 import { ClientBase } from "./base";
 import { Client } from "./schema";
 import { Configuration } from "./schema/client";
+import { EventSourceParserStream } from "eventsource-parser/stream";
 
 /**
  * Steamship API client.
@@ -188,11 +189,10 @@ export class Steamship extends ClientBase implements Client {
       );
     }
 
-    const decoder = new TextDecoder();
-    const reader = res.body?.getReader();
-
+    // @ts-ignore
     return new ReadableStream({
       async pull(controller): Promise<void> {
+<<<<<<< HEAD
         function onParse(event: any): void {
           if (event.type === "event") {
             const data = event.data;
@@ -224,8 +224,15 @@ export class Steamship extends ClientBase implements Client {
           controller.close();
         } else {
           parser.feed(decoder.decode(value));
+=======
+        for await (const chunk of res.body as any) {
+          controller.enqueue(chunk);
+>>>>>>> 5101a2a142ca84a69160a9cf885e4dad8acb3ba6
         }
+        controller.close();
       },
-    });
+    })
+      .pipeThrough(new TextDecoderStream())
+      .pipeThrough(new EventSourceParserStream());
   }
 }

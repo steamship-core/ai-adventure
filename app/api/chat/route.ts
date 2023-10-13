@@ -59,5 +59,5 @@ export async function POST(req: Request) {
   });
 
   // Respond with a stream of Markdown
-  return new StreamingTextResponse(stream);
+  return new Response(stream);
 }

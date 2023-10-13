@@ -28,7 +28,7 @@ export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "image")) {
     return MessageTypes.IMAGE;
   }
-  if (block.streamState === "started") {
+  if (block.streamState) {
     return MessageTypes.STREAMING_BLOCK;
   }
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
@@ -65,7 +65,17 @@ export const getFormattedBlocks = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
     .map((block) => {
-      return block ? (JSON.parse(block) as Block) : null;
+      if (block) {
+        try {
+          return JSON.parse(block) as Block;
+        } catch (e) {
+          console.log("getFormattedBlock error", e);
+          console.log("failed to parse block", block);
+
+          return null;
+        }
+      }
+      return null;
     })
     .filter((block) => block) as Block[];
 
