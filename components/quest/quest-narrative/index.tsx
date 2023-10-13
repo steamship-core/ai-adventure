@@ -8,7 +8,7 @@ import { SendIcon } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
-import { Block, PartialBLock } from "@/lib/streaming-client/src";
+import { Block, PartialBlock } from "@/lib/streaming-client/src";
 import { UserInputBlock } from "./user-input-block";
 import { MessageTypes, getFormattedBlock, getMessageType } from "./utils";
 import { CompletionBlock } from "./completion-block";
@@ -82,7 +82,7 @@ export default function QuestNarrative({
   }, []);
 
   // Get the blocks so that we can filter and sort them.
-  let blocks: PartialBLock[] = [];
+  let blocks: PartialBlock[] = [];
   for (let message of messages || []) {
     if (message.role == "user") {
       blocks.push({ text: message.content });
