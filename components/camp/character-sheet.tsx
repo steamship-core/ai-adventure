@@ -4,19 +4,69 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import Image from "next/image";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { Progress } from "../ui/progress";
+import { useState, useEffect } from "react";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
 import { levels } from "@/lib/game/levels";
+import { Switch } from "../ui/switch";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 export const CharacterSheet = () => {
-  const gameState = useRecoilValue(recoilGameState);
+  const [gameState, setGameState] = useRecoilState(recoilGameState);
+
   const rank = gameState?.player?.rank || 0;
+
+  // Begin Debug Information State Management
+  const showDebugInformationKey = "showDebugInformation";
+  const [showDebugInformation, setShowDebugInformation] = useState(false);
+  useEffect(() => {
+    const preference = localStorage.getItem(showDebugInformationKey);
+    if (preference) {
+      setShowDebugInformation(JSON.parse(preference));
+    }
+  }, [showDebugInformationKey, showDebugInformation]);
+  const toggleShowDebugInformation = (checked: boolean) => {
+    setShowDebugInformation(checked);
+    localStorage.setItem(showDebugInformationKey, checked.toString());
+  };
+  // End Debug Information State Management
+
+  // Begin Diagnostic Test State Management
+  const runDiagnosticTestKey = "runDiagnosticTest";
+  const [runDiagnosticTest, setRunDiagnosticTest] = useState("");
+  useEffect(() => {
+    const preference = localStorage.getItem(runDiagnosticTestKey);
+    if (preference) {
+      setRunDiagnosticTest(preference);
+    }
+  }, [runDiagnosticTestKey, runDiagnosticTest]);
+  const setAndSaveRunDiagnosticTest = (value: string) => {
+    setRunDiagnosticTest(value);
+    localStorage.setItem(runDiagnosticTestKey, value);
+  };
+  // End Diagnostic Test State Management
+
+  const setEnergyTo100 = async () => {
+    const response = await fetch("/api/game/debug", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "top-up-energy",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let newGameState = await response.json();
+      setGameState(newGameState);
+    }
+  };
 
   const getLevel = () => {
     try {
@@ -134,10 +184,36 @@ export const CharacterSheet = () => {
             </div>
             <div>
               <TypographyH3>Account</TypographyH3>
+              <TypographyMuted>Show Debug Information</TypographyMuted>
+              <Switch
+                checked={showDebugInformation}
+                onCheckedChange={toggleShowDebugInformation}
+              />
+              <TypographyMuted>Run Diagnostic Test</TypographyMuted>
+              <Input
+                className="w-full disabled:cursor-default"
+                placeholder={"knock-knock"}
+                value={runDiagnosticTest}
+                onChange={(e) => setAndSaveRunDiagnosticTest(e.target.value)}
+                disabled={false}
+              />
+              <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
+
               <div className="mt-2">
                 <UserButton afterSignOutUrl="/" />
               </div>
             </div>
+          </div>
+          <div>
+            <TypographyH3>Diagnostics</TypographyH3>
+            <TypographyMuted>Current Quest</TypographyMuted>
+            <TypographyMuted>
+              {gameState?.current_quest || "None"}
+            </TypographyMuted>
+            <TypographyMuted>Current NPC Conversation</TypographyMuted>
+            <TypographyMuted>
+              {gameState?.in_conversation_with || "None"}
+            </TypographyMuted>
           </div>
         </div>
       </SheetContent>

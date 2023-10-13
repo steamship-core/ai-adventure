@@ -10,6 +10,7 @@ import {
 
 import type {
   Block,
+  PartialBlock,
   ServerSentEvent,
   BlockCreatedPayload,
   FileEvent,
@@ -39,6 +40,7 @@ export type { SteamshipStreamOptions };
 export type {
   Client,
   Block,
+  PartialBlock,
   ServerSentEvent,
   BlockCreatedPayload,
   FileEvent,

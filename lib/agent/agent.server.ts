@@ -1,25 +1,45 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
-import prisma from "@/lib/db";
-import { saveGameState } from "@/lib/game/game-state.server";
-import { GameState } from "@/lib/game/schema/game_state";
-import { completeOnboarding } from "@/lib/game/onboarding";
-import { clerkIdToSteamshipHandle, getSteamshipClient } from "@/lib/utils";
 import { log } from "next-axiom";
+import { NextResponse } from "next/server";
+import prisma from "../db";
+import { clerkIdToSteamshipHandle, getSteamshipClient } from "../utils";
+import { Prisma } from "@prisma/client";
+import { DefaultArgs } from "@prisma/client/runtime/library";
 
-export async function POST(request: Request) {
-  const { userId } = auth();
-  if (!userId) {
-    log.error("No user");
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
+export const getAgent = async (
+  userId: string
+): Promise<Prisma.Prisma__AgentsClient<
+  {
+    id: number;
+    ownerId: string;
+    agentUrl: string;
+  },
+  never,
+  DefaultArgs
+> | null> => {
+  console.log(`Getting agent for user ${userId}`);
+  return await prisma.agents.findFirst({
+    where: {
+      ownerId: userId!,
+    },
+  });
+};
 
+export const createAgent = async (
+  userId: string
+): Promise<
+  Prisma.Prisma__AgentsClient<
+    {
+      id: number;
+      ownerId: string;
+      agentUrl: string;
+    },
+    never,
+    DefaultArgs
+  >
+> => {
   if (!process.env.STEAMSHIP_AGENT_VERSION) {
     log.error("No steamship agent version");
-    return NextResponse.json(
-      { error: "Please set the STEAMSHIP_AGENT_VERSION environment variable." },
-      { status: 404 }
-    );
+    throw Error("Please set the STEAMSHIP_AGENT_VERSION environment variable.");
   }
 
   var [_package, _version] = process.env.STEAMSHIP_AGENT_VERSION.split("@");
@@ -27,8 +47,6 @@ export async function POST(request: Request) {
   log.info(
     `Creating instance of Steamship Package ${_package} at version ${_version}`
   );
-
-  const config = await request.json();
 
   try {
     // Switch into the web user's workspace.
@@ -53,22 +71,15 @@ export async function POST(request: Request) {
 
     log.info(`New agent URL: ${agentUrl}`);
 
-    const agent = await prisma.agents.create({
+    return await prisma.agents.create({
       data: {
         ownerId: userId!,
         agentUrl: agentUrl,
       },
     });
-
-    await saveGameState(agent.agentUrl, config as GameState);
-    await completeOnboarding(agent.agentUrl);
-    return NextResponse.json({ agent }, { status: 200 });
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
-    return NextResponse.json(
-      { error: "Failed to create agent." },
-      { status: 404 }
-    );
+    throw Error("Failed to create agent.");
   }
-}
+};

@@ -1,6 +1,6 @@
 "use client";
 import CharacterCreationIntro from "./intro";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreationContainer } from "./shared/components";
 import CharacterCreationComplete, {
   CharacterConfig,
