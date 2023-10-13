@@ -62,6 +62,7 @@ export type { AgentRespondParams };
 
 export interface IAgentClient {
   post(params: AgentPostGetParams): Promise<Response>;
+  get(params: AgentPostGetParams): Promise<Response>;
   respond(params: AgentRespondParams): Promise<Block[]>;
   respondAsync(params: AgentRespondParams): Promise<StreamingResponse>;
 }

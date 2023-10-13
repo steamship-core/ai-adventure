@@ -3,6 +3,7 @@ import { IWorkspaceClient } from "./workspace";
 import { IAgentClient } from "./agent";
 import { IBlockClient } from "./block";
 import { IFileClient } from "./file";
+import { IUserClient } from "./user";
 
 export const API_BASE_PRODUCTION = "https://api.steamship.com/api/v1/";
 export const API_BASE_STAGING = "https://api.staging.steamship.com/api/v1/";
@@ -56,11 +57,13 @@ export interface Client {
   }: {
     workspace?: string;
     workspaceId?: string;
-  }): Client;
+  }): Promise<Client>;
 
   package: IPackageClient;
   workspace: IWorkspaceClient;
   agent: IAgentClient;
   block: IBlockClient;
   file: IFileClient;
+  user: IUserClient;
+  config: Configuration;
 }

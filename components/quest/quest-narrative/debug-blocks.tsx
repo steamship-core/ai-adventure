@@ -1,6 +1,6 @@
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { cn } from "@/lib/utils";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 
 const DEBUG_MODE = true;
 

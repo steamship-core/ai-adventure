@@ -64,8 +64,17 @@ export class PackageClient implements IPackageClient {
       fetchIfExists: fetchIfExists,
       config: config,
     });
+    if (!response.ok) {
+      let msg = "";
+      try {
+        msg = await response.text();
+      } catch {}
+      throw new Error(
+        `Failed to create package instance. ${response.statusText}. ${msg}`
+      );
+    }
     const json = await response.json();
-    return json?.packageInstance as PackageInstance;
+    return json?.data?.packageInstance as PackageInstance;
   }
 
   /**
@@ -90,7 +99,10 @@ export class PackageClient implements IPackageClient {
     }
     return await this.client.invokePackageMethod(base_url, params.method, {
       method: params.verb || "POST",
-      body: JSON.stringify(params.payload || {}),
+      body:
+        params.verb == "POST"
+          ? JSON.stringify(params.payload || {})
+          : undefined,
       json: true,
     });
   }

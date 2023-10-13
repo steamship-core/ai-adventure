@@ -21,7 +21,7 @@ export type PackageInstance = IsSteamshipModel &
     /**
      * The invocation URL base of the package.
      */
-    invocationUrl: string;
+    invocationURL: string;
 
     /**
      * The handle of the package tied to this instance.
@@ -47,6 +47,16 @@ export type PackageInstance = IsSteamshipModel &
      * The ID of the workspace this instance resides within.
      */
     workspaceId: string;
+
+    /**
+     * The ID of the initialization task for this package.
+     */
+    initTaskID: string;
+
+    /**
+     * The handle of the user for this package.
+     */
+    userHandle: string;
   };
 
 export type PartialPackageInstance = Partial<PackageInstance>;

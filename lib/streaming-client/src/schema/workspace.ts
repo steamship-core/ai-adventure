@@ -12,6 +12,6 @@ export type PartialWorkspace = Partial<Workspace>;
 export interface IWorkspaceClient {
   create(params: {
     handle?: string;
-    fetch_if_exists?: boolean;
+    fetchIfExists?: boolean;
   }): Promise<Workspace>;
 }

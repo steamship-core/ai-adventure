@@ -1,6 +1,6 @@
 "use client";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { useEffect, useState } from "react";
 
 export const ImageBlock = ({ block }: { block: Block }) => {

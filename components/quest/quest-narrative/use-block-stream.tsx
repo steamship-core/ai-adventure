@@ -1,4 +1,4 @@
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { useEffect, useState } from "react";
 
 export const useBlockStream = ({ block }: { block: Block }) => {

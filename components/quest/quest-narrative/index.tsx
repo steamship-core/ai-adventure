@@ -9,7 +9,7 @@ import { Button } from "../../ui/button";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
 import { NarrativeBlock } from "./narrrative-block";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 
 export default function QuestNarrative({
   id,
@@ -17,18 +17,23 @@ export default function QuestNarrative({
   onComplete,
   isComplete,
   summary,
+  agentBaseUrl,
 }: {
   id: string;
   summary: Block | null;
   onSummary: (block: Block) => void;
   onComplete: () => void;
   isComplete: boolean;
+  agentBaseUrl: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      body: { context_id: questId },
+      body: {
+        context_id: questId,
+        agentBaseUrl,
+      },
       id,
       initialInput: "Start a Quest",
     });

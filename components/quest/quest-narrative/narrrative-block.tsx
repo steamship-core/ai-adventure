@@ -12,7 +12,7 @@ import {
 } from "./debug-blocks";
 import { StreamingBlock } from "./streaming-block";
 import { QuestSummaryBlock } from "./quest-summary-block";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { CompletionBlock } from "./completion-block";
 import { ItemGenerationBlock } from "./item-generation-block";
 import { ImageBlock } from "./image-block";

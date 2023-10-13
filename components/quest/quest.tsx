@@ -5,9 +5,15 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { QuestHeader } from "./quest-header";
 import { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 
-export default function Quest({ gameState }: { gameState: GameState }) {
+export default function Quest({
+  gameState,
+  agentBaseUrl,
+}: {
+  gameState: GameState;
+  agentBaseUrl: string;
+}) {
   const [id, setId] = useState<string | null>(null);
   const [summary, setSummary] = useState<Block | null>(null);
   const [isComplete, setIsComplete] = useState(false);
@@ -42,6 +48,7 @@ export default function Quest({ gameState }: { gameState: GameState }) {
             onComplete={onComplete}
             isComplete={isComplete}
             summary={summary}
+            agentBaseUrl={agentBaseUrl}
           />
         </>
       )}

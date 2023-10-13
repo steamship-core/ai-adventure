@@ -1,7 +1,7 @@
 import { createParser } from "eventsource-parser";
 import { ClientBase } from "./base";
 import { Client } from "./schema";
-import { Configuration, DEFAULT_CONFIGURATION } from "./schema/client";
+import { Configuration } from "./schema/client";
 
 /**
  * Steamship API client.
@@ -9,16 +9,13 @@ import { Configuration, DEFAULT_CONFIGURATION } from "./schema/client";
  * Intended for use consuming Steamship's API.
  */
 export class Steamship extends ClientBase implements Client {
-  config: Configuration;
-
   /**
    * Create a new Steamship API client.
    *
    * @param config
    */
   constructor(config: Configuration) {
-    super();
-    this.config = { ...DEFAULT_CONFIGURATION, ...config };
+    super(config);
   }
 
   private workspaceHandleFromBaseUrl(baseUrl: string): string {
@@ -121,6 +118,10 @@ export class Steamship extends ClientBase implements Client {
       baseUrl: opts.baseUrl,
     });
 
+    if (opts.method && opts.method.toUpperCase() != "POST") {
+      delete opts["body"];
+    }
+
     const resp = await fetch(_url, opts);
     return resp;
   }
@@ -145,18 +146,29 @@ export class Steamship extends ClientBase implements Client {
     });
   }
 
-  public switchWorkspace({
+  public async switchWorkspace({
     workspace,
     workspaceId,
   }: {
     workspace?: string;
     workspaceId?: string;
-  }): Client {
+  }): Promise<Client> {
     let newConfig = { ...this.config };
     delete newConfig.workspace;
     delete newConfig.workspaceId;
+
+    if (workspace) {
+      // Make sure it's created
+      await this.workspace.create({
+        handle: workspace,
+        fetchIfExists: true,
+      });
+      newConfig.workspace = workspace;
+    }
+
     newConfig.workspace = workspace;
     newConfig.workspaceId = workspaceId;
+
     return new Steamship(newConfig);
   }
 

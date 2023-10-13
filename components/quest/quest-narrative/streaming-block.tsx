@@ -1,5 +1,5 @@
 "use client";
-import { Block } from "@steamship/client";
+import { Block } from "@/lib/streaming-client/src";
 import { DebugBlock } from "./debug-blocks";
 import { useBlockStream } from "./use-block-stream";
 import { TextBlock } from "./text-block";
