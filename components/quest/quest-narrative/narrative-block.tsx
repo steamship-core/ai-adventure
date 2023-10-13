@@ -26,7 +26,6 @@ export const NarrativeBlock = ({
   onSummary: (block: Block) => void;
   onComplete: () => void;
 }) => {
-  console.log("blocks", blocks);
   // Begin Debug Information State Management
   try {
     const formattedBlocks = blocks.sort((a, b) => {
