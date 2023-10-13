@@ -47,9 +47,11 @@ const StartAdventureButton = () => {
       return;
     }
 
-    log.debug(`Activating new quest: ${json.quest.chat_file_id}`);
-    if (json.quest.chat_file_id) {
-      router.push(`/play/quest/${json.quest.chat_file_id}`);
+    const questId = json.quest.name;
+    console.log(`Activating new quest: ${questId}`);
+    log.debug(`Activating new quest: ${questId}`);
+    if (questId) {
+      router.push(`/play/quest/${questId}`);
     }
     setIsLoading(false);
   };

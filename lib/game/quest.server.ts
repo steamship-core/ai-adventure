@@ -18,6 +18,9 @@ export const loadExistingQuestBlocks = async (
   agentBase: string,
   questId: string
 ) => {
+  console.log("Agent Base", agentBase);
+  console.log("QuestId", questId);
+
   const steamship = getSteamshipClient();
   const resp = await steamship.agent.post({
     url: agentBase,
