@@ -8,11 +8,9 @@ import { SendIcon } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useChat } from "ai/react";
 import { useParams } from "next/navigation";
-import { NarrativeBlock } from "./narrrative-block";
-import { Block } from "@/lib/streaming-client/src";
+import { Block, PartialBLock } from "@/lib/streaming-client/src";
 import { UserInputBlock } from "./user-input-block";
 import { MessageTypes, getFormattedBlock, getMessageType } from "./utils";
-import block from "@/lib/streaming-client/src/operations/block";
 import { CompletionBlock } from "./completion-block";
 import {
   StatusBlock,
@@ -45,6 +43,18 @@ export default function QuestNarrative({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
+
+  const [priorBlocks, setPriorBlocks] = useState<Block[]>([]);
+
+  useEffect(() => {
+    fetch(`/api/game/quest?questId=${questId}`).then(async (response) => {
+      if (response.ok) {
+        let blocks = (await response.json()) as Block[];
+        setPriorBlocks(blocks);
+      }
+    });
+  }, []);
+
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
       body: {
@@ -71,91 +81,105 @@ export default function QuestNarrative({
     inputRef?.current?.form?.requestSubmit();
   }, []);
 
-  let blocks = [];
-
+  // Get the blocks so that we can filter and sort them.
+  let blocks: PartialBLock[] = [];
   for (let message of messages || []) {
-    // If we're supposed to show debug information, show everything
-    if (showDebugInformation) return true;
-
-    // Else, filter out system messages
     if (message.role == "user") {
-      blocks.push(<UserInputBlock key={message.id} text={message.content} />);
+      blocks.push({ text: message.content });
     } else {
-      // It's a narrative block
       const _subBlocks = getFormattedBlock(message);
       for (let subBlock of _subBlocks) {
-        switch (getMessageType(subBlock)) {
-          case MessageTypes.TEXT:
-            blocks.push(<TextBlock key={subBlock.id} text={subBlock.text!} />);
-            break;
-          case MessageTypes.STATUS_MESSAGE:
-            if (showDebugInformation) {
-              blocks.push(<StatusBlock key={subBlock.id} block={subBlock} />);
-            }
-            break;
-          case MessageTypes.SYSTEM_MESSAGE:
-            if (showDebugInformation) {
-              blocks.push(<SystemBlock key={subBlock.id} block={subBlock} />);
-            }
-            break;
-          case MessageTypes.STREAMED_TO_CHAT_HISTORY:
-            blocks.push(
-              <ChatHistoryBlock key={subBlock.id} block={subBlock} />
-            );
-            break;
-          case MessageTypes.FUNCTION_SELECTION:
-            if (showDebugInformation) {
-              blocks.push(
-                <FunctionCallBlock key={subBlock.id} block={subBlock} />
-              );
-            }
-            break;
-          case MessageTypes.USER_MESSAGE:
-            blocks.push(
-              <UserMessageBlock key={subBlock.id} block={subBlock} />
-            );
-            break;
-          case MessageTypes.STREAMING_BLOCK:
-            blocks.push(<StreamingBlock key={subBlock.id} block={subBlock} />);
-            break;
-          case MessageTypes.QUEST_COMPLETE:
-            blocks.push(
-              <CompletionBlock
-                key={subBlock.id}
-                block={subBlock}
-                onComplete={onComplete}
-              />
-            );
-            break;
-          case MessageTypes.QUEST_SUMMARY:
-            blocks.push(
-              <QuestSummaryBlock
-                key={subBlock.id}
-                block={subBlock}
-                onSummary={onSummary}
-              />
-            );
-            break;
-          case MessageTypes.ITEM_GENERATION_CONTENT:
-            blocks.push(
-              <ItemGenerationBlock key={subBlock.id} block={subBlock} />
-            );
-            break;
-          case MessageTypes.IMAGE:
-            blocks.push(<ImageBlock key={subBlock.id} block={subBlock} />);
-            break;
-          default:
-            blocks.push(<FallbackBlock key={subBlock.id} block={subBlock} />);
-            break;
-        }
+        blocks.push(subBlock);
       }
+    }
+  }
+
+  // Filter and sort them.
+  blocks = [...priorBlocks, ...blocks].filter((block) => {
+    const type = getMessageType(block);
+    return (
+      block.id &&
+      (showDebugInformation ||
+        (type != MessageTypes.STATUS_MESSAGE &&
+          type != MessageTypes.SYSTEM_MESSAGE &&
+          type != MessageTypes.FUNCTION_SELECTION))
+    );
+  });
+
+  // Sort them
+  blocks = blocks.sort((a, b) => {
+    if (typeof a.index == "undefined") {
+      return -1;
+    }
+    if (typeof b.index == "undefined") {
+      return 1;
+    }
+    if (a.index == b.index) {
+      return 0;
+    }
+    return a.index > b.index ? -1 : 1;
+  });
+
+  let elements = [];
+
+  // Finally wrap them in elements
+  for (let block of blocks || []) {
+    switch (getMessageType(block)) {
+      case MessageTypes.TEXT:
+        elements.push(<TextBlock key={block.id} text={block.text!} />);
+        break;
+      case MessageTypes.STATUS_MESSAGE:
+        elements.push(<StatusBlock key={block.id} block={block} />);
+        break;
+      case MessageTypes.SYSTEM_MESSAGE:
+        elements.push(<SystemBlock key={block.id} block={block} />);
+        break;
+      case MessageTypes.STREAMED_TO_CHAT_HISTORY:
+        <ChatHistoryBlock key={block.id} block={block} />;
+        break;
+      case MessageTypes.FUNCTION_SELECTION:
+        elements.push(<FunctionCallBlock key={block.id} block={block} />);
+        break;
+      case MessageTypes.USER_MESSAGE:
+        elements.push(<TextBlock key={block.id} text={block.text} />);
+        break;
+      case MessageTypes.STREAMING_BLOCK:
+        elements.push(<StreamingBlock key={block.id} block={block} />);
+        break;
+      case MessageTypes.QUEST_COMPLETE:
+        elements.push(
+          <CompletionBlock
+            key={block.id}
+            block={block}
+            onComplete={onComplete}
+          />
+        );
+        break;
+      case MessageTypes.QUEST_SUMMARY:
+        elements.push(
+          <QuestSummaryBlock
+            key={block.id}
+            block={block}
+            onSummary={onSummary}
+          />
+        );
+        break;
+      case MessageTypes.ITEM_GENERATION_CONTENT:
+        elements.push(<ItemGenerationBlock key={block.id} block={block} />);
+        break;
+      case MessageTypes.IMAGE:
+        elements.push(<ImageBlock key={block.id} block={block} />);
+        break;
+      default:
+        elements.push(<FallbackBlock key={block.id} block={block} />);
+        break;
     }
   }
 
   return (
     <>
       <div className="flex basis-11/12 overflow-hidden">
-        <QuestNarrativeContainer>{blocks.reverse()}</QuestNarrativeContainer>
+        <QuestNarrativeContainer>{elements}</QuestNarrativeContainer>
       </div>
       <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
         {isLoading && (
