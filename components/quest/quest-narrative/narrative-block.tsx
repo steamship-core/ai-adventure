@@ -16,7 +16,6 @@ import { Block } from "@/lib/streaming-client/src";
 import { CompletionBlock } from "./completion-block";
 import { ItemGenerationBlock } from "./item-generation-block";
 import { ImageBlock } from "./image-block";
-import { useDebugMode } from "@/lib/hooks";
 
 export const NarrativeBlock = ({
   blocks,
@@ -28,31 +27,19 @@ export const NarrativeBlock = ({
   onComplete: () => void;
 }) => {
   // Begin Debug Information State Management
-  const { isDebugMode } = useDebugMode();
   try {
-    const formattedBlocks = blocks
-      .filter((block) => {
-        const type = getMessageType(block as Block);
-        return (
-          block.id &&
-          (isDebugMode ||
-            (type != MessageTypes.STATUS_MESSAGE &&
-              type != MessageTypes.SYSTEM_MESSAGE &&
-              type != MessageTypes.FUNCTION_SELECTION))
-        );
-      })
-      .sort((a, b) => {
-        if (typeof a.index == "undefined") {
-          return -1;
-        }
-        if (typeof b.index == "undefined") {
-          return 1;
-        }
-        if (a.index == b.index) {
-          return 0;
-        }
-        return a.index > b.index ? -1 : 1;
-      });
+    const formattedBlocks = blocks.sort((a, b) => {
+      if (typeof a.index == "undefined") {
+        return -1;
+      }
+      if (typeof b.index == "undefined") {
+        return 1;
+      }
+      if (a.index == b.index) {
+        return 0;
+      }
+      return a.index > b.index ? -1 : 1;
+    });
 
     return formattedBlocks.map((block) => {
       switch (getMessageType(block)) {

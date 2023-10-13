@@ -49,6 +49,7 @@ export default async function CampPage() {
     const randomIndex = Math.floor(Math.random() * bgImages.length);
     return bgImages[randomIndex];
   };
+  console.log(gameState);
 
   return (
     <RecoilProvider gameState={gameState}>

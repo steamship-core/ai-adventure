@@ -77,7 +77,8 @@ export const getFormattedBlocks = (message: Message) => {
       return block;
     })
     .filter((block) => block) as Block[];
-
+  console.log("CONTENT: ", message.content);
+  console.log("BLOCKS:", blocks);
   const combinedBlocks = blocks.reduce((acc, block) => {
     const existingBlock = acc.find((b) => b.id === block.id);
     if (existingBlock) {
