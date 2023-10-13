@@ -192,42 +192,8 @@ export class Steamship extends ClientBase implements Client {
     // @ts-ignore
     return new ReadableStream({
       async pull(controller): Promise<void> {
-<<<<<<< HEAD
-        function onParse(event: any): void {
-          if (event.type === "event") {
-            const data = event.data;
-            try {
-              let json = JSON.parse(data);
-              // The engine nests things. We don't want that.
-              if (json[event.event]) {
-                json = json[event.event];
-              }
-              event.data = json as T;
-              if (event.data.mimeType === "image/png") {
-                console.log("enqueing image!");
-              }
-              // console.log(event.data.mimeType);
-              controller.enqueue(event);
-            } catch (e) {
-              controller.error(e);
-            }
-          } else {
-            console.log("Parser encountered something other than an event");
-          }
-        }
-
-        const parser = createParser(onParse);
-
-        const { value, done } = await reader!.read();
-
-        if (done) {
-          controller.close();
-        } else {
-          parser.feed(decoder.decode(value));
-=======
         for await (const chunk of res.body as any) {
           controller.enqueue(chunk);
->>>>>>> 5101a2a142ca84a69160a9cf885e4dad8acb3ba6
         }
         controller.close();
       },
