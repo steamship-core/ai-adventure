@@ -3,6 +3,7 @@ import { ClientBase } from "./base";
 import { Client } from "./schema";
 import { Configuration } from "./schema/client";
 import { EventSourceParserStream } from "eventsource-parser/stream";
+
 /**
  * Steamship API client.
  *
@@ -189,8 +190,52 @@ export class Steamship extends ClientBase implements Client {
     }
 
     // @ts-ignore
-    return res
-      .body!.pipeThrough(new TextDecoderStream())
+    return new ReadableStream({
+      async pull(controller): Promise<void> {
+        for await (const chunk of res.body as any) {
+          controller.enqueue(chunk);
+        }
+        controller.close();
+      },
+    })
+      .pipeThrough(new TextDecoderStream())
       .pipeThrough(new EventSourceParserStream());
+
+    // return new ReadableStream({
+    //   async pull(controller): Promise<void> {
+    //     function onParse(event: any): void {
+    //       if (event.type === "event") {
+    //         const data = event.data;
+    //         try {
+    //           let json = JSON.parse(data);
+    //           // The engine nests things. We don't want that.
+    //           if (json[event.event]) {
+    //             json = json[event.event];
+    //           }
+    //           event.data = json as T;
+    //           if (event.data.mimeType === "image/png") {
+    //             console.log("enqueing image!");
+    //           }
+    //           console.log(event.data.mimeType);
+    //           controller.enqueue(event);
+    //         } catch (e) {
+    //           controller.error(e);
+    //         }
+    //       } else {
+    //         console.log("Parser encountered something other than an event");
+    //       }
+    //     }
+
+    //     const parser = createParser(onParse);
+
+    //     const { value, done } = await reader!.read();
+
+    //     if (done) {
+    //       controller.close();
+    //     } else {
+    //       parser.feed(decoder.decode(value));
+    //     }
+    //   },
+    // });
   }
 }

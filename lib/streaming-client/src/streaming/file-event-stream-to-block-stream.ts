@@ -9,7 +9,7 @@
  * =========================================================================================*/
 
 import { ParsedEvent } from "eventsource-parser/stream";
-import { FileEvent, Block, Client } from "../schema";
+import { Block, Client } from "../schema";
 
 const utf8Decoder = new TextDecoder("utf-8");
 
@@ -26,8 +26,6 @@ function FileEventStreamToBlockStream(
         const parsedEvent = JSON.parse(event.data);
         const data = parsedEvent[event.event];
         const blockId = data.blockId;
-
-        console.log("RECEIVED data", data);
 
         if (!blockId) {
           controller.error(new Error("Empty Block ID"));
