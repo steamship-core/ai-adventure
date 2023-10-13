@@ -10,8 +10,10 @@ export const runtime = "edge";
 export async function POST(req: Request) {
   const { userId } = auth();
   if (!userId) {
+    console.debug("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+  console.debug("Begin POST");
   // Extract the `prompt` from the body of the request
   const { context_id, messages } = (await req.json()) as {
     context_id: string;
@@ -33,8 +35,7 @@ export async function POST(req: Request) {
     },
   });
 
-  console.log("response", response);
-  console.log("test output");
+  console.debug("test output");
 
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {
