@@ -17,6 +17,7 @@ import { levels } from "@/lib/game/levels";
 import { Switch } from "../ui/switch";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useDebugMode } from "@/lib/hooks";
 
 export const CharacterSheet = () => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
@@ -24,18 +25,8 @@ export const CharacterSheet = () => {
   const rank = gameState?.player?.rank || 0;
 
   // Begin Debug Information State Management
-  const showDebugInformationKey = "showDebugInformation";
-  const [showDebugInformation, setShowDebugInformation] = useState(false);
-  useEffect(() => {
-    const preference = localStorage.getItem(showDebugInformationKey);
-    if (preference) {
-      setShowDebugInformation(JSON.parse(preference));
-    }
-  }, [showDebugInformationKey, showDebugInformation]);
-  const toggleShowDebugInformation = (checked: boolean) => {
-    setShowDebugInformation(checked);
-    localStorage.setItem(showDebugInformationKey, checked.toString());
-  };
+  const { isDebugMode, setIsDebugMode } = useDebugMode();
+
   // End Debug Information State Management
 
   // Begin Diagnostic Test State Management
@@ -185,10 +176,7 @@ export const CharacterSheet = () => {
             <div>
               <TypographyH3>Account</TypographyH3>
               <TypographyMuted>Show Debug Information</TypographyMuted>
-              <Switch
-                checked={showDebugInformation}
-                onCheckedChange={toggleShowDebugInformation}
-              />
+              <Switch checked={isDebugMode} onCheckedChange={setIsDebugMode} />
               <TypographyMuted>Run Diagnostic Test</TypographyMuted>
               <Input
                 className="w-full disabled:cursor-default"

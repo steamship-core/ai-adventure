@@ -65,7 +65,16 @@ export const getFormattedBlock = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
     .map((block) => {
-      return block ? (JSON.parse(block) as Block) : null;
+      if (block) {
+        try {
+          return JSON.parse(block) as Block;
+        } catch (e) {
+          console.log("getFormattedBlock error", e);
+
+          return block;
+        }
+      }
+      return block;
     })
     .filter((block) => block) as Block[];
 

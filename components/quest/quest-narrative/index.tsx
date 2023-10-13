@@ -25,6 +25,7 @@ import { ItemGenerationBlock } from "./item-generation-block";
 import { QuestSummaryBlock } from "./quest-summary-block";
 import { StreamingBlock } from "./streaming-block";
 import { TextBlock } from "./text-block";
+import { useDebugMode } from "@/lib/hooks";
 
 export default function QuestNarrative({
   id,
@@ -66,14 +67,7 @@ export default function QuestNarrative({
     });
 
   // Begin Debug Information State Management
-  const showDebugInformationKey = "showDebugInformation";
-  const [showDebugInformation, setShowDebugInformation] = useState(false);
-  useEffect(() => {
-    const preference = localStorage.getItem(showDebugInformationKey);
-    if (preference) {
-      setShowDebugInformation(JSON.parse(preference));
-    }
-  }, [showDebugInformationKey, showDebugInformation]);
+  const { isDebugMode } = useDebugMode();
   // End Debug Information State Management
 
   useEffect(() => {
@@ -99,7 +93,7 @@ export default function QuestNarrative({
     const type = getMessageType(block as Block);
     return (
       block.id &&
-      (showDebugInformation ||
+      (isDebugMode ||
         (type != MessageTypes.STATUS_MESSAGE &&
           type != MessageTypes.SYSTEM_MESSAGE &&
           type != MessageTypes.FUNCTION_SELECTION))

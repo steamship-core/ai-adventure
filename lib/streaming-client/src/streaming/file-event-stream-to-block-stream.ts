@@ -8,22 +8,31 @@
  *
  * =========================================================================================*/
 
+import { ParsedEvent } from "eventsource-parser/stream";
 import { FileEvent, Block, Client } from "../schema";
 
 const utf8Decoder = new TextDecoder("utf-8");
 
 function FileEventStreamToBlockStream(
   client: Client
-): TransformStream<FileEvent, Block> {
-  return new TransformStream<FileEvent, Block>({
-    transform(event: FileEvent, controller) {
-      const blockId = event.data.blockId;
-
-      if (!blockId) {
-        controller.error(new Error("Empty Block ID"));
+): TransformStream<ParsedEvent, Block> {
+  return new TransformStream<ParsedEvent, Block>({
+    transform(event: ParsedEvent, controller) {
+      if (!event.data || !event.event) {
+        console.log("no event data or event", event);
         return;
       }
       try {
+        const parsedEvent = JSON.parse(event.data);
+        const data = parsedEvent[event.event];
+        const blockId = data.blockId;
+
+        console.log("RECEIVED data", data);
+
+        if (!blockId) {
+          controller.error(new Error("Empty Block ID"));
+          return;
+        }
         client.block.get({ id: blockId }).then((block) => {
           return new Promise<void>((resolve, reject) => {
             if (!block) {
@@ -38,7 +47,7 @@ function FileEventStreamToBlockStream(
           });
         });
       } catch (e) {
-        console.log(e);
+        console.log("FileEventStreamToBlockStream error", e);
         controller.error(e);
         return;
       }
