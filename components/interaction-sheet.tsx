@@ -95,7 +95,9 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
               <div className="flex items-center">
                 Your Gold:{" "}
                 <CoinsIcon size={16} className="text-yellow-400 ml-4 mr-2" />
-                <span className="text-yellow-400">{gameState.player.gold}</span>
+                <span className="text-yellow-400">
+                  {gameState?.player?.gold}
+                </span>
               </div>
               {selectedToSell.length > 0 && (
                 <>

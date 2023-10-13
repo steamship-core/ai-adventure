@@ -54,7 +54,7 @@ export const CharacterSheet = () => {
               className="h-2 border border-foreground/20"
             />
             <TypographyMuted className="text-xs md:text-sm ">
-              Rank: {getLevel()} ({gameState.player.rank})
+              Rank: {getLevel()} ({gameState?.player?.rank})
             </TypographyMuted>
           </div>
         </button>

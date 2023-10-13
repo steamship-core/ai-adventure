@@ -38,7 +38,7 @@ export default async function CampPage() {
   let gameState = await getGameState(agent?.agentUrl);
   await saveGameState(agent?.agentUrl, {
     ...gameState,
-    player: { ...gameState.player, energy: 100 },
+    player: { ...(gameState?.player || {}), energy: 100 },
   });
   gameState = await getGameState(agent?.agentUrl);
 

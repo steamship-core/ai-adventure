@@ -35,8 +35,8 @@ const StartAdventureButton = () => {
     }
     setIsLoading(false);
   };
-  console.log(gameState);
-  const lowEnergy = (gameState.player.energy || 0) < 10;
+
+  const lowEnergy = (gameState?.player?.energy || 0) < 10;
 
   return (
     <>
