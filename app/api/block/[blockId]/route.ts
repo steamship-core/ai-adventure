@@ -1,4 +1,3 @@
-import Steamship from "@/lib/streaming-client/src";
 import { getSteamshipClient } from "@/lib/utils";
 import { log } from "next-axiom";
 

@@ -15,6 +15,14 @@ export const MessageTypes = {
   TEXT: "TEXT",
 } as const;
 
+export type ExtendedBlock = Block & {
+  /**
+   * Used to indicate the block is from a prior chat history session. Important because we
+   * choose to show or hide user input blocks depending on whether they are historical
+   */
+  historical?: boolean;
+};
+
 export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
@@ -61,7 +69,10 @@ export const getMessageType = (block: Block) => {
   return MessageTypes.TEXT;
 };
 
-export const getFormattedBlocks = (message: Message) => {
+export const getFormattedBlocks = (
+  message: Message,
+  nonPersistedUserInput: string | null
+) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
     .map((block) => {
@@ -71,14 +82,18 @@ export const getFormattedBlocks = (message: Message) => {
         } catch (e) {
           console.log("getFormattedBlock error", e);
           console.log("failed to parse block", block);
-
           return null;
         }
       }
       return null;
     })
-    .filter((block) => block) as Block[];
+    .filter((block) => {
+      // When we send up input, this allows us to render it immediately.. but then also skip it when it
+      // gets played back to us.
+      return block && block.text != nonPersistedUserInput;
+    }) as Block[];
 
+  // TODO(Ted): I'm not sure if this is necessary because of the way we're doing block streaming.
   const combinedBlocks = blocks.reduce((acc, block) => {
     const existingBlock = acc.find((b) => b.id === block.id);
     if (existingBlock) {

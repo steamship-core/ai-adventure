@@ -11,6 +11,9 @@ import { useParams } from "next/navigation";
 import { Block } from "@/lib/streaming-client/src";
 import { getFormattedBlocks } from "./utils";
 import { NarrativeBlock } from "./narrative-block";
+import { UserInputBlock } from "./user-input-block";
+import { ExtendedBlock } from "./utils";
+import { getGameState } from "@/lib/game/game-state.server";
 
 export default function QuestNarrative({
   id,
@@ -19,6 +22,7 @@ export default function QuestNarrative({
   isComplete,
   summary,
   agentBaseUrl,
+  completeButtonText,
 }: {
   id: string;
   summary: Block | null;
@@ -26,11 +30,12 @@ export default function QuestNarrative({
   onComplete: () => void;
   isComplete: boolean;
   agentBaseUrl: string;
+  completeButtonText?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
 
-  const [priorBlocks, setPriorBlocks] = useState<Block[]>([]);
+  const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[]>([]);
 
   const {
     messages,
@@ -50,8 +55,11 @@ export default function QuestNarrative({
   useEffect(() => {
     fetch(`/api/game/quest?questId=${questId}`).then(async (response) => {
       if (response.ok) {
-        let blocks = ((await response.json()) || {}).blocks as Block[];
+        let blocks = ((await response.json()) || {}).blocks as ExtendedBlock[];
         if (blocks && blocks.length > 0) {
+          for (let block of blocks) {
+            block.historical = true;
+          }
           setPriorBlocks(blocks.reverse());
         } else {
           // We have no history, so we should say "start a quest"
@@ -65,6 +73,7 @@ export default function QuestNarrative({
     });
   }, []);
 
+  let nonPersistedUserInput: string | null = null;
   return (
     <>
       <div className="flex basis-11/12 overflow-hidden">
@@ -72,19 +81,15 @@ export default function QuestNarrative({
           {messages
             .map((message) => {
               if (message.role === "user") {
+                nonPersistedUserInput = message.content;
                 return (
-                  <div
-                    key={message.id}
-                    className="px-4 py-2 border-l-2 border-foreground/20 text-muted-foreground"
-                  >
-                    {message.content}
-                  </div>
+                  <UserInputBlock text={message.content} key={message.id} />
                 );
               }
               return (
                 <NarrativeBlock
                   key={message.id}
-                  blocks={getFormattedBlocks(message)}
+                  blocks={getFormattedBlocks(message, nonPersistedUserInput)}
                   onSummary={onSummary}
                   onComplete={onComplete}
                 />
@@ -107,7 +112,11 @@ export default function QuestNarrative({
           </div>
         )}
         {isComplete ? (
-          <EndSheet isEnd={true} summary={summary} />
+          <EndSheet
+            isEnd={true}
+            summary={summary}
+            completeButtonText={completeButtonText}
+          />
         ) : (
           <form
             className="flex gap-2 w-full"
