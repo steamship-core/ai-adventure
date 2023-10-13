@@ -70,7 +70,7 @@ export const NarrativeBlock = ({
         case MessageTypes.SYSTEM_MESSAGE:
           return <SystemBlock key={block.id} block={block} />;
         case MessageTypes.STREAMED_TO_CHAT_HISTORY:
-          return <ChatHistoryBlock key={block.id} block={block} />;
+          return <TextBlock key={block.id} text={block.text || ""} />;
         case MessageTypes.FUNCTION_SELECTION:
           return <FunctionCallBlock key={block.id} block={block} />;
         case MessageTypes.USER_MESSAGE:

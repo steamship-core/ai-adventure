@@ -6,7 +6,7 @@ import EndSheet from "../shared/end-sheet";
 import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../../ui/button";
-import { useChat } from "ai/react";
+import { useChat, Message } from "ai/react";
 import { useParams } from "next/navigation";
 import { Block } from "@/lib/streaming-client/src";
 import { getFormattedBlocks } from "./utils";
@@ -32,29 +32,37 @@ export default function QuestNarrative({
 
   const [priorBlocks, setPriorBlocks] = useState<Block[]>([]);
 
+  const {
+    messages,
+    append,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+  } = useChat({
+    body: {
+      context_id: questId,
+      agentBaseUrl,
+    },
+    id,
+  });
+
   useEffect(() => {
     fetch(`/api/game/quest?questId=${questId}`).then(async (response) => {
       if (response.ok) {
         let blocks = ((await response.json()) || {}).blocks as Block[];
-        console.log("prior blocks", blocks);
-        setPriorBlocks(blocks);
+        if (blocks && blocks.length > 0) {
+          setPriorBlocks(blocks.reverse());
+        } else {
+          // We have no history, so we should say "start a quest"
+          console.log("Append chat history");
+          append({
+            content: "Let's go on an adventure!",
+            role: "user",
+          });
+        }
       }
     });
-  }, []);
-
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      body: {
-        context_id: questId,
-        agentBaseUrl,
-      },
-      id,
-      initialInput: "Start a Quest",
-    });
-
-  useEffect(() => {
-    // Manually submit a message of   "Let's go on an adventure!" when the quest narrative loads
-    inputRef?.current?.form?.requestSubmit();
   }, []);
 
   return (
@@ -85,7 +93,7 @@ export default function QuestNarrative({
             .reverse()}
           {priorBlocks && (
             <NarrativeBlock
-              blocks={priorBlocks}
+              blocks={priorBlocks.reverse()}
               onSummary={onSummary}
               onComplete={onComplete}
             />

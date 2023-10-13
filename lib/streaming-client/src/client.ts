@@ -206,7 +206,7 @@ export class Steamship extends ClientBase implements Client {
               if (event.data.mimeType === "image/png") {
                 console.log("enqueing image!");
               }
-              console.log(event.data.mimeType);
+              // console.log(event.data.mimeType);
               controller.enqueue(event);
             } catch (e) {
               controller.error(e);
