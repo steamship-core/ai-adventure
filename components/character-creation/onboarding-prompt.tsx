@@ -14,7 +14,7 @@ import { useTypeWriter } from "./hooks/use-typewriter";
 import useFocus from "./hooks/use-focus";
 import { Input } from "../ui/input";
 
-const FocusableTextArea = ({
+export const FocusableTextArea = ({
   value,
   isFinished,
   isCurrent,
@@ -47,7 +47,7 @@ const FocusableTextArea = ({
   );
 };
 
-const FocusableInputArea = ({
+export const FocusableInputArea = ({
   value,
   isFinished,
   isCurrent,
