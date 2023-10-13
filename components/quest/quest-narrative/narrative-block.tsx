@@ -54,7 +54,7 @@ export const NarrativeBlock = ({
         return a.index > b.index ? -1 : 1;
       });
 
-    return blocks.map((block) => {
+    return formattedBlocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return <TextBlock key={block.id} text={block.text!} />;

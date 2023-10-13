@@ -13,7 +13,6 @@ export const DebugBlock = ({
   className: string;
   title: string;
 }) => {
-  if (!process.env.NEXT_PUBLIC_DEBUG_MODE) return null;
   return (
     <div
       className={cn(
