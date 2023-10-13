@@ -49,7 +49,8 @@ export default function QuestNarrative({
   useEffect(() => {
     fetch(`/api/game/quest?questId=${questId}`).then(async (response) => {
       if (response.ok) {
-        let blocks = (await response.json()) as Block[];
+        let blocks = ((await response.json()) || {}).blocks as Block[];
+        console.log("prior blocks", blocks);
         setPriorBlocks(blocks);
       }
     });

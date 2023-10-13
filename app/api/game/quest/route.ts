@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { startQuest, loadQuest } from "@/lib/game/quest.server";
+import { startQuest, loadExistingQuestBlocks } from "@/lib/game/quest.server";
 import { getAgent } from "@/lib/agent/agent.server";
+import { NextApiRequest } from "next";
 
 export async function POST(request: Request) {
   const { userId } = auth();
@@ -31,17 +32,28 @@ export async function GET(request: Request) {
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+
+  const searchParams = new URL(request.url).searchParams;
+  const questId = searchParams.get("questId");
+
+  if (!questId) {
+    return NextResponse.json(
+      { error: "questId not in param string" },
+      { status: 404 }
+    );
+  }
+
   const agent = await getAgent(userId);
 
   if (!agent) {
+    console.log("no agent");
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   }
 
-  const { questId } = await request.json();
-
   try {
-    const quest = await loadQuest(agent!.agentUrl, questId);
-    return NextResponse.json({ quest }, { status: 200 });
+    const blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
+    console.log("Existing Blocks", JSON.stringify(blocks));
+    return NextResponse.json({ blocks }, { status: 200 });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
