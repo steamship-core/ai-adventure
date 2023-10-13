@@ -1,24 +1,6 @@
 import { Block } from "@/lib/streaming-client/src";
 import { useEffect, useState } from "react";
 
-async function* streamAsyncIterator(stream: ReadableStream) {
-  // Get a lock on the stream
-  const reader = stream.getReader();
-
-  try {
-    while (true) {
-      // Read from the stream
-      const { done, value } = await reader.read();
-      // Exit if we're done
-      if (done) return;
-      // Else yield the chunk
-      yield value;
-    }
-  } finally {
-    reader.releaseLock();
-  }
-}
-
 export const useBlockStream = ({ block }: { block: Block }) => {
   const [innerBlock, setInnerBlock] = useState<Block>(block);
   const [isComplete, setIsComplete] = useState(false);
@@ -45,6 +27,7 @@ export const useBlockStream = ({ block }: { block: Block }) => {
           }
 
           const decodedChunk = decoder.decode(value, { stream: true });
+          console.log("decoded chunk", decodedChunk);
           setInnerBlock((prev) => ({
             ...prev,
             text: decodedChunk,

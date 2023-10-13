@@ -9,7 +9,7 @@ export const StreamingBlock = ({ block }: { block: Block }) => {
   const { streamedBlock } = useBlockStream({ block });
   const { isDebugMode } = useDebugMode();
 
-  if (isDebugMode) {
+  if (!isDebugMode) {
     return (
       <DebugBlock
         block={streamedBlock}
