@@ -5,7 +5,7 @@ import { getSteamshipClient } from "@/lib/utils";
 import { SteamshipStream } from "@/lib/streaming-client/src";
 import { log } from "next-axiom";
 
-// IMPORTANT! Set the runtime to edgew
+// IMPORTANT! Set the runtime to edge
 export const runtime = "edge";
 
 export async function POST(req: Request) {

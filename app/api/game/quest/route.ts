@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { startQuest, loadExistingQuestBlocks } from "@/lib/game/quest.server";
 import { getAgent } from "@/lib/agent/agent.server";
-import { NextApiRequest } from "next";
 
 export async function POST(request: Request) {
   const { userId } = auth();

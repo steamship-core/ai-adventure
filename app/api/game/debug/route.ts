@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { startQuest } from "@/lib/game/quest.server";
 import { getGameState, saveGameState } from "@/lib/game/game-state.server";
 import { getAgent } from "@/lib/agent/agent.server";
 
