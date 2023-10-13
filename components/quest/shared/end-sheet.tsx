@@ -26,7 +26,7 @@ const EndSheet = ({
 }: {
   isEnd: boolean;
   summary: Block | null;
-  completeButtonText: string;
+  completeButtonText?: string;
 }) => (
   <Sheet>
     <SheetTrigger asChild>
