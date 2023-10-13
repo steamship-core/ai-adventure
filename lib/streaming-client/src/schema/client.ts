@@ -57,7 +57,7 @@ export interface Client {
   }: {
     workspace?: string;
     workspaceId?: string;
-  }): Client;
+  }): Promise<Client>;
 
   package: IPackageClient;
   workspace: IWorkspaceClient;

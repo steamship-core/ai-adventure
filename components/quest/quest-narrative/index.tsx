@@ -17,18 +17,23 @@ export default function QuestNarrative({
   onComplete,
   isComplete,
   summary,
+  agentBaseUrl,
 }: {
   id: string;
   summary: Block | null;
   onSummary: (block: Block) => void;
   onComplete: () => void;
   isComplete: boolean;
+  agentBaseUrl: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { questId } = useParams();
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      body: { context_id: questId },
+      body: {
+        context_id: questId,
+        agentBaseUrl,
+      },
       id,
       initialInput: "Start a Quest",
     });

@@ -55,7 +55,7 @@ export async function SteamshipStream(
       ((res?.task as any) || {})["request_id"] ||
       opts?.requestId;
 
-    client = client.switchWorkspace({
+    client = await client.switchWorkspace({
       workspace: undefined,
       workspaceId:
         res?.file?.workspaceId || ((res?.file as any) || {}).workspace_id,

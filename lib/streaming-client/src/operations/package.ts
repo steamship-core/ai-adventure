@@ -64,20 +64,17 @@ export class PackageClient implements IPackageClient {
       fetchIfExists: fetchIfExists,
       config: config,
     });
-    const json = await response.json();
-    return json?.packageInstance as PackageInstance;
-  }
-
-  public async getBaseUrl(pkg: PackageInstance): Promise<string> {
-    const user = await this.client.user.current();
-
-    const urlParts = this.client.config.appBase?.split("//");
-    if (!urlParts) {
-      throw new Error("appBase is not set in the Configuration");
+    if (!response.ok) {
+      let msg = "";
+      try {
+        msg = await response.text();
+      } catch {}
+      throw new Error(
+        `Failed to create package instance. ${response.statusText}. ${msg}`
+      );
     }
-
-    const url = `${urlParts[0]}//${user.handle}.${urlParts[1]}}/${pkg.workspaceHandle}/${pkg.handle}/`;
-    return url;
+    const json = await response.json();
+    return json?.data?.packageInstance as PackageInstance;
   }
 
   /**

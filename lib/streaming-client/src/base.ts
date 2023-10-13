@@ -61,5 +61,5 @@ export abstract class ClientBase implements Client {
   }: {
     workspace?: string;
     workspaceId?: string;
-  }): Client;
+  }): Promise<Client>;
 }

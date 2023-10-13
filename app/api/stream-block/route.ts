@@ -1,5 +1,6 @@
 import { StreamingTextResponse } from "ai";
 import Steamship, { SteamshipStream } from "@/lib/streaming-client/src";
+import { getSteamshipClient } from "@/lib/utils";
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = "edge";

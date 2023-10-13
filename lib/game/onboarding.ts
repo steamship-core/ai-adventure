@@ -1,6 +1,10 @@
 import { getSteamshipClient } from "../utils";
 
-export const completeOnboarding = async (apiBase: string) => {
-  const steamship = getSteamshipClient(apiBase);
-  return await steamship.post(`/complete_onboarding`, {});
+export const completeOnboarding = async (agentBase: string) => {
+  const steamship = getSteamshipClient();
+  return await steamship.agent.post({
+    url: agentBase,
+    path: "/complete_onboarding",
+    arguments: {},
+  });
 };

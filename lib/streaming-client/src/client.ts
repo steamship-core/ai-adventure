@@ -118,7 +118,7 @@ export class Steamship extends ClientBase implements Client {
       baseUrl: opts.baseUrl,
     });
 
-    if (opts.method.toUpperCase() != "POST") {
+    if (opts.method && opts.method.toUpperCase() != "POST") {
       delete opts["body"];
     }
 
@@ -146,18 +146,29 @@ export class Steamship extends ClientBase implements Client {
     });
   }
 
-  public switchWorkspace({
+  public async switchWorkspace({
     workspace,
     workspaceId,
   }: {
     workspace?: string;
     workspaceId?: string;
-  }): Client {
+  }): Promise<Client> {
     let newConfig = { ...this.config };
     delete newConfig.workspace;
     delete newConfig.workspaceId;
+
+    if (workspace) {
+      // Make sure it's created
+      await this.workspace.create({
+        handle: workspace,
+        fetchIfExists: true,
+      });
+      newConfig.workspace = workspace;
+    }
+
     newConfig.workspace = workspace;
     newConfig.workspaceId = workspaceId;
+
     return new Steamship(newConfig);
   }
 

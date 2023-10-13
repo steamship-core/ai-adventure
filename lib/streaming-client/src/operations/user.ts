@@ -20,7 +20,7 @@ export class UserClient implements IUserClient {
   public async current(): Promise<User> {
     let response = await this.client.get(`account/current`, {});
     let json = await response.json();
-    return json as User;
+    return json?.data?.user as User;
   }
 }
 

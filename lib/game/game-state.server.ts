@@ -2,7 +2,6 @@ import { getSteamshipClient } from "../utils";
 import { GameState } from "./schema/game_state";
 
 export const getGameState = async (agentBase: string) => {
-  console.log(`Getting game state from: ${agentBase}`);
   const steamship = getSteamshipClient();
   const userSettings = await steamship.agent.get({
     url: agentBase,

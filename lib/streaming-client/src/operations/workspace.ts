@@ -15,12 +15,12 @@ export class WorkspaceClient implements IWorkspaceClient {
    */
   public async create(params: {
     handle?: string;
-    fetch_if_exists?: boolean;
+    fetchIfExists?: boolean;
   }): Promise<Workspace> {
-    const { handle, fetch_if_exists = true } = params;
+    const { handle, fetchIfExists = true } = params;
     const response = await this.client.post("workspace/create", {
       handle,
-      fetch_if_exists,
+      fetchIfExists,
     });
     const json = await response.json();
     return json?.workspace as Workspace;
