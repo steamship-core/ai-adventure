@@ -1,9 +1,8 @@
 import { Message, StreamingTextResponse } from "ai";
-import Steamship, { SteamshipStream } from "@steamship/client";
-import prisma from "@/lib/db";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
 import { getSteamshipClient } from "@/lib/utils";
+import { SteamshipStream } from "@/lib/streaming-client/src";
 
 // IMPORTANT! Set the runtime to edgew
 export const runtime = "edge";
@@ -11,8 +10,10 @@ export const runtime = "edge";
 export async function POST(req: Request) {
   const { userId } = auth();
   if (!userId) {
+    console.debug("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
+  console.debug("Begin POST");
   // Extract the `prompt` from the body of the request
   const { context_id, messages } = (await req.json()) as {
     context_id: string;
@@ -34,9 +35,11 @@ export async function POST(req: Request) {
     },
   });
 
+  console.debug("test output");
+
   // Adapt the Streamship Blockstream into a Markdown Stream
   const stream = await SteamshipStream(response, steamship, {
-    streamTimeoutSeconds: 60,
+    streamTimeoutSeconds: 600,
     // Use: "markdown" | "json"
     format: "json-no-inner-stream",
   });

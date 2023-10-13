@@ -36,7 +36,7 @@ const LoadingScreen = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setLoadingMessage(pickRandomMessage());
-    }, 3000);
+    }, 4000);
 
     return () => {
       clearInterval(interval);
@@ -44,7 +44,7 @@ const LoadingScreen = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 h-[100dvh] w-full bg-background flex flex-col">
+    <div className="fixed top-0 left-0 h-[100dvh] z-50 w-full bg-background flex flex-col">
       <div className="h-3/5 flex items-center justify-center">
         <Player autoplay loop src="/fire-lottie.json" className="w-96" />
       </div>

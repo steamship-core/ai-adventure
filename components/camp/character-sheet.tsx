@@ -12,16 +12,31 @@ import { TypographyP } from "../ui/typography/TypographyP";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { UserButton } from "@clerk/nextjs";
+import { levels } from "@/lib/game/levels";
 
 export const CharacterSheet = () => {
   const gameState = useRecoilValue(recoilGameState);
+  const rank = gameState?.player?.rank || 0;
 
+  const getLevel = () => {
+    try {
+      if (rank === 1) {
+        levels[0];
+      }
+      if (rank >= 100) {
+        levels[99];
+      }
+      return levels[Math.ceil(rank / 4)];
+    } catch (e) {
+      return "Unknown";
+    }
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>
         <button className="flex gap-4 items-start text-left h-full">
           <div className="flex items-center justify-center h-full">
-            <div className="rounded-full overflow-hidden h-8 w-8 md:h-18 md:w-18 border border-yellow-600 shadow-sm shadow-primary">
+            <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-blue-600">
               <Image
                 src={"/orc.png"}
                 height={1024}
@@ -30,10 +45,17 @@ export const CharacterSheet = () => {
               />
             </div>
           </div>
-          <div className="w-28 sm:w-44 lg:w-56">
-            <TypographyLarge>{gameState?.player?.name}</TypographyLarge>
-            <Progress value={33} className="h-2 border border-foreground/20" />
-            <TypographyMuted>Rank: {gameState?.player?.rank}</TypographyMuted>
+          <div className="w-44 lg:w-56">
+            <TypographyLarge className="text-sm md:text-lg">
+              {gameState?.player?.name}
+            </TypographyLarge>
+            <Progress
+              value={(((rank - 1) % 4) / 4) * 100}
+              className="h-2 border border-foreground/20"
+            />
+            <TypographyMuted className="text-xs md:text-sm ">
+              Rank: {getLevel()} ({gameState?.player?.rank})
+            </TypographyMuted>
           </div>
         </button>
       </SheetTrigger>

@@ -11,6 +11,7 @@ export const MessageTypes = {
   QUEST_SUMMARY: "QUEST_SUMMARY",
   QUEST_COMPLETE: "QUEST_COMPLETE",
   ITEM_GENERATION_CONTENT: "ITEM_GENERATION_CONTENT",
+  IMAGE: "IMAGE",
   TEXT: "TEXT",
 } as const;
 
@@ -23,6 +24,9 @@ export const getMessageType = (block: Block) => {
   }
   if (block.tags?.find((tag) => tag.name === "quest_summary")) {
     return MessageTypes.QUEST_SUMMARY;
+  }
+  if (block.tags?.find((tag) => tag.name === "image")) {
+    return MessageTypes.IMAGE;
   }
   if (block.streamState === "started") {
     return MessageTypes.STREAMING_BLOCK;
@@ -57,7 +61,6 @@ export const getMessageType = (block: Block) => {
   return MessageTypes.TEXT;
 };
 
-// 🤮
 export const getFormattedBlock = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)

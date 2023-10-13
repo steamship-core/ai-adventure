@@ -40,14 +40,19 @@ export const useBlockStream = ({ block }: { block: Block }) => {
           const mostRecentChunk = chunks[chunks.length - 1];
           try {
             const newBlock = JSON.parse(mostRecentChunk);
-            setInnerBlock((prev) => ({ ...prev, text: newBlock.text }));
+            if (newBlock.text && newBlock.text.trim() !== "") {
+              setInnerBlock((prev) => ({ ...prev, text: newBlock.text }));
+            }
           } catch (e) {
             console.log(e);
           }
         }
       }
     };
-    readStream();
+    if (!isComplete) {
+      console.log("reading stream");
+      readStream();
+    }
   }, [block.id]);
 
   return { streamedBlock: innerBlock, isComplete };
