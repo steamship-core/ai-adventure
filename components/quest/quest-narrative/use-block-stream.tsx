@@ -44,7 +44,7 @@ export const useBlockStream = ({ block }: { block: Block }) => {
               setInnerBlock((prev) => ({ ...prev, text: newBlock.text }));
             }
           } catch (e) {
-            console.log("useBlockStream error", e);
+            console.log("error in use-block-stream", e);
           }
         }
       }
