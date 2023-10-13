@@ -61,7 +61,7 @@ export const getMessageType = (block: Block) => {
   return MessageTypes.TEXT;
 };
 
-export const getFormattedBlock = (message: Message) => {
+export const getFormattedBlocks = (message: Message) => {
   const blocks = message.content
     .split(/\r?\n|\r|\n/g)
     .map((block) => {
