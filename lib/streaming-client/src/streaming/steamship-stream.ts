@@ -3,6 +3,7 @@ import { BlockStreamToMarkdownStream } from "./block-stream-to-markdown-stream";
 import { BlockStreamToStreamingBlockStream } from "./block-stream-to-streaming-block-stream";
 import { StreamingResponse, Client } from "../schema";
 import { BlockStreamToBlockJsonStream } from "./block-stream-to-block-json";
+import { log } from "next-axiom";
 
 export type SteamshipStreamOptions = {
   streamTimeoutSeconds?: number;
@@ -73,7 +74,7 @@ export async function SteamshipStream(
     const queryArgs = _dictToURI(filterDict);
     const _url = `file/${chatFileId}/stream?${queryArgs}`;
 
-    console.log(`[Debug] Stream URL ${_url}`);
+    log.debug(`Stream URL ${_url}`);
 
     // 2. Create a stream of markdown wrapping.
     const eventStream = await client.eventStream(_url, {});
@@ -82,7 +83,7 @@ export async function SteamshipStream(
       FileEventStreamToBlockStream(client)
     );
 
-    console.log(`[Debug] Output Format ${opts?.format}`);
+    log.debug(`Output Format ${opts?.format}`);
 
     if (opts?.format == "json") {
       // This is a stream of blocks, and if the blocks themselves are streaming, we stream updates.
