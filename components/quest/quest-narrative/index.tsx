@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useChat, Message } from "ai/react";
-import { useParams } from "next/navigation";
 import { Block } from "@/lib/streaming-client/src";
 import { getFormattedBlocks } from "./utils";
 import { NarrativeBlock } from "./narrative-block";
@@ -32,10 +31,10 @@ export default function QuestNarrative({
   agentBaseUrl: string;
   completeButtonText?: string;
 }) {
+  const initialized = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { questId } = useParams();
 
-  const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[]>([]);
+  const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
   const {
     messages,
@@ -46,31 +45,41 @@ export default function QuestNarrative({
     isLoading,
   } = useChat({
     body: {
-      context_id: questId,
+      context_id: id,
       agentBaseUrl,
     },
     id,
   });
 
   useEffect(() => {
-    fetch(`/api/game/quest?questId=${questId}`).then(async (response) => {
-      if (response.ok) {
-        let blocks = ((await response.json()) || {}).blocks as ExtendedBlock[];
-        if (blocks && blocks.length > 0) {
-          for (let block of blocks) {
-            block.historical = true;
+    // https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar
+    // This suppresses the double-loading. My hypothesis is that this is happening in dev as a result of strict mode, but
+    // even in dev it messes with the remote agent.
+    if (!initialized.current) {
+      initialized.current = true;
+      // On the first load, get the quest history
+      fetch(`/api/game/quest?questId=${id}`).then(async (response) => {
+        if (response.ok) {
+          let blocks = ((await response.json()) || {})
+            .blocks as ExtendedBlock[];
+          if (blocks && blocks.length > 0) {
+            for (let block of blocks) {
+              block.historical = true;
+            }
+            setPriorBlocks(blocks.reverse());
+          } else {
+            // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest
+            // if it hasn't already been started.
+            // TODO: We could find a way to kick off the quest proactively.
+            append({
+              id: "000-000-000",
+              content: "Let's go on an adventure!",
+              role: "user",
+            });
           }
-          setPriorBlocks(blocks.reverse());
-        } else {
-          // We have no history, so we should say "start a quest"
-          console.log("Append chat history");
-          append({
-            content: "Let's go on an adventure!",
-            role: "user",
-          });
         }
-      }
-    });
+      });
+    }
   }, []);
 
   let nonPersistedUserInput: string | null = null;

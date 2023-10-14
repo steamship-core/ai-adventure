@@ -21,6 +21,5 @@ export default async function QuestPage() {
   }
 
   const gameState = await getGameState(agent?.agentUrl);
-
   return <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />;
 }

@@ -1,11 +1,12 @@
 "use client";
 import { Block } from "@/lib/streaming-client/src";
-import { useBlockStream } from "./use-block-stream";
+// import { useBlockStream } from "./use-block-stream";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
+import { useBlockStream } from "./use-block-stream";
 
 export const ItemGenerationBlock = ({ block }: { block: Block }) => {
-  const { streamedBlock } = useBlockStream({ block });
+  const text = useBlockStream({ blockId: block.id });
 
   return (
     <div
@@ -17,7 +18,7 @@ export const ItemGenerationBlock = ({ block }: { block: Block }) => {
         Item Found! 🎉
       </TypographyLarge>
       <TypographyP className="text-background whitespace-pre-wrap text-sm">
-        {streamedBlock.text}
+        {text}
       </TypographyP>
     </div>
   );
