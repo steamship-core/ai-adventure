@@ -17,6 +17,7 @@ export default function Quest({
   const [id, setId] = useState<string | null>(null);
   const [summary, setSummary] = useState<Block | null>(null);
   const [isComplete, setIsComplete] = useState(false);
+  const [completeButtonText, setCompleteButtonText] = useState<string>();
 
   useEffect(() => {
     setId(v4());
@@ -29,6 +30,16 @@ export default function Quest({
   const onComplete = () => {
     setIsComplete(true);
   };
+
+  useEffect(() => {
+    if (gameState.active_mode != "quest") {
+      // If we're not in a quest, then we don't need to do anything.
+      // Here we override the "Complete Quest" label since it's historical.
+      setCompleteButtonText("See Quest Results");
+      setIsComplete(true);
+    }
+  }, [gameState.active_mode]);
+  console.log(gameState);
 
   return (
     <QuestContainer>
@@ -47,6 +58,7 @@ export default function Quest({
             isComplete={isComplete}
             summary={summary}
             agentBaseUrl={agentBaseUrl}
+            completeButtonText={completeButtonText}
           />
         </>
       )}

@@ -22,14 +22,16 @@ import Link from "next/link";
 const EndSheet = ({
   isEnd,
   summary,
+  completeButtonText = "Complete Quest",
 }: {
   isEnd: boolean;
   summary: Block | null;
+  completeButtonText?: string;
 }) => (
   <Sheet>
     <SheetTrigger asChild>
       <Button variant={isEnd ? "default" : "ghost"} className="w-full">
-        Complete Quest
+        {completeButtonText}
       </Button>
     </SheetTrigger>
     <SheetContent

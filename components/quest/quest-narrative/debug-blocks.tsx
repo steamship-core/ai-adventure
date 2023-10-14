@@ -1,6 +1,7 @@
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { cn } from "@/lib/utils";
 import { Block } from "@/lib/streaming-client/src";
+import { useDebugMode } from "@/lib/hooks";
 
 const DEBUG_MODE = true;
 
@@ -13,7 +14,10 @@ export const DebugBlock = ({
   className: string;
   title: string;
 }) => {
-  if (!process.env.NEXT_PUBLIC_DEBUG_MODE) return null;
+  const { isDebugMode } = useDebugMode();
+  if (!isDebugMode) {
+    return null;
+  }
   return (
     <div
       className={cn(
@@ -27,25 +31,25 @@ export const DebugBlock = ({
   );
 };
 
-export const FallbackBlock = ({ block }: { block: Block }) => {
+export const FallbackDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock block={block} className="border-foreground" title="Fallback" />
   );
 };
 
-export const StatusBlock = ({ block }: { block: Block }) => {
+export const StatusDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock block={block} className="border-yellow-600" title="Status" />
   );
 };
 
-export const SystemBlock = ({ block }: { block: Block }) => {
+export const SystemDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock block={block} className="border-orange-600" title="System" />
   );
 };
 
-export const ChatHistoryBlock = ({ block }: { block: Block }) => {
+export const ChatHistoryDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock
       block={block}
@@ -55,7 +59,7 @@ export const ChatHistoryBlock = ({ block }: { block: Block }) => {
   );
 };
 
-export const FunctionCallBlock = ({ block }: { block: Block }) => {
+export const FunctionCallDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock
       block={block}
@@ -65,7 +69,7 @@ export const FunctionCallBlock = ({ block }: { block: Block }) => {
   );
 };
 
-export const UserMessageBlock = ({ block }: { block: Block }) => {
+export const UserMessageDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock
       block={block}
