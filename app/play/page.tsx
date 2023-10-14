@@ -1,14 +1,13 @@
 import LogoutButton from "@/components/LogoutButton";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import prisma from "@/lib/db";
-import { SignOutButton, UserButton, auth } from "@clerk/nextjs";
+import { getAgent } from "@/lib/agent/agent.server";
+import { auth } from "@clerk/nextjs";
+import { log } from "next-axiom";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getAgent } from "@/lib/agent/agent.server";
-import { log } from "next-axiom";
 
-export default async function Home() {
+export default async function PlayPage() {
   const { userId } = auth();
 
   if (!userId) {

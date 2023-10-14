@@ -1,5 +1,5 @@
-import { IsSteamshipModel } from "./util";
 import { HasHandle } from "@/lib/streaming-client/src";
+import { IsSteamshipModel } from "./util";
 
 /**
  * User

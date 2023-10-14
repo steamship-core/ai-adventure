@@ -1,9 +1,7 @@
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { cn } from "@/lib/utils";
-import { Block } from "@/lib/streaming-client/src";
 import { useDebugMode } from "@/lib/hooks";
-
-const DEBUG_MODE = true;
+import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 
 export const DebugBlock = ({
   block,

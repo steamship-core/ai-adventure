@@ -1,26 +1,23 @@
 "use client";
-import { CheckIcon, CoinsIcon, PackageIcon } from "lucide-react";
+import { getGameState } from "@/lib/game/game-state.client";
+import { NpcCharacter } from "@/lib/game/schema/characters";
+import { Item } from "@/lib/game/schema/objects";
+import { CoinsIcon, PackageIcon } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { InventoryList } from "./inventory-list";
+import { recoilGameState } from "./recoil-provider";
 import { Button } from "./ui/button";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import Image from "next/image";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { TypographyP } from "./ui/typography/TypographyP";
-import { NpcCharacter } from "@/lib/game/schema/characters";
-import { Item } from "@/lib/game/schema/objects";
-import { TypographyLarge } from "./ui/typography/TypographyLarge";
-import { recoilGameState } from "./recoil-provider";
-import { useRecoilState } from "recoil";
-import { InventoryList } from "./inventory-list";
-import { getGameState } from "@/lib/game/game-state.client";
 import { TypographySmall } from "./ui/typography/TypographySmall";
 
 const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
@@ -60,7 +57,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
             alt="A merchant"
             className="object-cover z-10"
           />
-          <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1">
+          <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1 w-full">
             {member.name}
           </TypographySmall>
         </button>

@@ -11,8 +11,6 @@
 import { ParsedEvent } from "eventsource-parser/stream";
 import { Block, Client } from "../schema";
 
-const utf8Decoder = new TextDecoder("utf-8");
-
 function FileEventStreamToBlockStream(
   client: Client
 ): TransformStream<ParsedEvent, Block> {

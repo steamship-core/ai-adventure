@@ -77,8 +77,8 @@ const isStreamTerminatingBlock = (block: Block) => {
 };
 
 export {
-  streamToString,
-  streamToArray,
-  stringToStream,
   isStreamTerminatingBlock,
+  streamToArray,
+  streamToString,
+  stringToStream,
 };

@@ -1,23 +1,19 @@
-import { Message } from "ai";
-import { MessageTypes, getMessageType } from "./utils";
-import { useEffect, useState } from "react";
-import { TextBlock } from "./text-block";
+import { Block } from "@/lib/streaming-client/src";
+import { CompletionBlock } from "./completion-block";
 import {
-  ChatHistoryDebugBlock,
   FallbackDebugBlock,
   FunctionCallDebugBlock,
   StatusDebugBlock,
   SystemDebugBlock,
   UserMessageDebugBlock,
 } from "./debug-blocks";
-import { StreamingBlock } from "./streaming-block";
-import { QuestSummaryBlock } from "./quest-summary-block";
-import { Block } from "@/lib/streaming-client/src";
-import { CompletionBlock } from "./completion-block";
-import { ItemGenerationBlock } from "./item-generation-block";
 import { ImageBlock } from "./image-block";
+import { ItemGenerationBlock } from "./item-generation-block";
+import { QuestSummaryBlock } from "./quest-summary-block";
+import { StreamingBlock } from "./streaming-block";
+import { TextBlock } from "./text-block";
 import { UserInputBlock } from "./user-input-block";
-import { ExtendedBlock } from "./utils";
+import { ExtendedBlock, MessageTypes, getMessageType } from "./utils";
 
 export const NarrativeBlock = ({
   blocks,

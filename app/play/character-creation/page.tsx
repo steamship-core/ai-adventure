@@ -1,9 +1,9 @@
 import CharacterCreation from "@/components/character-creation";
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import { createAgent, getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
+import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
+import { redirect } from "next/navigation";
 
 export default async function CharacterCreationPage() {
   const { userId } = auth();
@@ -16,12 +16,15 @@ export default async function CharacterCreationPage() {
   let agent = await getAgent(userId);
 
   if (!agent) {
-    agent = await createAgent(userId!);
+    console.log("creating agent");
+    agent = await createAgent(userId);
+    console.log("agent", agent);
     return <CharacterCreation />;
   } else {
     // We already have an agent. Need to check if we're still onboarding.
-    let gameState = getGameState(agent.agentUrl);
-    if ((await gameState).active_mode == "onboarding") {
+    let gameState = await getGameState(agent.agentUrl);
+    console.log("gameState", gameState);
+    if (gameState.active_mode == "onboarding") {
       return <CharacterCreation />;
     } else {
       redirect("/play/camp");

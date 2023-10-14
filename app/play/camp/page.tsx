@@ -1,22 +1,16 @@
-import InventorySheet from "@/components/inventory-sheet";
-import { Button } from "@/components/ui/button";
-import prisma from "@/lib/db";
-import { UserButton, auth } from "@clerk/nextjs";
-import { FootprintsIcon, StarIcon } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { ReactNode } from "react";
-import { getGameState, saveGameState } from "@/lib/game/game-state.server";
-import StartAdventureButton from "@/components/camp/start-adventure-button";
-import RecoilProvider from "@/components/recoil-provider";
-import { CharacterSheet } from "@/components/camp/character-sheet";
-import { SummaryStats } from "@/components/camp/summary-stats";
 import { CampMembers } from "@/components/camp/camp-members";
+import { CharacterSheet } from "@/components/camp/character-sheet";
 import { ContentBox } from "@/components/camp/content-box";
-import { completeOnboarding } from "@/lib/game/onboarding";
+import StartAdventureButton from "@/components/camp/start-adventure-button";
+import { SummaryStats } from "@/components/camp/summary-stats";
+import InventorySheet from "@/components/inventory-sheet";
+import RecoilProvider from "@/components/recoil-provider";
 import { getAgent } from "@/lib/agent/agent.server";
+import { getGameState } from "@/lib/game/game-state.server";
+import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
+import Image from "next/image";
+import { redirect } from "next/navigation";
 
 const bgImages = [
   "/campfire-dark.png",

@@ -2,17 +2,17 @@ import { Item } from "@/lib/game/schema/objects";
 import { cn } from "@/lib/utils";
 import { CheckIcon, PackageIcon } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { Switch } from "./ui/switch";
 import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import { useEffect, useState } from "react";
-import { Switch } from "./ui/switch";
 
 export const InventoryList = ({
   inventory,

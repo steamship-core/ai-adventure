@@ -1,13 +1,13 @@
 "use client";
-import { CompassIcon } from "lucide-react";
-import { Button } from "../ui/button";
 import { Quest } from "@/lib/game/schema/quest";
+import { CompassIcon } from "lucide-react";
+import { log } from "next-axiom";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import useLoadingScreen from "../loading/use-loading-screen";
 import { useRecoilValue } from "recoil";
+import useLoadingScreen from "../loading/use-loading-screen";
 import { recoilGameState } from "../recoil-provider";
-import { log } from "next-axiom";
+import { Button } from "../ui/button";
 
 const StartAdventureButton = () => {
   const router = useRouter();

@@ -1,11 +1,15 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";
-import type { Metadata } from "next";
-import { Azeret_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
+import { Ubuntu_Mono } from "next/font/google";
+import "./globals.css";
 
-const font = Azeret_Mono({ subsets: ["latin"], display: "swap" });
+const font = Ubuntu_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "AI Adventure",

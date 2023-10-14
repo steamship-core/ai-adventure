@@ -1,11 +1,11 @@
 "use client";
 import { QuestContainer } from "@/components/quest/shared/components";
-import QuestNarrative from "./quest-narrative";
 import { GameState } from "@/lib/game/schema/game_state";
-import { QuestHeader } from "./quest-header";
-import { useEffect, useState } from "react";
 import { Block } from "@/lib/streaming-client/src";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { QuestHeader } from "./quest-header";
+import QuestNarrative from "./quest-narrative";
 
 export default function Quest({
   gameState,
@@ -17,9 +17,6 @@ export default function Quest({
   const [summary, setSummary] = useState<Block | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [completeButtonText, setCompleteButtonText] = useState<string>();
-
-  console.log(gameState, agentBaseUrl);
-
   const { questId } = useParams();
 
   const onSummary = (summary: Block) => {

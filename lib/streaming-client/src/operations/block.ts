@@ -1,4 +1,4 @@
-import { Client, Block, IBlockClient } from "../schema";
+import { Block, Client, IBlockClient } from "../schema";
 
 export class BlockClient implements IBlockClient {
   private client: Client;

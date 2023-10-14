@@ -1,9 +1,9 @@
 import agent from "./agent";
-import package_ from "./package";
-import workspace from "./workspace";
-import file from "./file";
 import block from "./block";
+import file from "./file";
+import package_ from "./package";
 import user from "./user";
+import workspace from "./workspace";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

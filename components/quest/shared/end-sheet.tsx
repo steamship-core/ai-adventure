@@ -12,12 +12,10 @@ import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
-import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { Player } from "@lottiefiles/react-lottie-player";
 import { Block } from "@/lib/streaming-client/src";
-import { AwardIcon, BadgeDollarSignIcon, PackageIcon } from "lucide-react";
-import Link from "next/link";
+import { Player } from "@lottiefiles/react-lottie-player";
+import { BadgeDollarSignIcon, PackageIcon } from "lucide-react";
 
 const EndSheet = ({
   isEnd,

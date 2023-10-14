@@ -1,6 +1,5 @@
-import Steamship, { Block } from "@/lib/streaming-client/src";
+import { Block } from "@/lib/streaming-client/src";
 import { getSteamshipClient } from "../utils";
-import { GameState } from "./schema/game_state";
 import { Quest } from "./schema/quest";
 
 export const startQuest = async (agentBase: string) => {

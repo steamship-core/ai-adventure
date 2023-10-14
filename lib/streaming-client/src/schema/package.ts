@@ -1,11 +1,10 @@
+import { CreatePackageInstanceParams } from "../operations/package";
 import {
   HasHandle,
   IsSteamshipModel,
   IsUserOwned,
   IsWorkspaceContained,
 } from "./util";
-import workspace from "../operations/workspace";
-import { CreatePackageInstanceParams } from "../operations/package";
 
 /**
  * Steamship Package Instance.

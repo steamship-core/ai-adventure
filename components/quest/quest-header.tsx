@@ -1,12 +1,10 @@
 "use client";
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { ArrowLeftIcon } from "lucide-react";
-import EndSheet from "./shared/end-sheet";
-import InventorySheet from "../inventory-sheet";
 import { GameState } from "@/lib/game/schema/game_state";
-import { useChat } from "ai/react";
 import { Block } from "@/lib/streaming-client/src";
+import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
+import InventorySheet from "../inventory-sheet";
+import { Button } from "../ui/button";
 
 const MINIUM_MESSAGE_COUNT = 2;
 

@@ -2,13 +2,13 @@
  * Parameters for creating an instance of an agent.
  *
  */
-import { Block, Client } from "../schema";
 import {
-  IAgentClient,
   AgentPostGetParams,
-  StreamingResponse,
   AgentRespondParams,
-  AgentInstance,
+  Block,
+  Client,
+  IAgentClient,
+  StreamingResponse,
 } from "../schema";
 
 export class AgentClient implements IAgentClient {

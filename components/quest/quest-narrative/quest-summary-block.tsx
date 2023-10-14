@@ -2,7 +2,6 @@
 import { Block } from "@/lib/streaming-client/src";
 import { DebugBlock } from "./debug-blocks";
 import { useBlockStream } from "./use-block-stream";
-import { useEffect } from "react";
 
 export const QuestSummaryBlock = ({
   block,

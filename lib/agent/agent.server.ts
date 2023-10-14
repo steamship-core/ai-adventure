@@ -1,10 +1,10 @@
-import { log } from "next-axiom";
-import { NextResponse } from "next/server";
-import prisma from "../db";
-import { clerkIdToSteamshipHandle, getSteamshipClient } from "../utils";
 import { Prisma } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
+import prisma from "../db";
+import { getSteamshipClient } from "../utils";
+
 export const getAgent = async (
   userId: string
 ): Promise<Prisma.Prisma__AgentsClient<
@@ -16,7 +16,6 @@ export const getAgent = async (
   never,
   DefaultArgs
 > | null> => {
-  console.log(`Getting agent for user ${userId}`);
   return await prisma.agents.findFirst({
     where: {
       ownerId: userId!,

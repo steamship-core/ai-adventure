@@ -1,6 +1,9 @@
 "use client";
 
+import { GameState } from "@/lib/game/schema/game_state";
+import { cn } from "@/lib/utils";
 import { PackageIcon } from "lucide-react";
+import { InventoryList } from "./inventory-list";
 import { Button } from "./ui/button";
 import {
   Sheet,
@@ -10,10 +13,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { GameState } from "@/lib/game/schema/game_state";
 import { TypographySmall } from "./ui/typography/TypographySmall";
-import { cn } from "@/lib/utils";
-import { InventoryList } from "./inventory-list";
 
 const InventorySheet = ({
   gameState,

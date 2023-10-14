@@ -1,4 +1,4 @@
-import { Client, Block } from "../schema";
+import { Block, Client } from "../schema";
 import { isStreamTerminatingBlock } from "./utils";
 const decoder = new TextDecoder();
 

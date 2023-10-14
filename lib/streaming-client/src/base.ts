@@ -1,3 +1,9 @@
+import AgentClient from "./operations/agent";
+import BlockClient from "./operations/block";
+import FileClient from "./operations/file";
+import PackageClient from "./operations/package";
+import UserClient from "./operations/user";
+import WorkspaceClient from "./operations/workspace";
 import {
   Client,
   IAgentClient,
@@ -6,18 +12,12 @@ import {
   IPackageClient,
   IWorkspaceClient,
 } from "./schema";
-import PackageClient from "./operations/package";
-import AgentClient from "./operations/agent";
-import WorkspaceClient from "./operations/workspace";
-import FileClient from "./operations/file";
-import BlockClient from "./operations/block";
 import {
   Configuration,
   DEFAULT_CONFIGURATION,
   RequestOptions,
 } from "./schema/client";
 import { IUserClient } from "./schema/user";
-import UserClient from "./operations/user";
 
 export abstract class ClientBase implements Client {
   public package: IPackageClient;

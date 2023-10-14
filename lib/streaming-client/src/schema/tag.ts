@@ -4,7 +4,6 @@ import {
   IsUserOwned,
   IsWorkspaceContained,
 } from "./util";
-import { PackageInstance } from "./package";
 
 /**
  * Tag

@@ -1,9 +1,9 @@
-import { IPackageClient } from "./package";
-import { IWorkspaceClient } from "./workspace";
 import { IAgentClient } from "./agent";
 import { IBlockClient } from "./block";
 import { IFileClient } from "./file";
+import { IPackageClient } from "./package";
 import { IUserClient } from "./user";
+import { IWorkspaceClient } from "./workspace";
 
 export const API_BASE_PRODUCTION = "https://api.steamship.com/api/v1/";
 export const API_BASE_STAGING = "https://api.staging.steamship.com/api/v1/";

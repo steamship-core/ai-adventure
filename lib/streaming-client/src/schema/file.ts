@@ -1,13 +1,12 @@
+import { Block } from "./block";
+import { FileEvent } from "./event";
+import { Tag } from "./tag";
 import {
   HasHandle,
   IsSteamshipModel,
   IsUserOwned,
   IsWorkspaceContained,
 } from "./util";
-import { Tag, PartialTag } from "./tag";
-import { Block, PartialBlock } from "./block";
-import { Client } from "./client";
-import { FileEvent } from "./event";
 
 /**
  * File

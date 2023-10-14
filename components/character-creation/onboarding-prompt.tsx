@@ -1,18 +1,17 @@
-import { Button } from "../ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { CreationActions, CreationContent } from "./shared/components";
-import { TypographyP } from "../ui/typography/TypographyP";
 import {
   Dispatch,
   KeyboardEvent,
   SetStateAction,
-  useEffect,
   useRef,
   useState,
 } from "react";
-import { useTypeWriter } from "./hooks/use-typewriter";
-import useFocus from "./hooks/use-focus";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { TypographyP } from "../ui/typography/TypographyP";
+import useFocus from "./hooks/use-focus";
+import { useTypeWriter } from "./hooks/use-typewriter";
+import { CreationActions, CreationContent } from "./shared/components";
 
 export const FocusableTextArea = ({
   value,

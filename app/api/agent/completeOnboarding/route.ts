@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
-import { completeOnboarding } from "@/lib/game/onboarding";
-import { log } from "next-axiom";
 import { getAgent } from "@/lib/agent/agent.server";
+import { completeOnboarding } from "@/lib/game/onboarding";
+import { auth } from "@clerk/nextjs";
+import { log } from "next-axiom";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { userId } = auth();

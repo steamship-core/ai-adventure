@@ -1,8 +1,7 @@
 "use client";
-import { Block } from "@/lib/streaming-client/src";
-// import { useBlockStream } from "./use-block-stream";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
+import { Block } from "@/lib/streaming-client/src";
 import { useBlockStream } from "./use-block-stream";
 
 export const ItemGenerationBlock = ({ block }: { block: Block }) => {

@@ -2,11 +2,10 @@
 
 import { useRecoilValue } from "recoil";
 import InteractionSheet from "../interaction-sheet";
+import { recoilGameState } from "../recoil-provider";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { TypographySmall } from "../ui/typography/TypographySmall";
-import { recoilGameState } from "../recoil-provider";
-import { ContentBox } from "./content-box";
-import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 export const CampMembers = () => {
   const gameState = useRecoilValue(recoilGameState);

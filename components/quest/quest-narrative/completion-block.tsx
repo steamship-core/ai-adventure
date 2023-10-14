@@ -1,6 +1,6 @@
 import { Block } from "@/lib/streaming-client/src";
-import { DebugBlock } from "./debug-blocks";
 import { useEffect } from "react";
+import { DebugBlock } from "./debug-blocks";
 
 export const CompletionBlock = ({
   block,

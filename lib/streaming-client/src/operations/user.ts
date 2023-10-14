@@ -2,12 +2,7 @@
  * Parameters for creating an instance of an agent.
  *
  */
-import {
-  Client,
-  AgentInstance,
-  IPackageClient,
-  PackageInstance,
-} from "../schema";
+import { Client } from "../schema";
 import { IUserClient, User } from "../schema/user";
 
 export class UserClient implements IUserClient {

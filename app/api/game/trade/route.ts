@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
-import { tradeItems } from "@/lib/game/trade";
 import { getAgent } from "@/lib/agent/agent.server";
+import { tradeItems } from "@/lib/game/trade";
+import { auth } from "@clerk/nextjs";
+import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { userId } = auth();

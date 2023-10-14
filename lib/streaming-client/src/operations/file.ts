@@ -1,11 +1,4 @@
-import {
-  Client,
-  AgentInstance,
-  Block,
-  FileEvent,
-  IFileClient,
-  File,
-} from "../schema";
+import { Client, File, FileEvent, IFileClient } from "../schema";
 
 export class FileClient implements IFileClient {
   private client: Client;

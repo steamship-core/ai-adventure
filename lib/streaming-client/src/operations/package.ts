@@ -2,12 +2,7 @@
  * Parameters for creating an instance of an agent.
  *
  */
-import {
-  Client,
-  AgentInstance,
-  IPackageClient,
-  PackageInstance,
-} from "../schema";
+import { Client, IPackageClient, PackageInstance } from "../schema";
 
 type CreatePackageInstanceParams = {
   /**

@@ -1,15 +1,15 @@
-import { TypographyP } from "../ui/typography/TypographyP";
-import { Button } from "../ui/button";
-import { TypographyMuted } from "../ui/typography/TypographyMuted";
-import { CreationActions, CreationContent } from "./shared/components";
-import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TypographyLarge } from "../ui/typography/TypographyLarge";
-import { useTypeWriter } from "./hooks/use-typewriter";
-import { useRouter } from "next/navigation";
 import { GameState } from "@/lib/game/schema/game_state";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
+import { Button } from "../ui/button";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { TypographyP } from "../ui/typography/TypographyP";
+import { useTypeWriter } from "./hooks/use-typewriter";
+import { CreationActions, CreationContent } from "./shared/components";
 
 const allValuesAreSet = (config: CharacterConfig) => {
   return (

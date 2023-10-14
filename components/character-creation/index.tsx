@@ -1,12 +1,12 @@
 "use client";
-import CharacterCreationIntro from "./intro";
-import { useEffect, useState } from "react";
-import { CreationContainer } from "./shared/components";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 import CharacterCreationComplete, {
   CharacterConfig,
 } from "./complete-character";
-import { useSearchParams } from "next/navigation";
+import CharacterCreationIntro from "./intro";
 import OnboardingPrompt from "./onboarding-prompt";
+import { CreationContainer } from "./shared/components";
 
 export default function CharacterCreation() {
   const searchParams = useSearchParams();

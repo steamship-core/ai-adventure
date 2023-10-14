@@ -1,9 +1,9 @@
 "use client";
 
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
-import { TypographySmall } from "../ui/typography/TypographySmall";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
+import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const SummaryStats = () => {
   const gameState = useRecoilValue(recoilGameState);

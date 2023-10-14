@@ -2,58 +2,58 @@ import { Steamship } from "./client";
 
 import {
   BlockStreamToMarkdownStream,
+  BlockStreamToStreamingBlockStream,
   FileEventStreamToBlockStream,
   SteamshipStream,
-  BlockStreamToStreamingBlockStream,
   SteamshipStreamOptions,
 } from "./streaming";
 
 import type {
+  AgentInstance,
   Block,
+  BlockCreatedPayload,
+  Client,
+  File,
+  FileEvent,
+  HasHandle,
+  IsSteamshipModel,
+  IsUserOwned,
+  IsWorkspaceContained,
+  PackageInstance,
   PartialBlock,
   ServerSentEvent,
-  BlockCreatedPayload,
-  FileEvent,
-  File,
   Tag,
   Task,
   Workspace,
-  IsUserOwned,
-  IsWorkspaceContained,
-  IsSteamshipModel,
-  HasHandle,
-  PackageInstance,
-  AgentInstance,
-  Client,
 } from "./schema";
 
 export {
-  Steamship,
   BlockStreamToMarkdownStream,
-  FileEventStreamToBlockStream,
-  SteamshipStream,
   BlockStreamToStreamingBlockStream,
+  FileEventStreamToBlockStream,
+  Steamship,
+  SteamshipStream,
 };
 
 export type { SteamshipStreamOptions };
 
 export type {
-  Client,
+  AgentInstance,
   Block,
+  BlockCreatedPayload,
+  Client,
+  File,
+  FileEvent,
+  HasHandle,
+  IsSteamshipModel,
+  IsUserOwned,
+  IsWorkspaceContained,
+  PackageInstance,
   PartialBlock,
   ServerSentEvent,
-  BlockCreatedPayload,
-  FileEvent,
-  File,
   Tag,
   Task,
   Workspace,
-  IsUserOwned,
-  IsWorkspaceContained,
-  IsSteamshipModel,
-  HasHandle,
-  PackageInstance,
-  AgentInstance,
 };
 
 export default Steamship;

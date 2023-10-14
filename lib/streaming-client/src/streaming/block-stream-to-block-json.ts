@@ -1,6 +1,6 @@
+import { log } from "next-axiom";
 import { Block } from "../schema";
 import { isStreamTerminatingBlock } from "./utils";
-import { log } from "next-axiom";
 
 /**
  * Converts a stream of Blocks to a stream of JSON that repeats blocks if they themselves are in the process of streaming.

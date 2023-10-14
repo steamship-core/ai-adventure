@@ -2,17 +2,15 @@
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
-import EndSheet from "../shared/end-sheet";
-import { useEffect, useRef, useState } from "react";
-import { SendIcon } from "lucide-react";
-import { Button } from "../../ui/button";
-import { useChat, Message } from "ai/react";
 import { Block } from "@/lib/streaming-client/src";
-import { getFormattedBlocks } from "./utils";
+import { useChat } from "ai/react";
+import { SendIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "../../ui/button";
+import EndSheet from "../shared/end-sheet";
 import { NarrativeBlock } from "./narrative-block";
 import { UserInputBlock } from "./user-input-block";
-import { ExtendedBlock } from "./utils";
-import { getGameState } from "@/lib/game/game-state.server";
+import { ExtendedBlock, getFormattedBlocks } from "./utils";
 
 export default function QuestNarrative({
   id,

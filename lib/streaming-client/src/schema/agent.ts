@@ -1,8 +1,7 @@
+import { Block } from "./block";
+import { File } from "./file";
 import { PackageInstance } from "./package";
 import { Task } from "./task";
-import { File } from "./file";
-import { Client } from "./client";
-import { Block } from "./block";
 
 /**
  * Agent Instance.

@@ -1,48 +1,27 @@
 "use client";
 
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import Image from "next/image";
-import { TypographyLarge } from "../ui/typography/TypographyLarge";
-import { Progress } from "../ui/progress";
-import { useState, useEffect } from "react";
+import { levels } from "@/lib/game/levels";
+import { useDebugMode } from "@/lib/hooks";
+import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
+import Image from "next/image";
+import { useRecoilState } from "recoil";
+import { recoilGameState } from "../recoil-provider";
+import { Button } from "../ui/button";
+import { Progress } from "../ui/progress";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Switch } from "../ui/switch";
 import { TypographyH1 } from "../ui/typography/TypographyH1";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
-import { UserButton } from "@clerk/nextjs";
-import { levels } from "@/lib/game/levels";
-import { Switch } from "../ui/switch";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { useDebugMode } from "@/lib/hooks";
 
 export const CharacterSheet = () => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
-
-  const rank = gameState?.player?.rank || 0;
-
-  // Begin Debug Information State Management
   const { isDebugMode, setIsDebugMode } = useDebugMode();
 
-  // End Debug Information State Management
-
-  // Begin Diagnostic Test State Management
-  const runDiagnosticTestKey = "runDiagnosticTest";
-  const [runDiagnosticTest, setRunDiagnosticTest] = useState("");
-  useEffect(() => {
-    const preference = localStorage.getItem(runDiagnosticTestKey);
-    if (preference) {
-      setRunDiagnosticTest(preference);
-    }
-  }, [runDiagnosticTestKey, runDiagnosticTest]);
-  const setAndSaveRunDiagnosticTest = (value: string) => {
-    setRunDiagnosticTest(value);
-    localStorage.setItem(runDiagnosticTestKey, value);
-  };
-  // End Diagnostic Test State Management
+  const rank = gameState?.player?.rank || 0;
 
   const setEnergyTo100 = async () => {
     const response = await fetch("/api/game/debug", {
@@ -177,14 +156,6 @@ export const CharacterSheet = () => {
               <TypographyH3>Account</TypographyH3>
               <TypographyMuted>Show Debug Information</TypographyMuted>
               <Switch checked={isDebugMode} onCheckedChange={setIsDebugMode} />
-              <TypographyMuted>Run Diagnostic Test</TypographyMuted>
-              <Input
-                className="w-full disabled:cursor-default"
-                placeholder={"knock-knock"}
-                value={runDiagnosticTest}
-                onChange={(e) => setAndSaveRunDiagnosticTest(e.target.value)}
-                disabled={false}
-              />
               <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
 
               <div className="mt-2">

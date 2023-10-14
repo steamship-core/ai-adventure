@@ -1,10 +1,9 @@
 import Quest from "@/components/quest/quest";
-import prisma from "@/lib/db";
+import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import { getAgent } from "@/lib/agent/agent.server";
 import { log } from "next-axiom";
+import { redirect } from "next/navigation";
 
 export default async function QuestPage() {
   const { userId } = auth();

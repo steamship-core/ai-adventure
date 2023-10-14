@@ -1,8 +1,7 @@
-import { createParser } from "eventsource-parser";
+import { EventSourceParserStream } from "eventsource-parser/stream";
 import { ClientBase } from "./base";
 import { Client } from "./schema";
 import { Configuration } from "./schema/client";
-import { EventSourceParserStream } from "eventsource-parser/stream";
 
 /**
  * Steamship API client.

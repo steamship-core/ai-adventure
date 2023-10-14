@@ -1,6 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { useEffect, useState } from "react";
 
 const LoadingScreen = () => {
   const funnyLoadingMessages = [

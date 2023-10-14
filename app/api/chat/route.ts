@@ -1,9 +1,9 @@
-import { Message, StreamingTextResponse } from "ai";
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
-import { getSteamshipClient } from "@/lib/utils";
 import { SteamshipStream } from "@/lib/streaming-client/src";
+import { getSteamshipClient } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
+import { Message } from "ai";
 import { log } from "next-axiom";
+import { NextResponse } from "next/server";
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = "edge";

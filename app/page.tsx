@@ -10,7 +10,6 @@ export default function Home() {
       id="main-container"
     >
       <UserButton afterSignOutUrl="/" />
-
       <TypographyH1>AI Adventure</TypographyH1>
       <Button asChild>
         <Link href="/play">Get Started</Link>
