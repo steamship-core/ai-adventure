@@ -25,7 +25,7 @@
     "@react-spring/web": "^9.7.3",
     "@vercel/analytics": "^1.0.2",
     "@xstate/react": "^3.2.2",
-    "ai": "^2.2.14",
+    "ai": "^2.2.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "eventsource-parser": "^1.1.1",

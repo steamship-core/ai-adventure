@@ -45,19 +45,10 @@ export default async function CampPage() {
     redirect("/play/character-creation");
   }
 
-  // await saveGameState(agent?.agentUrl, {
-  //   ...gameState,
-  //   player: {
-  //     ...gameState.player,
-  //     energy: 100,
-  //   },
-  // });
-
   const randomlyGetBackground = () => {
     const randomIndex = Math.floor(Math.random() * bgImages.length);
     return bgImages[randomIndex];
   };
-  console.log(gameState);
 
   return (
     <RecoilProvider gameState={gameState}>

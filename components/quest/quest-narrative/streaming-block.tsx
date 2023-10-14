@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 
 export const StreamingBlock = ({ block }: { block: Block }) => {
-  const { streamedBlock } = useBlockStream({ block });
+  const text = useBlockStream({ blockId: block.id });
   const { isDebugMode } = useDebugMode();
 
   // if (!isDebugMode) {
@@ -19,7 +19,7 @@ export const StreamingBlock = ({ block }: { block: Block }) => {
       )}
     >
       <TypographySmall>Streaming</TypographySmall>
-      <p>{streamedBlock.text}</p>
+      <p>{text}</p>
     </div>
   );
   // }

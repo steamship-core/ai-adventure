@@ -4,8 +4,8 @@ import QuestNarrative from "./quest-narrative";
 import { GameState } from "@/lib/game/schema/game_state";
 import { QuestHeader } from "./quest-header";
 import { useEffect, useState } from "react";
-import { v4 } from "uuid";
 import { Block } from "@/lib/streaming-client/src";
+import { useParams } from "next/navigation";
 
 export default function Quest({
   gameState,
@@ -14,14 +14,13 @@ export default function Quest({
   gameState: GameState;
   agentBaseUrl: string;
 }) {
-  const [id, setId] = useState<string | null>(null);
   const [summary, setSummary] = useState<Block | null>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [completeButtonText, setCompleteButtonText] = useState<string>();
 
-  useEffect(() => {
-    setId(v4());
-  }, []);
+  console.log(gameState, agentBaseUrl);
+
+  const { questId } = useParams();
 
   const onSummary = (summary: Block) => {
     setSummary(summary);
@@ -32,6 +31,7 @@ export default function Quest({
   };
 
   useEffect(() => {
+    console.log("game state use effecg", gameState.active_mode);
     if (gameState.active_mode != "quest") {
       // If we're not in a quest, then we don't need to do anything.
       // Here we override the "Complete Quest" label since it's historical.
@@ -39,20 +39,19 @@ export default function Quest({
       setIsComplete(true);
     }
   }, [gameState.active_mode]);
-  console.log(gameState);
 
   return (
     <QuestContainer>
-      {id && (
+      {questId && (
         <>
           <QuestHeader
             gameState={gameState}
-            id={id}
+            id={questId as string}
             summary={summary}
             isComplete={isComplete}
           />
           <QuestNarrative
-            id={id}
+            id={questId as string}
             onSummary={onSummary}
             onComplete={onComplete}
             isComplete={isComplete}

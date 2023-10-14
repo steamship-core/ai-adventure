@@ -11,19 +11,15 @@ export const QuestSummaryBlock = ({
   block: Block;
   onSummary: (block: Block) => void;
 }) => {
-  const { streamedBlock, isComplete } = useBlockStream({ block });
+  const onFinish = (prompt: string, result: string) => {
+    block.text = result;
+    onSummary(block);
+  };
 
-  useEffect(() => {
-    if (isComplete) {
-      onSummary(streamedBlock);
-    }
-  }, [isComplete, streamedBlock, onSummary]);
+  const text = useBlockStream({ blockId: block.id, onFinish });
+  block.text = text;
 
   return (
-    <DebugBlock
-      block={streamedBlock}
-      title="Streaming"
-      className="border-indigo-600"
-    />
+    <DebugBlock block={block} title="Streaming" className="border-indigo-600" />
   );
 };
