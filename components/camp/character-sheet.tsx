@@ -56,7 +56,7 @@ export const CharacterSheet = () => {
       <SheetTrigger asChild>
         <button className="flex gap-4 items-start text-left h-full">
           <div className="flex items-center justify-center h-full">
-            <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-blue-600">
+            <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
               <Image
                 src={"/orc.png"}
                 height={1024}

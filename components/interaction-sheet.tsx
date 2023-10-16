@@ -16,6 +16,7 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "./ui/sheet";
+import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
 import { TypographyP } from "./ui/typography/TypographyP";
 import { TypographySmall } from "./ui/typography/TypographySmall";
@@ -50,16 +51,21 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex flex-col justify-end items-center relative overflow-hidden h-24 w-24 rounded-md border border-yellow-600/90">
-          <Image
-            src={"/merchant.png"}
-            fill
-            alt="A merchant"
-            className="object-cover z-10"
-          />
-          <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1 w-full">
-            {member.name}
-          </TypographySmall>
+        <button className="flex gap-4 hover:bg-foreground/10 rounded-md">
+          <div>
+            <div className="relative overflow-hidden h-20 md:h-24 aspect-square rounded-md border border-blue-foreground/90">
+              <Image
+                src={"/merchant.png"}
+                fill
+                alt="A merchant"
+                className="object-cover z-10"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col items-start text-start">
+            <TypographyLarge>{member.name}</TypographyLarge>
+            <TypographyMuted>{member.description}</TypographyMuted>
+          </div>
         </button>
       </SheetTrigger>
       <SheetContent
@@ -248,21 +254,6 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
 const InteractionSheet = ({ member }: { member: NpcCharacter }) => {
   if (member.name === "The Merchant") {
     return <MerchantSheet member={member} />;
-  }
-  if (member.name === "Logan") {
-    return (
-      <div className="flex flex-col items-center">
-        <div className="w-16 h-16 md:h-28 md:w-28 relative rounded-full overflow-hidden drop-shadow-2xl border-yellow-400 border">
-          <Image
-            src={"/merchant.png"}
-            fill
-            alt="A merchant"
-            className="object-cover"
-          />
-        </div>
-        {member.name}
-      </div>
-    );
   }
   return null;
 };

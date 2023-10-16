@@ -1,10 +1,9 @@
 "use client";
 
-import { GameState } from "@/lib/game/schema/game_state";
-import { cn } from "@/lib/utils";
-import { PackageIcon } from "lucide-react";
+import { ReactNode } from "react";
+import { useRecoilValue } from "recoil";
 import { InventoryList } from "./inventory-list";
-import { Button } from "./ui/button";
+import { recoilGameState } from "./recoil-provider";
 import {
   Sheet,
   SheetContent,
@@ -15,21 +14,12 @@ import {
 } from "./ui/sheet";
 import { TypographySmall } from "./ui/typography/TypographySmall";
 
-const InventorySheet = ({
-  gameState,
-  text = "View Inventory",
-}: {
-  gameState: GameState;
-  text?: string;
-}) => {
+const InventorySheet = ({ children }: { children: ReactNode }) => {
+  const gameState = useRecoilValue(recoilGameState);
+  console.log(gameState);
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">
-          <PackageIcon size={16} className={cn(text && "mr-2")} />
-          {text}
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="bottom"
         className="w-100% h-[100dvh] flex flex-col pb-0"

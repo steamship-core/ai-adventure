@@ -40,10 +40,9 @@ export const NarrativeBlock = ({
     });
 
     return formattedBlocks.map((block) => {
-      console.log(`Block ${block} is of type ${getMessageType(block)}`);
-
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
+          console.log("BLINGBLO", block);
           return <TextBlock key={block.id} text={block.text!} />;
         case MessageTypes.STATUS_MESSAGE:
           return <StatusDebugBlock key={block.id} block={block} />;
@@ -62,10 +61,8 @@ export const NarrativeBlock = ({
             return null;
           }
         case MessageTypes.STREAMING_BLOCK:
-          console.log("streaming block", block);
           return <StreamingBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_COMPLETE:
-          console.log("QUEST COMPLETE", block);
           return (
             <CompletionBlock
               key={block.id}

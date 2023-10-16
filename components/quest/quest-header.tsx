@@ -1,12 +1,10 @@
 "use client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
 import InventorySheet from "../inventory-sheet";
 import { Button } from "../ui/button";
-
-const MINIUM_MESSAGE_COUNT = 2;
 
 export const QuestHeader = ({
   gameState,
@@ -31,7 +29,11 @@ export const QuestHeader = ({
         <span />
       )}
       <div className="flex items-center justify-center">
-        <InventorySheet gameState={gameState} text="" />
+        <InventorySheet>
+          <Button variant="outline">
+            <PackageIcon size={16} className="mr-2" />
+          </Button>
+        </InventorySheet>
       </div>
     </div>
   );
