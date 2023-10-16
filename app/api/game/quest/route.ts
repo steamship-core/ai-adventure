@@ -52,7 +52,10 @@ export async function GET(request: Request) {
   console.log(`Loading quest ${questId} from ${agent!.agentUrl}`);
 
   try {
-    const blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
+    let blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
+    for (let block of blocks) {
+      block;
+    }
     console.log(JSON.stringify(blocks, undefined, 2));
     return NextResponse.json({ blocks }, { status: 200 });
   } catch (e) {

@@ -95,9 +95,6 @@ export default function QuestNarrative({
           let blocks = ((await response.json()) || {})
             .blocks as ExtendedBlock[];
           if (blocks && blocks.length > 0) {
-            for (let block of blocks) {
-              block.historical = true;
-            }
             setPriorBlocks(blocks.reverse());
           } else {
             // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest

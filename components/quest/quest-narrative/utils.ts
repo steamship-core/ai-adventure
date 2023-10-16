@@ -22,10 +22,14 @@ export type ExtendedBlock = Block & {
    * choose to show or hide user input blocks depending on whether they are historical
    */
   historical?: boolean;
+
+  /**
+   * The url where the contents cen be streamed from.
+   */
+  streamingUrl?: string;
 };
 
 export const getMessageType = (block: Block) => {
-  console.log(block);
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
   }
@@ -44,7 +48,6 @@ export const getMessageType = (block: Block) => {
     return MessageTypes.IMAGE;
   }
   if (block.tags?.find((tag) => tag.kind === "scene" && tag.name === "audio")) {
-    console.log("YES");
     return MessageTypes.SCENE_AUDIO;
   }
   if (block.streamState) {

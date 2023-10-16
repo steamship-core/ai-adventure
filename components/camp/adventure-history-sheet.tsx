@@ -48,7 +48,11 @@ export const AdventureHistorySheet = () => {
           {gameState.quests.map((quest, i) => {
             if (!quest.text_summary) return null;
             return (
-              <div key={quest.name} className="relative">
+              <a
+                href={`/play/quest/${quest.name}`}
+                key={quest.name}
+                className="relative"
+              >
                 <div className="border border-foreground/20 rounded-md p-4">
                   <TypographySmall className="!mt-0">
                     {quest.text_summary}
@@ -59,7 +63,7 @@ export const AdventureHistorySheet = () => {
                     <MoreHorizontalIcon size={16} />
                   </div>
                 </div>
-              </div>
+              </a>
             );
           })}
           {gameState.quests.length === 0 && (

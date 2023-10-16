@@ -79,7 +79,6 @@ export const NarrativeBlock = ({
             return null;
           }
         case MessageTypes.STREAMING_BLOCK:
-          console.log("block", block);
           return <StreamingBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_COMPLETE:
           return (
@@ -102,8 +101,10 @@ export const NarrativeBlock = ({
         case MessageTypes.IMAGE:
           return <ImageBlock key={block.id} block={block} />;
         case MessageTypes.SCENE_AUDIO:
-          console.log("SCENE");
-          console.log(block);
+          if (block.streamingUrl) {
+            console.log(`Setting background music: ${block.streamingUrl}`);
+            setBackgroundAudio(block.streamingUrl);
+          }
           return <BackgroundAudioBlock key={block.id} block={block} />;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
