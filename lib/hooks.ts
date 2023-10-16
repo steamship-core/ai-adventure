@@ -49,7 +49,7 @@ export const useNarration = () => {
 
   const updateBlockId = (block_id: string) => {
     setUrl(undefined);
-    setBlockId(blockId);
+    setBlockId(block_id);
     fetch("/api/game/narrate", {
       method: "POST",
       body: JSON.stringify({ block_id }),
@@ -65,5 +65,6 @@ export const useNarration = () => {
     setAllowed,
     url: url as string,
     updateBlockId,
+    blockId,
   };
 };

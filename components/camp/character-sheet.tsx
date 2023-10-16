@@ -201,7 +201,9 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
               <TypographyMuted>Play Narrations</TypographyMuted>
               <Switch
                 checked={narrationAllowed === true}
-                onCheckedChange={setNarrationAllowed as any}
+                onCheckedChange={(checked) => {
+                  setNarrationAllowed(checked);
+                }}
               />
             </div>
             <div>

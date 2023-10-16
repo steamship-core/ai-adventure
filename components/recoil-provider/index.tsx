@@ -6,16 +6,22 @@ import { RecoilRoot, SetRecoilState, atom } from "recoil";
 const localStorageEffect =
   (key: string) =>
   ({ setSelf, onSet }: { setSelf: any; onSet: any }) => {
+    console.log("localStorageEffect", key);
     if (typeof window === "undefined" || window?.localStorage === undefined) {
       return;
     }
 
     const savedValue = localStorage.getItem(key);
+    console.log("localStorageEffect savedValue", savedValue);
     if (savedValue != null) {
       setSelf(JSON.parse(savedValue));
     }
 
     onSet((newValue: any, _: any, isReset: any) => {
+      console.log("localStorageEffect isReset", key);
+      console.log("localStorageEffect isReset", isReset);
+      console.log("localStorageEffect newValue", newValue);
+
       isReset
         ? localStorage.removeItem(key)
         : localStorage.setItem(key, JSON.stringify(newValue));
