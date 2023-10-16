@@ -1,4 +1,5 @@
 export type Item = {
+  id: string;
   name?: string;
   description?: string;
   is_one_time_use?: boolean;

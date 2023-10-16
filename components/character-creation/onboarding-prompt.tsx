@@ -83,6 +83,7 @@ const OnboardingPrompt = ({
   text,
   isTextarea,
   placeholder,
+  buttonText,
 }: {
   onContinue: (value: string) => any;
   isCurrent: boolean;
@@ -90,12 +91,14 @@ const OnboardingPrompt = ({
   text: string;
   isTextarea?: boolean;
   placeholder: string;
+  buttonText: string;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
   });
   const [value, setValue] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+
   const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.code === "Enter" && e.shiftKey == false) {
       e.preventDefault();
@@ -139,7 +142,7 @@ const OnboardingPrompt = ({
             />
           )}
           <Button disabled={value.length < 1} className="w-full" type="submit">
-            Set Appearance
+            {buttonText}
           </Button>
         </form>
       </CreationActions>

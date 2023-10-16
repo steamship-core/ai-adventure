@@ -15,7 +15,6 @@ import {
 
 const InventorySheet = ({ children }: { children: ReactNode }) => {
   const gameState = useRecoilValue(recoilGameState);
-  console.log(gameState);
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
