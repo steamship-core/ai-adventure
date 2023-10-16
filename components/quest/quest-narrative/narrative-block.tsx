@@ -42,14 +42,21 @@ export const NarrativeBlock = ({
     return formattedBlocks.map((block) => {
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
-          console.log("BLINGBLO", block);
-          return <TextBlock key={block.id} text={block.text!} />;
+          return (
+            <TextBlock key={block.id} blockId={block.id} text={block.text!} />
+          );
         case MessageTypes.STATUS_MESSAGE:
           return <StatusDebugBlock key={block.id} block={block} />;
         case MessageTypes.SYSTEM_MESSAGE:
           return <SystemDebugBlock key={block.id} block={block} />;
         case MessageTypes.STREAMED_TO_CHAT_HISTORY:
-          return <TextBlock key={block.id} text={block.text || ""} />;
+          return (
+            <TextBlock
+              key={block.id}
+              blockId={block.id}
+              text={block.text || ""}
+            />
+          );
         case MessageTypes.FUNCTION_SELECTION:
           return <FunctionCallDebugBlock key={block.id} block={block} />;
         case MessageTypes.USER_MESSAGE:

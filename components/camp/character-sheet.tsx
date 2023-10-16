@@ -1,7 +1,11 @@
 "use client";
 
 import { levels } from "@/lib/game/levels";
-import { useDebugMode } from "@/lib/hooks";
+import {
+  useBackgroundMusic,
+  useDebugModeSetting,
+  useNarration,
+} from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import Image from "next/image";
@@ -17,13 +21,19 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 
-export const CharacterSheet = () => {
+export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
-  const { isDebugMode, setIsDebugMode } = useDebugMode();
+  const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
 
   const rank = gameState?.player?.rank || 0;
 
+  const [backgroundAllowed, setBackgroundAllowed, _1, _2] =
+    useBackgroundMusic();
+
+  const [narrationAllowed, setNarrationAllowed, _1a, _2a] = useNarration();
+
   const setEnergyTo100 = async () => {
+    console.log("setting");
     const response = await fetch("/api/game/debug", {
       method: "POST",
       body: JSON.stringify({
@@ -54,8 +64,8 @@ export const CharacterSheet = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex gap-4 items-start text-left h-full">
-          <div className="flex items-center justify-center h-full">
+        {mini === true ? (
+          <button className="text-left h-full">
             <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
               <Image
                 src={"/orc.png"}
@@ -64,20 +74,33 @@ export const CharacterSheet = () => {
                 alt="Character"
               />
             </div>
-          </div>
-          <div className="w-44 lg:w-56">
-            <TypographyLarge className="text-sm md:text-lg">
-              {gameState?.player?.name}
-            </TypographyLarge>
-            <Progress
-              value={(((rank - 1) % 4) / 4) * 100}
-              className="h-2 border border-foreground/20"
-            />
-            <TypographyMuted className="text-xs md:text-sm ">
-              Rank: {getLevel()} ({gameState?.player?.rank})
-            </TypographyMuted>
-          </div>
-        </button>
+          </button>
+        ) : (
+          <button className="flex gap-4 items-start text-left h-full">
+            <div className="flex items-center justify-center h-full">
+              <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
+                <Image
+                  src={"/orc.png"}
+                  height={1024}
+                  width={1024}
+                  alt="Character"
+                />
+              </div>
+            </div>
+            <div className="w-44 lg:w-56">
+              <TypographyLarge className="text-sm md:text-lg">
+                {gameState?.player?.name}
+              </TypographyLarge>
+              <Progress
+                value={(((rank - 1) % 4) / 4) * 100}
+                className="h-2 border border-foreground/20"
+              />
+              <TypographyMuted className="text-xs md:text-sm ">
+                Rank: {getLevel()} ({gameState?.player?.rank})
+              </TypographyMuted>
+            </div>
+          </button>
+        )}
       </SheetTrigger>
       <SheetContent
         side="bottom"
@@ -153,10 +176,33 @@ export const CharacterSheet = () => {
               </ul>
             </div>
             <div>
+              <TypographyH3>Audio</TypographyH3>
+              <TypographyMuted>Play Background Music</TypographyMuted>
+              <Switch
+                checked={backgroundAllowed === true}
+                onCheckedChange={setBackgroundAllowed as any}
+              />
+              <TypographyMuted>Play Narrations</TypographyMuted>
+              <Switch
+                checked={narrationAllowed === true}
+                onCheckedChange={setNarrationAllowed as any}
+              />
+            </div>
+            <div>
               <TypographyH3>Account</TypographyH3>
               <TypographyMuted>Show Debug Information</TypographyMuted>
-              <Switch checked={isDebugMode} onCheckedChange={setIsDebugMode} />
-              <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
+              <Switch
+                checked={isDebugMode === true}
+                onCheckedChange={setIsDebugMode as any}
+              />
+              <br />
+              <Button
+                onClick={(e) => {
+                  setEnergyTo100();
+                }}
+              >
+                Set Energy to 100
+              </Button>
 
               <div className="mt-2">
                 <UserButton afterSignOutUrl="/" />
