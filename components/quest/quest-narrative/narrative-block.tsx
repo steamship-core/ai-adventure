@@ -1,6 +1,7 @@
 import { Block } from "@/lib/streaming-client/src";
 import { CompletionBlock } from "./completion-block";
 import {
+  BackgroundAudioBlock,
   FallbackDebugBlock,
   FunctionCallDebugBlock,
   StatusDebugBlock,
@@ -94,9 +95,7 @@ export const NarrativeBlock = ({
         case MessageTypes.SCENE_AUDIO:
           console.log("SCENE");
           console.log(block);
-          // const blockUrl = block.setBackgroundAudio();
-          // TODO SET AUDIO
-          return null;
+          return <BackgroundAudioBlock key={block.id} block={block} />;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
       }
