@@ -1,11 +1,7 @@
 "use client";
 
 import { levels } from "@/lib/game/levels";
-import {
-  useBackgroundMusic,
-  useDebugModeSetting,
-  useNarration,
-} from "@/lib/hooks";
+import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import Image from "next/image";
@@ -31,9 +27,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
 
   const [backgroundAllowed, setBackgroundAllowed, _1, _2] =
     useBackgroundMusic();
-
-  const { isAllowed: narrationAllowed, setAllowed: setNarrationAllowed } =
-    useNarration();
 
   const setEnergyTo100 = async () => {
     const response = await fetch("/api/game/debug", {
@@ -197,13 +190,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
               <Switch
                 checked={backgroundAllowed === true}
                 onCheckedChange={setBackgroundAllowed as any}
-              />
-              <TypographyMuted>Play Narrations</TypographyMuted>
-              <Switch
-                checked={narrationAllowed === true}
-                onCheckedChange={(checked) => {
-                  setNarrationAllowed(checked);
-                }}
               />
             </div>
             <div>

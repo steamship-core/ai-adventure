@@ -1,6 +1,6 @@
 "use client";
 
-import { useBackgroundMusic, useNarration } from "@/lib/hooks";
+import { useBackgroundMusic } from "@/lib/hooks";
 import { useEffect } from "react";
 import { useAudio } from "react-use";
 import { useRecoilState } from "recoil";
@@ -50,9 +50,4 @@ export function BackgroundAudio() {
   return (
     <AudioPlayer allowed={isAllowed === true} url={url as string} loop={true} />
   );
-}
-
-export function NarrationAudio() {
-  const { isAllowed, url } = useNarration();
-  return <AudioPlayer allowed={isAllowed === true} url={url} loop={false} />;
 }

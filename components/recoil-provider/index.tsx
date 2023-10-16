@@ -47,15 +47,6 @@ export const recoilBackgroundAudioUrlState = atom<string | undefined>({
   default: undefined,
 });
 
-export const recoilNarrationAudioState = atom<boolean | undefined>({
-  key: "NarrationAudioState",
-  default:
-    typeof window != "undefined" &&
-    window.localStorage &&
-    localStorage?.getItem("NarrationAudioState") === "true",
-  effects: [localStorageEffect("NarrationAudioState")],
-});
-
 export const recoilAudioActiveState = atom<boolean | undefined>({
   key: "AudioActiveState",
   default:
@@ -65,53 +56,31 @@ export const recoilAudioActiveState = atom<boolean | undefined>({
   effects: [localStorageEffect("AudioActiveState")],
 });
 
-export const recoilNarrationAudioUrlState = atom<string | undefined>({
-  key: "NarrationAudioUrl",
-  default: undefined,
-});
-
-export const recoilNarrationBlockIdState = atom<string | undefined>({
-  key: "NarrationBlockIds",
-  default: undefined,
-});
-
 function initializeState(
   set: SetRecoilState,
   gameState: GameState,
   backgroundAudioState?: boolean,
-  narrationAudioState?: boolean,
   audioActiveState?: boolean,
-  backgroundAudioUrl?: string,
-  narrationAudioUrl?: string,
-  narrationBlockId?: string
+  backgroundAudioUrl?: string
 ) {
   set(recoilGameState, gameState);
-  set(recoilNarrationAudioState, narrationAudioState);
   set(recoilBackgroundAudioState, backgroundAudioState);
   set(recoilAudioActiveState, audioActiveState);
   set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
-  set(recoilNarrationAudioUrlState, narrationAudioUrl);
-  set(recoilNarrationBlockIdState, narrationBlockId);
 }
 
 function RecoilProvider({
   children,
   gameState,
   backgroundAudioState,
-  narrationAudioState,
   audioActiveState,
   backgroundAudioUrlState,
-  narrationAudioUrlState,
-  narrationBlockIdState,
 }: {
   children: ReactNode;
   gameState: GameState;
   backgroundAudioState?: boolean;
-  narrationAudioState?: boolean;
   audioActiveState?: boolean;
   backgroundAudioUrlState?: string;
-  narrationAudioUrlState?: string;
-  narrationBlockIdState?: string;
 }) {
   return (
     <RecoilRoot
@@ -120,11 +89,8 @@ function RecoilProvider({
           set,
           gameState,
           backgroundAudioState,
-          narrationAudioState,
           audioActiveState,
-          backgroundAudioUrlState,
-          narrationAudioUrlState,
-          narrationBlockIdState
+          backgroundAudioUrlState
         )
       }
     >
