@@ -23,7 +23,6 @@ import { TypographyP } from "./ui/typography/TypographyP";
 
 const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
-  console.log(gameState);
   const [selectedToSell, setSelectedToSell] = useState<Item[]>([]);
   const [selectedToBuy, setSelectedToBuy] = useState<Item[]>([]);
   const [isTrading, setIsTrading] = useState(false);
@@ -39,6 +38,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
       itemsToSell: sell.length,
       itemsToBuy: buy.length,
     });
+
     await fetch("/api/game/trade", {
       method: "POST",
       body: JSON.stringify({
@@ -66,7 +66,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
           }}
           className="flex gap-4 hover:bg-foreground/10 rounded-md"
         >
-          <div>
+          <div className="flex items-center justify-center h-full">
             <div className="relative overflow-hidden h-20 md:h-24 aspect-square rounded-md border border-blue-foreground/90">
               <Image
                 src={"/merchant.png"}
@@ -88,8 +88,8 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
       >
         <SheetHeader>
           <SheetDescription>
-            <div className="flex gap-4 hover:bg-foreground/10 rounded-md">
-              <div>
+            <div className="flex gap-4 rounded-md">
+              <div className="flex items-center justify-center h-full">
                 <div className="relative overflow-hidden h-20 md:h-24 aspect-square rounded-md border border-blue-foreground/90">
                   <Image
                     src={"/merchant.png"}

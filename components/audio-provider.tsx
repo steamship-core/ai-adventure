@@ -35,13 +35,13 @@ export function AudioPlayer({
   useEffect(() => {
     if (controls && ref) {
       if (allowed == true && url && active) {
-        console.log("Play!");
         controls.play();
       } else {
         controls.pause();
       }
     }
   }, [allowed, url, active]); // NOTE: Adding the audio dependencies here causes an infinite loop!
+
   return audio;
 }
 
@@ -53,12 +53,6 @@ export function BackgroundAudio() {
 }
 
 export function NarrationAudio() {
-  const [isAllowed, _1, url, _2] = useNarration();
-  return (
-    <AudioPlayer
-      allowed={isAllowed === true}
-      url={url as string}
-      loop={false}
-    />
-  );
+  const { isAllowed, url } = useNarration();
+  return <AudioPlayer allowed={isAllowed === true} url={url} loop={false} />;
 }

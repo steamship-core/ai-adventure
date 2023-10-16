@@ -13,9 +13,55 @@ import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { Block } from "@/lib/streaming-client/src";
+import { getGameState } from "@/lib/game/game-state.client";
+import { GameState } from "@/lib/game/schema/game_state";
+import { Block } from "@/lib/streaming-client/src/schema";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { BadgeDollarSignIcon, PackageIcon } from "lucide-react";
+import { BadgeDollarSignIcon, Loader2Icon, PackageIcon } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+const ItemsGained = () => {
+  const params = useParams();
+  const [gameState, setGameState] = useState<GameState | null>(null);
+
+  useEffect(() => {
+    const updateGameState = async () => {
+      const gs = await getGameState();
+      setGameState(gs);
+    };
+    updateGameState();
+  }, []);
+
+  if (!gameState) {
+    return (
+      <div className="mt-4">
+        <Loader2Icon className="animate-spin" size={30} />
+      </div>
+    );
+  }
+
+  const quest = gameState.quests.find((q) => q.name === params.questId);
+  if (!quest || !quest.new_items) {
+    return null;
+  }
+
+  return (
+    <div className="flex w-full mt-6 mb-6">
+      {quest.new_items.map((item, i) => (
+        <div key={item.id} className="flex gap-4">
+          <div className="flex items-start justify-center pt-2">
+            <PackageIcon size={24} />
+          </div>
+          <div>
+            <TypographyLarge>{item.name}</TypographyLarge>
+            <TypographyMuted>{item.description}</TypographyMuted>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const EndSheet = ({
   isEnd,
@@ -72,15 +118,7 @@ const EndSheet = ({
           {summary && summary.text}
         </TypographyMuted>
         <TypographyH3>Items Gained</TypographyH3>
-        <div className="flex w-full overflow-hidden">
-          <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex items-center justify-center">
-                <div className="border rounded-md border-foreground/20 h-12 aspect-square" />
-              </div>
-            ))}
-          </div>
-        </div>
+        <ItemsGained />
       </div>
     </SheetContent>
   </Sheet>

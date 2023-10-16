@@ -68,6 +68,7 @@ export default function CharacterCreation() {
           placeholder="To become the most powerful wizard in the land."
           text="What primary motivation does your character have? This will be used to generate quests and storylines for your character."
           isTextarea
+          buttonText="Set motivation"
         />
       )}
       {step > 4 && (
@@ -88,6 +89,7 @@ export default function CharacterCreation() {
           placeholder="Born to a noble family, your character has always had everything they wanted... until now."
           text="Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?"
           isTextarea
+          buttonText="Set background"
         />
       )}
       {step > 3 && (
@@ -108,6 +110,7 @@ export default function CharacterCreation() {
           placeholder="An old, wise, wizard with a long white beard and a pointy hat."
           text="Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!"
           isTextarea
+          buttonText="Set appearance"
         />
       )}
       {step > 2 && (
@@ -127,6 +130,7 @@ export default function CharacterCreation() {
           isCurrent={activeStep === 3}
           text="Choose a name for your character. This can be anything you want!"
           placeholder="Professor Chaos"
+          buttonText="Set name"
         />
       )}
       {step > 1 && (
@@ -142,6 +146,7 @@ export default function CharacterCreation() {
           isCurrent={activeStep === 2}
           placeholder="Serious, silly, dark, light, etc.."
           text="What is the tone of the story? Serious, silly, dark, light, etc.."
+          buttonText="Set tone"
         />
       )}
       {step > 0 && (
@@ -157,6 +162,7 @@ export default function CharacterCreation() {
           isCurrent={activeStep === 1}
           placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
           text="Set the theme of the adventure. This will determine the setting and genre of the story you will be playing."
+          buttonText="Set theme"
         />
       )}
       <CharacterCreationIntro

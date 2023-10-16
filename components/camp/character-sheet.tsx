@@ -32,10 +32,10 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [backgroundAllowed, setBackgroundAllowed, _1, _2] =
     useBackgroundMusic();
 
-  const [narrationAllowed, setNarrationAllowed, _1a, _2a] = useNarration();
+  const { isAllowed: narrationAllowed, setAllowed: setNarrationAllowed } =
+    useNarration();
 
   const setEnergyTo100 = async () => {
-    console.log("setting");
     const response = await fetch("/api/game/debug", {
       method: "POST",
       body: JSON.stringify({

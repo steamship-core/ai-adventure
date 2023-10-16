@@ -28,7 +28,6 @@ export default function Quest({
   };
 
   useEffect(() => {
-    console.log("game state use effecg", gameState.active_mode);
     if (gameState.active_mode != "quest") {
       // If we're not in a quest, then we don't need to do anything.
       // Here we override the "Complete Quest" label since it's historical.

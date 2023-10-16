@@ -12,11 +12,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { TypographySmall } from "./ui/typography/TypographySmall";
 
 const InventorySheet = ({ children }: { children: ReactNode }) => {
   const gameState = useRecoilValue(recoilGameState);
-  console.log(gameState);
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -27,11 +25,10 @@ const InventorySheet = ({ children }: { children: ReactNode }) => {
         <SheetHeader>
           <SheetTitle>Inventory</SheetTitle>
           <SheetDescription>
-            Items you&apos;e collected on your adventures. They might just be
+            Items you&apos;ve collected on your adventures. They might just be
             junk, or they might be useful.
           </SheetDescription>
         </SheetHeader>
-        <TypographySmall>Grid view</TypographySmall>
         <InventoryList inventory={gameState?.player?.inventory || []} />
       </SheetContent>
     </Sheet>

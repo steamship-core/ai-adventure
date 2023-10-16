@@ -60,5 +60,10 @@ export const useNarration = () => {
       });
   };
 
-  return [isAllowed, setAllowed, url as string, updateBlockId];
+  return {
+    isAllowed,
+    setAllowed,
+    url: url as string,
+    updateBlockId,
+  };
 };

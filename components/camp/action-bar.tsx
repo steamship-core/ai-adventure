@@ -1,8 +1,9 @@
 "use client";
 import { track } from "@vercel/analytics/react";
-import { CompassIcon, PackageIcon } from "lucide-react";
+import { PackageIcon } from "lucide-react";
 import InventorySheet from "../inventory-sheet";
 import { Button } from "../ui/button";
+import { AdventureHistorySheet } from "./adventure-history-sheet";
 import StartAdventureButton from "./start-adventure-button";
 
 export const ActionBar = () => {
@@ -25,19 +26,7 @@ export const ActionBar = () => {
             View Inventory
           </Button>
         </InventorySheet>
-        <Button
-          onClick={(e) => {
-            track("Click Button", {
-              buttonName: "Adventure History",
-              location: "Camp",
-            });
-          }}
-          variant="outline"
-          className="w-full flex justify-start"
-        >
-          <CompassIcon size={16} className="h-6 w-6 mr-2" />
-          Adventure History
-        </Button>
+        <AdventureHistorySheet />
       </div>
     </div>
   );
