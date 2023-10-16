@@ -47,6 +47,16 @@ export const SystemDebugBlock = ({ block }: { block: Block }) => {
   );
 };
 
+export const BackgroundAudioBlock = ({ block }: { block: Block }) => {
+  return (
+    <DebugBlock
+      block={block}
+      className="border-orange-600"
+      title="Background Audio"
+    />
+  );
+};
+
 export const ChatHistoryDebugBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock

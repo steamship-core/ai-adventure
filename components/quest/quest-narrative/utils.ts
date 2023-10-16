@@ -12,6 +12,7 @@ export const MessageTypes = {
   QUEST_COMPLETE: "QUEST_COMPLETE",
   ITEM_GENERATION_CONTENT: "ITEM_GENERATION_CONTENT",
   IMAGE: "IMAGE",
+  SCENE_AUDIO: "SCENE_AUDIO",
   TEXT: "TEXT",
 } as const;
 
@@ -24,6 +25,7 @@ export type ExtendedBlock = Block & {
 };
 
 export const getMessageType = (block: Block) => {
+  console.log(block);
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
   }
@@ -40,6 +42,10 @@ export const getMessageType = (block: Block) => {
   }
   if (block.tags?.find((tag) => tag.name === "image")) {
     return MessageTypes.IMAGE;
+  }
+  if (block.tags?.find((tag) => tag.kind === "scene" && tag.name === "audio")) {
+    console.log("YES");
+    return MessageTypes.SCENE_AUDIO;
   }
   if (block.streamState) {
     return MessageTypes.STREAMING_BLOCK;

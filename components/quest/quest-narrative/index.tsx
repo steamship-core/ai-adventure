@@ -1,12 +1,15 @@
 "use client";
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
+import { recoilAudioActiveState } from "@/components/recoil-provider";
 import { Input } from "@/components/ui/input";
+import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
 import { SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import { NarrativeBlock } from "./narrative-block";
@@ -32,6 +35,8 @@ export default function QuestNarrative({
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
+  const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
 
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
@@ -97,9 +102,11 @@ export default function QuestNarrative({
               return (
                 <NarrativeBlock
                   key={message.id}
+                  offerAudio={offerAudio}
                   blocks={getFormattedBlocks(message, nonPersistedUserInput)}
                   onSummary={onSummary}
                   onComplete={onComplete}
+                  setBackgroundAudio={setBackgroundMusicUrl as any}
                 />
               );
             })
@@ -107,8 +114,10 @@ export default function QuestNarrative({
           {priorBlocks && (
             <NarrativeBlock
               blocks={priorBlocks.reverse()}
+              offerAudio={offerAudio}
               onSummary={onSummary}
               onComplete={onComplete}
+              setBackgroundAudio={setBackgroundMusicUrl as any}
             />
           )}
         </QuestNarrativeContainer>

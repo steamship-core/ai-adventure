@@ -1,6 +1,7 @@
 import { Block } from "@/lib/streaming-client/src";
 import { CompletionBlock } from "./completion-block";
 import {
+  BackgroundAudioBlock,
   FallbackDebugBlock,
   FunctionCallDebugBlock,
   StatusDebugBlock,
@@ -19,10 +20,14 @@ export const NarrativeBlock = ({
   blocks,
   onSummary,
   onComplete,
+  offerAudio,
+  setBackgroundAudio,
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
   onComplete: () => void;
+  offerAudio?: boolean;
+  setBackgroundAudio: (url: string) => void;
 }) => {
   // Begin Debug Information State Management
   try {
@@ -43,7 +48,12 @@ export const NarrativeBlock = ({
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return (
-            <TextBlock key={block.id} blockId={block.id} text={block.text!} />
+            <TextBlock
+              key={block.id}
+              offerAudio={offerAudio}
+              blockId={block.id}
+              text={block.text!}
+            />
           );
         case MessageTypes.STATUS_MESSAGE:
           return <StatusDebugBlock key={block.id} block={block} />;
@@ -54,6 +64,7 @@ export const NarrativeBlock = ({
             <TextBlock
               key={block.id}
               blockId={block.id}
+              offerAudio={offerAudio}
               text={block.text || ""}
             />
           );
@@ -90,6 +101,10 @@ export const NarrativeBlock = ({
           return <ItemGenerationBlock key={block.id} block={block} />;
         case MessageTypes.IMAGE:
           return <ImageBlock key={block.id} block={block} />;
+        case MessageTypes.SCENE_AUDIO:
+          console.log("SCENE");
+          console.log(block);
+          return <BackgroundAudioBlock key={block.id} block={block} />;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
       }
