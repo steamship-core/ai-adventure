@@ -6,6 +6,10 @@ import { RecoilRoot, SetRecoilState, atom } from "recoil";
 const localStorageEffect =
   (key: string) =>
   ({ setSelf, onSet }: { setSelf: any; onSet: any }) => {
+    if (typeof window === "undefined" || window?.localStorage === undefined) {
+      return;
+    }
+
     const savedValue = localStorage.getItem(key);
     if (savedValue != null) {
       setSelf(JSON.parse(savedValue));
@@ -25,7 +29,10 @@ export const recoilGameState = atom({
 
 export const recoilBackgroundAudioState = atom<boolean | undefined>({
   key: "BackgroundAudioState",
-  default: localStorage?.getItem("BackgroundAudioState") === "true",
+  default:
+    typeof window != "undefined" &&
+    window.localStorage &&
+    localStorage?.getItem("BackgroundAudioState") === "true",
   effects: [localStorageEffect("BackgroundAudioState")],
 });
 
@@ -36,13 +43,19 @@ export const recoilBackgroundAudioUrlState = atom<string | undefined>({
 
 export const recoilNarrationAudioState = atom<boolean | undefined>({
   key: "NarrationAudioState",
-  default: localStorage?.getItem("NarrationAudioState") === "true",
+  default:
+    typeof window != "undefined" &&
+    window.localStorage &&
+    localStorage?.getItem("NarrationAudioState") === "true",
   effects: [localStorageEffect("NarrationAudioState")],
 });
 
 export const recoilAudioActiveState = atom<boolean | undefined>({
   key: "AudioActiveState",
-  default: localStorage?.getItem("AudioActiveState") === "true",
+  default:
+    typeof window != "undefined" &&
+    window.localStorage &&
+    localStorage?.getItem("AudioActiveState") === "true",
   effects: [localStorageEffect("AudioActiveState")],
 });
 

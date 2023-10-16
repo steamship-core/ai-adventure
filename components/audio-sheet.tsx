@@ -18,11 +18,8 @@ const AudioSheet = ({ text = "Audio Settings" }: { text?: string }) => {
   };
 
   return (
-    <Button variant="outline" onClick={toggle}>
-      <Volume2Icon
-        size={16}
-        className={cn(text && "mr-2", active && "bg-red-400")}
-      />
+    <Button variant={active ? undefined : "outline"} onClick={toggle}>
+      <Volume2Icon size={16} className={cn(text && "mr-2")} />
       {text}
     </Button>
   );

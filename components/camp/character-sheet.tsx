@@ -21,7 +21,7 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 
-export const CharacterSheet = () => {
+export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
 
@@ -33,6 +33,7 @@ export const CharacterSheet = () => {
   const [narrationAllowed, setNarrationAllowed, _1a, _2a] = useNarration();
 
   const setEnergyTo100 = async () => {
+    console.log("setting");
     const response = await fetch("/api/game/debug", {
       method: "POST",
       body: JSON.stringify({
@@ -63,8 +64,8 @@ export const CharacterSheet = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex gap-4 items-start text-left h-full">
-          <div className="flex items-center justify-center h-full">
+        {mini === true ? (
+          <button className="text-left h-full">
             <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
               <Image
                 src={"/orc.png"}
@@ -73,20 +74,33 @@ export const CharacterSheet = () => {
                 alt="Character"
               />
             </div>
-          </div>
-          <div className="w-44 lg:w-56">
-            <TypographyLarge className="text-sm md:text-lg">
-              {gameState?.player?.name}
-            </TypographyLarge>
-            <Progress
-              value={(((rank - 1) % 4) / 4) * 100}
-              className="h-2 border border-foreground/20"
-            />
-            <TypographyMuted className="text-xs md:text-sm ">
-              Rank: {getLevel()} ({gameState?.player?.rank})
-            </TypographyMuted>
-          </div>
-        </button>
+          </button>
+        ) : (
+          <button className="flex gap-4 items-start text-left h-full">
+            <div className="flex items-center justify-center h-full">
+              <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
+                <Image
+                  src={"/orc.png"}
+                  height={1024}
+                  width={1024}
+                  alt="Character"
+                />
+              </div>
+            </div>
+            <div className="w-44 lg:w-56">
+              <TypographyLarge className="text-sm md:text-lg">
+                {gameState?.player?.name}
+              </TypographyLarge>
+              <Progress
+                value={(((rank - 1) % 4) / 4) * 100}
+                className="h-2 border border-foreground/20"
+              />
+              <TypographyMuted className="text-xs md:text-sm ">
+                Rank: {getLevel()} ({gameState?.player?.rank})
+              </TypographyMuted>
+            </div>
+          </button>
+        )}
       </SheetTrigger>
       <SheetContent
         side="bottom"
@@ -181,8 +195,14 @@ export const CharacterSheet = () => {
                 checked={isDebugMode === true}
                 onCheckedChange={setIsDebugMode as any}
               />
-
-              <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
+              <br />
+              <Button
+                onClick={(e) => {
+                  setEnergyTo100();
+                }}
+              >
+                Set Energy to 100
+              </Button>
 
               <div className="mt-2">
                 <UserButton afterSignOutUrl="/" />

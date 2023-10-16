@@ -36,7 +36,7 @@ export const InventoryList = ({
 
   const toggleGridView = (checked: boolean) => {
     setUseGridView(checked);
-    localStorage.setItem(localStorageKey, checked.toString());
+    localStorage?.setItem(localStorageKey, checked.toString());
   };
 
   if (useGridView) {
