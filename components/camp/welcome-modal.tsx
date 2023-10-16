@@ -11,7 +11,7 @@ export const WelcomeModal = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    if (gameState.quests.length > 0) {
+    if (gameState?.quests?.length > 0) {
       return;
     }
     // Check if the user has already seen this modal.
@@ -20,7 +20,7 @@ export const WelcomeModal = () => {
       setIsOpen(true);
       localStorage.setItem("welcomeModalSeen", "true");
     }
-  }, [gameState.quests.length]);
+  }, [gameState?.quests?.length]);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>

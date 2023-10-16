@@ -115,7 +115,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
         side="bottom"
         className="w-100% h-[100dvh] flex flex-col pb-0 overflow-scroll"
       >
-        <div className="flex flex-col gap-4 max-w-xl mx-auto">
+        <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2">
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
@@ -199,24 +199,23 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 checked={isDebugMode === true}
                 onCheckedChange={setIsDebugMode as any}
               />
-              <br />
-              <Button
-                onClick={(e) => {
-                  setEnergyTo100();
-                }}
-              >
-                Set Energy to 100
-              </Button>
+              <div className="flex gap-4 flex-wrap my-4">
+                <Button
+                  onClick={(e) => {
+                    setEnergyTo100();
+                  }}
+                >
+                  Set Energy to 100
+                </Button>
 
-              <br />
-
-              <Button
-                onClick={(e) => {
-                  resetCharacter();
-                }}
-              >
-                Reset Character
-              </Button>
+                <Button
+                  onClick={(e) => {
+                    resetCharacter();
+                  }}
+                >
+                  Reset Character
+                </Button>
+              </div>
 
               <div className="mt-2">
                 <UserButton afterSignOutUrl="/" />

@@ -15,24 +15,20 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
+import { Quest } from "@/lib/game/schema/quest";
 import { Block } from "@/lib/streaming-client/src/schema";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { BadgeDollarSignIcon, Loader2Icon, PackageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const ItemsGained = () => {
-  const params = useParams();
-  const [gameState, setGameState] = useState<GameState | null>(null);
-
-  useEffect(() => {
-    const updateGameState = async () => {
-      const gs = await getGameState();
-      setGameState(gs);
-    };
-    updateGameState();
-  }, []);
-
+const ItemsGained = ({
+  gameState,
+  quest,
+}: {
+  quest?: Quest;
+  gameState: GameState | null;
+}) => {
   if (!gameState) {
     return (
       <div className="mt-4">
@@ -40,8 +36,6 @@ const ItemsGained = () => {
       </div>
     );
   }
-
-  const quest = gameState.quests.find((q) => q.name === params.questId);
   if (!quest || !quest.new_items) {
     return null;
   }
@@ -71,57 +65,80 @@ const EndSheet = ({
   isEnd: boolean;
   summary: Block | null;
   completeButtonText?: string;
-}) => (
-  <Sheet>
-    <SheetTrigger asChild>
-      <Button variant={isEnd ? "default" : "ghost"} className="w-full">
-        {completeButtonText}
-      </Button>
-    </SheetTrigger>
-    <SheetContent
-      side="bottom"
-      className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
-    >
-      <SheetHeader className="px-6">
-        <SheetTitle>Your Adventure as come to an end</SheetTitle>
-        <SheetDescription>
-          Great job, adventurer. Time to collect your rewards.
-        </SheetDescription>
-      </SheetHeader>
-      <div className="overflow-scroll w-full px-6">
-        <TypographyH1 className="text-center mt-12">
-          Quest Completed
-        </TypographyH1>
-        <div className="flex items-center justify-center my-12 flex-col gap-6">
-          <Player
-            autoplay
-            src="/award-lottie.json"
-            keepLastFrame
-            style={{ height: "300px", width: "300px" }}
-          />
-          <TypographyLarge>You did it!</TypographyLarge>
-          <div className="flex gap-6">
-            <TypographySmall className="flex items-center">
-              <BadgeDollarSignIcon size={16} className="mr-2 text-yellow-400" />
-              36
-            </TypographySmall>
-            <TypographySmall className="flex items-center">
-              <PackageIcon size={16} className="mr-2 text-blue-400" />4
-            </TypographySmall>
+}) => {
+  const params = useParams();
+  const [gameState, setGameState] = useState<GameState | null>(null);
+
+  useEffect(() => {
+    const updateGameState = async () => {
+      const gs = await getGameState();
+      setGameState(gs);
+    };
+    updateGameState();
+  }, []);
+
+  const quest = gameState?.quests?.find((q) => q.name === params.questId);
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant={isEnd ? "default" : "ghost"} className="w-full">
+          {completeButtonText}
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="bottom"
+        className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
+      >
+        <SheetHeader className="px-6">
+          <SheetTitle>Your Adventure as come to an end</SheetTitle>
+          <SheetDescription>
+            Great job, adventurer. Time to collect your rewards.
+          </SheetDescription>
+        </SheetHeader>
+        <div className="overflow-scroll w-full px-6">
+          <TypographyH1 className="text-center mt-12">
+            Quest Completed
+          </TypographyH1>
+          <div className="flex items-center justify-center my-12 flex-col gap-6">
+            <Player
+              autoplay
+              src="/award-lottie.json"
+              keepLastFrame
+              style={{ height: "300px", width: "300px" }}
+            />
+            <TypographyLarge>You did it!</TypographyLarge>
+            <div className="flex gap-6">
+              {quest?.gold_delta && (
+                <TypographySmall className="flex items-center">
+                  <BadgeDollarSignIcon
+                    size={16}
+                    className="mr-2 text-yellow-400"
+                  />
+                  {quest?.gold_delta}
+                </TypographySmall>
+              )}
+              {quest?.new_items && (
+                <TypographySmall className="flex items-center">
+                  <PackageIcon size={16} className="mr-2 text-blue-400" />
+                  {quest?.new_items?.length}
+                </TypographySmall>
+              )}
+            </div>
+            <Button asChild>
+              <a href="/play/camp">Back to camp</a>
+            </Button>
           </div>
-          <Button asChild>
-            <a href="/play/camp">Back to camp</a>
-          </Button>
+          <TypographyH3>Journey Overview</TypographyH3>
+          <TypographyMuted className="text-lg mb-12">
+            {summary && summary.text}
+          </TypographyMuted>
+          <TypographyH3>Items Gained</TypographyH3>
+          <ItemsGained gameState={gameState} quest={quest} />
         </div>
-        <TypographyH3>Journey Overview</TypographyH3>
-        <TypographyMuted className="text-lg mb-12">
-          {summary && summary.text}
-        </TypographyMuted>
-        <TypographyH3>Items Gained</TypographyH3>
-        <ItemsGained />
-      </div>
-    </SheetContent>
-  </Sheet>
-);
+      </SheetContent>
+    </Sheet>
+  );
+};
 
 export default EndSheet;
