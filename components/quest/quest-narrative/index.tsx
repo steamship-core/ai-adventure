@@ -7,14 +7,42 @@ import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
-import { SendIcon } from "lucide-react";
+import { ArrowDown, SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { useRecoilState } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import { NarrativeBlock } from "./narrative-block";
 import { UserInputBlock } from "./user-input-block";
 import { ExtendedBlock, getFormattedBlocks } from "./utils";
+
+const ScrollButton = () => {
+  const { ref, inView } = useInView();
+
+  const scrollToBottom = () => {
+    const container = document.getElementById("narrative-container");
+    container?.scrollTo({
+      top: container.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <>
+      <div ref={ref} />
+      {!inView && (
+        <Button
+          onClick={scrollToBottom}
+          variant="outline"
+          className="absolute bottom-4 right-4 rounded-full aspect-square !p-2"
+        >
+          <ArrowDown size={16} />
+        </Button>
+      )}
+    </>
+  );
+};
 
 export default function QuestNarrative({
   id,
@@ -89,8 +117,9 @@ export default function QuestNarrative({
   let nonPersistedUserInput: string | null = null;
   return (
     <>
-      <div className="flex basis-11/12 overflow-hidden">
+      <div className="flex basis-11/12 overflow-hidden relative">
         <QuestNarrativeContainer>
+          <ScrollButton />
           {messages
             .map((message) => {
               if (message.role === "user") {
