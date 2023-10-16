@@ -20,11 +20,10 @@ import {
 import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
 import { TypographyP } from "./ui/typography/TypographyP";
-import { TypographySmall } from "./ui/typography/TypographySmall";
 
 const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
-
+  console.log(gameState);
   const [selectedToSell, setSelectedToSell] = useState<Item[]>([]);
   const [selectedToBuy, setSelectedToBuy] = useState<Item[]>([]);
   const [isTrading, setIsTrading] = useState(false);
@@ -85,25 +84,29 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0"
+        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6"
       >
         <SheetHeader>
           <SheetDescription>
-            <div className="flex gap-6">
+            <div className="flex gap-4 hover:bg-foreground/10 rounded-md">
               <div>
-                <div className="flex flex-col justify-end items-center relative overflow-hidden h-32 w-32 rounded-md border border-yellow-600/90">
+                <div className="relative overflow-hidden h-20 md:h-24 aspect-square rounded-md border border-blue-foreground/90">
                   <Image
                     src={"/merchant.png"}
                     fill
                     alt="A merchant"
                     className="object-cover z-10"
                   />
-                  <TypographySmall className="mt-2 z-20 bg-yellow-600/90 py-1 w-full text-primary">
-                    {member.name}
-                  </TypographySmall>
                 </div>
               </div>
-              <div className="text-left">{member.description}</div>
+              <div className="flex flex-col items-start text-start">
+                <TypographyLarge className="text-foreground">
+                  {member.name}
+                </TypographyLarge>
+                <TypographyMuted className="md:w-[75%]">
+                  {member.description}
+                </TypographyMuted>
+              </div>
             </div>
           </SheetDescription>
         </SheetHeader>

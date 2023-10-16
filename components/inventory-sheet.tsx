@@ -22,7 +22,7 @@ const InventorySheet = ({ children }: { children: ReactNode }) => {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0"
+        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6"
       >
         <SheetHeader>
           <SheetTitle>Inventory</SheetTitle>

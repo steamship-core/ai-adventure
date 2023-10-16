@@ -10,7 +10,6 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
-import { Switch } from "./ui/switch";
 import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
 
@@ -42,7 +41,7 @@ export const InventoryList = ({
   if (useGridView) {
     return (
       <>
-        <Switch checked={useGridView} onCheckedChange={toggleGridView} />
+        {/* <Switch checked={useGridView} onCheckedChange={toggleGridView} /> */}
 
         <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
           {inventory?.map((item, i) => (
@@ -69,7 +68,7 @@ export const InventoryList = ({
 
   return (
     <>
-      <Switch checked={useGridView} onCheckedChange={toggleGridView} />
+      {/* <Switch checked={useGridView} onCheckedChange={toggleGridView} /> */}
 
       <div className="flex w-full overflow-hidden">
         <div className="w-full flex flex-col gap-5 mt-8 pb-8">
