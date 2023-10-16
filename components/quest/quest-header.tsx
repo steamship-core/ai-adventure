@@ -30,8 +30,8 @@ export const QuestHeader = ({
       )}
       <div className="flex items-center justify-center">
         <InventorySheet>
-          <Button variant="outline">
-            <PackageIcon size={16} className="mr-2" />
+          <Button variant="outline" size="icon">
+            <PackageIcon size={16} />
           </Button>
         </InventorySheet>
       </div>
