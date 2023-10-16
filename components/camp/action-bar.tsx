@@ -1,3 +1,5 @@
+"use client";
+import { track } from "@vercel/analytics/react";
 import { CompassIcon, PackageIcon } from "lucide-react";
 import InventorySheet from "../inventory-sheet";
 import { Button } from "../ui/button";
@@ -9,7 +11,13 @@ export const ActionBar = () => {
       <div className="flex w-full  flex-col justify-center items-center gap-2">
         <StartAdventureButton />
         <InventorySheet>
-          <Button variant="outline" className="w-full flex justify-start">
+          <Button
+            onClick={(e) =>
+              track("Click Button", { buttonName: "View Inventory" })
+            }
+            variant="outline"
+            className="w-full flex justify-start"
+          >
             <PackageIcon size={16} className="h-6 w-6 mr-2" />
             View Inventory
           </Button>
