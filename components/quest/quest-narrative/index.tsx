@@ -15,7 +15,12 @@ import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import { NarrativeBlock } from "./narrative-block";
 import { UserInputBlock } from "./user-input-block";
-import { ExtendedBlock, getFormattedBlocks } from "./utils";
+import {
+  ExtendedBlock,
+  MessageTypes,
+  getFormattedBlocks,
+  getMessageType,
+} from "./utils";
 
 const ScrollButton = () => {
   const { ref, inView } = useInView();
@@ -111,6 +116,21 @@ export default function QuestNarrative({
     }
   }, []);
 
+  // TODO: This is duplicated work.
+  // TODO: Extend to work with dynamically generated blocks -- that will requireus to know the STEAMSHIP_API_BASE
+  useEffect(() => {
+    if (setBackgroundMusicUrl) {
+      if (priorBlocks) {
+        for (let block of priorBlocks) {
+          if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
+            console.log("Setting music", block.streamingUrl);
+            (setBackgroundMusicUrl as any)(block.streamingUrl);
+          }
+        }
+      }
+    }
+  }, [priorBlocks]);
+
   let nonPersistedUserInput: string | null = null;
   return (
     <>
@@ -132,7 +152,6 @@ export default function QuestNarrative({
                   blocks={getFormattedBlocks(message, nonPersistedUserInput)}
                   onSummary={onSummary}
                   onComplete={onComplete}
-                  setBackgroundAudio={setBackgroundMusicUrl as any}
                 />
               );
             })
@@ -143,7 +162,6 @@ export default function QuestNarrative({
               offerAudio={offerAudio}
               onSummary={onSummary}
               onComplete={onComplete}
-              setBackgroundAudio={setBackgroundMusicUrl as any}
             />
           )}
         </QuestNarrativeContainer>

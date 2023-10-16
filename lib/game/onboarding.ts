@@ -2,7 +2,6 @@ import { getSteamshipClient } from "../utils";
 
 export const completeOnboarding = async (agentBase: string) => {
   const steamship = getSteamshipClient();
-  console.log("Try to complete on boarding", agentBase);
   const res = await steamship.agent.post({
     url: agentBase,
     path: "/complete_onboarding",
@@ -12,7 +11,7 @@ export const completeOnboarding = async (agentBase: string) => {
     console.log("Complete onboarding not ok");
     console.log(await res.text());
   } else {
-    console.log("Compelte onboarding: ", res.ok);
+    console.log("Completed onboarding: ", res.ok);
   }
   return res;
 };

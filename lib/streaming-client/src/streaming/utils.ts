@@ -46,7 +46,6 @@ const streamToString = async (stream: ReadableStream<string>) => {
         break;
       }
       ret += value;
-      console.log("Streaming Chunk", value);
     } catch (e) {
       console.log(e);
     }
