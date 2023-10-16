@@ -50,6 +50,7 @@ export default async function CampPage() {
       gameState={gameState}
       narrationAudioState={false}
       backgroundAudioState={false}
+      backgroundAudioUrlState={"/music.wav"}
     >
       <AudioProvider>
         <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">

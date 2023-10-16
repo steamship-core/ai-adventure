@@ -25,25 +25,46 @@ export const recoilGameState = atom({
 
 export const recoilBackgroundAudioState = atom({
   key: "BackgroundAudioState",
-  default: false,
+  default: localStorage.getItem("BackgroundAudioState") === "true",
   effects: [localStorageEffect("BackgroundAudioState")],
+});
+
+export const recoilBackgroundAudioUrlState = atom<string | undefined>({
+  key: "BackgroundAudioUrl",
+  default: undefined,
 });
 
 export const recoilNarrationAudioState = atom({
   key: "NarrationAudioState",
-  default: false,
+  default: localStorage.getItem("NarrationAudioState") === "true",
   effects: [localStorageEffect("NarrationAudioState")],
+});
+
+export const recoilNarrationAudioUrlState = atom<string | undefined>({
+  key: "NarrationAudioUrl",
+  default: undefined,
+});
+
+export const recoilNarrationBlockIdState = atom<string[]>({
+  key: "NarrationBlockIds",
+  default: [],
 });
 
 function initializeState(
   set: SetRecoilState,
   gameState: GameState,
   backgroundAudioState: boolean,
-  narrationAudioState: boolean
+  narrationAudioState: boolean,
+  backgroundAudioUrl?: string,
+  narrationAudioUrl?: string,
+  narrationBlockId?: string
 ) {
   set(recoilGameState, gameState);
   set(recoilNarrationAudioState, narrationAudioState);
   set(recoilBackgroundAudioState, backgroundAudioState);
+  set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
+  set(recoilNarrationAudioUrlState, narrationAudioUrl);
+  set(recoilNarrationBlockIdState, narrationBlockId);
 }
 
 function RecoilProvider({
@@ -51,11 +72,17 @@ function RecoilProvider({
   gameState,
   backgroundAudioState,
   narrationAudioState,
+  backgroundAudioUrlState,
+  narrationAudioUrlState,
+  narrationBlockIdState,
 }: {
   children: ReactNode;
   gameState: GameState;
   backgroundAudioState: boolean;
   narrationAudioState: boolean;
+  backgroundAudioUrlState?: string;
+  narrationAudioUrlState?: string;
+  narrationBlockIdState?: string;
 }) {
   return (
     <RecoilRoot
@@ -64,7 +91,10 @@ function RecoilProvider({
           set,
           gameState,
           backgroundAudioState,
-          narrationAudioState
+          narrationAudioState,
+          backgroundAudioUrlState,
+          narrationAudioUrlState,
+          narrationBlockIdState
         )
       }
     >

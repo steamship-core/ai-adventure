@@ -28,6 +28,7 @@ export default async function QuestPage() {
       gameState={gameState}
       narrationAudioState={false}
       backgroundAudioState={false}
+      backgroundAudioUrlState={"/music.wav"}
     >
       <AudioProvider>
         <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />;
