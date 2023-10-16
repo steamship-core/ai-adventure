@@ -4,7 +4,6 @@ import { levels } from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../recoil-provider";
@@ -76,8 +75,8 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
         {mini === true ? (
           <button className="text-left h-full">
             <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
-              <Image
-                src={"/orc.png"}
+              <img
+                src={gameState?.profile_image_url}
                 height={1024}
                 width={1024}
                 alt="Character"
@@ -88,8 +87,8 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           <button className="flex gap-4 items-start text-left h-full">
             <div className="flex items-center justify-center h-full">
               <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
-                <Image
-                  src={"/orc.png"}
+                <img
+                  src={gameState?.profile_image_url}
                   height={1024}
                   width={1024}
                   alt="Character"
@@ -119,8 +118,8 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           <div className="flex items-center justify-center flex-col w-full gap-2">
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
-              <Image
-                src={"/orc.png"}
+              <img
+                src={gameState?.profile_image_url}
                 height={1024}
                 width={1024}
                 alt="Character"
@@ -142,14 +141,16 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           </div>
           <div className="flex flex-col gap-4">
             <div>
-              <TypographyH3>Explorer</TypographyH3>
-              <div className="w-full">
-                <Progress
-                  value={33}
-                  className="h-2 border border-foreground/20"
-                />
-              </div>
-              <TypographyMuted>4 adventures until next rank</TypographyMuted>
+              <TypographyH3>
+                {getLevel()} ({gameState?.player?.rank})
+              </TypographyH3>
+              <Progress
+                value={(((rank - 1) % 4) / 4) * 100}
+                className="h-2 border border-foreground/20"
+              />
+              <TypographyMuted className="text-xs md:text-sm ">
+                {4 - (((rank - 1) % 4) / 4) * 100} levels until next rank
+              </TypographyMuted>
             </div>
             <div>
               <TypographyH3>Background</TypographyH3>

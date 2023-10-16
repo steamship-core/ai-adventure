@@ -15,6 +15,8 @@ const StartAdventureButton = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { loadingScreen, setIsVisible } = useLoadingScreen();
   const gameState = useRecoilValue(recoilGameState);
+  console.log(gameState);
+
   const onClick = async () => {
     setIsVisible(true);
     setIsLoading(true);

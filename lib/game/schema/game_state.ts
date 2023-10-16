@@ -28,4 +28,5 @@ export type GameState = {
 
   /** The active mode of the game */
   active_mode: "onboarding" | "camp" | "quest" | "npc-conversation";
+  profile_image_url: string;
 };
