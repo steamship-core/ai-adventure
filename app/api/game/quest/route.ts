@@ -49,6 +49,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   }
 
+  console.log(`Loading quest ${questId} from ${agent!.agentUrl}`);
+
   try {
     const blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
     console.log(JSON.stringify(blocks, undefined, 2));

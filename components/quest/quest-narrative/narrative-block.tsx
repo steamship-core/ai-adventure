@@ -20,11 +20,13 @@ export const NarrativeBlock = ({
   blocks,
   onSummary,
   onComplete,
+  offerAudio,
   setBackgroundAudio,
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
   onComplete: () => void;
+  offerAudio?: boolean;
   setBackgroundAudio: (url: string) => void;
 }) => {
   // Begin Debug Information State Management
@@ -46,7 +48,12 @@ export const NarrativeBlock = ({
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return (
-            <TextBlock key={block.id} blockId={block.id} text={block.text!} />
+            <TextBlock
+              key={block.id}
+              offerAudio={offerAudio}
+              blockId={block.id}
+              text={block.text!}
+            />
           );
         case MessageTypes.STATUS_MESSAGE:
           return <StatusDebugBlock key={block.id} block={block} />;
@@ -57,6 +64,7 @@ export const NarrativeBlock = ({
             <TextBlock
               key={block.id}
               blockId={block.id}
+              offerAudio={offerAudio}
               text={block.text || ""}
             />
           );
