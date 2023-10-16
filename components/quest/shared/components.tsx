@@ -13,7 +13,7 @@ export const QuestNarrativeContainer = ({
 }) => (
   <main
     id="narrative-container"
-    className="flex flex-col-reverse overflow-auto gap-8 pt-8 pb-4 h-full w-full relative"
+    className="flex flex-col-reverse overflow-auto gap-8 pt-8 pb-4 h-full w-full"
   >
     {children}
   </main>
