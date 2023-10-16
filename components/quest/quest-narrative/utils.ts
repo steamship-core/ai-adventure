@@ -25,7 +25,8 @@ export type ExtendedBlock = Block & {
 };
 
 export const getMessageType = (block: Block) => {
-  console.log(block);
+  console.log(block.tags?.find((tag) => tag.kind === "scene"));
+
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
   }

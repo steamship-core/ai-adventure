@@ -79,7 +79,6 @@ export const NarrativeBlock = ({
             return null;
           }
         case MessageTypes.STREAMING_BLOCK:
-          console.log("block", block);
           return <StreamingBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_COMPLETE:
           return (
