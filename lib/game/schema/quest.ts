@@ -24,4 +24,5 @@ export type Quest = {
 
   /** The change in rank that resulted from this quest. */
   rank_delta?: number;
+  gold_delta?: number;
 };
