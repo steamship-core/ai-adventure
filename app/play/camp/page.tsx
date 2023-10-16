@@ -47,7 +47,6 @@ export default async function CampPage() {
   return (
     <RecoilProvider
       gameState={gameState}
-      narrationAudioState={false}
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >
