@@ -16,7 +16,7 @@ export const TextBlock = ({
   };
 
   return (
-    <p data-blocktype="text-block" className="whitespace-pre-wrap text-sm">
+    <p data-blocktype="text-block" className="whitespace-pre-wrap text-normal">
       {text} {blockId && <Volume2Icon onClick={play} />}
     </p>
   );

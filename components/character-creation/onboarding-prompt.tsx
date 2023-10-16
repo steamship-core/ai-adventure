@@ -93,7 +93,6 @@ const OnboardingPrompt = ({
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
-    delay: 0,
   });
   const [value, setValue] = useState("");
   const formRef = useRef<HTMLFormElement>(null);

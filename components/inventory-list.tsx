@@ -118,6 +118,11 @@ export const InventoryList = ({
               </div>
             </div>
           ))}
+          {inventory.length === 0 && (
+            <div className="w-full flex flex-col items-center justify-center">
+              There&apos;s nothing here ... yet.
+            </div>
+          )}
         </div>
       </div>
     </>
