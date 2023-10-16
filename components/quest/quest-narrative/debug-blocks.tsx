@@ -1,5 +1,5 @@
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { useDebugMode } from "@/lib/hooks";
+import { useDebugModeSetting } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,7 @@ export const DebugBlock = ({
   className: string;
   title: string;
 }) => {
-  const { isDebugMode } = useDebugMode();
+  const [isDebugMode, _] = useDebugModeSetting();
   if (!isDebugMode) {
     return null;
   }

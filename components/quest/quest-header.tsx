@@ -3,6 +3,7 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
 import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
+import AudioSheet from "../audio-sheet";
 import InventorySheet from "../inventory-sheet";
 import { Button } from "../ui/button";
 
@@ -31,6 +32,7 @@ export const QuestHeader = ({
         <span />
       )}
       <div className="flex items-center justify-center">
+        <AudioSheet text="" /> &nbsp;
         <InventorySheet gameState={gameState} text="" />
       </div>
     </div>

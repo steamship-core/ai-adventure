@@ -1,7 +1,7 @@
 "use client";
 
 import { levels } from "@/lib/game/levels";
-import { useDebugMode } from "@/lib/hooks";
+import { useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import Image from "next/image";
@@ -19,7 +19,7 @@ import { TypographyP } from "../ui/typography/TypographyP";
 
 export const CharacterSheet = () => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
-  const { isDebugMode, setIsDebugMode } = useDebugMode();
+  const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
 
   const rank = gameState?.player?.rank || 0;
 
@@ -155,7 +155,11 @@ export const CharacterSheet = () => {
             <div>
               <TypographyH3>Account</TypographyH3>
               <TypographyMuted>Show Debug Information</TypographyMuted>
-              <Switch checked={isDebugMode} onCheckedChange={setIsDebugMode} />
+              <Switch
+                checked={isDebugMode === true}
+                onCheckedChange={setIsDebugMode as any}
+              />
+
               <Button onClick={(e) => setEnergyTo100}>Set Energy to 100</Button>
 
               <div className="mt-2">

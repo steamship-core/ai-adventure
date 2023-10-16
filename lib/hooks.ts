@@ -1,24 +1,27 @@
 import { useEffect, useState } from "react";
 
-export const useDebugMode = () => {
-  const showDebugInformationKey = "showDebugInformation";
-  const [isDebugMode, _setIsDebugMode] = useState(false);
+export const _useLocalstoreBoolean = (key: string) => {
+  const [value, _setValue] = useState<boolean>(false);
 
   useEffect(() => {
-    const preference = localStorage.getItem(showDebugInformationKey);
+    const preference = localStorage.getItem(key);
     if (preference) {
-      _setIsDebugMode(true);
+      _setValue(true);
     }
   }, []);
 
-  const setIsDebugMode = (isEnabled: boolean) => {
-    if (!isEnabled) {
-      localStorage.removeItem(showDebugInformationKey);
+  const setValue = (isEnabled: boolean) => {
+    if (!(isEnabled === true)) {
+      localStorage.removeItem(key);
     } else {
-      localStorage.setItem(showDebugInformationKey, "true");
+      localStorage.setItem(key, "true");
     }
-    _setIsDebugMode(isEnabled);
+    _setValue(isEnabled === true);
   };
 
-  return { isDebugMode, setIsDebugMode };
+  return [value, setValue];
+};
+
+export const useDebugModeSetting = () => {
+  return _useLocalstoreBoolean("showDebugInformation");
 };

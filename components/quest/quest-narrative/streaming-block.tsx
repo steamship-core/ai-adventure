@@ -1,12 +1,12 @@
 "use client";
-import { useDebugMode } from "@/lib/hooks";
+import { useDebugModeSetting } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { TextBlock } from "./text-block";
 import { useBlockStream } from "./use-block-stream";
 
 export const StreamingBlock = ({ block }: { block: Block }) => {
   const text = useBlockStream({ blockId: block.id });
-  const { isDebugMode } = useDebugMode();
+  const [isDebugMode, _] = useDebugModeSetting();
 
   // if (!isDebugMode) {
   // return (

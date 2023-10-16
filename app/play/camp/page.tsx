@@ -1,3 +1,4 @@
+import { AudioProvider } from "@/components/audio-provider";
 import { CampMembers } from "@/components/camp/camp-members";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { ContentBox } from "@/components/camp/content-box";
@@ -45,37 +46,43 @@ export default async function CampPage() {
   };
 
   return (
-    <RecoilProvider gameState={gameState}>
-      <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">
-        <Image
-          fill
-          sizes="100vw"
-          src={randomlyGetBackground()}
-          alt="background"
-          className="object-cover -z-10"
-        />
-        <div className="h-full flex flex-col">
-          <div className="flex flex-col flex-grow justify-between max-w-5xl w-full mx-auto">
-            <ContentBox>
-              <div className="flex justify-between">
-                <div>
-                  <CharacterSheet />
+    <RecoilProvider
+      gameState={gameState}
+      narrationAudioState={false}
+      backgroundAudioState={false}
+    >
+      <AudioProvider>
+        <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">
+          <Image
+            fill
+            sizes="100vw"
+            src={randomlyGetBackground()}
+            alt="background"
+            className="object-cover -z-10"
+          />
+          <div className="h-full flex flex-col">
+            <div className="flex flex-col flex-grow justify-between max-w-5xl w-full mx-auto">
+              <ContentBox>
+                <div className="flex justify-between">
+                  <div>
+                    <CharacterSheet />
+                  </div>
+                  <SummaryStats />
                 </div>
-                <SummaryStats />
-              </div>
-              <div className="mt-4">
-                <CampMembers />
-              </div>
-            </ContentBox>
-            <ContentBox>
-              <div className="flex flex-col gap-2">
-                <StartAdventureButton />
-                <InventorySheet gameState={gameState} />
-              </div>
-            </ContentBox>
+                <div className="mt-4">
+                  <CampMembers />
+                </div>
+              </ContentBox>
+              <ContentBox>
+                <div className="flex flex-col gap-2">
+                  <StartAdventureButton />
+                  <InventorySheet gameState={gameState} />
+                </div>
+              </ContentBox>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </AudioProvider>
     </RecoilProvider>
   );
 }
