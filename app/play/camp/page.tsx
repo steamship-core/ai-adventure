@@ -1,10 +1,8 @@
-import { AudioProvider } from "@/components/audio-provider";
+import { BackgroundAudio } from "@/components/audio-provider";
+import { ActionBar } from "@/components/camp/action-bar";
 import { CampMembers } from "@/components/camp/camp-members";
 import { CharacterSheet } from "@/components/camp/character-sheet";
-import { ContentBox } from "@/components/camp/content-box";
-import StartAdventureButton from "@/components/camp/start-adventure-button";
 import { SummaryStats } from "@/components/camp/summary-stats";
-import InventorySheet from "@/components/inventory-sheet";
 import RecoilProvider from "@/components/recoil-provider";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
@@ -52,38 +50,36 @@ export default async function CampPage() {
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >
-      <AudioProvider>
-        <main className="h-[100dvh] p-2 md:p-6 pt-0 relative">
-          <Image
-            fill
-            sizes="100vw"
-            src={randomlyGetBackground()}
-            alt="background"
-            className="object-cover -z-10"
-          />
-          <div className="h-full flex flex-col">
-            <div className="flex flex-col flex-grow justify-between max-w-5xl w-full mx-auto">
-              <ContentBox>
-                <div className="flex justify-between">
-                  <div>
-                    <CharacterSheet />
-                  </div>
-                  <SummaryStats />
-                </div>
-                <div className="mt-4">
-                  <CampMembers />
-                </div>
-              </ContentBox>
-              <ContentBox>
-                <div className="flex flex-col gap-2">
-                  <StartAdventureButton />
-                  <InventorySheet gameState={gameState} />
-                </div>
-              </ContentBox>
+      <main className="h-[100dvh] w-full">
+        <div className="h-full flex flex-col justify-between max-w-4xl mx-auto p-6 gap-6">
+          <div className="flex flex-col gap-6 h-[80%]">
+            <div className="flex justify-between items-center">
+              <div>
+                <CharacterSheet />
+              </div>
+              <SummaryStats />
+            </div>
+            <div className="">
+              <div className="relative rounded-lg overflow-hidden w-full aspect-video">
+                <Image
+                  fill
+                  sizes="100vw"
+                  src={randomlyGetBackground()}
+                  alt="background"
+                  className="object-cover -z-10"
+                />
+              </div>
+            </div>
+            <div className="overflow-scroll flex flex-grow flex-col">
+              <CampMembers />
             </div>
           </div>
-        </main>
-      </AudioProvider>
+          <div>
+            <ActionBar />
+          </div>
+        </div>
+      </main>
+      <BackgroundAudio />
     </RecoilProvider>
   );
 }

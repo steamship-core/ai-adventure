@@ -1,6 +1,6 @@
 "use client";
 import { Quest } from "@/lib/game/schema/quest";
-import { CompassIcon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import { log } from "next-axiom";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -64,9 +64,10 @@ const StartAdventureButton = () => {
         onClick={onClick}
         isLoading={isLoading}
         disabled={isLoading || lowEnergy}
+        className="w-full flex justify-start"
       >
-        <CompassIcon className="mr-2" size={16} />
-        Go on an adventure{lowEnergy ? " (low energy)" : ""}
+        <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
+        Go on an Adventure
       </Button>
       {loadingScreen}
     </>

@@ -16,14 +16,11 @@ export default async function CharacterCreationPage() {
   let agent = await getAgent(userId);
 
   if (!agent) {
-    console.log("creating agent");
     agent = await createAgent(userId);
-    console.log("agent", agent);
     return <CharacterCreation />;
   } else {
     // We already have an agent. Need to check if we're still onboarding.
     let gameState = await getGameState(agent.agentUrl);
-    console.log("gameState", gameState);
     if (gameState.active_mode == "onboarding") {
       return <CharacterCreation />;
     } else {

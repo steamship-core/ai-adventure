@@ -51,7 +51,6 @@ export async function GET(request: Request) {
 
   try {
     const blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
-    console.log("Existing Blocks", JSON.stringify(blocks));
     return NextResponse.json({ blocks }, { status: 200 });
   } catch (e) {
     console.error(e);

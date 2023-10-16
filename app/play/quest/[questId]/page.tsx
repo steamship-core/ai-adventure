@@ -1,4 +1,4 @@
-import { AudioProvider } from "@/components/audio-provider";
+import { BackgroundAudio } from "@/components/audio-provider";
 import Quest from "@/components/quest/quest";
 import RecoilProvider from "@/components/recoil-provider";
 import { getAgent } from "@/lib/agent/agent.server";
@@ -22,7 +22,6 @@ export default async function QuestPage() {
   }
 
   const gameState = await getGameState(agent?.agentUrl);
-
   return (
     <RecoilProvider
       gameState={gameState}
@@ -30,9 +29,8 @@ export default async function QuestPage() {
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >
-      <AudioProvider>
-        <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />;
-      </AudioProvider>
+      <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />
+      <BackgroundAudio />
     </RecoilProvider>
   );
 }

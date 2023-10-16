@@ -1,4 +1,11 @@
+"use client";
+
+import {
+  recoilBackgroundAudioState,
+  recoilBackgroundAudioUrlState,
+} from "@/components/recoil-provider";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 export const _useLocalstoreBoolean = (key: string) => {
   const [value, _setValue] = useState<boolean>(false);
@@ -24,4 +31,10 @@ export const _useLocalstoreBoolean = (key: string) => {
 
 export const useDebugModeSetting = () => {
   return _useLocalstoreBoolean("showDebugInformation");
+};
+
+export const useBackgroundMusic = () => {
+  const [isAllowed, setAllowed] = useRecoilState(recoilBackgroundAudioState);
+  const [url, setUrl] = useRecoilState(recoilBackgroundAudioUrlState);
+  return [isAllowed, setAllowed, url, setUrl];
 };

@@ -27,6 +27,11 @@ export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
   }
+  if (
+    block.tags?.find((tag) => tag.name === "background" && tag.kind === "scene")
+  ) {
+    return MessageTypes.IMAGE;
+  }
   if (block.tags?.find((tag) => tag.name === "quest-complete")) {
     return MessageTypes.QUEST_COMPLETE;
   }
