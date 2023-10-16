@@ -1,4 +1,4 @@
-import { Block } from "@/lib/streaming-client/src";
+import { ExtendedBlock } from "@/components/quest/quest-narrative/utils";
 import { getSteamshipClient } from "../utils";
 import { Quest } from "./schema/quest";
 
@@ -17,9 +17,6 @@ export const loadExistingQuestBlocks = async (
   agentBase: string,
   questId: string
 ) => {
-  console.log("Agent Base", agentBase);
-  console.log("QuestId", questId);
-
   const steamship = getSteamshipClient();
   const resp = await steamship.agent.post({
     url: agentBase,
@@ -28,6 +25,10 @@ export const loadExistingQuestBlocks = async (
       quest_id: questId,
     },
   });
-  const blocks = await resp.json();
-  return blocks as Block[];
+  let blocks = (await resp.json()) as ExtendedBlock[];
+  return blocks.map((block) => {
+    block.streamingUrl = `${process.env.STEAMSHIP_API_BASE}block/${block.id}/raw`;
+    block.historical = true;
+    return block;
+  });
 };
