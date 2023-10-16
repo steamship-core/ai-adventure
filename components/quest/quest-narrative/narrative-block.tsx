@@ -19,10 +19,12 @@ export const NarrativeBlock = ({
   blocks,
   onSummary,
   onComplete,
+  setBackgroundAudio,
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
   onComplete: () => void;
+  setBackgroundAudio: (url: string) => void;
 }) => {
   // Begin Debug Information State Management
   try {
@@ -89,6 +91,12 @@ export const NarrativeBlock = ({
           return <ItemGenerationBlock key={block.id} block={block} />;
         case MessageTypes.IMAGE:
           return <ImageBlock key={block.id} block={block} />;
+        case MessageTypes.SCENE_AUDIO:
+          console.log("SCENE");
+          console.log(block);
+          // const blockUrl = block.setBackgroundAudio();
+          // TODO SET AUDIO
+          return null;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
       }

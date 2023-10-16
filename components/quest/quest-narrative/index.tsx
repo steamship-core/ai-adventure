@@ -2,6 +2,7 @@
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
+import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
@@ -32,6 +33,7 @@ export default function QuestNarrative({
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
 
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
@@ -100,6 +102,7 @@ export default function QuestNarrative({
                   blocks={getFormattedBlocks(message, nonPersistedUserInput)}
                   onSummary={onSummary}
                   onComplete={onComplete}
+                  setBackgroundAudio={setBackgroundMusicUrl as any}
                 />
               );
             })
@@ -109,6 +112,7 @@ export default function QuestNarrative({
               blocks={priorBlocks.reverse()}
               onSummary={onSummary}
               onComplete={onComplete}
+              setBackgroundAudio={setBackgroundMusicUrl as any}
             />
           )}
         </QuestNarrativeContainer>

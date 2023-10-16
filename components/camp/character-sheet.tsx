@@ -9,6 +9,7 @@ import {
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { Button } from "../ui/button";
@@ -24,6 +25,7 @@ import { TypographyP } from "../ui/typography/TypographyP";
 export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
+  const { push } = useRouter();
 
   const rank = gameState?.player?.rank || 0;
 
@@ -45,6 +47,20 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     } else {
       let newGameState = await response.json();
       setGameState(newGameState);
+    }
+  };
+
+  const resetCharacter = async () => {
+    const response = await fetch("/api/game/debug", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "reset",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      push("/");
     }
   };
 
@@ -202,6 +218,16 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 }}
               >
                 Set Energy to 100
+              </Button>
+
+              <br />
+
+              <Button
+                onClick={(e) => {
+                  resetCharacter();
+                }}
+              >
+                Reset Character
               </Button>
 
               <div className="mt-2">

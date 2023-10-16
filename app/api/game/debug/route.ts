@@ -1,10 +1,11 @@
-import { getAgent } from "@/lib/agent/agent.server";
+import { deleteAgent, getAgent } from "@/lib/agent/agent.server";
 import { getGameState, saveGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const { userId } = auth();
+
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
   }
 
   const { operation } = (await request.json()) as {
-    operation: "top-up-energy";
+    operation: "top-up-energy" | "reset";
   };
 
   try {
@@ -27,6 +28,10 @@ export async function POST(request: Request) {
       });
       gameState = await getGameState(agent?.agentUrl);
       return NextResponse.json(gameState);
+    } else if (operation == "reset") {
+      await deleteAgent(userId);
+      const hostName = new URL(request.url).host;
+      return NextResponse.json(true);
     } else {
       return NextResponse.json(
         { error: `Unknown operation: ${operation}` },

@@ -23,6 +23,15 @@ export const getAgent = async (
   });
 };
 
+export const deleteAgent = async (userId: string): Promise<number> => {
+  let res = await prisma.agents.deleteMany({
+    where: {
+      ownerId: userId!,
+    },
+  });
+  return res.count;
+};
+
 export const createAgent = async (
   userId: string
 ): Promise<
