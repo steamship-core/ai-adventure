@@ -21,13 +21,11 @@ export const NarrativeBlock = ({
   onSummary,
   onComplete,
   offerAudio,
-  setBackgroundAudio,
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
   onComplete: () => void;
   offerAudio?: boolean;
-  setBackgroundAudio: (url: string) => void;
 }) => {
   // Begin Debug Information State Management
   try {
@@ -79,7 +77,13 @@ export const NarrativeBlock = ({
             return null;
           }
         case MessageTypes.STREAMING_BLOCK:
-          return <StreamingBlock key={block.id} block={block} />;
+          return (
+            <StreamingBlock
+              key={block.id}
+              offerAudio={offerAudio}
+              block={block}
+            />
+          );
         case MessageTypes.QUEST_COMPLETE:
           return (
             <CompletionBlock
@@ -101,17 +105,13 @@ export const NarrativeBlock = ({
         case MessageTypes.IMAGE:
           return <ImageBlock key={block.id} block={block} />;
         case MessageTypes.SCENE_AUDIO:
-          if (block.streamingUrl) {
-            console.log(`Setting background music: ${block.streamingUrl}`);
-            setBackgroundAudio(block.streamingUrl);
-          }
           return <BackgroundAudioBlock key={block.id} block={block} />;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
       }
     });
   } catch (e) {
-    console.log(e);
+    console.log(`Error ${e}`);
     return null;
   }
 };
