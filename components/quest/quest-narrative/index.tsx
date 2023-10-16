@@ -3,6 +3,7 @@
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { Input } from "@/components/ui/input";
 import { Block } from "@/lib/streaming-client/src";
+import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
 import { SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -131,6 +132,9 @@ export default function QuestNarrative({
               e.preventDefault();
               e.stopPropagation();
               inputRef?.current?.focus();
+              track("Send Message", {
+                location: "Quest",
+              });
               handleSubmit(e);
             }}
           >

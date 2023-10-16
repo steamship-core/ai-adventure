@@ -12,9 +12,12 @@ export const ActionBar = () => {
         <StartAdventureButton />
         <InventorySheet>
           <Button
-            onClick={(e) =>
-              track("Click Button", { buttonName: "View Inventory" })
-            }
+            onClick={(e) => {
+              track("Click Button", {
+                buttonName: "View Inventory",
+                location: "Camp",
+              });
+            }}
             variant="outline"
             className="w-full flex justify-start"
           >
@@ -22,7 +25,16 @@ export const ActionBar = () => {
             View Inventory
           </Button>
         </InventorySheet>
-        <Button variant="outline" className="w-full flex justify-start">
+        <Button
+          onClick={(e) => {
+            track("Click Button", {
+              buttonName: "Adventure History",
+              location: "Camp",
+            });
+          }}
+          variant="outline"
+          className="w-full flex justify-start"
+        >
           <CompassIcon size={16} className="h-6 w-6 mr-2" />
           Adventure History
         </Button>

@@ -2,6 +2,7 @@
 import { getGameState } from "@/lib/game/game-state.client";
 import { NpcCharacter } from "@/lib/game/schema/characters";
 import { Item } from "@/lib/game/schema/objects";
+import { track } from "@vercel/analytics/react";
 import { CoinsIcon, PackageIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -33,6 +34,12 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
     const counter_party = member.name;
     const sell = selectedToSell.map((item) => item.name);
     const buy = selectedToBuy.map((item) => item.name);
+    track("Trade Item", {
+      buttonName: "Complete Trade",
+      location: "Camp",
+      itemsToSell: sell.length,
+      itemsToBuy: buy.length,
+    });
     await fetch("/api/game/trade", {
       method: "POST",
       body: JSON.stringify({
@@ -51,7 +58,15 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button className="flex gap-4 hover:bg-foreground/10 rounded-md">
+        <button
+          onClick={() => {
+            track("Click Camp Member", {
+              buttonName: member.name,
+              location: "Camp",
+            });
+          }}
+          className="flex gap-4 hover:bg-foreground/10 rounded-md"
+        >
           <div>
             <div className="relative overflow-hidden h-20 md:h-24 aspect-square rounded-md border border-blue-foreground/90">
               <Image

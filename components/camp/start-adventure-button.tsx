@@ -1,5 +1,6 @@
 "use client";
 import { Quest } from "@/lib/game/schema/quest";
+import { track } from "@vercel/analytics/react";
 import { SparklesIcon } from "lucide-react";
 import { log } from "next-axiom";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,10 @@ const StartAdventureButton = () => {
   const onClick = async () => {
     setIsVisible(true);
     setIsLoading(true);
+    track("Click Button", {
+      buttonName: "Go on an Adventure",
+      location: "Camp",
+    });
 
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode == "quest" && gameState?.current_quest) {
@@ -48,7 +53,7 @@ const StartAdventureButton = () => {
     }
 
     const questId = json.quest.name;
-    console.log(`Activating new quest: ${questId}`);
+
     log.debug(`Activating new quest: ${questId}`);
     if (questId) {
       router.push(`/play/quest/${questId}`);
