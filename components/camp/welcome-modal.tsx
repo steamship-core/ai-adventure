@@ -14,7 +14,7 @@ export const WelcomeModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  console.log(gameState);
+
   useEffect(() => {
     if (!isOpen) return;
     const loadProfilePic = async () => {

@@ -9,4 +9,5 @@ export type Item = {
    *
    */
   modifier?: number;
+  picture_url?: string;
 };

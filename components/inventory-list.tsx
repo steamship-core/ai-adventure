@@ -1,7 +1,6 @@
 import { Item } from "@/lib/game/schema/objects";
 import { cn } from "@/lib/utils";
 import { CheckIcon, InfoIcon, PackageIcon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -82,9 +81,8 @@ export const InventoryList = ({
                   onClick && onClick(item);
                 }}
               >
-                <Image
-                  src={"/orb.png"}
-                  fill
+                <img
+                  src={item?.picture_url}
                   alt={item.description!}
                   className="object-cover -z-10"
                 />

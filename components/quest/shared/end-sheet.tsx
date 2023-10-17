@@ -16,7 +16,7 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { Quest } from "@/lib/game/schema/quest";
-import { Block } from "@/lib/streaming-client/src/schema";
+import { Block } from "@/lib/streaming-client/src";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { BadgeDollarSignIcon, Loader2Icon, PackageIcon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -43,11 +43,17 @@ const ItemsGained = ({
   return (
     <div className="flex w-full mt-6 mb-6">
       {quest.new_items.map((item, i) => (
-        <div key={item.id} className="flex gap-4">
-          <div className="flex items-start justify-center pt-2">
-            <PackageIcon size={24} />
-          </div>
+        <div key={item.description} className="flex flex-col gap-2">
           <div>
+            <div className="rounded-md h-32 aspect-square relative overflow-hidden">
+              <img
+                src={item?.picture_url}
+                alt={item.description!}
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+          <div className="w-full flex flex-col">
             <TypographyLarge>{item.name}</TypographyLarge>
             <TypographyMuted>{item.description}</TypographyMuted>
           </div>
@@ -90,13 +96,13 @@ const EndSheet = ({
         side="bottom"
         className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
       >
-        <SheetHeader className="px-6">
+        <SheetHeader className="px-6 md:max-w-xl md:mx-auto text-center">
           <SheetTitle>Your Adventure as come to an end</SheetTitle>
           <SheetDescription>
             Great job, adventurer. Time to collect your rewards.
           </SheetDescription>
         </SheetHeader>
-        <div className="overflow-auto w-full px-6">
+        <div className="overflow-auto w-full px-6 md:max-w-xl md:mx-auto">
           <TypographyH1 className="text-center mt-12">
             Quest Completed
           </TypographyH1>
