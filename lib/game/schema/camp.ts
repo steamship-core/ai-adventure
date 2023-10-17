@@ -12,4 +12,5 @@ export type Camp = {
 
   /** The chat file id of the camp */
   chat_file_id?: string;
+  image_block_url?: string;
 };

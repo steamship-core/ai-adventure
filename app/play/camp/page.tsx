@@ -1,6 +1,7 @@
 import { CampMembers } from "@/camp-members";
 import { BackgroundAudio } from "@/components/audio-provider";
 import { ActionBar } from "@/components/camp/action-bar";
+import { CampImage } from "@/components/camp/camp-image";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
@@ -9,15 +10,7 @@ import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
-import Image from "next/image";
 import { redirect } from "next/navigation";
-
-const bgImages = [
-  "/campfire-dark.png",
-  "/campfire.png",
-  "/campfire-pixel.png",
-  "/campfire-art.png",
-];
 
 export default async function CampPage() {
   const { userId } = auth();
@@ -38,11 +31,6 @@ export default async function CampPage() {
     redirect("/play/character-creation");
   }
 
-  const randomlyGetBackground = () => {
-    const randomIndex = Math.floor(Math.random() * bgImages.length);
-    return bgImages[randomIndex];
-  };
-
   return (
     <RecoilProvider
       gameState={gameState}
@@ -60,17 +48,7 @@ export default async function CampPage() {
               </div>
               <SummaryStats />
             </div>
-            <div className="">
-              <div className="relative rounded-lg overflow-hidden w-full max-h-48 aspect-video -z-20">
-                <Image
-                  fill
-                  sizes="100vw"
-                  src={randomlyGetBackground()}
-                  alt="background"
-                  className="object-cover -z-10"
-                />
-              </div>
-            </div>
+            <CampImage />
             <div className="flex flex-grow flex-col overflow-auto">
               <CampMembers />
             </div>

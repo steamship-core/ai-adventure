@@ -11,6 +11,24 @@ const font = Barlow({
   display: "swap",
 });
 
+// import localFont from "next/font/local";
+
+// Font files can be colocated inside of `pages`
+// const font = localFont({
+//   src: [
+//     {
+//       path: "../lib/pixel_operator/PixelOperatorMono.ttf",
+//       weight: "400",
+//       style: "normal",
+//     },
+//     {
+//       path: "../lib/pixel_operator/PixelOperatorMono-Bold.ttf",
+//       weight: "700",
+//       style: "bold",
+//     },
+//   ],
+// });
+
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
@@ -29,6 +47,25 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+          />
+        </head>
         <body className={font.className}>
           <ThemeProvider
             attribute="class"
