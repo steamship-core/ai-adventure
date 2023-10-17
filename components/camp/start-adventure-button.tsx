@@ -26,7 +26,7 @@ const StartAdventureButton = () => {
     });
 
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
-    if (gameState?.active_mode == "quest" && gameState?.current_quest) {
+    if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
       router.push(`/play/quest/${gameState?.current_quest}`);
       setIsLoading(false);
@@ -73,7 +73,11 @@ const StartAdventureButton = () => {
         className="w-full flex justify-start"
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
-        Go on an Adventure
+        {gameState?.active_mode === "quest" && gameState?.current_quest ? (
+          <>Continue Adventure</>
+        ) : (
+          <>Go on an Adventure</>
+        )}
       </Button>
       {loadingScreen}
     </>
