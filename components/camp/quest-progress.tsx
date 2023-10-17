@@ -79,9 +79,9 @@ const QuestProgressElement = ({
 export const QuestProgress = () => {
   const gameState = useRecoilValue(recoilGameState);
   const questArc = gameState?.quest_arc || [];
-  const questCount = gameState.current_quest
-    ? gameState.quests.length - 1
-    : gameState.quests.length;
+  const questCount = gameState?.current_quest
+    ? gameState?.quests?.length - 1
+    : gameState?.quests?.length;
   console.log(gameState);
   // A horiztonally scrolling list of the players quest arc.
   // Each quest is represented by a card with the quest name and a progress bar.
