@@ -16,10 +16,10 @@ export const WelcomeModal = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) return;
     const loadProfilePic = async () => {
       setImageLoaded(false);
       const gs = await getGameState();
-      console.log("gs", gs);
       if (gs && gs.profile_image_url) {
         setProfilePic(gs.profile_image_url);
         setImageLoaded(true);
@@ -32,7 +32,7 @@ export const WelcomeModal = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [profilePic]);
+  }, [profilePic, isOpen]);
 
   useEffect(() => {
     if (gameState?.quests?.length > 0) {

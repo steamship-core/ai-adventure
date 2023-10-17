@@ -148,7 +148,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 className="h-2 border border-foreground/20"
               />
               <TypographyMuted className="text-xs md:text-sm ">
-                {4 - (((rank - 1) % 4) / 4) * 100} levels until next rank
+                {(100 - (((rank - 1) % 4) / 4) * 100) / 25} exp until next rank
               </TypographyMuted>
             </div>
             <div>
