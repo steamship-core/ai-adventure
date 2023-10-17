@@ -70,6 +70,8 @@ export default function QuestNarrative({
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
 
@@ -182,6 +184,7 @@ export default function QuestNarrative({
           />
         ) : (
           <form
+            ref={formRef}
             className="flex gap-2 w-full"
             onSubmit={(e) => {
               e.preventDefault();
@@ -198,6 +201,11 @@ export default function QuestNarrative({
               value={input}
               onChange={handleInputChange}
               ref={inputRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  formRef?.current?.requestSubmit();
+                }
+              }}
               disabled={isLoading || isComplete}
             />
             <Button type="submit" disabled={isLoading || isComplete}>
