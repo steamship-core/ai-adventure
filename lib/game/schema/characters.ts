@@ -15,6 +15,8 @@ export type Character = {
 
   /** The motivation of the character */
   motivation: string;
+
+  max_energy: number;
 };
 
 export type NpcCharacter = Character & {

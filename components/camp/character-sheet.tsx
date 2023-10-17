@@ -128,7 +128,8 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
             <div className="flex flex-col items-center justify-center gap-2 w-full">
               <TypographyP className="flex items-center">
                 <ActivityIcon size={20} className="mr-2 text-indigo-400" />
-                100/100
+                {gameState?.player?.energy || 0}/
+                {gameState?.player?.max_energy || 0}
               </TypographyP>
               <TypographyP className="flex !mt-0 items-center">
                 <BadgeDollarSignIcon
@@ -166,6 +167,18 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
               <TypographyH3>Motivation</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">
                 {gameState?.player?.motivation}
+              </TypographyMuted>
+            </div>
+            <div>
+              <TypographyH3>Game Tone</TypographyH3>
+              <TypographyMuted className=" whitespace-pre-wrap">
+                {gameState?.tone}
+              </TypographyMuted>
+            </div>
+            <div>
+              <TypographyH3>Game Theme</TypographyH3>
+              <TypographyMuted className=" whitespace-pre-wrap">
+                {gameState?.genre}
               </TypographyMuted>
             </div>
             <div>
