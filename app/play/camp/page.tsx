@@ -6,6 +6,7 @@ import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
 import RecoilProvider from "@/components/recoil-provider";
+import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
@@ -48,12 +49,17 @@ export default async function CampPage() {
               </div>
               <SummaryStats />
             </div>
-            <CampImage />
-            <div className="flex flex-grow flex-col overflow-auto">
-              <CampMembers />
+            <div id="camp">
+              <TypographyLarge className="">
+                {gameState.player.name} is currently resting in camp.
+              </TypographyLarge>
+              <CampImage />
+              <div className="flex flex-grow flex-col overflow-auto">
+                <CampMembers />
+              </div>
             </div>
           </div>
-          <div>
+          <div id="actions">
             <ActionBar />
           </div>
         </div>
