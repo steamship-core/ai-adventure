@@ -1,17 +1,13 @@
 import { Item } from "@/lib/game/schema/objects";
 import { cn } from "@/lib/utils";
-import { CheckIcon, PackageIcon } from "lucide-react";
+import { CheckIcon, InfoIcon, PackageIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { TypographyLarge } from "./ui/typography/TypographyLarge";
 import { TypographyMuted } from "./ui/typography/TypographyMuted";
+import { TypographySmall } from "./ui/typography/TypographySmall";
 
 export const InventoryList = ({
   inventory,
@@ -71,50 +67,43 @@ export const InventoryList = ({
       {/* <Switch checked={useGridView} onCheckedChange={toggleGridView} /> */}
 
       <div className="flex w-full overflow-hidden">
-        <div className="w-full flex flex-col gap-5 mt-8 pb-8">
+        <div className="w-full flex gap-5 mt-8 pb-8 flex-wrap">
           {inventory.map((item, i) => (
-            <div key={item.description} className="flex gap-2 text-left w-full">
-              <div>
-                <button
-                  className={cn(
-                    "border rounded-md h-12 aspect-square relative overflow-hidden",
-                    !onClick && "hover:cursor-default"
-                  )}
-                  onClick={() => {
-                    onClick && onClick(item);
-                  }}
-                >
-                  <Image
-                    src={"/orb.png"}
-                    fill
-                    alt={item.description!}
-                    className="object-cover"
-                  />
-                  {isItemSelected?.(item) && (
-                    <div className="absolute top-0 left-0 bg-background/50 w-full h-full z-20 flex items-center justify-center">
-                      <CheckIcon size={32} />
-                    </div>
-                  )}
-                </button>
-              </div>
-              <div className="w-full">
-                <Accordion type="single" collapsible>
-                  <AccordionItem value={item.name!} className="border-none">
-                    <AccordionTrigger className="w-full p-0">
-                      <div className="flex flex-col w-full text-left">
-                        <TypographyLarge>{item.name}</TypographyLarge>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div>
-                        <TypographyMuted>
-                          {item.description ||
-                            `No description can be found for this item. It's purpose has been lost to time.`}
-                        </TypographyMuted>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
+            <div
+              key={item.description}
+              className="flex gap-2 flex-col items-center justify-center"
+            >
+              <button
+                className={cn(
+                  "border rounded-md h-32 aspect-square relative overflow-hidden",
+                  !onClick && "hover:cursor-default"
+                )}
+                onClick={() => {
+                  onClick && onClick(item);
+                }}
+              >
+                <Image
+                  src={"/orb.png"}
+                  fill
+                  alt={item.description!}
+                  className="object-cover -z-10"
+                />
+                {isItemSelected?.(item) && (
+                  <div className="absolute top-0 left-0 bg-blue-600/50 w-full h-full z-20 flex items-center justify-center">
+                    <CheckIcon size={32} />
+                  </div>
+                )}
+              </button>
+              <div className="w-32">
+                <TypographySmall>{item.name}</TypographySmall>
+                <Popover>
+                  <PopoverTrigger>
+                    <InfoIcon size={16} className="ml-2" />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <TypographySmall>{item.description}</TypographySmall>
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
           ))}
