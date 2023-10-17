@@ -96,7 +96,7 @@ const EndSheet = ({
             Great job, adventurer. Time to collect your rewards.
           </SheetDescription>
         </SheetHeader>
-        <div className="overflow-scroll w-full px-6">
+        <div className="overflow-auto w-full px-6">
           <TypographyH1 className="text-center mt-12">
             Quest Completed
           </TypographyH1>

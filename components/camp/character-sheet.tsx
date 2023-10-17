@@ -104,7 +104,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 className="h-2 border border-foreground/20"
               />
               <TypographyMuted className="text-xs md:text-sm ">
-                Rank: {getLevel()} ({gameState?.player?.rank})
+                Rank: {getLevel()}
               </TypographyMuted>
             </div>
           </button>
@@ -112,7 +112,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0 overflow-scroll"
+        className="w-100% h-[100dvh] flex flex-col pb-0 overflow-y-auto"
       >
         <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2">
@@ -141,9 +141,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           </div>
           <div className="flex flex-col gap-4">
             <div>
-              <TypographyH3>
-                {getLevel()} ({gameState?.player?.rank})
-              </TypographyH3>
+              <TypographyH3>{getLevel()}</TypographyH3>
               <Progress
                 value={(((rank - 1) % 4) / 4) * 100}
                 className="h-2 border border-foreground/20"

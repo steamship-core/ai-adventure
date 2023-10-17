@@ -43,7 +43,7 @@ export const InventoryList = ({
       <>
         {/* <Switch checked={useGridView} onCheckedChange={toggleGridView} /> */}
 
-        <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-scroll">
+        <div className="w-full grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 lg:grid-cols-12 gap-5 mt-8 pb-8 overflow-auto">
           {inventory?.map((item, i) => (
             <div key={item.name} className="flex items-center justify-center">
               <HoverCard>

@@ -1,14 +1,10 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { Button } from "../ui/button";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
-import { TypographyP } from "../ui/typography/TypographyP";
-import { useTypeWriter } from "./hooks/use-typewriter";
 import { CreationActions, CreationContent } from "./shared/components";
 
 const allValuesAreSet = (config: CharacterConfig) => {
@@ -19,8 +15,6 @@ const allValuesAreSet = (config: CharacterConfig) => {
     config.genre
   );
 };
-
-const TEXT = `Creating an image of your character...`;
 
 export type CharacterConfig =
   | Partial<GameState> & {
@@ -36,32 +30,13 @@ const CharacterCreationComplete = ({
   isCurrent: boolean;
   onFocus: () => any;
 }) => {
-  const { currentText } = useTypeWriter({
-    text: TEXT,
-  });
   const { loadingScreen, setIsVisible } = useLoadingScreen();
-
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   const router = useRouter();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setImageLoaded(true);
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, []);
 
   const onComplete = async () => {
     setIsVisible(true);
-    let resp = await fetch("/api/agent/update", {
-      method: "POST",
-      body: JSON.stringify(config),
-    });
-    resp = await fetch("/api/agent/completeOnboarding", {
+    await updateGameState(config as GameState);
+    await fetch("/api/agent/completeOnboarding", {
       method: "POST",
       body: JSON.stringify({}),
     });
@@ -72,23 +47,6 @@ const CharacterCreationComplete = ({
     <>
       {loadingScreen}
       <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-        <div>
-          <TypographyP>{currentText}</TypographyP>
-        </div>
-        <div className="w-full flex items-center justify-center mt-4">
-          <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
-            {imageLoaded ? (
-              <Image
-                src={"/orc.png"}
-                height={1024}
-                width={1024}
-                alt="Character"
-              />
-            ) : (
-              <Skeleton className="h-full w-full" />
-            )}
-          </div>
-        </div>
         <div className="mt-6 flex flex-col gap-4">
           <div>
             <TypographyMuted className="text-muted-foreground">

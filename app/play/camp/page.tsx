@@ -52,7 +52,7 @@ export default async function CampPage() {
       <WelcomeModal />
 
       <main className="h-[100dvh] min-h-[600px] w-full">
-        <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-6 overflow-scroll">
+        <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-6 overflow-auto">
           <div className="flex flex-col gap-6 h-[80%] overflow-hidden">
             <div className="flex justify-between items-center">
               <div>
@@ -71,7 +71,7 @@ export default async function CampPage() {
                 />
               </div>
             </div>
-            <div className="flex flex-grow flex-col overflow-scroll">
+            <div className="flex flex-grow flex-col overflow-auto">
               <CampMembers />
             </div>
           </div>

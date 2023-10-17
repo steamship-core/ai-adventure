@@ -1,4 +1,6 @@
 "use client";
+import { updateGameState } from "@/lib/game/game-state.client";
+import { GameState } from "@/lib/game/schema/game_state";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import CharacterCreationComplete, {
@@ -40,6 +42,10 @@ export default function CharacterCreation() {
     },
     quests: [],
   });
+
+  const saveConfig = async (config: CharacterConfig) => {
+    await updateGameState(config as GameState);
+  };
 
   return (
     <CreationContainer>
@@ -98,6 +104,13 @@ export default function CharacterCreation() {
             setStep(5);
             setActiveStep(5);
             setConfiguration({
+              ...configuration,
+              player: {
+                ...configuration.player,
+                description,
+              },
+            });
+            saveConfig({
               ...configuration,
               player: {
                 ...configuration.player,

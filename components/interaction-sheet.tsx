@@ -110,7 +110,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
             </div>
           </SheetDescription>
         </SheetHeader>
-        <div className="w-full overflow-scroll">
+        <div className="w-full overflow-auto">
           {(selectedToSell.length > 0 || selectedToBuy.length > 0) && (
             <div className="flex flex-col gap-2 border rounded-md p-4 border-blue-500">
               <div className="flex items-center">

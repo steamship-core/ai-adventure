@@ -31,7 +31,7 @@ export const AdventureHistorySheet = () => {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0 overflow-scroll"
+        className="w-100% h-[100dvh] flex flex-col pb-0 overflow-auto"
       >
         <SheetHeader>
           <div className="flex items-center flex-col justify-center">
@@ -45,7 +45,7 @@ export const AdventureHistorySheet = () => {
           </div>
         </SheetHeader>
         <div className="flex flex-col gap-8">
-          {gameState.quests.map((quest, i) => {
+          {gameState?.quests?.map((quest, i) => {
             if (!quest.text_summary) return null;
             return (
               <a
@@ -66,7 +66,7 @@ export const AdventureHistorySheet = () => {
               </a>
             );
           })}
-          {gameState.quests.length === 0 && (
+          {gameState?.quests?.length === 0 && (
             <div className="w-full flex flex-col items-center justify-center">
               You haven&apos;t been on any adventures yet.
             </div>
