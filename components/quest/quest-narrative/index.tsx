@@ -2,14 +2,16 @@
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { recoilAudioActiveState } from "@/components/recoil-provider";
-import { Input } from "@/components/ui/input";
+import { inputClassNames } from "@/components/ui/input";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
 import { ArrowDown, SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
+import TextareaAutosize from "react-textarea-autosize";
 import { useRecoilState } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
@@ -67,7 +69,7 @@ export default function QuestNarrative({
   completeButtonText?: string;
 }) {
   const initialized = useRef(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
 
@@ -191,8 +193,8 @@ export default function QuestNarrative({
               handleSubmit(e);
             }}
           >
-            <Input
-              className="w-full"
+            <TextareaAutosize
+              className={cn(inputClassNames, "w-full py-[.6rem] resize-none")}
               value={input}
               onChange={handleInputChange}
               ref={inputRef}
