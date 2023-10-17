@@ -28,8 +28,8 @@ export const CampImage = async () => {
   }, [campPic]);
 
   return (
-    <div className="px-8 sm:px-12 my-2">
-      <div className="relative rounded-lg overflow-hidden w-full aspect-square -z-20">
+    <div className="my-2">
+      <div className="relative rounded-lg overflow-hidden w-full aspect-video -z-20">
         {campPic ? (
           <img src={campPic} alt="background" className="object-cover -z-10" />
         ) : (
