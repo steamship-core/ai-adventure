@@ -3,7 +3,7 @@
 import { Player } from "@lottiefiles/react-lottie-player";
 import { track } from "@vercel/analytics/react";
 import { CompassIcon, MoreHorizontalIcon } from "lucide-react";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import { Button } from "../ui/button";
 import {
@@ -13,11 +13,13 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "../ui/sheet";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const AdventureHistorySheet = () => {
-  const [gameState, setGameState] = useRecoilState(recoilGameState);
-
+  const gameState = useRecoilValue(recoilGameState);
+  const questArcs = gameState.quest_arc || [];
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -51,9 +53,10 @@ export const AdventureHistorySheet = () => {
           </div>
         </SheetHeader>
         <SheetBody>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 h-full">
             {gameState?.quests?.map((quest, i) => {
               if (!quest.text_summary) return null;
+              const questArc = i < questArcs.length ? questArcs[i] : null;
               return (
                 <a
                   href={`/play/quest/${quest.name}`}
@@ -61,9 +64,15 @@ export const AdventureHistorySheet = () => {
                   className="relative"
                 >
                   <div className="border border-foreground/20 rounded-md p-4">
-                    <TypographySmall className="!mt-0">
+                    {questArc && (
+                      <div>
+                        <TypographyLarge>{questArc.location}</TypographyLarge>
+                        <TypographySmall>{questArc.goal}</TypographySmall>
+                      </div>
+                    )}
+                    <TypographyMuted className="mt-2">
                       {quest.text_summary}
-                    </TypographySmall>
+                    </TypographyMuted>
                   </div>
                   <div className="absolute -bottom-4 left-0 w-full flex items-center justify-center">
                     <div>
