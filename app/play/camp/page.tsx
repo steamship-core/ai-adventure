@@ -59,10 +59,6 @@ export default async function CampPage() {
             </div>
             <div className="overflow-auto">
               <div>
-                <TypographyLarge className="">Quest Progress</TypographyLarge>
-                <TypographyMuted>
-                  {gameState?.player?.motivation}
-                </TypographyMuted>
                 <QuestProgress />
               </div>
               <div id="camp">
