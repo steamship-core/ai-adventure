@@ -22,7 +22,7 @@ export const ImageBlock = ({ block }: { block: Block }) => {
   return (
     <div>
       {item && <TypographyP>{item?.value?.["string-value"]}</TypographyP>}
-      <div className="overflow-hidden rounded-md mt-2">
+      <div className="overflow-hidden rounded-md mt-2 md:px-24">
         {url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -31,7 +31,7 @@ export const ImageBlock = ({ block }: { block: Block }) => {
             alt="generated image"
           />
         ) : (
-          <Skeleton className="w-full aspect-square" />
+          <Skeleton className="w-full aspect-video" />
         )}
       </div>
     </div>

@@ -186,9 +186,9 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
               <ul className="flex flex-col gap-2 list-disc pl-6">
                 <li>
                   <TypographyMuted>
-                    {gameState.current_quest
+                    {gameState?.current_quest
                       ? gameState?.quests?.length - 1
-                      : gameState.quests.length}{" "}
+                      : gameState?.quests?.length}{" "}
                     quests completed
                   </TypographyMuted>
                 </li>

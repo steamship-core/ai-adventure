@@ -9,4 +9,14 @@ module.exports = withAxiom({
     steamship_api_key: process.env.STEAMSHIP_API_KEY,
     steamship_agent_version: process.env.STEAMSHIP_AGENT_VERSION,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.steamship.com",
+        port: "",
+        pathname: "/api/v1/**/raw",
+      },
+    ],
+  },
 });

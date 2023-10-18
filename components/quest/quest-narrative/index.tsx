@@ -1,8 +1,12 @@
 "use client";
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import { recoilAudioActiveState } from "@/components/recoil-provider";
+import {
+  recoilAudioActiveState,
+  recoilGameState,
+} from "@/components/recoil-provider";
 import { inputClassNames } from "@/components/ui/input";
+import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
@@ -74,7 +78,8 @@ export default function QuestNarrative({
 
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
-
+  const [gg, setGameState] = useRecoilState(recoilGameState);
+  console.log(gg);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
   const {
@@ -134,6 +139,17 @@ export default function QuestNarrative({
       }
     }
   }, [priorBlocks]);
+
+  useEffect(() => {
+    const updateGameState = async () => {
+      const gs = await getGameState();
+      setGameState(gs);
+    };
+
+    if (isComplete) {
+      updateGameState();
+    }
+  }, [isComplete]);
 
   let nonPersistedUserInput: string | null = null;
   return (

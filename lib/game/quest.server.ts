@@ -32,3 +32,12 @@ export const loadExistingQuestBlocks = async (
     return block;
   });
 };
+
+export const generateQuestArc = async (agentBase: string) => {
+  const steamship = getSteamshipClient();
+  const resp = await steamship.agent.post({
+    url: agentBase,
+    path: "/generate_quest_arc",
+    arguments: {},
+  });
+};
