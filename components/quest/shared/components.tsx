@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 
 export const QuestContainer = ({ children }: { children: ReactNode }) => (
-  <main className="h-[100dvh] max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
+  <div className="h-[100dvh] max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
     {children}
-  </main>
+  </div>
 );
 
 export const QuestNarrativeContainer = ({
@@ -11,11 +11,8 @@ export const QuestNarrativeContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <main
-    id="narrative-container"
-    className="flex flex-col-reverse overflow-auto gap-8 pt-8 pb-0 h-full w-full"
-  >
-    {children}
+  <main id="narrative-container" className="overflow-auto h-full w-full">
+    <div className="flex flex-col-reverse gap-8 pt-8 pb-0 ">{children}</div>
   </main>
 );
 
@@ -24,7 +21,7 @@ export const QuestContentContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <main className="max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
+  <div className="max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
     {children}
-  </main>
+  </div>
 );
