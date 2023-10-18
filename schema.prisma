@@ -24,9 +24,9 @@ model Subscriptions {
 
 model TopUps {
   id        Int      @id @default(autoincrement())
-  ownerId   String
-  agentUrl  String
-  amount    Int     // Amount paid
-  coins     Int     // Coins added
+  ownerId           String
+  agentUrl          String
+  amountPaidCents    Int     // Amount paid
+  creditIncrease     Int     // Energy Added
   reference String  // Stripe reference
 }

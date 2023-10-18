@@ -8,8 +8,8 @@ import { getSteamshipClient } from "../utils";
 export const createTopUp = async (
   userId: string,
   agentUrl: string,
-  amount: number,
-  coins: number,
+  amountPaidCents: number,
+  creditIncrease: number,
   reference: string
 ): Promise<
   Prisma.Prisma__SubscriptionsClient<
@@ -17,8 +17,8 @@ export const createTopUp = async (
       id: number;
       ownerId: string;
       agentUrl: string;
-      amount: number;
-      coins: number;
+      amountPaidCents: number;
+      creditIncrease: number;
       reference: string;
     },
     never,
@@ -38,14 +38,14 @@ export const createTopUp = async (
       url: agent.agentUrl,
       path: "/add_energy",
       arguments: {
-        amount: coins,
+        amount: creditIncrease,
         fail_if_exceeded_max: false,
       },
     });
 
     if (!result.ok) {
       log.error(
-        `Failed to add energy for ${userId} (${agentUrl}, ${amount}, ${coins}, ${reference}). ${await result.text()}`
+        `Failed to add energy for ${userId} (${agentUrl}, ${amountPaidCents}, ${creditIncrease}, ${reference}). ${await result.text()}`
       );
     }
 
@@ -53,8 +53,8 @@ export const createTopUp = async (
       data: {
         ownerId: userId!,
         agentUrl: agentUrl!,
-        amount: amount!,
-        coins: coins!,
+        amountPaidCents: amountPaidCents!,
+        creditIncrease: creditIncrease!,
         reference: reference!,
       },
     });

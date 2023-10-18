@@ -40,9 +40,7 @@ const ProductDisplay = () => {
     <>
       <section className="pt-4">
         <TypographyH3>Subscribe and Save</TypographyH3>
-        <TypographyLead>
-          $5.00 / month for 150 Gold Coins / month
-        </TypographyLead>
+        <TypographyLead>$5.00 / month for 150 Energy / month</TypographyLead>
         <form action="/api/stripe/create-checkout-session" method="POST">
           <Button id="checkout-button" type="submit" className="mt-2">
             Subscribe
@@ -51,7 +49,7 @@ const ProductDisplay = () => {
       </section>
       <section className="pt-4">
         <TypographyH3>One-time Top Up</TypographyH3>
-        <TypographyLead>$5.00 for 100 Gold Coins</TypographyLead>
+        <TypographyLead>$5.00 for 100 Energy</TypographyLead>
         <form
           action="/api/stripe/create-checkout-session?topUp=true"
           method="POST"
