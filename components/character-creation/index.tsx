@@ -60,8 +60,8 @@ export default function CharacterCreation() {
       {step > 5 && (
         <OnboardingPrompt
           onContinue={(motivation) => {
-            setStep(7);
-            setActiveStep(7);
+            setStep((prev) => (prev > 7 ? prev : 7));
+            setActiveStep((prev) => (prev > 7 ? prev : 7));
             setConfiguration({
               ...configuration,
               player: {
@@ -76,13 +76,15 @@ export default function CharacterCreation() {
           text="What primary motivation does your character have? This will be used to generate quests and storylines for your character."
           isTextarea
           buttonText="Set motivation"
+          step={6}
+          totalSteps={6}
         />
       )}
       {step > 4 && (
         <OnboardingPrompt
           onContinue={(background) => {
-            setStep(6);
-            setActiveStep(6);
+            setStep((prev) => (prev > 6 ? prev : 6));
+            setActiveStep((prev) => (prev > 6 ? prev : 6));
             setConfiguration({
               ...configuration,
               player: {
@@ -97,13 +99,15 @@ export default function CharacterCreation() {
           text="Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?"
           isTextarea
           buttonText="Set background"
+          step={5}
+          totalSteps={6}
         />
       )}
       {step > 3 && (
         <OnboardingPrompt
           onContinue={(description) => {
-            setStep(5);
-            setActiveStep(5);
+            setStep((prev) => (prev > 5 ? prev : 5));
+            setActiveStep((prev) => (prev > 5 ? prev : 5));
             setConfiguration({
               ...configuration,
               player: {
@@ -125,13 +129,15 @@ export default function CharacterCreation() {
           text="Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!"
           isTextarea
           buttonText="Set appearance"
+          step={4}
+          totalSteps={6}
         />
       )}
       {step > 2 && (
         <OnboardingPrompt
           onContinue={(name) => {
-            setStep(4);
-            setActiveStep(4);
+            setStep((prev) => (prev > 4 ? prev : 4));
+            setActiveStep((prev) => (prev > 4 ? prev : 4));
             setConfiguration({
               ...configuration,
               player: {
@@ -145,13 +151,15 @@ export default function CharacterCreation() {
           text="Choose a name for your character. This can be anything you want!"
           placeholder="Professor Chaos"
           buttonText="Set name"
+          step={3}
+          totalSteps={6}
         />
       )}
       {step > 1 && (
         <OnboardingPrompt
           onContinue={(tone) => {
-            setStep(3);
-            setActiveStep(3);
+            setStep((prev) => (prev > 3 ? prev : 3));
+            setActiveStep((prev) => (prev > 3 ? prev : 3));
             setConfiguration({ ...configuration, tone });
           }}
           onFocus={() => {
@@ -161,13 +169,16 @@ export default function CharacterCreation() {
           placeholder="Serious, silly, dark, light, etc.."
           text="What is the tone of the story? Serious, silly, dark, light, etc.."
           buttonText="Set tone"
+          options={["Serious", "Silly", "Dark"]}
+          step={2}
+          totalSteps={6}
         />
       )}
       {step > 0 && (
         <OnboardingPrompt
           onContinue={(genre) => {
-            setStep(2);
-            setActiveStep(2);
+            setStep((prev) => (prev > 2 ? prev : 2));
+            setActiveStep((prev) => (prev > 2 ? prev : 2));
             setConfiguration({ ...configuration, genre });
           }}
           onFocus={() => {
@@ -177,6 +188,9 @@ export default function CharacterCreation() {
           placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
           text="Set the theme of the adventure. This will determine the setting and genre of the story you will be playing."
           buttonText="Set theme"
+          options={["Fantasy", "Steampunk", "Horror"]}
+          step={1}
+          totalSteps={6}
         />
       )}
       <CharacterCreationIntro

@@ -6,6 +6,7 @@ import { InventoryList } from "./inventory-list";
 import { recoilGameState } from "./recoil-provider";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -29,7 +30,9 @@ const InventorySheet = ({ children }: { children: ReactNode }) => {
             junk, or they might be useful.
           </SheetDescription>
         </SheetHeader>
-        <InventoryList inventory={gameState?.player?.inventory || []} />
+        <SheetBody>
+          <InventoryList inventory={gameState?.player?.inventory || []} />
+        </SheetBody>
       </SheetContent>
     </Sheet>
   );

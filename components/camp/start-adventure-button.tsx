@@ -15,7 +15,14 @@ const StartAdventureButton = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { loadingScreen, setIsVisible } = useLoadingScreen();
   const gameState = useRecoilValue(recoilGameState);
-  console.log(gameState.player.inventory);
+
+  const questArc = gameState?.quest_arc || [];
+  const questCount = gameState?.current_quest
+    ? gameState?.quests?.length - 1
+    : gameState?.quests?.length;
+
+  const currentQuestArc =
+    questCount > questArc.length ? null : questArc[questCount];
 
   const onClick = async () => {
     setIsVisible(true);
@@ -74,9 +81,17 @@ const StartAdventureButton = () => {
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
         {gameState?.active_mode === "quest" && gameState?.current_quest ? (
-          <>Continue Adventure</>
+          <>
+            {currentQuestArc
+              ? `Continue Adventure: ${currentQuestArc.location}`
+              : "Continue Adventure"}
+          </>
         ) : (
-          <>Go on an Adventure</>
+          <>
+            {currentQuestArc
+              ? `Start Adventure: ${currentQuestArc.location}`
+              : "Go on an Adventure"}{" "}
+          </>
         )}
       </Button>
       {loadingScreen}

@@ -1,6 +1,9 @@
 import { ThemeProvider } from "@/components/theme-provider";
+import { TypographySmall } from "@/components/ui/typography/TypographySmall";
+import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
+import { ZapIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
 import "./globals.css";
@@ -10,24 +13,6 @@ const font = Barlow({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
-
-// import localFont from "next/font/local";
-
-// Font files can be colocated inside of `pages`
-// const font = localFont({
-//   src: [
-//     {
-//       path: "../lib/pixel_operator/PixelOperatorMono.ttf",
-//       weight: "400",
-//       style: "normal",
-//     },
-//     {
-//       path: "../lib/pixel_operator/PixelOperatorMono-Bold.ttf",
-//       weight: "700",
-//       style: "bold",
-//     },
-//   ],
-// });
 
 export const metadata: Metadata = {
   title: "AI Adventure",
@@ -66,7 +51,7 @@ export default function RootLayout({
             href="/apple-touch-icon.png"
           />
         </head>
-        <body className={font.className}>
+        <body className={cn(font.className, "pb-3")}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -75,6 +60,22 @@ export default function RootLayout({
           >
             {children}
             <Analytics />
+            <div className="w-full text-center flex items-center justify-center absolute bottom-2">
+              <TypographySmall>
+                <ZapIcon
+                  size={16}
+                  className="fill-yellow-600 inline text-yellow-600"
+                />{" "}
+                by{" "}
+                <a
+                  href="https://steamship.com"
+                  target="_blank"
+                  className="underline"
+                >
+                  Steamship
+                </a>
+              </TypographySmall>
+            </div>
           </ThemeProvider>
         </body>
       </html>

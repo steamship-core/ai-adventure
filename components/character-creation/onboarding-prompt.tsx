@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import useFocus from "./hooks/use-focus";
 import { useTypeWriter } from "./hooks/use-typewriter";
@@ -84,6 +85,9 @@ const OnboardingPrompt = ({
   isTextarea,
   placeholder,
   buttonText,
+  options,
+  step,
+  totalSteps,
 }: {
   onContinue: (value: string) => any;
   isCurrent: boolean;
@@ -92,11 +96,15 @@ const OnboardingPrompt = ({
   isTextarea?: boolean;
   placeholder: string;
   buttonText: string;
+  options?: string[];
+  step: number;
+  totalSteps: number;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
   });
   const [value, setValue] = useState("");
+  const [showForm, setShowForm] = useState(options ? false : true);
   const formRef = useRef<HTMLFormElement>(null);
 
   const onEnterPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -108,43 +116,71 @@ const OnboardingPrompt = ({
 
   return (
     <CreationContent isCurrent={isCurrent} onClick={onFocus}>
+      <TypographyMuted>
+        {step}/{totalSteps}
+      </TypographyMuted>
       <div>
         <TypographyP>{currentText}</TypographyP>
       </div>
       <CreationActions isFinished={isFinished}>
-        <form
-          ref={formRef}
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onContinue(value);
-          }}
-          className="flex gap-2 flex-col"
-        >
-          {isTextarea ? (
-            <FocusableTextArea
-              placeholder={placeholder}
-              onFocus={onFocus}
-              onKeyDown={onEnterPress}
-              value={value}
-              setValue={setValue}
-              isFinished={isFinished}
-              isCurrent={isCurrent}
-            />
-          ) : (
-            <FocusableInputArea
-              placeholder={placeholder}
-              onFocus={onFocus}
-              value={value}
-              setValue={setValue}
-              isFinished={isFinished}
-              isCurrent={isCurrent}
-            />
-          )}
-          <Button disabled={value.length < 1} className="w-full" type="submit">
-            {buttonText}
-          </Button>
-        </form>
+        {options && (
+          <div className="grid grid-cols-2 gap-2">
+            {options.map((option) => (
+              <Button
+                variant={option === value ? "default" : "outline"}
+                key={option}
+                onClick={() => {
+                  setValue(option);
+                  onContinue(option);
+                }}
+              >
+                {option}
+              </Button>
+            ))}
+            <Button variant="ghost" onClick={() => setShowForm(true)}>
+              Custom
+            </Button>
+          </div>
+        )}
+        {showForm && (
+          <form
+            ref={formRef}
+            onSubmit={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onContinue(value);
+            }}
+            className="flex gap-2 flex-col"
+          >
+            {isTextarea ? (
+              <FocusableTextArea
+                placeholder={placeholder}
+                onFocus={onFocus}
+                onKeyDown={onEnterPress}
+                value={value}
+                setValue={setValue}
+                isFinished={isFinished}
+                isCurrent={isCurrent}
+              />
+            ) : (
+              <FocusableInputArea
+                placeholder={placeholder}
+                onFocus={onFocus}
+                value={value}
+                setValue={setValue}
+                isFinished={isFinished}
+                isCurrent={isCurrent}
+              />
+            )}
+            <Button
+              disabled={value.length < 1}
+              className="w-full"
+              type="submit"
+            >
+              {buttonText}
+            </Button>
+          </form>
+        )}
       </CreationActions>
     </CreationContent>
   );

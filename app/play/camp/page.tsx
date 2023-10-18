@@ -48,7 +48,7 @@ export default async function CampPage() {
     >
       <WelcomeModal />
 
-      <main className="h-[100dvh] min-h-[600px] w-full">
+      <main className="w-full h-full">
         <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-2 overflow-auto">
           <div className="flex flex-col gap-2 h-[80%] overflow-hidden">
             <div className="flex justify-between items-center">
@@ -57,17 +57,21 @@ export default async function CampPage() {
               </div>
               <SummaryStats />
             </div>
-            <div>
-              <TypographyLarge className="">Quest Progress</TypographyLarge>
-              <TypographyMuted>{gameState.player.motivation}</TypographyMuted>
-              <QuestProgress />
-            </div>
-            <div id="camp">
-              <TypographyLarge className="mt-0">Camp</TypographyLarge>
-              <TypographyMuted>
-                Click on the image to view camp members
-              </TypographyMuted>
-              <CampImage />
+            <div className="overflow-auto">
+              <div>
+                <TypographyLarge className="">Quest Progress</TypographyLarge>
+                <TypographyMuted>
+                  {gameState?.player?.motivation}
+                </TypographyMuted>
+                <QuestProgress />
+              </div>
+              <div id="camp">
+                <TypographyLarge className="mt-0">Camp</TypographyLarge>
+                <TypographyMuted>
+                  Click on the image to view camp members
+                </TypographyMuted>
+                <CampImage />
+              </div>
             </div>
           </div>
           <div id="actions">

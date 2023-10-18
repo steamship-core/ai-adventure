@@ -12,6 +12,7 @@ import { recoilGameState } from "./recoil-provider";
 import { Button } from "./ui/button";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -84,7 +85,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6"
+        className="w-100% h-[100dvh] flex flex-col mx-auto p-6"
       >
         <SheetHeader>
           <SheetDescription>
@@ -110,7 +111,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
             </div>
           </SheetDescription>
         </SheetHeader>
-        <div className="w-full overflow-auto">
+        <SheetBody>
           {(selectedToSell.length > 0 || selectedToBuy.length > 0) && (
             <div className="flex flex-col gap-2 border rounded-md p-4 border-blue-500">
               <div className="flex items-center">
@@ -263,7 +264,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
               }
             }}
           />
-        </div>
+        </SheetBody>
       </SheetContent>
     </Sheet>
   );
