@@ -92,7 +92,7 @@ export default function CharacterCreation() {
     },
     {
       placeholder:
-        "Born to a noble family, your character has always had everything they wanted... until now.",
+        "Thumblemore was once a prodigious student at the Arcanum Academy, but an experiment gone awry with a teleportation spell left his sense of direction—both physically and magically—utterly skewed. Despite his frequent misadventures and unintended destinations, his heart remains as true as his compass is not. Each mishap, from conversing with trees to accidentally attending dragon conventions, has only enriched his knowledge, making him an unexpected, yet invaluable, repository of arcane oddities.",
       text: "Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?",
       buttonText: "Set background",
       setConfiguration: (background: string) => {
@@ -103,7 +103,8 @@ export default function CharacterCreation() {
       },
     },
     {
-      placeholder: "To become the most powerful wizard in the land.",
+      placeholder:
+        'Thumblemore\'s primary goal is to find the elusive "True North" spell, an ancient and forgotten magic rumored to correct any misdirection, whether physical or arcane. He believes that with this spell, he can finally regain his once impeccable magical precision and stop his unintentional jaunts into the unknown—though a part of him has grown fond of the unexpected adventures his "condition" brings.',
       text: "What primary motivation does your character have? This will be used to generate quests and storylines for your character.",
       buttonText: "Set motivation",
       setConfiguration: (motivation: string) => {
