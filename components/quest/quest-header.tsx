@@ -26,9 +26,13 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
         )}
         <CharacterSheet mini={true} />
         {questArc && (
-          <div className="ml-2 mr-12">
-            <TypographySmall>{questArc.location}</TypographySmall>
-            <TypographyMuted>{questArc.goal}</TypographyMuted>
+          <div className="ml-2 mr-2 flex flex-col">
+            <TypographySmall className="text-xs">
+              {questArc.location}
+            </TypographySmall>
+            <TypographyMuted className="text-xs">
+              {questArc.goal}
+            </TypographyMuted>
           </div>
         )}
       </div>

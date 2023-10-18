@@ -27,7 +27,6 @@ export default function CharacterCreation() {
       background: isCompleteConfig ? searchParams.get("background")! : "",
       rank: 1,
       energy: 100,
-      max_energy: 100,
       gold: 0,
       inventory: [],
       motivation: "",

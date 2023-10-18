@@ -4,6 +4,7 @@ import { levels } from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../recoil-provider";
@@ -76,7 +77,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
         {mini === true ? (
           <button className="text-left h-full">
             <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
-              <img
+              <Image
                 src={gameState?.profile_image_url}
                 height={1024}
                 width={1024}
@@ -88,7 +89,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           <button className="flex gap-4 items-start text-left h-full">
             <div className="flex items-center justify-center h-full">
               <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
-                <img
+                <Image
                   src={gameState?.profile_image_url}
                   height={1024}
                   width={1024}
@@ -119,7 +120,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           <div className="flex items-center justify-center flex-col w-full gap-2">
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
-              <img
+              <Image
                 src={gameState?.profile_image_url}
                 height={1024}
                 width={1024}
@@ -129,8 +130,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
             <div className="flex flex-col items-center justify-center gap-2 w-full">
               <TypographyP className="flex items-center">
                 <ActivityIcon size={20} className="mr-2 text-indigo-400" />
-                {gameState?.player?.energy || 0}/
-                {gameState?.player?.max_energy || 0}
+                {gameState?.player?.energy || 0}
               </TypographyP>
               <TypographyP className="flex !mt-0 items-center">
                 <BadgeDollarSignIcon
