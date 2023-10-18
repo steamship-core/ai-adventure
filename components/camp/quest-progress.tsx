@@ -61,8 +61,10 @@ const QuestProgressElement = ({
           />
         )}
       </div>
-      <div className="mt-2">
-        <TypographySmall>{questArc.location}</TypographySmall>
+      <div className="mt-2 flex flex-col">
+        <TypographySmall className="leading-1">
+          {questArc.location}
+        </TypographySmall>
         <TypographyMuted
           className={cn(
             isCompleteQuest && "text-green-800",
