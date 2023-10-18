@@ -1,10 +1,19 @@
-import { CreatePackageInstanceParams } from "../operations/package";
+import {
+  CreatePackageInstanceParams,
+  GetPackageInstanceParams,
+} from "../operations/package";
 import {
   HasHandle,
   IsSteamshipModel,
   IsUserOwned,
   IsWorkspaceContained,
 } from "./util";
+
+export type InstanceInitStatus =
+  | "notNeeded"
+  | "initializing"
+  | "complete"
+  | "failed";
 
 /**
  * Steamship Package Instance.
@@ -56,6 +65,11 @@ export type PackageInstance = IsSteamshipModel &
      * The handle of the user for this package.
      */
     userHandle: string;
+
+    /**
+     * The init status of the package.
+     */
+    initStatus?: InstanceInitStatus;
   };
 
 export type PartialPackageInstance = Partial<PackageInstance>;
@@ -68,4 +82,18 @@ export interface IPackageClient {
     payload?: Record<string, any>;
     verb?: "GET" | "POST";
   }): Promise<Response>;
+
+  waitForInit({
+    timeoutSeconds = 0.5,
+    retryCount = 15,
+    handle,
+    id,
+  }: {
+    timeoutSeconds: number;
+    retryCount: number;
+  } & GetPackageInstanceParams): Promise<boolean>;
+
+  getInstanceInitStatus(
+    params: GetPackageInstanceParams
+  ): Promise<InstanceInitStatus | undefined>;
 }

@@ -3,6 +3,30 @@
  *
  */
 import { Client, IPackageClient, PackageInstance } from "../schema";
+import { InstanceInitStatus } from "../schema/package";
+
+/**
+ * @function delay Delays the execution of an action.
+ * @param {number} timeSeconds The time to wait in seconds.
+ * @returns {Promise<void>}
+ */
+async function delay(timeSeconds: number): Promise<void> {
+  return new Promise<void>((resolve) =>
+    setTimeout(resolve, timeSeconds * 1000)
+  );
+}
+
+type GetPackageInstanceParams = {
+  /**
+   * Handle of the package you are fetching.
+   */
+  handle?: string;
+
+  /**
+   * ID of the package you are fetching.
+   */
+  id?: string;
+};
 
 type CreatePackageInstanceParams = {
   /**
@@ -39,6 +63,30 @@ export class PackageClient implements IPackageClient {
 
   constructor(client: Client) {
     this.client = client;
+  }
+
+  public async getInstance(
+    params: GetPackageInstanceParams
+  ): Promise<PackageInstance> {
+    if (!params.handle && !params.id) {
+      throw new Error(
+        "Either `params.handle` or `params.id` must be provided to get a package instance"
+      );
+    }
+
+    const response = await this.client.post("/package/instance/get", params);
+
+    if (!response.ok) {
+      let msg = "";
+      try {
+        msg = await response.text();
+      } catch {}
+      throw new Error(
+        `Failed to fetch package instance. ${response.statusText}. ${msg}`
+      );
+    }
+    const json = await response.json();
+    return json?.data?.packageInstance as PackageInstance;
   }
 
   public async createInstance(
@@ -100,6 +148,51 @@ export class PackageClient implements IPackageClient {
           : undefined,
       json: true,
     });
+  }
+
+  /**
+   * Returns the initStatus of a Package Instance.
+   *
+   * @param params THe GetPackageInstanceParams object
+   */
+  public async getInstanceInitStatus(
+    params: GetPackageInstanceParams
+  ): Promise<InstanceInitStatus | undefined> {
+    const instance = await this.getInstance(params);
+    return instance.initStatus;
+  }
+
+  /**
+   * Awaits the initialization of a package.
+   *
+   * Returns true/false based on initialization success.
+   * Throws an error if the timeout was exceeded before completion.
+   *
+   * @param timeoutSeconds Timeout in seconds. Default: 0.5.
+   * @param retryCount Number of times to retry. Default: 15. After this count, an exception is thrown.
+   */
+  public async waitForInit({
+    timeoutSeconds = 0.5,
+    retryCount = 15,
+    handle,
+    id,
+  }: {
+    timeoutSeconds: number;
+    retryCount: number;
+  } & GetPackageInstanceParams): Promise<boolean> {
+    let i = 0;
+
+    for (let i = 0; i < retryCount; i++) {
+      const initStatus = await this.getInstanceInitStatus({ id, handle });
+      if (initStatus === "complete" || initStatus === "notNeeded") {
+        return true;
+      } else if (initStatus === "failed") {
+        return false;
+      }
+    }
+    throw new Error(
+      `Max tries await for package initialization exceeded: ${retryCount}`
+    );
   }
 }
 

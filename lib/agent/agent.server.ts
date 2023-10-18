@@ -3,6 +3,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../db";
+import { saveServerSettingsFromDiskConfiguration } from "../game/server_settings.server";
 import { getSteamshipClient } from "../utils";
 
 export const getAgent = async (
@@ -79,12 +80,20 @@ export const createAgent = async (
 
     log.info(`New agent URL: ${agentUrl}`);
 
-    return await prisma.agents.create({
+    const agent = await prisma.agents.create({
       data: {
         ownerId: userId!,
         agentUrl: agentUrl,
       },
     });
+
+    // Now we need to await the agent's startup loop. This is critical
+    // because if we perform an operation to quickly after initialization it will fail.
+
+    // Now we need to set the server settings.
+    await saveServerSettingsFromDiskConfiguration(agent.agentUrl);
+
+    return agent;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
