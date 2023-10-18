@@ -9,30 +9,6 @@ import { TypographyH3 } from "./ui/typography/TypographyH3";
 import { TypographyLead } from "./ui/typography/TypographyLead";
 import { TypographyP } from "./ui/typography/TypographyP";
 
-async function postSubscribe(e: any) {
-  try {
-    const dataSend = {
-      lookup_key: e.target.lookup_key.value,
-      customerEmail: e.target.user_Email.value,
-    };
-    const jsonSend = JSON.stringify(dataSend);
-    const response = await fetch("/api/stripe/create-checkout-session", {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      redirect: "follow",
-      body: jsonSend,
-    });
-    if (response.status === 500) {
-      console.error(await response.text());
-      return;
-    }
-    return response;
-  } catch (err) {
-    console.log(`Error when calling postJSON: ${err}`);
-  }
-}
-
 const ProductDisplay = () => {
   const { user } = useUser();
   if (!user) return null;
@@ -44,6 +20,11 @@ const ProductDisplay = () => {
         <form action="/api/stripe/create-checkout-session" method="POST">
           <Button id="checkout-button" type="submit" className="mt-2">
             Subscribe
+          </Button>
+        </form>
+        <form action="/api/stripe/visit-billing-portal" method="POST">
+          <Button id="checkout-button" type="submit" className="mt-2">
+            Manage Subscription
           </Button>
         </form>
       </section>

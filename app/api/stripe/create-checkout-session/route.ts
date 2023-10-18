@@ -1,3 +1,4 @@
+import { ensureStripeEnvVars } from "@/lib/subscription/stripe.server";
 import { auth } from "@clerk/nextjs";
 import Cors from "cors";
 import { log } from "next-axiom";
@@ -16,7 +17,6 @@ const cors = Cors({
 
 export async function POST(req: Request) {
   try {
-    console.log("HI");
     const { userId, user } = auth();
 
     const searchParams = new URL(req.url).searchParams;
@@ -27,27 +27,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY == "") {
-      throw new Error("Missing STRIPE_SECRET_KEY env var");
-    }
+    ensureStripeEnvVars();
 
-    if (!process.env.NEXT_PUBLIC_STRIPE_CURRENCY) {
-      throw new Error("Missing NEXT_PUBLIC_STRIPE_CURRENCY env var");
-    }
-
-    if (!process.env.STRIPE_PRICE_ID) {
-      throw new Error("Missing STRIPE_PRICE_ID env var");
-    }
-
-    if (!process.env.STRIPE_TOPUP_PRICE_ID) {
-      throw new Error("Missing STRIPE_TOPUP_PRICE_ID env var");
-    }
-
-    if (!process.env.NEXT_PUBLIC_STRIPE_UNIT_AMOUNT) {
-      throw new Error("Missing NEXT_PUBLIC_STRIPE_UNIT_AMOUNT env var");
-    }
-
-    const unitAmount = parseInt(process.env.NEXT_PUBLIC_STRIPE_UNIT_AMOUNT);
+    const unitAmount = parseInt(
+      process.env.NEXT_PUBLIC_STRIPE_UNIT_AMOUNT || ""
+    );
 
     if (unitAmount <= 0) {
       throw new Error(
