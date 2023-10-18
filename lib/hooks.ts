@@ -3,9 +3,10 @@
 import {
   recoilBackgroundAudioState,
   recoilBackgroundAudioUrlState,
+  recoilGameState,
 } from "@/components/recoil-provider";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 export const _useLocalstoreBoolean = (key: string) => {
   const [value, _setValue] = useState<boolean>(false);
@@ -37,4 +38,17 @@ export const useBackgroundMusic = () => {
   const [isAllowed, setAllowed] = useRecoilState(recoilBackgroundAudioState);
   const [url, setUrl] = useRecoilState(recoilBackgroundAudioUrlState);
   return [isAllowed, setAllowed, url as string, setUrl];
+};
+
+export const useCurrentQuestArc = () => {
+  const gameState = useRecoilValue(recoilGameState);
+
+  const questArc = gameState?.quest_arc || [];
+  const questCount = gameState?.current_quest
+    ? gameState?.quests?.length - 1
+    : gameState?.quests?.length;
+
+  const currentQuestArc =
+    questCount > questArc.length ? null : questArc[questCount];
+  return currentQuestArc;
 };

@@ -22,7 +22,7 @@ export const ActionBar = () => {
               variant="outline"
               className="w-full flex justify-start"
             >
-              <PackageIcon size={16} className="h-6 w-6 mr-2" />
+              <PackageIcon className="h-4 w-4 md:h-6 md:w-6 mr-2" />
               Inventory
             </Button>
           </InventorySheet>

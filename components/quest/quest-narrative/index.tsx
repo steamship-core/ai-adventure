@@ -12,7 +12,7 @@ import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
-import { ArrowDown, SendIcon } from "lucide-react";
+import { ArrowDown, LoaderIcon, SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
@@ -35,13 +35,13 @@ const ScrollButton = () => {
     const container = document.getElementById("narrative-container");
     container?.scrollTo({
       top: container.scrollHeight,
-      behavior: "smooth",
+      behavior: "instant",
     });
   };
 
   return (
     <>
-      <div ref={ref} />
+      <div ref={ref} className="w-full" />
       {!inView && (
         <Button
           onClick={scrollToBottom}
@@ -187,11 +187,6 @@ export default function QuestNarrative({
         </QuestNarrativeContainer>
       </div>
       <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
-        {isLoading && (
-          <div className="flex items-center justify-center">
-            <div className="w-6 h-6 rounded-full animate-spin border-2 border-dashed border-green-500 border-t-transparent"></div>
-          </div>
-        )}
         {isComplete ? (
           <EndSheet
             isEnd={true}
@@ -225,7 +220,11 @@ export default function QuestNarrative({
               disabled={isLoading || isComplete}
             />
             <Button type="submit" disabled={isLoading || isComplete}>
-              <SendIcon size={16} />
+              {isLoading ? (
+                <LoaderIcon size={16} className="animate-spin" />
+              ) : (
+                <SendIcon size={16} />
+              )}
             </Button>
           </form>
         )}

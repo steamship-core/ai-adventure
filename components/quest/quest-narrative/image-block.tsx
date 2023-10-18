@@ -2,6 +2,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export const ImageBlock = ({ block }: { block: Block }) => {
@@ -19,19 +20,29 @@ export const ImageBlock = ({ block }: { block: Block }) => {
     (tag) => tag.kind === "item" && tag.name === "name"
   );
 
+  const itemName = item?.value?.["string-value"];
+
   return (
     <div>
-      {item && <TypographyP>{item?.value?.["string-value"]}</TypographyP>}
+      {itemName && <TypographyP>{itemName}</TypographyP>}
       <div className="overflow-hidden rounded-md mt-2 md:px-24">
         {url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
-            className="w-full aspect-video"
+            className={cn(
+              "w-full",
+              itemName ? "aspect-square" : "aspect-video"
+            )}
             alt="generated image"
           />
         ) : (
-          <Skeleton className="w-full aspect-video" />
+          <Skeleton
+            className={cn(
+              "w-full",
+              itemName ? "aspect-square" : "aspect-video"
+            )}
+          />
         )}
       </div>
     </div>
