@@ -151,6 +151,7 @@ const EndSheet = ({
             <a
               className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
               href={twitterLink.href}
+              target="_blank"
             >
               <TwitterIcon size={16} /> Share on Twitter
             </a>
