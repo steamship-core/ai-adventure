@@ -15,7 +15,8 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Skeleton } from "../ui/skeleton";
-export const CampImage = async () => {
+
+export const CampImage = () => {
   const gameState = useRecoilValue(recoilGameState);
   const [campPic, setCampPic] = useState<string | undefined>(
     gameState?.camp?.image_block_url

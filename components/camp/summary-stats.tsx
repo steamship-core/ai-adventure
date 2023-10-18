@@ -13,7 +13,7 @@ export const SummaryStats = () => {
       <TypographySmall className="flex items-center">
         <ActivityIcon size={16} className="mr-2 text-indigo-400" />
         {/* @ts-ignore */}
-        {gameState?.player?.energy}/{gameState?.player?.max_energy}
+        {gameState?.player?.energy}
       </TypographySmall>
       <TypographySmall className="flex items-center">
         <BadgeDollarSignIcon size={16} className="mr-2 text-yellow-400" />

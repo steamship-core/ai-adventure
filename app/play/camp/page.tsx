@@ -59,14 +59,10 @@ export default async function CampPage() {
             </div>
             <div className="overflow-auto">
               <div>
-                <TypographyLarge className="">Quest Progress</TypographyLarge>
-                <TypographyMuted>
-                  {gameState?.player?.motivation}
-                </TypographyMuted>
                 <QuestProgress />
               </div>
               <div id="camp">
-                <TypographyLarge className="mt-0">Camp</TypographyLarge>
+                <TypographyLarge className="mt-4">Camp</TypographyLarge>
                 <TypographyMuted>
                   Click on the image to view camp members
                 </TypographyMuted>

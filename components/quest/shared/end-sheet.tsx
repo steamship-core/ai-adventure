@@ -19,7 +19,12 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { Quest } from "@/lib/game/schema/quest";
 import { Block } from "@/lib/streaming-client/src";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { BadgeDollarSignIcon, Loader2Icon, PackageIcon } from "lucide-react";
+import {
+  BadgeDollarSignIcon,
+  Loader2Icon,
+  PackageIcon,
+  TwitterIcon,
+} from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -86,6 +91,14 @@ const EndSheet = ({
 
   const quest = gameState?.quests?.find((q) => q.name === params.questId);
 
+  const twitterLink = new URL("https://twitter.com/intent/tweet");
+  twitterLink.searchParams.set(
+    "text",
+    `🎲 My AI Adventurer, ${gameState?.player?.name}, completed their quest! Along the way we found a ${quest?.new_items?.[0]?.name}! Can't wait to see what we find next 🤩 #aiadventure`
+  );
+
+  twitterLink.searchParams.set("url", `https://ai-adventure.steamship.com`);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -98,7 +111,7 @@ const EndSheet = ({
         className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
       >
         <SheetHeader>
-          <SheetTitle>Your Adventure as come to an end</SheetTitle>
+          <SheetTitle>Your Adventure has come to an end</SheetTitle>
           <SheetDescription>
             Great job, adventurer. Time to collect your rewards.
           </SheetDescription>
@@ -135,6 +148,13 @@ const EndSheet = ({
             <Button asChild>
               <a href="/play/camp">Back to camp</a>
             </Button>
+            <a
+              className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
+              href={twitterLink.href}
+              target="_blank"
+            >
+              <TwitterIcon size={16} /> Share on Twitter
+            </a>
           </div>
           <TypographyH3>Journey Overview</TypographyH3>
           <TypographyMuted className="text-lg mb-12">

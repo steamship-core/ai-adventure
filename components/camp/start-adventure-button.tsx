@@ -81,17 +81,17 @@ const StartAdventureButton = () => {
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
         {gameState?.active_mode === "quest" && gameState?.current_quest ? (
-          <>
+          <p className="line-clamp-1 text-left">
             {currentQuestArc
               ? `Continue Adventure: ${currentQuestArc.location}`
               : "Continue Adventure"}
-          </>
+          </p>
         ) : (
-          <>
+          <p className="line-clamp-1 text-left">
             {currentQuestArc
               ? `Start Adventure: ${currentQuestArc.location}`
               : "Go on an Adventure"}{" "}
-          </>
+          </p>
         )}
       </Button>
       {loadingScreen}
