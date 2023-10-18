@@ -7,6 +7,7 @@ import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../recoil-provider";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -64,9 +65,11 @@ export const CampImage = async () => {
               interact with them.
             </SheetDescription>
           </SheetHeader>
-          <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
-            <CampMembers />
-          </div>
+          <SheetBody>
+            <div className="flex flex-col gap-4">
+              <CampMembers />
+            </div>
+          </SheetBody>
         </SheetContent>
       </Sheet>
     </div>

@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
+  SheetBody,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -96,13 +97,13 @@ const EndSheet = ({
         side="bottom"
         className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
       >
-        <SheetHeader className="px-6 md:max-w-xl md:mx-auto text-center">
+        <SheetHeader>
           <SheetTitle>Your Adventure as come to an end</SheetTitle>
           <SheetDescription>
             Great job, adventurer. Time to collect your rewards.
           </SheetDescription>
         </SheetHeader>
-        <div className="overflow-auto w-full px-6 md:max-w-xl md:mx-auto">
+        <SheetBody>
           <TypographyH1 className="text-center mt-12">
             Quest Completed
           </TypographyH1>
@@ -141,7 +142,7 @@ const EndSheet = ({
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>
           <ItemsGained gameState={gameState} quest={quest} />
-        </div>
+        </SheetBody>{" "}
       </SheetContent>
     </Sheet>
   );
