@@ -35,7 +35,7 @@ const ScrollButton = () => {
     const container = document.getElementById("narrative-container");
     container?.scrollTo({
       top: container.scrollHeight,
-      behavior: "smooth",
+      behavior: "instant",
     });
   };
 
@@ -188,7 +188,7 @@ export default function QuestNarrative({
       </div>
       <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
         {isLoading && (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center absolute bottom-16">
             <div className="w-6 h-6 rounded-full animate-spin border-2 border-dashed border-green-500 border-t-transparent"></div>
           </div>
         )}
