@@ -141,6 +141,16 @@ The generative portions of the
 
 ### Customizing Generated Storyline
 
+Customize the model used to generate stories by editing `configuration/server_settings.js`.
+
+```
+  default_story_model: "gpt-4",
+  default_story_temperature: 0.4,
+  default_story_max_tokens: 256,
+```
+
+New games will automatically adopt these new settings. To reset your running game to see these changes, click on your profile image and then click "Reset Game".
+
 ## Advanced Customization
 
 The generative game engine is a [separate open-source project](https://github.com/steamship-packages/ai-adventure-game) deployed to [Steamship](https://steamship.com). It maintains most of the game state -- this web app is mostly a headless client.
