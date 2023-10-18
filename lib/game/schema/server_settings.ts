@@ -13,10 +13,16 @@ export type ServerSettings = {
   default_narration_model?: string;
 
   default_background_music_model?: string;
+
   camp_image_prompt?: string;
   item_image_prompt?: string;
   profile_image_prompt?: string;
   quest_background_image_prompt?: string;
+
+  camp_image_loras?: string[];
+  item_image_loras?: string[];
+  profile_image_loras?: string[];
+  quest_background_image_loras?: string[];
 
   music_prompt?: string;
 };

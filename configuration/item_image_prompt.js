@@ -26,7 +26,7 @@ module.exports = {
   newlines_to_spaces: true,
   value: `
 (pixel art) 16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {item.name}.
-The item's description is: {item.description}.  
+The items's name is: {name}.
+The item's description is: {description}.  
 `,
 };
