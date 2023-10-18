@@ -129,11 +129,34 @@ Get a Vercel Analytics ID from your Vercel project page, and then set the follow
 
 ## Running on Localhost
 
+To run on localhost:
+
+Install the required dependencies:
+
+```
+npm install
+```
+
+Make sure your `.env.local` file is set:
+
+TODO(ted) - what's best practice for this?
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Then open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
 ## Customization
 
 ### Customizing the Non-Generative Game UI
 
 The non-generative portions of the Game UI are all contained within this NextJS project.
+
+You can start exploring by looking at the pages in `app/pages`.
+When running on localhost, your browser will update automatically when you edit and save a file.
 
 ### Customizing Generated Images
 
@@ -180,35 +203,13 @@ If the modifications you with to make are beyond the provided settings of the of
 3. Deploy it as your own Steamship package (`ship deploy`)
 4. Change the `STEAMSHIP_AGENT_VERSION` environment variable in this Vercel project to match your own game engine's handle. If you want to pin it to a specific version, use `handle@version` format.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+This is an open source effort -- come join our quest!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+We hang out in the [Steamship Discord](https://steamship.com/discord)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Related Repositories:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Web Interface** The web interface is at [steamship-core/ai-adventure-game](https://github.com/steamship-core/ai-adventure-game)
+- **Game Engine** The game engine is at [steamship-packages/ai-adventure-game](https://github.com/steamship-packages/ai-adventure-game)
