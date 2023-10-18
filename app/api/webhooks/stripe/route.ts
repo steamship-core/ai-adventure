@@ -246,6 +246,15 @@ export async function POST(req: Request) {
         return NextResponse.json({ result: event, ok: true });
       }
 
+      if (!userId) {
+        const msg = `Missing userId in Stripe Metadata. ${JSON.stringify(
+          event
+        )}`;
+        log.error(msg);
+        console.log(msg);
+        throw Error(msg);
+      }
+
       const agent = await getAgent(userId);
 
       if (!agent) {
