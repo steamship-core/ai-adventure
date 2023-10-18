@@ -59,7 +59,7 @@ export default async function CampPage() {
             </div>
             <div>
               <TypographyLarge className="">Quest Progress</TypographyLarge>
-              <TypographyMuted>{gameState.player.motivation}</TypographyMuted>
+              <TypographyMuted>{gameState?.player?.motivation}</TypographyMuted>
               <QuestProgress />
             </div>
             <div id="camp">
