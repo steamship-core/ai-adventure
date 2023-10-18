@@ -137,19 +137,35 @@ The non-generative portions of the Game UI are all contained within this NextJS 
 
 ### Customizing Generated Images
 
-The generative portions of the
+To customize the models used to generate camp, profile, quest, and item images, edit the following files:
+
+- `configuration/server_settings.js` - Models and their parameters
+- `configuration/camp_image_prompt.js` - Camp image prompt
+- `configuration/item_image_prompt.js` - Item image prompt
+- `configuration/profile_image_prompt.js` - Profile image prompt
+- `configuration/quest_background_image_prompt.js` - Quest background prompt
+
+New games will automatically adopt these new settings.
+To reset your running game to see these changes, click on your profile image and then click "Reset Game".
+
+### Customizing Music
+
+To customize the models used to generate music, edit the following files:
+
+- `configuration/server_settings.js` - Models and their parameters
+- `configuration/music_prompt.js` - Music prompt
+
+New games will automatically adopt these new settings.
+To reset your running game to see these changes, click on your profile image and then click "Reset Game".
 
 ### Customizing Generated Storyline
 
-Customize the model used to generate stories by editing `configuration/server_settings.js`.
+To customize the quest storyline, edit the following files:
 
-```
-  default_story_model: "gpt-4",
-  default_story_temperature: 0.4,
-  default_story_max_tokens: 256,
-```
+- `configuration/server_settings.js` - Models and their parameters
 
-New games will automatically adopt these new settings. To reset your running game to see these changes, click on your profile image and then click "Reset Game".
+New games will automatically adopt these new settings.
+To reset your running game to see these changes, click on your profile image and then click "Reset Game".
 
 ## Advanced Customization
 
