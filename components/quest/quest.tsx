@@ -40,12 +40,7 @@ export default function Quest({
     <QuestContainer>
       {questId && (
         <>
-          <QuestHeader
-            gameState={gameState}
-            id={questId as string}
-            summary={summary}
-            isComplete={isComplete}
-          />
+          <QuestHeader isComplete={isComplete} />
           <QuestNarrative
             id={questId as string}
             onSummary={onSummary}
