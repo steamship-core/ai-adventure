@@ -98,7 +98,7 @@ const EndSheet = ({
         className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
       >
         <SheetHeader>
-          <SheetTitle>Your Adventure as come to an end</SheetTitle>
+          <SheetTitle>Your Adventure has come to an end</SheetTitle>
           <SheetDescription>
             Great job, adventurer. Time to collect your rewards.
           </SheetDescription>

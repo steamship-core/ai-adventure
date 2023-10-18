@@ -41,7 +41,7 @@ const ScrollButton = () => {
 
   return (
     <>
-      <div ref={ref} />
+      <div ref={ref} className="w-full" />
       {!inView && (
         <Button
           onClick={scrollToBottom}

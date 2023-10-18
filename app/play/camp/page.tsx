@@ -66,7 +66,7 @@ export default async function CampPage() {
                 <QuestProgress />
               </div>
               <div id="camp">
-                <TypographyLarge className="mt-0">Camp</TypographyLarge>
+                <TypographyLarge className="mt-4">Camp</TypographyLarge>
                 <TypographyMuted>
                   Click on the image to view camp members
                 </TypographyMuted>
