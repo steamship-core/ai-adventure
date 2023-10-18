@@ -126,7 +126,7 @@ export default function CharacterCreation() {
           onFocus={() => setActiveStep(4)}
           isCurrent={activeStep === 4}
           placeholder="An old, wise, wizard with a long white beard and a pointy hat."
-          text="Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!"
+          text="Describe your character's appearance. An image will be generated based on your description - so be as detailed as you want!"
           isTextarea
           buttonText="Set appearance"
           step={4}
