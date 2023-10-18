@@ -1,4 +1,3 @@
-import { CampMembers } from "@/camp-members";
 import { BackgroundAudio } from "@/components/audio-provider";
 import { ActionBar } from "@/components/camp/action-bar";
 import { CampImage } from "@/components/camp/camp-image";
@@ -66,9 +65,6 @@ export default async function CampPage() {
             <div id="camp">
               <TypographyLarge className="mt-0">Camp</TypographyLarge>
               <CampImage />
-              <div className="flex flex-grow flex-col overflow-auto">
-                <CampMembers />
-              </div>
             </div>
           </div>
           <div id="actions">
