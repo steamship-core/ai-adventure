@@ -34,3 +34,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Set up Stripe
+
+1. Create a new Product in your Stripe console for the adventure game.
+2. Make it a Recurring Subscription
+3. Put the product ID in
+
+### Testing Webhooks
+
+To fully test the app with Stripe on localhost, you will need to forward webhooks to your development machine.
+
+After installing the Stripe CLI, run:
+
+```bash
+stripe login
+stripe stripe listen --forward-to localhost:3000/webhooks/stripe
+```
+
+And then copy your webhook secret into the `STRIPE_WEBHOOK_SECRET` environment variable on localhost.
+
+Leave this proxy running while you develop & run the app on localhost.
