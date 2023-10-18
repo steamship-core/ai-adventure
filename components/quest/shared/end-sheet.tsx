@@ -142,7 +142,7 @@ const EndSheet = ({
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>
           <ItemsGained gameState={gameState} quest={quest} />
-        </SheetBody>{" "}
+        </SheetBody>
       </SheetContent>
     </Sheet>
   );

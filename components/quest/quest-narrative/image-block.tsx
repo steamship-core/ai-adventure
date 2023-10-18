@@ -27,7 +27,7 @@ export const ImageBlock = ({ block }: { block: Block }) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
-            className="w-full aspect-square"
+            className="w-full aspect-video"
             alt="generated image"
           />
         ) : (

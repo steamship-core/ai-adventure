@@ -51,7 +51,7 @@ export default function RootLayout({
             href="/apple-touch-icon.png"
           />
         </head>
-        <body className={cn(font.className, "pb-2")}>
+        <body className={cn(font.className, "pb-3")}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
