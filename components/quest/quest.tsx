@@ -21,7 +21,7 @@ export default function Quest({
     quest?.text_summary ? true : false
   );
   const [completeButtonText, setCompleteButtonText] = useState<string>(
-    quest?.text_summary ? "See Quest Results" : ""
+    quest?.text_summary ? "See Quest Results" : "Complete Quest"
   );
 
   const onSummary = (summary: Block) => {
