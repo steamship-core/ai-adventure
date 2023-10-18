@@ -15,9 +15,14 @@ export default function Quest({
   agentBaseUrl: string;
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
-  const [isComplete, setIsComplete] = useState(false);
-  const [completeButtonText, setCompleteButtonText] = useState<string>();
   const { questId } = useParams();
+  const quest = gameState.quests.find((q) => q.name === questId);
+  const [isComplete, setIsComplete] = useState(
+    quest?.text_summary ? true : false
+  );
+  const [completeButtonText, setCompleteButtonText] = useState<string>(
+    quest?.text_summary ? "See Quest Results" : ""
+  );
 
   const onSummary = (summary: Block) => {
     setSummary(summary);
