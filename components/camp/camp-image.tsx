@@ -35,7 +35,7 @@ export const CampImage = async () => {
       clearInterval(interval);
     };
   }, [campPic]);
-  console.log(campPic);
+
   return (
     <div className="my-2">
       <Sheet>

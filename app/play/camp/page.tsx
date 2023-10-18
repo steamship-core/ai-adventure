@@ -64,6 +64,9 @@ export default async function CampPage() {
             </div>
             <div id="camp">
               <TypographyLarge className="mt-0">Camp</TypographyLarge>
+              <TypographyMuted>
+                Click on the image to view camp members
+              </TypographyMuted>
               <CampImage />
             </div>
           </div>
