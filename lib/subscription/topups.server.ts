@@ -25,6 +25,9 @@ export const createTopUp = async (
     DefaultArgs
   >
 > => {
+  log.info(
+    `Creating TopUp: ${userId} ${agentUrl} ${amountPaidCents} ${creditIncrease} ${reference}`
+  );
   try {
     const agent = await getAgent(userId);
 
@@ -39,7 +42,7 @@ export const createTopUp = async (
       path: "/add_energy",
       arguments: {
         amount: creditIncrease,
-        fail_if_exceeded_max: false,
+        fail_if_exceed_max: false,
       },
     });
 

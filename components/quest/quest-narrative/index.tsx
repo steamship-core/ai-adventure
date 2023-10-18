@@ -126,7 +126,7 @@ export default function QuestNarrative({
   }, []);
 
   // TODO: This is duplicated work.
-  // TODO: Extend to work with dynamically generated blocks -- that will requireus to know the STEAMSHIP_API_BASE
+  // TODO: Extend to work with dynamically generated blocks -- that will re quireus to know the NEXT_PUBLIC_STEAMSHIP_API_BASE
   useEffect(() => {
     if (setBackgroundMusicUrl) {
       if (priorBlocks) {

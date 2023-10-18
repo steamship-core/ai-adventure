@@ -12,27 +12,70 @@ import { TypographyP } from "./ui/typography/TypographyP";
 const ProductDisplay = () => {
   const { user } = useUser();
   if (!user) return null;
+
+  const [subscriptionState, setSubscriptionState] = useState<
+    "loading" | "error" | "true" | "false"
+  >("loading");
+
+  useEffect(() => {
+    fetch("/api/stripe/get-subscription-status", { method: "POST" }).then(
+      (response) => {
+        response.json().then(
+          (data) => {
+            const { hasSubscription } = data;
+            if (hasSubscription) {
+              setSubscriptionState("true");
+            } else {
+              setSubscriptionState("false");
+            }
+          },
+          (error) => {
+            setSubscriptionState("error");
+            console.error(error);
+          }
+        );
+      },
+      (error) => {
+        setSubscriptionState("error");
+        console.error(error);
+      }
+    );
+  }, []);
+
   return (
     <>
       <section className="pt-4">
         <TypographyH3>Subscribe and Save</TypographyH3>
         <TypographyLead>$5.00 / month for 150 Energy / month</TypographyLead>
-        <form action="/api/stripe/create-checkout-session" method="POST">
-          <Button id="checkout-button" type="submit" className="mt-2">
-            Subscribe
-          </Button>
-        </form>
-        <form action="/api/stripe/visit-billing-portal" method="POST">
-          <Button id="checkout-button" type="submit" className="mt-2">
-            Manage Subscription
-          </Button>
-        </form>
+        {subscriptionState == "loading" && (
+          <div>Loading subscription details...</div>
+        )}
+        {subscriptionState == "error" && (
+          <div>
+            There was an error loading your subscription details. Please contact
+            support@steamship.com.
+          </div>
+        )}
+        {subscriptionState == "true" && (
+          <form action="/api/stripe/visit-billing-portal" method="POST">
+            <Button id="checkout-button" type="submit" className="mt-2">
+              Manage Subscription
+            </Button>
+          </form>
+        )}
+        {subscriptionState == "false" && (
+          <form action="/api/stripe/visit-checkout-portal" method="POST">
+            <Button id="checkout-button" type="submit" className="mt-2">
+              Subscribe
+            </Button>
+          </form>
+        )}
       </section>
       <section className="pt-4">
         <TypographyH3>One-time Top Up</TypographyH3>
         <TypographyLead>$5.00 for 100 Energy</TypographyLead>
         <form
-          action="/api/stripe/create-checkout-session?topUp=true"
+          action="/api/stripe/visit-checkout-portal?topUp=true"
           method="POST"
         >
           {" "}
@@ -45,15 +88,16 @@ const ProductDisplay = () => {
   );
 };
 
-const SuccessDisplay = ({ sessionId }: { sessionId: string }) => {
+const SuccessDisplay = ({
+  message,
+  sessionId,
+}: {
+  message: string;
+  sessionId: string;
+}) => {
   return (
     <section>
-      <div className="product Box-root">
-        <div className="description Box-root">
-          <TypographyH3>Subscription to starter plan successful!</TypographyH3>
-        </div>
-      </div>
-      <p>Check your email for a receipt.</p>
+      <TypographyH3>{message}</TypographyH3>
     </section>
   );
 };
@@ -74,6 +118,11 @@ const SubscriptionSheet = () => {
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
       setSuccess(true);
+      if (query.get("topUp") === "true") {
+        setMessage("Top Up Successful!");
+      } else {
+        setMessage("Subscription successful!");
+      }
       const _s = query.get("session_id");
       if (_s) {
         setSessionId(_s);
@@ -86,11 +135,13 @@ const SubscriptionSheet = () => {
   }, [session_Id]);
 
   let result = <></>;
+  let notification = <></>;
 
   if (!success && message === "") {
     result = <ProductDisplay />;
   } else if (success && session_Id !== "") {
-    result = <SuccessDisplay sessionId={session_Id} />;
+    notification = <SuccessDisplay message={message} sessionId={session_Id} />;
+    result = <ProductDisplay />;
   } else {
     result = <Message message={message} />;
   }
@@ -108,6 +159,7 @@ const SubscriptionSheet = () => {
         <TypographyP>
           Support the <b>open source development</b> of this game by filling up!
         </TypographyP>
+        {notification}
         {result}
       </div>
     </div>

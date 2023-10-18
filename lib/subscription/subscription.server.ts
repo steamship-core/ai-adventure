@@ -43,10 +43,14 @@ export const getSubscriptionFromStripeId = async (
   });
 };
 
-export const deleteSubscription = async (userId: string): Promise<number> => {
+export const deleteSubscription = async (
+  subscriptionId: string
+): Promise<number> => {
+  log.info(`Deleting Subscription: ${subscriptionId}`);
+
   let res = await prisma.subscriptions.deleteMany({
     where: {
-      ownerId: userId!,
+      subscriptionId: subscriptionId!,
     },
   });
   return res.count;
@@ -69,6 +73,8 @@ export const createSubscription = async (
     DefaultArgs
   >
 > => {
+  log.info(`Creating TopUp: ${userId} ${stripeId} ${subscriptionId}`);
+
   try {
     return await prisma.subscriptions.create({
       data: {

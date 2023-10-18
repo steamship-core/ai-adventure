@@ -1,6 +1,7 @@
 import { getAgent } from "@/lib/agent/agent.server";
 import {
   createSubscription,
+  deleteSubscription,
   getSubscriptionFromStripeId,
 } from "@/lib/subscription/subscription.server";
 import { createTopUp } from "@/lib/subscription/topups.server";
@@ -28,9 +29,6 @@ export async function POST(req: Request) {
     const event = stripe.webhooks.constructEvent(body, signature, secret);
     log.info(`Stripe Event ${event.type}:${event.id}`);
 
-    if (!event.data.object.customer_details.email) {
-      throw new Error(`missing user email, ${event.id}`);
-    }
     const userId = event.data?.object?.metadata?.userId;
     const subscriptionId = event.data?.object?.subscription;
     const stripeId = event.data?.object?.customer;
@@ -39,6 +37,9 @@ export async function POST(req: Request) {
     const objectId = event.data?.object?.id;
     const amountPaidCents = event.data?.object?.amount_total;
     const currency = event.data?.object?.currency;
+    const cancelAt = event.data?.object?.cancel_at;
+    const canceledAt = event.data?.object?.canceled_at;
+
     // Note: Stripe Metadata turns everything into a string.
     const topUp = event.data?.object?.metadata?.topUp === "true";
 
@@ -151,6 +152,56 @@ export async function POST(req: Request) {
             currency,
           })
         );
+      }
+    } else if (event.type === "customer.subscription.updated") {
+      if (canceledAt) {
+        // They canceled it.
+        if (!stripeId) {
+          const msg = `Stripe customer ID was null. ${JSON.stringify(event)}`;
+          log.error(msg);
+          console.log(msg);
+          throw Error(msg);
+        }
+
+        // Now we have to loop up the user.
+        const subscription = await getSubscriptionFromStripeId(stripeId);
+
+        if (!subscription) {
+          const msg = `Unable to find subscription for customer ${stripeId}. This could be because it's a new subscription. ${JSON.stringify(
+            event
+          )}`;
+          log.warn(msg);
+          console.log(msg);
+          return NextResponse.json({ result: event, ok: true });
+        }
+
+        if (!subscription.subscriptionId) {
+          const msg = `Unable to find subscription.subscriptionId for customer ${stripeId}. This could be because it's a new subscription. ${JSON.stringify(
+            event
+          )}`;
+          log.warn(msg);
+          console.log(msg);
+          return NextResponse.json({ result: event, ok: true });
+        }
+        log.error(
+          `Canceling ${userId} subscription ${subscription.subscriptionId}.`
+        );
+        deleteSubscription(subscription.subscriptionId);
+      } else {
+        log.error(`User ${userId} un-canceled.`);
+        if (stripeId && subscriptionId && status == "active") {
+          // The user might have just re-actived their subscription. Since we don't refund
+          // a prorated amount, this means we just need to check and re-add the subscription object
+          // if it has been deleted.
+
+          // Now we have to loop up the user.
+          const subscription = await getSubscriptionFromStripeId(stripeId);
+
+          if (!subscription) {
+            log.info(`Re-activating ${userId} subscription ${subscriptionId}.`);
+            await createSubscription(userId, stripeId, subscriptionId);
+          }
+        }
       }
     } else if (event.type === "invoice.paid") {
       if (status !== "paid") {
