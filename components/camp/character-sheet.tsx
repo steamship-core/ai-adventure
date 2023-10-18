@@ -3,7 +3,7 @@
 import { levels } from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
-import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
+import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../recoil-provider";
@@ -16,6 +16,7 @@ import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
+import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
@@ -112,7 +113,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0 overflow-y-auto"
+        className="w-100% h-[100dvh] flex flex-col pb-4 overflow-y-auto"
       >
         <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2">
@@ -247,6 +248,50 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
             <TypographyMuted>
               {gameState?.in_conversation_with || "None"}
             </TypographyMuted>
+          </div>
+          <div>
+            <TypographyH3>About this game</TypographyH3>
+            <TypographyMuted>
+              This game was built using the{" "}
+              <a href="https://www.steamship.com/" target="_blank">
+                Steamship Agent SDK
+              </a>
+              . If there is a bug or you have a feature request, please submit
+              an issue on Github. If you&apos;re a developer, feel free to fork
+              the repo and create your own game!
+            </TypographyMuted>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <div className="flex flex-col gap-2">
+                <TypographySmall>Python</TypographySmall>
+                <Button asChild>
+                  <a
+                    href="https://github.com/steamship-packages/ai-adventure/tree/main"
+                    target="_blank"
+                  >
+                    <StarIcon
+                      className="fill-yellow-600 text-yellow-600 mr-2"
+                      size={20}
+                    />
+                    Agent Repo
+                  </a>
+                </Button>
+              </div>
+              <div className="flex flex-col gap-2">
+                <TypographySmall>Next.js</TypographySmall>
+                <Button asChild>
+                  <a
+                    href="https://github.com/steamship-core/ai-adventure"
+                    target="_blank"
+                  >
+                    <StarIcon
+                      className="fill-yellow-600 text-yellow-600 mr-2"
+                      size={20}
+                    />
+                    Web Repo
+                  </a>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </SheetContent>

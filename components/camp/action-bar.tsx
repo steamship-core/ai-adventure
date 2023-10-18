@@ -5,7 +5,6 @@ import InventorySheet from "../inventory-sheet";
 import { Button } from "../ui/button";
 import { AdventureHistorySheet } from "./adventure-history-sheet";
 import StartAdventureButton from "./start-adventure-button";
-
 export const ActionBar = () => {
   return (
     <div className="w-full">
