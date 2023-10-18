@@ -65,9 +65,11 @@ export const AdventureHistorySheet = () => {
                 >
                   <div className="border border-foreground/20 rounded-md p-4">
                     {questArc && (
-                      <div>
+                      <div className="flex flex-col">
                         <TypographyLarge>{questArc.location}</TypographyLarge>
-                        <TypographySmall>{questArc.goal}</TypographySmall>
+                        <TypographySmall className="mt-2 leading-1">
+                          {questArc.goal}
+                        </TypographySmall>
                       </div>
                     )}
                     <TypographyMuted className="mt-2">

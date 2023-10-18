@@ -1,16 +1,24 @@
 "use client";
-import { useCurrentQuestArc } from "@/lib/hooks";
 import { ArrowLeftIcon, PackageIcon } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useRecoilValue } from "recoil";
 import AudioSheet from "../audio-sheet";
 import { CharacterSheet } from "../camp/character-sheet";
 import InventorySheet from "../inventory-sheet";
+import { recoilGameState } from "../recoil-provider";
 import { Button } from "../ui/button";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
-  const questArc = useCurrentQuestArc();
+  const gameState = useRecoilValue(recoilGameState);
+  const { questId } = useParams();
+
+  const questArcs = gameState?.quest_arc || [];
+  const questIndex = gameState.quests.findIndex((q) => q.name === questId);
+
+  const questArc = questIndex > questArcs.length ? null : questArcs[questIndex];
 
   return (
     <div className="flex justify-between items-center border-b border-b-foreground/10 pb-2 basis-1/12">
