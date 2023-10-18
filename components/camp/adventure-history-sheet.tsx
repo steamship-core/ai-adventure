@@ -31,8 +31,8 @@ export const AdventureHistorySheet = () => {
           variant="outline"
           className="w-full flex justify-start"
         >
-          <CompassIcon size={16} className="h-6 w-6 mr-2" />
-          Adventure History
+          <CompassIcon size={16} className="h-4 w-4 md:h-6 md:w-6 mr-2" />
+          Past Adventures
         </Button>
       </SheetTrigger>
       <SheetContent

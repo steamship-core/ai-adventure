@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import {
   Dispatch,
   KeyboardEvent,
@@ -6,8 +6,9 @@ import {
   useRef,
   useState,
 } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { inputClassNames } from "../ui/input";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import useFocus from "./hooks/use-focus";
@@ -33,72 +34,45 @@ export const FocusableTextArea = ({
 }) => {
   const { ref } = useFocus<HTMLTextAreaElement>(isFinished, isCurrent);
   return (
-    <Textarea
-      ref={ref}
-      className="w-full disabled:cursor-default"
-      placeholder={placeholder}
-      onFocus={onFocus}
+    <TextareaAutosize
+      className={cn(
+        inputClassNames,
+        "w-full py-[.6rem] resize-none disabled:cursor-default"
+      )}
       value={value}
       onChange={(e) => setValue(e.target.value)}
-      disabled={!isFinished}
+      ref={ref}
       onKeyDown={onKeyDown}
-      autoFocus
-    />
-  );
-};
-
-export const FocusableInputArea = ({
-  value,
-  isFinished,
-  isCurrent,
-  onFocus,
-  setValue,
-  placeholder,
-}: {
-  value: string;
-  setValue: Dispatch<SetStateAction<string>>;
-  isFinished: boolean;
-  isCurrent: boolean;
-  onFocus: () => any;
-  placeholder: string;
-}) => {
-  const { ref } = useFocus<HTMLInputElement>(isFinished, isCurrent);
-  return (
-    <Input
-      ref={ref}
-      className="w-full disabled:cursor-default"
-      placeholder={placeholder}
-      onFocus={onFocus}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
       disabled={!isFinished}
+      onFocus={onFocus}
+      placeholder={placeholder}
       autoFocus
     />
   );
 };
 
 const OnboardingPrompt = ({
-  onContinue,
   isCurrent,
-  onFocus,
   text,
-  isTextarea,
   placeholder,
   buttonText,
   options,
   step,
   totalSteps,
+  setStep,
+  setActiveStep,
+  setConfiguration,
 }: {
-  onContinue: (value: string) => any;
   isCurrent: boolean;
-  onFocus: () => any;
   text: string;
-  isTextarea?: boolean;
   placeholder: string;
   buttonText: string;
   options?: string[];
   step: number;
   totalSteps: number;
+  setStep: Dispatch<SetStateAction<number>>;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  setConfiguration: (option: string) => void;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
@@ -114,8 +88,14 @@ const OnboardingPrompt = ({
     }
   };
 
+  const onContinue = (option: string) => {
+    setStep((prev) => (prev > step + 1 ? prev : step + 1));
+    setActiveStep((prev) => (prev > step + 1 ? prev : step + 1));
+    setConfiguration(option);
+  };
+
   return (
-    <CreationContent isCurrent={isCurrent} onClick={onFocus}>
+    <CreationContent isCurrent={isCurrent} onClick={() => setActiveStep(step)}>
       <TypographyMuted>
         {step}/{totalSteps}
       </TypographyMuted>
@@ -129,7 +109,9 @@ const OnboardingPrompt = ({
               <Button
                 variant={option === value ? "default" : "outline"}
                 key={option}
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   setValue(option);
                   onContinue(option);
                 }}
@@ -152,26 +134,15 @@ const OnboardingPrompt = ({
             }}
             className="flex gap-2 flex-col"
           >
-            {isTextarea ? (
-              <FocusableTextArea
-                placeholder={placeholder}
-                onFocus={onFocus}
-                onKeyDown={onEnterPress}
-                value={value}
-                setValue={setValue}
-                isFinished={isFinished}
-                isCurrent={isCurrent}
-              />
-            ) : (
-              <FocusableInputArea
-                placeholder={placeholder}
-                onFocus={onFocus}
-                value={value}
-                setValue={setValue}
-                isFinished={isFinished}
-                isCurrent={isCurrent}
-              />
-            )}
+            <FocusableTextArea
+              placeholder={placeholder}
+              onFocus={() => setActiveStep(step)}
+              onKeyDown={onEnterPress}
+              value={value}
+              setValue={setValue}
+              isFinished={isFinished}
+              isCurrent={isCurrent}
+            />
             <Button
               disabled={value.length < 1}
               className="w-full"

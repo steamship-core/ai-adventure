@@ -1,6 +1,4 @@
 "use client";
-import { updateGameState } from "@/lib/game/game-state.client";
-import { GameState } from "@/lib/game/schema/game_state";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import CharacterCreationComplete, {
@@ -44,9 +42,78 @@ export default function CharacterCreation() {
     quests: [],
   });
 
-  const saveConfig = async (config: CharacterConfig) => {
-    await updateGameState(config as GameState);
-  };
+  const steps = [
+    {
+      placeholder: "Fantasy, steampunk, pirate/high-seas, viking, etc..",
+      text: "Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.",
+      buttonText: "Set theme",
+      options: ["Fantasy", "Steampunk", "Horror"],
+      setConfiguration: (genre: string) => {
+        setConfiguration({
+          ...configuration,
+          genre,
+        });
+      },
+    },
+    {
+      placeholder: "Serious, silly, dark, light, etc..",
+      text: "What is the tone of the story? Serious, silly, dark, light, etc..",
+      buttonText: "Set tone",
+      options: ["Serious", "Silly", "Dark"],
+      setConfiguration: (tone: string) => {
+        setConfiguration({
+          ...configuration,
+          tone,
+        });
+      },
+    },
+    {
+      placeholder: "Thumblemore the Often-Lost",
+      text: "Choose a name for your character. This can be anything you want!",
+      buttonText: "Set name",
+      setConfiguration: (name: string) => {
+        setConfiguration({
+          ...configuration,
+          player: { ...configuration.player, name },
+        });
+      },
+    },
+    {
+      placeholder:
+        "Thumblemore is a disheveled wizard with silver-white hair that cascades wildly, often obscuring his dazed blue eyes. He wears azure robes dotted with confusing maps and compasses, all misleadingly pointing in various directions. Around his neck dangle mismatched amulets from many misadventures, while he leans on a crooked staff etched with arcane symbols, some seemingly corrected in haste. His twisty beard seems to harbor its own mysteries, much like the rest of him.",
+      text: "Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!",
+      buttonText: "Set appearance",
+      setConfiguration: (description: string) => {
+        setConfiguration({
+          ...configuration,
+          player: { ...configuration.player, description },
+        });
+      },
+    },
+    {
+      placeholder:
+        "Born to a noble family, your character has always had everything they wanted... until now.",
+      text: "Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?",
+      buttonText: "Set background",
+      setConfiguration: (background: string) => {
+        setConfiguration({
+          ...configuration,
+          player: { ...configuration.player, background },
+        });
+      },
+    },
+    {
+      placeholder: "To become the most powerful wizard in the land.",
+      text: "What primary motivation does your character have? This will be used to generate quests and storylines for your character.",
+      buttonText: "Set motivation",
+      setConfiguration: (motivation: string) => {
+        setConfiguration({
+          ...configuration,
+          player: { ...configuration.player, motivation },
+        });
+      },
+    },
+  ];
 
   return (
     <CreationContainer>
@@ -57,142 +124,22 @@ export default function CharacterCreation() {
           isCurrent={activeStep === 7}
         />
       )}
-      {step > 5 && (
-        <OnboardingPrompt
-          onContinue={(motivation) => {
-            setStep((prev) => (prev > 7 ? prev : 7));
-            setActiveStep((prev) => (prev > 7 ? prev : 7));
-            setConfiguration({
-              ...configuration,
-              player: {
-                ...configuration.player,
-                motivation,
-              },
-            });
-          }}
-          onFocus={() => setActiveStep(6)}
-          isCurrent={activeStep === 6}
-          placeholder="To become the most powerful wizard in the land."
-          text="What primary motivation does your character have? This will be used to generate quests and storylines for your character."
-          isTextarea
-          buttonText="Set motivation"
-          step={6}
-          totalSteps={6}
-        />
-      )}
-      {step > 4 && (
-        <OnboardingPrompt
-          onContinue={(background) => {
-            setStep((prev) => (prev > 6 ? prev : 6));
-            setActiveStep((prev) => (prev > 6 ? prev : 6));
-            setConfiguration({
-              ...configuration,
-              player: {
-                ...configuration.player,
-                background,
-              },
-            });
-          }}
-          onFocus={() => setActiveStep(5)}
-          isCurrent={activeStep === 5}
-          placeholder="Born to a noble family, your character has always had everything they wanted... until now."
-          text="Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?"
-          isTextarea
-          buttonText="Set background"
-          step={5}
-          totalSteps={6}
-        />
-      )}
-      {step > 3 && (
-        <OnboardingPrompt
-          onContinue={(description) => {
-            setStep((prev) => (prev > 5 ? prev : 5));
-            setActiveStep((prev) => (prev > 5 ? prev : 5));
-            setConfiguration({
-              ...configuration,
-              player: {
-                ...configuration.player,
-                description,
-              },
-            });
-            saveConfig({
-              ...configuration,
-              player: {
-                ...configuration.player,
-                description,
-              },
-            });
-          }}
-          onFocus={() => setActiveStep(4)}
-          isCurrent={activeStep === 4}
-          placeholder="An old, wise, wizard with a long white beard and a pointy hat."
-          text="Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!"
-          isTextarea
-          buttonText="Set appearance"
-          step={4}
-          totalSteps={6}
-        />
-      )}
-      {step > 2 && (
-        <OnboardingPrompt
-          onContinue={(name) => {
-            setStep((prev) => (prev > 4 ? prev : 4));
-            setActiveStep((prev) => (prev > 4 ? prev : 4));
-            setConfiguration({
-              ...configuration,
-              player: {
-                ...configuration.player,
-                name,
-              },
-            });
-          }}
-          onFocus={() => setActiveStep(3)}
-          isCurrent={activeStep === 3}
-          text="Choose a name for your character. This can be anything you want!"
-          placeholder="Professor Chaos"
-          buttonText="Set name"
-          step={3}
-          totalSteps={6}
-        />
-      )}
-      {step > 1 && (
-        <OnboardingPrompt
-          onContinue={(tone) => {
-            setStep((prev) => (prev > 3 ? prev : 3));
-            setActiveStep((prev) => (prev > 3 ? prev : 3));
-            setConfiguration({ ...configuration, tone });
-          }}
-          onFocus={() => {
-            setActiveStep(2);
-          }}
-          isCurrent={activeStep === 2}
-          placeholder="Serious, silly, dark, light, etc.."
-          text="What is the tone of the story? Serious, silly, dark, light, etc.."
-          buttonText="Set tone"
-          options={["Serious", "Silly", "Dark"]}
-          step={2}
-          totalSteps={6}
-        />
-      )}
-      {step > 0 && (
-        <OnboardingPrompt
-          onContinue={(genre) => {
-            setStep((prev) => (prev > 2 ? prev : 2));
-            setActiveStep((prev) => (prev > 2 ? prev : 2));
-            setConfiguration({ ...configuration, genre });
-          }}
-          onFocus={() => {
-            setActiveStep(1);
-          }}
-          isCurrent={activeStep === 1}
-          placeholder="Fantasy, steampunk, pirate/high-seas, viking, etc.."
-          text="Set the theme of the adventure. This will determine the setting and genre of the story you will be playing."
-          buttonText="Set theme"
-          options={["Fantasy", "Steampunk", "Horror"]}
-          step={1}
-          totalSteps={6}
-        />
-      )}
+      {steps
+        .map((stepConfig, index) => {
+          if (index + 1 > step) return null;
+          return (
+            <OnboardingPrompt
+              setStep={setStep}
+              setActiveStep={setActiveStep}
+              isCurrent={activeStep === index + 1}
+              totalSteps={6}
+              key={stepConfig.text}
+              step={index + 1}
+              {...stepConfig}
+            />
+          );
+        })
+        .reverse()}
       <CharacterCreationIntro
         onContinue={() => {
           setStep(1);
