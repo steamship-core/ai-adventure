@@ -14,7 +14,7 @@ export const QuestNarrativeContainer = ({
   <div className="flex flex-col h-full w-full">
     <div
       id="narrative-container"
-      className="flex-1 flex flex-col-reverse overflow-auto gap-8 pt-8 pb-0 "
+      className="flex-1 overflow-auto flex flex-col-reverse gap-8 pt-8 pb-0 "
     >
       {children}
     </div>
