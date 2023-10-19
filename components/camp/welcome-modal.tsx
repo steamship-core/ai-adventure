@@ -1,12 +1,20 @@
 "use client";
 import { getGameState } from "@/lib/game/game-state.client";
+import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { StepProps, TooltipRenderProps } from "react-joyride";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import {
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet";
 import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
@@ -118,28 +126,35 @@ export const WelcomeModal = () => {
     setIsOpen(false);
     setRunTour(true);
   };
+  const [isClamped, setIsClamped] = useState(true);
 
   return (
     <>
-      <Dialog open={isOpen} onOpenChange={(open) => closeDialog()}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              <span className="mr-2">👋</span>Welcome to AI Adventure!
-            </DialogTitle>
+      <Sheet open={isOpen} onOpenChange={(open) => closeDialog()}>
+        <SheetContent side="bottom" className="w-100% h-[100dvh] flex flex-col">
+          <SheetHeader>
+            <SheetTitle>Welcome to AI Adventure!</SheetTitle>
+          </SheetHeader>
+          <SheetBody>
             <div className="flex flex-col gap-4">
-              <div className="flex items-center flex-col justify-center mt-4 p-2">
+              <div className="flex items-center flex-col justify-center">
                 <div className="w-full flex items-center flex-col justify-center p-4 border border-foreground/20 rounded-md shadow-lg dark:bg-black bg-white">
                   <TypographyLarge>{gameState?.player?.name}</TypographyLarge>
-                  <TypographyMuted>
-                    {gameState?.player?.background}
-                  </TypographyMuted>
+                  <button onClick={() => setIsClamped((p) => !p)}>
+                    <TypographyMuted
+                      className={cn(isClamped && "line-clamp-2")}
+                    >
+                      {gameState?.player?.background}
+                    </TypographyMuted>
+                  </button>
                   <div className="mt-2">
                     {imageLoaded && profilePic ? (
-                      <img
+                      <Image
                         className="w-24 h-24 rounded-full"
                         src={profilePic}
                         alt="Generated profile pic"
+                        height={1024}
+                        width={1024}
                       />
                     ) : (
                       <Skeleton className="w-24 h-24 rounded-full" />
@@ -167,9 +182,9 @@ export const WelcomeModal = () => {
               </TypographyMuted>
               <Button onClick={() => closeDialog()}>Let&apos;s go!</Button>
             </div>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+          </SheetBody>
+        </SheetContent>
+      </Sheet>
       <Joyride
         run={runTour}
         steps={joyrideSteps}
