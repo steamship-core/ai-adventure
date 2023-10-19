@@ -21,13 +21,13 @@ export default async function AccountPlanPage() {
   const agent = await getAgent(userId);
 
   if (!agent) {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   let gameState = await getGameState(agent?.agentUrl);
 
   if (gameState.active_mode == "onboarding") {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   return (

@@ -26,7 +26,7 @@ export default async function PlayPage() {
       <TypographyH1>AI Adventure</TypographyH1>
       <div className="flex flex-col mt-8">
         <Button asChild>
-          <Link href="/play/character-creation">Create your own Character</Link>
+          <Link href="/character-creation">Create your own Character</Link>
         </Button>
         <LogoutButton />
       </div>

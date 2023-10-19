@@ -27,13 +27,13 @@ export default async function CampPage() {
   const agent = await getAgent(userId);
 
   if (!agent) {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   let gameState = await getGameState(agent?.agentUrl);
 
   if (gameState.active_mode == "onboarding") {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   if (!gameState.quest_arc) {

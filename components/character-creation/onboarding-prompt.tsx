@@ -62,6 +62,7 @@ const OnboardingPrompt = ({
   setStep,
   setActiveStep,
   setConfiguration,
+  initialValue = "",
 }: {
   isCurrent: boolean;
   text: string;
@@ -73,11 +74,12 @@ const OnboardingPrompt = ({
   setStep: Dispatch<SetStateAction<number>>;
   setActiveStep: Dispatch<SetStateAction<number>>;
   setConfiguration: (option: string) => void;
+  initialValue?: string;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
   });
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
   const [showForm, setShowForm] = useState(options ? false : true);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -133,10 +135,14 @@ const OnboardingPrompt = ({
               onContinue(value);
             }}
             className="flex gap-2 flex-col"
+            autoFocus={false}
           >
             <FocusableTextArea
               placeholder={placeholder}
-              onFocus={() => setActiveStep(step)}
+              onFocus={() => {
+                console.log("focus here");
+                setActiveStep(step);
+              }}
               onKeyDown={onEnterPress}
               value={value}
               setValue={setValue}

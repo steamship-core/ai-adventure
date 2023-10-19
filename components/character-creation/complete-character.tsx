@@ -1,6 +1,7 @@
 import { updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { Button } from "../ui/button";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
@@ -25,13 +26,18 @@ const CharacterCreationComplete = ({
   config,
   isCurrent,
   onFocus,
+  isCompleteConfig,
+  editCharacterFromTemplate,
 }: {
   config: CharacterConfig;
   isCurrent: boolean;
   onFocus: () => any;
+  isCompleteConfig: boolean;
+  editCharacterFromTemplate: () => any;
 }) => {
   const { loadingScreen, setIsVisible } = useLoadingScreen();
   const router = useRouter();
+  const ref = useRef<HTMLButtonElement>(null);
 
   const onComplete = async () => {
     setIsVisible(true);
@@ -46,8 +52,8 @@ const CharacterCreationComplete = ({
   return (
     <>
       {loadingScreen}
-      <CreationContent isCurrent={isCurrent} onClick={onFocus}>
-        <div className="mt-6 flex flex-col gap-4">
+      <CreationContent isCurrent={isCurrent}>
+        <div className="mt-6 flex flex-col gap-4" onClick={onFocus}>
           <div>
             <TypographyMuted className="text-muted-foreground">
               Name:
@@ -80,10 +86,17 @@ const CharacterCreationComplete = ({
           <Button
             disabled={!allValuesAreSet(config)}
             className="w-full"
+            autoFocus
             onClick={onComplete}
+            ref={ref}
           >
             Create Character
           </Button>
+          {isCompleteConfig && (
+            <Button variant="outline" onClick={editCharacterFromTemplate}>
+              Edit Character
+            </Button>
+          )}
         </CreationActions>
       </CreationContent>
     </>

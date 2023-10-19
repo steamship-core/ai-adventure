@@ -18,7 +18,7 @@ export default async function QuestPage() {
   const agent = await getAgent(userId);
 
   if (!agent) {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   const gameState = await getGameState(agent?.agentUrl);

@@ -192,7 +192,7 @@ export default function QuestNarrative({
           )}
         </QuestNarrativeContainer>
       </div>
-      <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
+      <div className="flex items-end justify-center flex-col w-full gap-2 basis-1/12 pt-1 relative">
         {isComplete ? (
           <EndSheet
             isEnd={true}
