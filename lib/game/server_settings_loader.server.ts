@@ -8,10 +8,10 @@
  */
 import { ServerSettings } from "./schema/server_settings";
 
-import * as _camp_image_prompt from "@/configuration/camp_image_prompt";
 import * as _item_image_prompt from "@/configuration/item_image_prompt";
 import * as _music_prompt from "@/configuration/music_prompt";
 import * as _profile_image_prompt from "@/configuration/profile_image_prompt";
+import * as _camp_image_prompt from "@/configuration/prompts/camp_image_prompt";
 import * as _quest_background_image_prompt from "@/configuration/quest_background_image_prompt";
 import * as _server_settings_base from "@/configuration/server_settings";
 
