@@ -5,7 +5,7 @@ import { CharacterSheet } from "@/components/camp/character-sheet";
 import { QuestProgress } from "@/components/camp/quest-progress";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
-import RecoilProvider from "@/components/recoil-provider";
+import RecoilProvider from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAgent } from "@/lib/agent/agent.server";

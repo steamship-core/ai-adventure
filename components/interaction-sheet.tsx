@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { InventoryList } from "./inventory-list";
-import { recoilGameState } from "./recoil-provider";
+import { recoilGameState } from "./providers/recoil";
 import { Button } from "./ui/button";
 import {
   Sheet,

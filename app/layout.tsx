@@ -1,9 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
-import { ZapIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
 import "./globals.css";
@@ -51,7 +49,7 @@ export default function RootLayout({
             href="/apple-touch-icon.png"
           />
         </head>
-        <body className={cn(font.className, "pb-3")}>
+        <body className={cn(font.className)}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -60,22 +58,6 @@ export default function RootLayout({
           >
             {children}
             <Analytics />
-            <div className="w-full text-center flex items-center justify-center absolute bottom-2">
-              <TypographySmall>
-                <ZapIcon
-                  size={16}
-                  className="fill-yellow-600 inline text-yellow-600"
-                />{" "}
-                by{" "}
-                <a
-                  href="https://steamship.com"
-                  target="_blank"
-                  className="underline"
-                >
-                  Steamship
-                </a>
-              </TypographySmall>
-            </div>
           </ThemeProvider>
         </body>
       </html>

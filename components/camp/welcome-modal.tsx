@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { StepProps, TooltipRenderProps } from "react-joyride";
 import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Skeleton } from "../ui/skeleton";

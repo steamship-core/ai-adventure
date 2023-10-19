@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 import { InventoryList } from "./inventory-list";
-import { recoilGameState } from "./recoil-provider";
+import { recoilGameState } from "./providers/recoil";
 import {
   Sheet,
   SheetBody,

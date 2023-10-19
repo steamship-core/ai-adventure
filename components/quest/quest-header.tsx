@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 import AudioSheet from "../audio-sheet";
 import { CharacterSheet } from "../camp/character-sheet";
 import InventorySheet from "../inventory-sheet";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";

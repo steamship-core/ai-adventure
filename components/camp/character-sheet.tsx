@@ -11,7 +11,7 @@ import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";

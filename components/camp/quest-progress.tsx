@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2Icon, CircleIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";

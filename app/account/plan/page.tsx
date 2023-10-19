@@ -2,7 +2,7 @@ import ReturnToCampButton from "@/components/account/return-to-camp-button";
 import { BackgroundAudio } from "@/components/audio-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
-import RecoilProvider from "@/components/recoil-provider";
+import RecoilProvider from "@/components/providers/recoil";
 import SubscriptionSheet from "@/components/subscription-sheet";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";

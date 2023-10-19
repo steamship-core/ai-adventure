@@ -2,7 +2,7 @@
 
 import { useRecoilValue } from "recoil";
 import InteractionSheet from "./components/interaction-sheet";
-import { recoilGameState } from "./components/recoil-provider";
+import { recoilGameState } from "./components/providers/recoil";
 import { TypographyMuted } from "./components/ui/typography/TypographyMuted";
 import { TypographyP } from "./components/ui/typography/TypographyP";
 import { TypographySmall } from "./components/ui/typography/TypographySmall";

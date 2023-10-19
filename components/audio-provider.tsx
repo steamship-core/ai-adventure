@@ -4,7 +4,7 @@ import { useBackgroundMusic } from "@/lib/hooks";
 import { useEffect } from "react";
 import { useAudio } from "react-use";
 import { useRecoilState } from "recoil";
-import { recoilAudioActiveState } from "./recoil-provider";
+import { recoilAudioActiveState } from "./providers/recoil";
 
 export interface AudioProviderProps {
   children?: React.ReactNode;

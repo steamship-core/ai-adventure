@@ -1,7 +1,7 @@
 "use client";
 
+import { recoilAudioActiveState } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import { recoilAudioActiveState } from "@/components/recoil-provider";
 import { inputClassNames } from "@/components/ui/input";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";

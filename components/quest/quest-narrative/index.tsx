@@ -1,10 +1,10 @@
 "use client";
 
-import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import {
   recoilAudioActiveState,
   recoilGameState,
-} from "@/components/recoil-provider";
+} from "@/components/providers/recoil";
+import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { inputClassNames } from "@/components/ui/input";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";

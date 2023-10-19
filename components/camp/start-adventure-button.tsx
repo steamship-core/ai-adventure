@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import useLoadingScreen from "../loading/use-loading-screen";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 
 const StartAdventureButton = () => {
