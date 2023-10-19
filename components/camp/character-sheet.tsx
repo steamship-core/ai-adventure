@@ -25,7 +25,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const { push } = useRouter();
 
   const rank = gameState?.player?.rank || 0;
-
   const [backgroundAllowed, setBackgroundAllowed, _1, _2] =
     useBackgroundMusic();
 
@@ -42,6 +41,25 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
       let newGameState = await response.json();
       setGameState(newGameState);
     }
+  };
+
+  const setEnergyTo0 = async () => {
+    const response = await fetch("/api/game/debug", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "deplete-energy",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let newGameState = await response.json();
+      setGameState(newGameState);
+    }
+  };
+
+  const buyEnergy = async () => {
+    push("/account/plan");
   };
 
   const resetCharacter = async () => {
@@ -216,6 +234,22 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 onCheckedChange={setIsDebugMode as any}
               />
               <div className="flex gap-4 flex-wrap my-4">
+                <Button
+                  onClick={(e) => {
+                    buyEnergy();
+                  }}
+                >
+                  Buy Energy
+                </Button>
+
+                <Button
+                  onClick={(e) => {
+                    setEnergyTo0();
+                  }}
+                >
+                  Set Energy to 0
+                </Button>
+
                 <Button
                   onClick={(e) => {
                     setEnergyTo100();

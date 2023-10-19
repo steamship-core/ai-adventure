@@ -27,7 +27,7 @@ export const loadExistingQuestBlocks = async (
   });
   let blocks = (await resp.json()) as ExtendedBlock[];
   return blocks.map((block) => {
-    block.streamingUrl = `${process.env.STEAMSHIP_API_BASE}block/${block.id}/raw`;
+    block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
     block.historical = true;
     return block;
   });

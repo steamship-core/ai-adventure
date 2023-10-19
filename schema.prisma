@@ -13,3 +13,20 @@ model Agents {
   ownerId   String
   agentUrl  String
 }
+
+model Subscriptions {
+  id        Int      @id @default(autoincrement())
+  ownerId   String
+  stripeId  String
+  priceId    String
+  subscriptionId  String
+}
+
+model TopUps {
+  id        Int      @id @default(autoincrement())
+  ownerId           String
+  agentUrl          String
+  amountPaidCents    Int     // Amount paid
+  creditIncrease     Int     // Energy Added
+  reference String  // Stripe reference
+}

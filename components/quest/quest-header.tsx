@@ -21,7 +21,7 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
   const questArc = questIndex > questArcs.length ? null : questArcs[questIndex];
 
   return (
-    <div className="flex justify-between items-center border-b border-b-foreground/10 pb-2 basis-1/12">
+    <header className="flex justify-between items-center border-b border-b-foreground/10 pb-2 basis-1/12">
       <div className="flex items-center justify-center">
         {!isComplete ? (
           <Button asChild variant="link" className="pl-0">
@@ -52,6 +52,6 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
           </Button>
         </InventorySheet>
       </div>
-    </div>
+    </header>
   );
 };
