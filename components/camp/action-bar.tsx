@@ -1,3 +1,4 @@
+"use client";
 import { track } from "@vercel/analytics/react";
 import { PackageIcon } from "lucide-react";
 import InventorySheet from "../inventory-sheet";
