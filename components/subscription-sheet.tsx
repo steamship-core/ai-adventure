@@ -1,6 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import { ActivityIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -10,9 +9,6 @@ import { TypographyLead } from "./ui/typography/TypographyLead";
 import { TypographyP } from "./ui/typography/TypographyP";
 
 const ProductDisplay = () => {
-  const { user } = useUser();
-  if (!user) return null;
-
   const [subscriptionState, setSubscriptionState] = useState<
     "loading" | "error" | "true" | "false"
   >("loading");
