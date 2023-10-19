@@ -1,32 +1,28 @@
 "use client";
 
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import {
-  recoilAudioActiveState,
-  recoilGameState,
-} from "@/components/recoil-provider";
+import { recoilAudioActiveState } from "@/components/recoil-provider";
 import { inputClassNames } from "@/components/ui/input";
-import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
-import { ArrowDown, LoaderIcon, SendIcon } from "lucide-react";
+import { ArrowDown, SendIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
 import { useRecoilState } from "recoil";
-import { Button } from "../../ui/button";
-import EndSheet from "../shared/end-sheet";
-import { NarrativeBlock } from "./narrative-block";
-import { UserInputBlock } from "./user-input-block";
+import { NarrativeBlock } from "../../quest/quest-narrative/narrative-block";
+import { UserInputBlock } from "../../quest/quest-narrative/user-input-block";
 import {
   ExtendedBlock,
   MessageTypes,
   getFormattedBlocks,
   getMessageType,
-} from "./utils";
+} from "../../quest/quest-narrative/utils";
+import EndSheet from "../../quest/shared/end-sheet";
+import { Button } from "../../ui/button";
 
 const ScrollButton = () => {
   const { ref, inView } = useInView();
@@ -35,13 +31,13 @@ const ScrollButton = () => {
     const container = document.getElementById("narrative-container");
     container?.scrollTo({
       top: container.scrollHeight,
-      behavior: "instant",
+      behavior: "smooth",
     });
   };
 
   return (
     <>
-      <div ref={ref} className="w-full" />
+      <div ref={ref} />
       {!inView && (
         <Button
           onClick={scrollToBottom}
@@ -55,7 +51,7 @@ const ScrollButton = () => {
   );
 };
 
-export default function QuestNarrative({
+export default function ChatNarrative({
   id,
   onSummary,
   onComplete,
@@ -78,8 +74,7 @@ export default function QuestNarrative({
 
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
-  const [gg, setGameState] = useRecoilState(recoilGameState);
-  console.log(gg);
+
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
   const {
@@ -126,7 +121,7 @@ export default function QuestNarrative({
   }, []);
 
   // TODO: This is duplicated work.
-  // TODO: Extend to work with dynamically generated blocks -- that will re quireus to know the NEXT_PUBLIC_STEAMSHIP_API_BASE
+  // TODO: Extend to work with dynamically generated blocks -- that will require us to know the NEXT_PUBLIC_STEAMSHIP_API_BASE
   useEffect(() => {
     if (setBackgroundMusicUrl) {
       if (priorBlocks) {
@@ -139,17 +134,6 @@ export default function QuestNarrative({
       }
     }
   }, [priorBlocks]);
-
-  useEffect(() => {
-    const updateGameState = async () => {
-      const gs = await getGameState();
-      setGameState(gs);
-    };
-
-    if (isComplete) {
-      updateGameState();
-    }
-  }, [isComplete]);
 
   let nonPersistedUserInput: string | null = null;
   return (
@@ -187,6 +171,11 @@ export default function QuestNarrative({
         </QuestNarrativeContainer>
       </div>
       <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
+        {isLoading && (
+          <div className="flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full animate-spin border-2 border-dashed border-green-500 border-t-transparent"></div>
+          </div>
+        )}
         {isComplete ? (
           <EndSheet
             isEnd={true}
@@ -220,11 +209,7 @@ export default function QuestNarrative({
               disabled={isLoading || isComplete}
             />
             <Button type="submit" disabled={isLoading || isComplete}>
-              {isLoading ? (
-                <LoaderIcon size={16} className="animate-spin" />
-              ) : (
-                <SendIcon size={16} />
-              )}
+              <SendIcon size={16} />
             </Button>
           </form>
         )}

@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getSteamshipClient() {
   return new Steamship({
     apiKey: process.env.STEAMSHIP_API_KEY,
-    appBase: process.env.STEAMSHIP_APP_BASE,
-    apiBase: process.env.STEAMSHIP_API_BASE,
+    appBase: process.env.NEXT_PUBLIC_STEAMSHIP_APP_BASE,
+    apiBase: process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE,
   });
 }

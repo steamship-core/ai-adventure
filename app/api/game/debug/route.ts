@@ -1,6 +1,7 @@
 import { deleteAgent, getAgent } from "@/lib/agent/agent.server";
 import { getGameState, saveGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
+import { log } from "next-axiom";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -16,11 +17,12 @@ export async function POST(request: Request) {
   }
 
   const { operation } = (await request.json()) as {
-    operation: "top-up-energy" | "reset";
+    operation: "top-up-energy" | "reset" | "deplete-energy";
   };
 
   try {
     if (operation == "top-up-energy") {
+      log.info(`Topping up energy for ${userId}: ${agent?.agentUrl}`);
       let gameState = await getGameState(agent?.agentUrl);
       await saveGameState(agent?.agentUrl, {
         ...gameState,
@@ -28,9 +30,19 @@ export async function POST(request: Request) {
       });
       gameState = await getGameState(agent?.agentUrl);
       return NextResponse.json(gameState);
+    } else if (operation == "deplete-energy") {
+      log.info(`Depleting energy for ${userId}: ${agent?.agentUrl}`);
+      console.log(`Depleting energy for ${userId}: ${agent?.agentUrl}`);
+      let gameState = await getGameState(agent?.agentUrl);
+      await saveGameState(agent?.agentUrl, {
+        ...gameState,
+        player: { ...(gameState?.player || {}), energy: 1 },
+      });
+      gameState = await getGameState(agent?.agentUrl);
+      return NextResponse.json(gameState);
     } else if (operation == "reset") {
+      log.info(`Resetting ${userId}: ${agent?.agentUrl}`);
       await deleteAgent(userId);
-      const hostName = new URL(request.url).host;
       return NextResponse.json(true);
     } else {
       return NextResponse.json(
