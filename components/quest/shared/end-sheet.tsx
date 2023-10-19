@@ -120,10 +120,10 @@ const EndSheet = ({
           </SheetDescription>
         </SheetHeader>
         <SheetBody>
-          <TypographyH1 className="text-center mt-12">
+          <TypographyH1 className="text-center mt-4 md:mt-8">
             Quest Completed
           </TypographyH1>
-          <div className="flex items-center justify-center my-12 flex-col gap-6">
+          <div className="flex items-center justify-center my-4 md:my-8 flex-col gap-6">
             <Player
               autoplay
               src="/award-lottie.json"
