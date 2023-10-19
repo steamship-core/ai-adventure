@@ -25,6 +25,7 @@ import {
   PackageIcon,
   TwitterIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -52,8 +53,10 @@ const ItemsGained = ({
         <div key={item.description} className="flex flex-col gap-2">
           <div>
             <div className="rounded-md h-32 aspect-square relative overflow-hidden">
-              <img
-                src={item?.picture_url}
+              <Image
+                height={128}
+                width={128}
+                src={item?.picture_url!}
                 alt={item.description!}
                 className="w-full h-full"
               />
@@ -125,7 +128,7 @@ const EndSheet = ({
               autoplay
               src="/award-lottie.json"
               keepLastFrame
-              style={{ height: "300px", width: "300px" }}
+              className="h-44 w-44"
             />
             <TypographyLarge>You did it!</TypographyLarge>
             <div className="flex gap-6">
