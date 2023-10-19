@@ -7,6 +7,7 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
+import { track } from "@vercel/analytics/react";
 import {
   ArrowRightIcon,
   CircleDollarSignIcon,
@@ -142,8 +143,8 @@ export default function Home() {
           asChild
           className="bg-indigo-600 hover:bg-indigo-800 text-white py-6 text-large mt-8 font-bold"
         >
-          <Link href="/play">
-            {user ? "Continute Your Journey" : "Create your Character"}
+          <Link href="/character-creation">
+            {user ? "Continue Your Journey" : "Create your Character"}
           </Link>
         </Button>
         <div className="w-full text-center flex items-center justify-center mt-4">
@@ -184,6 +185,11 @@ export default function Home() {
                     <a
                       href={`/character-creation?${searchParams.toString()}`}
                       className="flex h-full text-center w-full relative rounded-md aspect-[1/1] md:aspect-[1/1.5]  overflow-hidden border border-foreground/20 hover:border-indigo-500"
+                      onClick={() => {
+                        track("Character Selected", {
+                          character: character.name,
+                        });
+                      }}
                     >
                       <Image
                         fill
