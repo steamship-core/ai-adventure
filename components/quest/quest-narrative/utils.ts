@@ -14,6 +14,7 @@ export const MessageTypes = {
   IMAGE: "IMAGE",
   SCENE_AUDIO: "SCENE_AUDIO",
   TEXT: "TEXT",
+  QUEST_ARC: "QUEST_ARC",
 } as const;
 
 export type ExtendedBlock = Block & {
@@ -47,11 +48,11 @@ export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "image")) {
     return MessageTypes.IMAGE;
   }
+  if (block.tags?.find((tag) => tag.kind === "quest_arc")) {
+    return MessageTypes.QUEST_ARC;
+  }
   if (block.tags?.find((tag) => tag.kind === "scene" && tag.name === "audio")) {
     return MessageTypes.SCENE_AUDIO;
-  }
-  if (block.streamState) {
-    return MessageTypes.STREAMING_BLOCK;
   }
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
     return MessageTypes.STATUS_MESSAGE;
@@ -69,6 +70,9 @@ export const getMessageType = (block: Block) => {
     )
   ) {
     return MessageTypes.USER_MESSAGE;
+  }
+  if (block.streamState) {
+    return MessageTypes.STREAMING_BLOCK;
   }
   if (
     block?.tags?.find(

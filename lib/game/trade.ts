@@ -9,7 +9,7 @@ export const tradeItems = async (
   }
 ) => {
   const steamship = getSteamshipClient();
-  const resp = await steamship.agent.post({
+  return steamship.agent.post({
     url: agentBase,
     path: "/trade",
     arguments: tradeBody,

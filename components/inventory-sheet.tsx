@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 import { InventoryList } from "./inventory-list";
-import { recoilGameState } from "./recoil-provider";
+import { recoilGameState } from "./providers/recoil";
 import {
   Sheet,
   SheetBody,
@@ -21,7 +21,7 @@ const InventorySheet = ({ children }: { children: ReactNode }) => {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="bottom"
-        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6"
+        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto"
       >
         <SheetHeader>
           <SheetTitle>Inventory</SheetTitle>

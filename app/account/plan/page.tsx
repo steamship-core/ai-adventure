@@ -2,11 +2,10 @@ import ReturnToCampButton from "@/components/account/return-to-camp-button";
 import { BackgroundAudio } from "@/components/audio-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
-import RecoilProvider from "@/components/recoil-provider";
+import RecoilProvider from "@/components/providers/recoil";
 import SubscriptionSheet from "@/components/subscription-sheet";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { generateQuestArc } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -22,18 +21,13 @@ export default async function AccountPlanPage() {
   const agent = await getAgent(userId);
 
   if (!agent) {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   let gameState = await getGameState(agent?.agentUrl);
 
   if (gameState.active_mode == "onboarding") {
-    redirect("/play/character-creation");
-  }
-
-  if (!gameState.quest_arc) {
-    await generateQuestArc(agent?.agentUrl);
-    gameState = await getGameState(agent?.agentUrl);
+    redirect("/character-creation");
   }
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
+import { recoilAudioActiveState } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import { recoilAudioActiveState } from "@/components/recoil-provider";
 import { inputClassNames } from "@/components/ui/input";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
@@ -127,7 +127,6 @@ export default function ChatNarrative({
       if (priorBlocks) {
         for (let block of priorBlocks) {
           if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-            console.log("Setting music", block.streamingUrl);
             (setBackgroundMusicUrl as any)(block.streamingUrl);
           }
         }

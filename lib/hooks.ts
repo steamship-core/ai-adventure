@@ -4,7 +4,7 @@ import {
   recoilBackgroundAudioState,
   recoilBackgroundAudioUrlState,
   recoilGameState,
-} from "@/components/recoil-provider";
+} from "@/components/providers/recoil";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 

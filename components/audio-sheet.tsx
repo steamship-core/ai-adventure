@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Volume2Icon } from "lucide-react";
 import { useRecoilState } from "recoil";
-import { recoilAudioActiveState } from "./recoil-provider";
+import { recoilAudioActiveState } from "./providers/recoil";
 import { Button } from "./ui/button";
 
 const AudioSheet = ({ text = "Audio Settings" }: { text?: string }) => {

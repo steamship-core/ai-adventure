@@ -5,11 +5,11 @@ const LoadingScreenPortal = dynamic(() => import("./loading-screen-portal"), {
   ssr: false,
 });
 
-const useLoadingScreen = () => {
+const useLoadingScreen = (text?: string) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return {
-    loadingScreen: isVisible ? <LoadingScreenPortal /> : null,
+    loadingScreen: isVisible ? <LoadingScreenPortal text={text} /> : null,
     setIsVisible,
   };
 };

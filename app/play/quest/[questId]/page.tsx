@@ -1,6 +1,6 @@
 import { BackgroundAudio } from "@/components/audio-provider";
+import RecoilProvider from "@/components/providers/recoil";
 import Quest from "@/components/quest/quest";
-import RecoilProvider from "@/components/recoil-provider";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
@@ -18,7 +18,7 @@ export default async function QuestPage() {
   const agent = await getAgent(userId);
 
   if (!agent) {
-    redirect("/play/character-creation");
+    redirect("/character-creation");
   }
 
   const gameState = await getGameState(agent?.agentUrl);

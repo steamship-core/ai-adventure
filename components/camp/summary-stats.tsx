@@ -2,7 +2,7 @@
 
 import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
 import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const SummaryStats = () => {

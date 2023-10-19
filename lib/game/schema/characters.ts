@@ -15,6 +15,7 @@ export type Character = {
 
   /** The motivation of the character */
   motivation: string;
+  inventory_last_updated?: string;
 };
 
 export type NpcCharacter = Character & {

@@ -25,6 +25,7 @@ import {
   PackageIcon,
   TwitterIcon,
 } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -52,8 +53,10 @@ const ItemsGained = ({
         <div key={item.description} className="flex flex-col gap-2">
           <div>
             <div className="rounded-md h-32 aspect-square relative overflow-hidden">
-              <img
-                src={item?.picture_url}
+              <Image
+                height={128}
+                width={128}
+                src={item?.picture_url!}
                 alt={item.description!}
                 className="w-full h-full"
               />
@@ -106,10 +109,7 @@ const EndSheet = ({
           {completeButtonText}
         </Button>
       </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
-      >
+      <SheetContent side="bottom" className="w-100% h-[100dvh] flex flex-col">
         <SheetHeader>
           <SheetTitle>Your Adventure has come to an end</SheetTitle>
           <SheetDescription>
@@ -117,15 +117,15 @@ const EndSheet = ({
           </SheetDescription>
         </SheetHeader>
         <SheetBody>
-          <TypographyH1 className="text-center mt-12">
+          <TypographyH1 className="text-center mt-4 md:mt-8">
             Quest Completed
           </TypographyH1>
-          <div className="flex items-center justify-center my-12 flex-col gap-6">
+          <div className="flex items-center justify-center my-4 md:my-8 flex-col gap-6">
             <Player
               autoplay
               src="/award-lottie.json"
               keepLastFrame
-              style={{ height: "300px", width: "300px" }}
+              className="h-44 w-44"
             />
             <TypographyLarge>You did it!</TypographyLarge>
             <div className="flex gap-6">
@@ -145,19 +145,21 @@ const EndSheet = ({
                 </TypographySmall>
               )}
             </div>
-            <Button asChild>
-              <a href="/play/camp">Back to camp</a>
-            </Button>
-            <a
-              className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
-              href={twitterLink.href}
-              target="_blank"
-            >
-              <TwitterIcon size={16} /> Share on Twitter
-            </a>
+            <div className="flex flex-col gap-2 items-center justify-center">
+              <Button asChild>
+                <a href="/play/camp">Back to camp</a>
+              </Button>
+              <a
+                className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
+                href={twitterLink.href}
+                target="_blank"
+              >
+                <TwitterIcon size={16} /> Share on Twitter
+              </a>
+            </div>
           </div>
           <TypographyH3>Journey Overview</TypographyH3>
-          <TypographyMuted className="text-lg mb-12">
+          <TypographyMuted className="text-base mb-12">
             {summary && summary.text}
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>

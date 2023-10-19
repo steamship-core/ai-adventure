@@ -4,7 +4,7 @@ import { getGameState } from "@/lib/game/game-state.client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import {
   Sheet,
   SheetBody,

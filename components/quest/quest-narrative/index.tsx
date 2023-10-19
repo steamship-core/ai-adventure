@@ -1,10 +1,10 @@
 "use client";
 
-import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import {
   recoilAudioActiveState,
   recoilGameState,
-} from "@/components/recoil-provider";
+} from "@/components/providers/recoil";
+import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { inputClassNames } from "@/components/ui/input";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
@@ -46,7 +46,7 @@ const ScrollButton = () => {
         <Button
           onClick={scrollToBottom}
           variant="outline"
-          className="absolute bottom-4 right-4 rounded-full aspect-square !p-2"
+          className="absolute bottom-4 right-4 rounded-full aspect-square !p-2 z-50"
         >
           <ArrowDown size={16} />
         </Button>
@@ -79,7 +79,6 @@ export default function QuestNarrative({
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
   const [gg, setGameState] = useRecoilState(recoilGameState);
-  console.log(gg);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
   const {
@@ -96,6 +95,14 @@ export default function QuestNarrative({
     },
     id,
   });
+
+  const scrollToBottom = () => {
+    const container = document.getElementById("narrative-container");
+    container?.scrollTo({
+      top: container.scrollHeight,
+      behavior: "instant",
+    });
+  };
 
   useEffect(() => {
     // https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar
@@ -126,13 +133,12 @@ export default function QuestNarrative({
   }, []);
 
   // TODO: This is duplicated work.
-  // TODO: Extend to work with dynamically generated blocks -- that will re quireus to know the NEXT_PUBLIC_STEAMSHIP_API_BASE
+  // TODO: Extend to work with dynamically generated blocks -- that will requireus to know the STEAMSHIP_API_BASE
   useEffect(() => {
     if (setBackgroundMusicUrl) {
       if (priorBlocks) {
         for (let block of priorBlocks) {
           if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-            console.log("Setting music", block.streamingUrl);
             (setBackgroundMusicUrl as any)(block.streamingUrl);
           }
         }
@@ -186,7 +192,7 @@ export default function QuestNarrative({
           )}
         </QuestNarrativeContainer>
       </div>
-      <div className="flex items-end flex-col w-full gap-2 basis-1/12 pb-4 pt-1 relative">
+      <div className="flex items-end justify-center flex-col w-full gap-2 basis-1/12 pt-1 relative">
         {isComplete ? (
           <EndSheet
             isEnd={true}
@@ -205,6 +211,7 @@ export default function QuestNarrative({
                 location: "Quest",
               });
               handleSubmit(e);
+              scrollToBottom();
             }}
           >
             <TextareaAutosize

@@ -17,12 +17,11 @@ export async function POST(request: Request) {
   const { counter_party, sell, buy } = await request.json();
 
   try {
-    const tradeResult = await tradeItems(agent!.agentUrl, {
+    return tradeItems(agent!.agentUrl, {
       counter_party,
       sell,
       buy,
     });
-    return tradeResult;
   } catch (e) {
     console.error(e);
     return NextResponse.json(

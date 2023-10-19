@@ -4,7 +4,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { track } from "@vercel/analytics/react";
 import { CompassIcon, MoreHorizontalIcon } from "lucide-react";
 import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../recoil-provider";
+import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import {
   Sheet,

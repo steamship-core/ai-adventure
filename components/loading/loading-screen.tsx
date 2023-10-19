@@ -1,8 +1,9 @@
 "use client";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { useEffect, useState } from "react";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ text }: { text?: string }) => {
   const funnyLoadingMessages = [
     "Rolling the dice...",
     "Training the goblins...",
@@ -36,7 +37,7 @@ const LoadingScreen = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setLoadingMessage(pickRandomMessage());
-    }, 4000);
+    }, 6000);
 
     return () => {
       clearInterval(interval);
@@ -45,8 +46,9 @@ const LoadingScreen = () => {
 
   return (
     <div className="fixed top-0 left-0 h-[100dvh] z-50 w-full bg-background flex flex-col">
-      <div className="h-3/5 flex items-center justify-center">
+      <div className="h-3/5 flex items-center justify-center flex-col">
         <Player autoplay loop src="/fire-lottie.json" className="w-96" />
+        {text && <TypographyMuted>{text}</TypographyMuted>}
       </div>
       <div className="px-8 text-center w-full">{loadingMessage}</div>
     </div>

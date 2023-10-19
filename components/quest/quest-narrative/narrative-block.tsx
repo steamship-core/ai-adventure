@@ -4,6 +4,7 @@ import {
   BackgroundAudioBlock,
   FallbackDebugBlock,
   FunctionCallDebugBlock,
+  QuestArcDebugBlock,
   StatusDebugBlock,
   SystemDebugBlock,
   UserMessageDebugBlock,
@@ -106,6 +107,8 @@ export const NarrativeBlock = ({
           return <ImageBlock key={block.id} block={block} />;
         case MessageTypes.SCENE_AUDIO:
           return <BackgroundAudioBlock key={block.id} block={block} />;
+        case MessageTypes.QUEST_ARC:
+          return <QuestArcDebugBlock key={block.id} block={block} />;
         default:
           return <FallbackDebugBlock key={block.id} block={block} />;
       }
