@@ -72,7 +72,6 @@ export const getMessageType = (block: Block) => {
     return MessageTypes.USER_MESSAGE;
   }
   if (block.streamState) {
-    console.log("block", block);
     return MessageTypes.STREAMING_BLOCK;
   }
   if (
@@ -85,7 +84,6 @@ export const getMessageType = (block: Block) => {
   if (block?.tags?.find((tag) => tag.kind === "function-selection")) {
     return MessageTypes.FUNCTION_SELECTION;
   }
-  console.log("block", block);
   return MessageTypes.TEXT;
 };
 
