@@ -11,9 +11,11 @@ export const QuestNarrativeContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <main id="narrative-container" className="overflow-auto h-full w-full">
-    <div className="flex flex-col-reverse gap-8 pt-8 pb-0 ">{children}</div>
-  </main>
+  <div id="narrative-container" className="flex flex-col h-full w-full">
+    <div className="flex flex-col-reverse overflow-auto gap-8 pt-8 pb-0 ">
+      {children}
+    </div>
+  </div>
 );
 
 export const QuestContentContainer = ({

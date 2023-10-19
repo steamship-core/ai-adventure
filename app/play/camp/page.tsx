@@ -10,7 +10,6 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { generateQuestArc } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -35,10 +34,10 @@ export default async function CampPage() {
     redirect("/play/character-creation");
   }
 
-  if (!gameState.quest_arc) {
-    await generateQuestArc(agent?.agentUrl);
-    gameState = await getGameState(agent?.agentUrl);
-  }
+  // if (!gameState.quest_arc) {
+  //   await generateQuestArc(agent?.agentUrl);
+  //   gameState = await getGameState(agent?.agentUrl);
+  // }
 
   return (
     <RecoilProvider

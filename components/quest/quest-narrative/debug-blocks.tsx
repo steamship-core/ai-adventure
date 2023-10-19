@@ -86,3 +86,9 @@ export const UserMessageDebugBlock = ({ block }: { block: Block }) => {
     />
   );
 };
+
+export const QuestArcDebugBlock = ({ block }: { block: Block }) => {
+  return (
+    <DebugBlock block={block} className="border-pink-600" title="Quest Arc" />
+  );
+};
