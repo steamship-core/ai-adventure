@@ -46,7 +46,7 @@ const ScrollButton = () => {
         <Button
           onClick={scrollToBottom}
           variant="outline"
-          className="absolute bottom-4 right-4 rounded-full aspect-square !p-2"
+          className="absolute bottom-4 right-4 rounded-full aspect-square !p-2 z-50"
         >
           <ArrowDown size={16} />
         </Button>
@@ -79,7 +79,6 @@ export default function QuestNarrative({
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
   const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
   const [gg, setGameState] = useRecoilState(recoilGameState);
-  console.log(gg);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
   const {
@@ -96,6 +95,14 @@ export default function QuestNarrative({
     },
     id,
   });
+
+  const scrollToBottom = () => {
+    const container = document.getElementById("narrative-container");
+    container?.scrollTo({
+      top: container.scrollHeight,
+      behavior: "instant",
+    });
+  };
 
   useEffect(() => {
     // https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar
@@ -132,7 +139,6 @@ export default function QuestNarrative({
       if (priorBlocks) {
         for (let block of priorBlocks) {
           if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-            console.log("Setting music", block.streamingUrl);
             (setBackgroundMusicUrl as any)(block.streamingUrl);
           }
         }
@@ -205,6 +211,7 @@ export default function QuestNarrative({
                 location: "Quest",
               });
               handleSubmit(e);
+              scrollToBottom();
             }}
           >
             <TextareaAutosize

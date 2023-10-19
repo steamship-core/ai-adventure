@@ -7,11 +7,5 @@ export const completeOnboarding = async (agentBase: string) => {
     path: "/complete_onboarding",
     arguments: {},
   });
-  if (!res.ok) {
-    console.log("Complete onboarding not ok");
-    console.log(await res.text());
-  } else {
-    console.log("Completed onboarding: ", res.ok);
-  }
   return res;
 };

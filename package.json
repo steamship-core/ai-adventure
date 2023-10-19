@@ -32,6 +32,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cors": "^2.8.5",
+    "date-fns": "^2.30.0",
     "eventsource-parser": "^1.1.1",
     "lucide-react": "^0.284.0",
     "micro-cors": "^0.1.1",

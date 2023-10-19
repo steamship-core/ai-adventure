@@ -8,7 +8,6 @@ export const updateInventory = async (agentBase: string, npc_name: string) => {
       path: "/refresh_inventory",
       arguments: { npc_name },
     });
-    return await resp.json();
   } catch (e) {
     console.error(e);
     return null;

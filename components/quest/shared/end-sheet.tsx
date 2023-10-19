@@ -109,10 +109,7 @@ const EndSheet = ({
           {completeButtonText}
         </Button>
       </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="w-100% h-[100dvh] flex flex-col pb-0 px-0"
-      >
+      <SheetContent side="bottom" className="w-100% h-[100dvh] flex flex-col">
         <SheetHeader>
           <SheetTitle>Your Adventure has come to an end</SheetTitle>
           <SheetDescription>
@@ -148,19 +145,21 @@ const EndSheet = ({
                 </TypographySmall>
               )}
             </div>
-            <Button asChild>
-              <a href="/play/camp">Back to camp</a>
-            </Button>
-            <a
-              className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
-              href={twitterLink.href}
-              target="_blank"
-            >
-              <TwitterIcon size={16} /> Share on Twitter
-            </a>
+            <div className="flex flex-col gap-2 items-center justify-center">
+              <Button asChild>
+                <a href="/play/camp">Back to camp</a>
+              </Button>
+              <a
+                className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
+                href={twitterLink.href}
+                target="_blank"
+              >
+                <TwitterIcon size={16} /> Share on Twitter
+              </a>
+            </div>
           </div>
           <TypographyH3>Journey Overview</TypographyH3>
-          <TypographyMuted className="text-lg mb-12">
+          <TypographyMuted className="text-base mb-12">
             {summary && summary.text}
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>

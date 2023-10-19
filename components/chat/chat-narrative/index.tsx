@@ -127,7 +127,6 @@ export default function ChatNarrative({
       if (priorBlocks) {
         for (let block of priorBlocks) {
           if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-            console.log("Setting music", block.streamingUrl);
             (setBackgroundMusicUrl as any)(block.streamingUrl);
           }
         }
