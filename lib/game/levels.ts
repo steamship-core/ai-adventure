@@ -100,3 +100,28 @@ export const levels = [
   "Aurora's Muse",
   "Ethereal Dreamer",
 ];
+
+const RANKS_PER_LEVEL = 2;
+// Returns a number between 1 - LEVELS_PER_RANK
+export const getRankProgress = (rank: number) => {
+  return (((rank - 1) % RANKS_PER_LEVEL) / RANKS_PER_LEVEL) * 100;
+};
+
+export const getRanksUntilNextLevel = (rank: number) => {
+  return RANKS_PER_LEVEL - ((rank - 1) % RANKS_PER_LEVEL);
+};
+
+export const getLevel = (rank: number) => {
+  try {
+    if (rank === 1) {
+      levels[0];
+    }
+    const level = Math.ceil(rank / RANKS_PER_LEVEL);
+    if (level > 99) {
+      return "Unknown";
+    }
+    return levels[Math.ceil(rank / RANKS_PER_LEVEL)];
+  } catch (e) {
+    return "Unknown";
+  }
+};

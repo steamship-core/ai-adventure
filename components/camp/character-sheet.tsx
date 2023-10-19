@@ -1,6 +1,10 @@
 "use client";
 
-import { levels } from "@/lib/game/levels";
+import {
+  getLevel,
+  getRankProgress,
+  getRanksUntilNextLevel,
+} from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { UserButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
@@ -76,19 +80,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     }
   };
 
-  const getLevel = () => {
-    try {
-      if (rank === 1) {
-        levels[0];
-      }
-      if (rank >= 100) {
-        levels[99];
-      }
-      return levels[Math.ceil(rank / 4)];
-    } catch (e) {
-      return "Unknown";
-    }
-  };
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -120,11 +111,11 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 {gameState?.player?.name}
               </TypographyLarge>
               <Progress
-                value={(((rank - 1) % 4) / 4) * 100}
+                value={getRankProgress(rank)}
                 className="h-2 border border-foreground/20"
               />
               <TypographyMuted className="text-xs md:text-sm ">
-                Rank: {getLevel()}
+                Rank: {getLevel(rank)}
               </TypographyMuted>
             </div>
           </button>
@@ -161,13 +152,13 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           </div>
           <div className="flex flex-col gap-4">
             <div>
-              <TypographyH3>{getLevel()}</TypographyH3>
+              <TypographyH3>{getLevel(rank)}</TypographyH3>
               <Progress
-                value={(((rank - 1) % 4) / 4) * 100}
+                value={getRankProgress(rank)}
                 className="h-2 border border-foreground/20"
               />
               <TypographyMuted className="text-xs md:text-sm ">
-                {(100 - (((rank - 1) % 4) / 4) * 100) / 25} exp until next rank
+                {getRanksUntilNextLevel(rank)} exp until next level
               </TypographyMuted>
             </div>
             <div>
