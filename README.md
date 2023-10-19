@@ -107,6 +107,7 @@ Get a Stripe API Key at [stripe.com](https://stripe.com) and then set the follow
 - `STRIPE_PRICE_ID` - The Price ID of your monthly subscription plan
 - `STRIPE_TOPUP_PRICE_ID` - The Price ID of your one-time top-up item
 - `STRIPE_WEBHOOK_SECRET` - The Webhook secret for Stripe Events
+- `NEXT_PUBLIC_WEB_BASE_URL` - The base URL of your deployment, without a trailing slash
 
 If you don't set up Stripe, the game will still work, but players will have no way to add energy once it is depleted.
 
@@ -211,34 +212,5 @@ We hang out in the [Steamship Discord](https://steamship.com/discord)
 
 Related Repositories:
 
-<<<<<<< HEAD
 - **Web Interface** The web interface is at [steamship-core/ai-adventure-game](https://github.com/steamship-core/ai-adventure-game)
 - **Game Engine** The game engine is at [steamship-packages/ai-adventure-game](https://github.com/steamship-packages/ai-adventure-game)
-=======
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## Set up Stripe
-
-1. Create a new Product in your Stripe console for the adventure game.
-2. Make it a Recurring Subscription
-3. Put the product ID in
-
-### Testing Webhooks
-
-To fully test the app with Stripe on localhost, you will need to forward webhooks to your development machine.
-
-After installing the Stripe CLI, run:
-
-```bash
-stripe login
-stripe stripe listen --forward-to localhost:3000/webhooks/stripe
-```
-
-And then copy your webhook secret into the `STRIPE_WEBHOOK_SECRET` environment variable on localhost.
-
-Leave this proxy running while you develop & run the app on localhost.
->>>>>>> main
