@@ -48,7 +48,7 @@ export default function CharacterCreation() {
       placeholder: "Fantasy, steampunk, pirate/high-seas, viking, etc..",
       text: "Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.",
       buttonText: "Set theme",
-      options: ["Fantasy", "Futuristic", "Mystery"],
+      options: ["Fantasy", "Realistic", "Mystery"],
       initialValue: configuration.genre,
       setConfiguration: (genre: string) => {
         setConfiguration({

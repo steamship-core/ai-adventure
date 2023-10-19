@@ -133,7 +133,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 src={gameState?.profile_image_url}
                 height={1024}
                 width={1024}
-                alt="Character"
+                alt={gameState?.player?.name}
               />
             </div>
             <div className="flex flex-col items-center justify-center gap-2 w-full">

@@ -1,7 +1,6 @@
 import CharacterCreation from "@/components/character-creation";
 import { createAgent, getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { updateInventory } from "@/lib/game/merchant.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -18,7 +17,6 @@ export default async function CharacterCreationPage() {
 
   if (!agent) {
     agent = await createAgent(userId);
-    updateInventory(agent.agentUrl, "The Merchant");
     return <CharacterCreation />;
   } else {
     // We already have an agent. Need to check if we're still onboarding.

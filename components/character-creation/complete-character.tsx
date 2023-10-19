@@ -35,7 +35,9 @@ const CharacterCreationComplete = ({
   isCompleteConfig: boolean;
   editCharacterFromTemplate: () => any;
 }) => {
-  const { loadingScreen, setIsVisible } = useLoadingScreen();
+  const { loadingScreen, setIsVisible } = useLoadingScreen(
+    "Building your AI generated adventure. This may take a minute..."
+  );
   const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
 

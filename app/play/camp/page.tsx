@@ -16,6 +16,9 @@ import { auth } from "@clerk/nextjs";
 import { differenceInHours } from "date-fns";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
+
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 export default async function CampPage() {
   const { userId } = auth();
 
@@ -31,14 +34,14 @@ export default async function CampPage() {
   }
 
   let gameState = await getGameState(agent?.agentUrl);
-
+  let refreshGameState = false;
   if (gameState.active_mode == "onboarding") {
     redirect("/character-creation");
   }
 
   if (!gameState.quest_arc) {
     await generateQuestArc(agent?.agentUrl);
-    gameState = await getGameState(agent?.agentUrl);
+    refreshGameState = true;
   }
 
   // Update the merchants inventory
@@ -53,8 +56,15 @@ export default async function CampPage() {
     ) {
       // No need to wait for this. It will update in the background and the user will see the updated inventory on the next page load
       updateInventory(agent?.agentUrl, "The Merchant");
+      // HACK - wait for the inventory to update, then refresh the game state. Sometimes /refresh-inventory hangs.
+      await delay(5000);
+      refreshGameState = true;
     }
   }
+  if (refreshGameState) {
+    gameState = await getGameState(agent?.agentUrl);
+  }
+
   return (
     <RecoilProvider
       gameState={gameState}

@@ -30,43 +30,44 @@ const font = Cinzel({
 
 const characters = [
   {
-    image: "/eldora.png",
-    name: "Eldora Brightwing",
-    class: "Enchantress",
+    image: "/programmer.png",
+    name: "Pro Grammer",
+    class: "Build an AI Game",
+    genre: "Realistic",
+    tone: "Serious",
+    description:
+      "Pro Gramer a tall lanky man with unruly hair. He wears round, wire-rimmed glasses and a black hoodie.",
+    background:
+      "Pro Gramer grew up in the bustling tech hub of Austin, Texas, where innovation thrived amidst local cafes and live music venues. Son to a software engineer and a novelist, Sebastian was exposed early on to a world where logical coding and imaginative storytelling converged. His weekends were spent at coding bootcamps, and his evenings buried in fantasy novels or playing the latest indie game. By the time he was 16, he had developed his first game, a simple quest that combined his love for Tolkien-esque lore with rudimentary AI. Opting out of the traditional college path, Sebastian chose to travel and learn from diverse tech communities globally, gathering a myriad of experiences and insights that would later fuel his ambition to revolutionize the gaming industry.",
+    motivation:
+      "His motivation stems from a profound belief that gaming can be more than just a pastime; it can be a deeply personal and transformative experience. He's driven by the idea that AI can craft a new frontier in gaming, where stories aren't just told but evolve dynamically based on player decisions. Recalling the sense of wonder he felt playing games as a child and the disappointment in predictable storylines as he grew older, Sebastian aims to create a world where every game session is as unpredictable and unique as life itself. He envisions a platform where players not only play a game but also co-create it, blending their choices with AI's imaginative prowess. For Sebastian, it's not just about entertainment; it's about pioneering a new age of storytelling and ensuring that each player's journey is genuinely their own.",
+  },
+  {
+    image: "/sarah.png",
+    name: "Lawyer Sarah Suit",
+    class: "Sue everyone",
+    genre: "Realistic",
+    tone: "Serious",
+    description:
+      "Suit is a tall, lean woman with icy blue eyes and a sharp jawline. She wears a black suit with a white shirt and a red tie. She has a long, black ponytail and a stern expression.",
+    background:
+      "Earning her stripes at Northwestern University's School of Law, Sarah quickly rose through the ranks, distinguishing herself with her razor-sharp wit and a unique ability to dissect complex cases. Her name became synonymous with tenacity, as she championed cases ranging from corporate fraud to pro bono work for underserved communities. While her colleagues know her for her legendary closing statements, the world outside the courtroom admires Sarah for her collection of colorful, bespoke suits, each reflecting the vibrancy of her character and the spirit of her city.",
+    motivation:
+      "Sarah's primary motivation is to sue every single person in the world. She's a lawyer, and she's very good at it.",
+  },
+  {
+    image: "/meatball.png",
+    name: "Mr. Meatball",
+    class: "Be the Biggest Meatball",
     genre: "Fantasy",
-    tone: "Serious",
+    tone: "Silly",
     description:
-      "Eldora has shimmering silver hair that cascades down to her mid-back, and her eyes are a striking shade of violet. Her fair skin is almost luminescent under the moonlight. She wears an intricately designed robe with embroidered runes, and she's often seen with a staff that has a crystal orb atop, filled with a swirling blue mist.",
-    background:
-      "Eldora comes from the hidden city of Lumeria, built atop the ancient trees of the Whispering Forest. She's well versed in ancient magics and protective spells. Eldora is on a quest to find and restore the lost artifacts of her ancestors that were stolen from her city.",
+      "Mr. Meatball is a staggering 600ft tall giant meatball. He has short, stubby legs, a round body, and a large, smiling face. He wears a chef's hat.",
+    background: `In the rolling valleys of the Fettuccine Foothills, a grand sorcerer chef, in an attempt to create the most delicious dish, accidentally combined rare magical herbs with a giant pot of meatball mixture. This arcane culinary experiment gave rise to Mr. Meatball. At first, the villagers were terrified, but Mr. Meatball's gentle nature and love for songs, dance, and good company made him a beloved figure in the region.
+
+      Growing up wasn't easy for Mr. Meatball. Due to his size, he often felt isolated, accidentally causing minor tremors when he danced or laughed too hard. With time, he learned the art of being gentle, careful, and making sure his presence brought more joy than disruption.`,
     motivation:
-      "Eldora is driven by a deep-seated need to restore her ancestral artifacts, as they not only hold significant historical importance to her people but also provide the key to preserving the balance of magic in the Whispering Forest. To Eldora, the artifacts represent her lineage, her connection to the ancient wisdom of the High Elves, and the protection of her homeland. The theft of these artifacts not only disrupted the serenity of Lumeria but threatened the very existence of the magical creatures and the forest's sanctity. She feels a personal responsibility to retrieve them and restore harmony.",
-  },
-  {
-    image: "/kael.png",
-    name: "Kael Xyron",
-    class: "Bounty Hunter",
-    genre: "Futuristic",
-    tone: "Serious",
-    description:
-      "Kael has a lean build, with one mechanical arm and an ocular implant that gives him enhanced targeting and vision. His attire is a mix of durable synthetic fabrics and armored plates, and he sports a cloak that has in-built stealth tech.",
-    background:
-      "Originally a soldier in the Intergalactic Federation, Kael suffered severe injuries in an ambush. After being revived and enhanced with cybernetic parts, he became a bounty hunter. Now, he travels between galaxies, capturing fugitives and occasionally getting involved in larger conspiracies.",
-    motivation:
-      "Before his transformation into a cyborg, Kael had a sense of duty and purpose serving the Intergalactic Federation. Post his cybernetic enhancement, he struggled with his identity, feeling like he no longer belonged to the world of the organic or the mechanical. By becoming a bounty hunter, he initially sought a way to channel his skills and find a new purpose. However, deeper down, Kael hopes that by helping maintain order in the galaxies and pursuing justice, even in this grey profession, he can find redemption for the perceived loss of his humanity and past mistakes.",
-  },
-  {
-    image: "/nox.png",
-    name: "Nox Umbra",
-    class: "Keeper of Secrets",
-    genre: "Mystery",
-    tone: "Serious",
-    description:
-      "Nox is cloaked in shadows, with only his pale hands and a hint of his face visible beneath his hooded cloak. His eyes are like bottomless pits, revealing nothing yet seeing everything.",
-    background:
-      "No one knows where Nox comes from or what his true intentions are. He's often seen at crossroads, graveyards, and places of power. Rumors say he collects secrets and stories from those he encounters, trading them for knowledge or artifacts of power.",
-    motivation:
-      "Nox is an enigma, driven by an insatiable thirst for the unknown, the forgotten, and the hidden. To him, knowledge is power, but not in the way most perceive. He doesn't seek power to control or dominate but rather to understand the intricacies of existence, realms, and the universe's darkest mysteries. Every secret he acquires, every story he collects, adds to his vast library of esoteric wisdom. He believes that with enough knowledge, he might unlock an even greater mystery that has eluded beings for eons—perhaps the nature of existence itself or a truth that binds all realms.",
+      "Mr. Meatball desires nothing more than to spread joy, make friends, and perhaps, find a purpose big enough for his massive size. Although he's content with the occasional visit to nearby towns for festivals where he's the star attraction, he harbors a deep-seated wish to find others like him, or at least learn why he was brought into existence. Guided by his boundless curiosity, Mr. Meatball seeks adventure, hoping to uncover the deeper mysteries of his origin and to perhaps find a place where he truly fits in – both figuratively and literally.",
   },
 ];
 
