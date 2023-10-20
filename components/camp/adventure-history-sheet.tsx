@@ -19,7 +19,7 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const AdventureHistorySheet = () => {
   const gameState = useRecoilValue(recoilGameState);
-  const questArcs = gameState.quest_arc || [];
+  const questArcs = gameState?.quest_arc || [];
   return (
     <Sheet>
       <SheetTrigger asChild>

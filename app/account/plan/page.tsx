@@ -26,7 +26,7 @@ export default async function AccountPlanPage() {
 
   let gameState = await getGameState(agent?.agentUrl);
 
-  if (gameState.active_mode == "onboarding") {
+  if (gameState?.active_mode == "onboarding") {
     redirect("/character-creation");
   }
 

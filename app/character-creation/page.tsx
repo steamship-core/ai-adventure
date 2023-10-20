@@ -21,7 +21,7 @@ export default async function CharacterCreationPage() {
   } else {
     // We already have an agent. Need to check if we're still onboarding.
     let gameState = await getGameState(agent.agentUrl);
-    if (gameState.active_mode == "onboarding") {
+    if (gameState?.active_mode == "onboarding") {
       return <CharacterCreation />;
     } else {
       redirect("/play/camp");

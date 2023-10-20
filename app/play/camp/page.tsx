@@ -35,11 +35,11 @@ export default async function CampPage() {
 
   let gameState = await getGameState(agent?.agentUrl);
   let refreshGameState = false;
-  if (gameState.active_mode == "onboarding") {
+  if (gameState?.active_mode == "onboarding") {
     redirect("/character-creation");
   }
 
-  if (!gameState.quest_arc) {
+  if (!gameState?.quest_arc) {
     await generateQuestArc(agent?.agentUrl);
     refreshGameState = true;
   }

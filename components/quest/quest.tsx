@@ -16,7 +16,7 @@ export default function Quest({
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
-  const quest = gameState.quests.find((q) => q.name === questId);
+  const quest = gameState?.quests?.find((q) => q.name === questId);
   const [isComplete, setIsComplete] = useState(
     quest?.text_summary ? true : false
   );
@@ -33,13 +33,13 @@ export default function Quest({
   };
 
   useEffect(() => {
-    if (gameState.active_mode != "quest") {
+    if (gameState?.active_mode != "quest") {
       // If we're not in a quest, then we don't need to do anything.
       // Here we override the "Complete Quest" label since it's historical.
       setCompleteButtonText("See Quest Results");
       setIsComplete(true);
     }
-  }, [gameState.active_mode]);
+  }, [gameState?.active_mode]);
 
   return (
     <QuestContainer>
