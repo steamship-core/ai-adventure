@@ -16,6 +16,7 @@ const font = Barlow({
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
+  metadataBase: new URL("https://ai-adventure.steamship.com"),
   viewport: {
     width: "device-width",
     initialScale: 1,
