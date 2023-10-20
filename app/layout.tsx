@@ -20,6 +20,21 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
+  openGraph: {
+    url: "https://ai-adventure.steamship.com/",
+    type: "website",
+    title: "AI Adventure",
+    description: "Create your own AI Adventure",
+    images: "https://ai-adventure.steamship.com/adventurer.png",
+  },
+  twitter: {
+    creator: "@GetSteamship",
+    card: "summary_large_image",
+    title: "AI Adventure",
+    site: "@GetSteamship",
+    description: "Create your own AI Adventure",
+    images: "https://ai-adventure.steamship.com/adventurer.png",
+  },
 };
 
 export default function RootLayout({
