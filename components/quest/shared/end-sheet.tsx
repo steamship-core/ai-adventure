@@ -93,14 +93,37 @@ const EndSheet = ({
   }, []);
 
   const quest = gameState?.quests?.find((q) => q.name === params.questId);
+  const questIndex = gameState?.quests?.findIndex(
+    (q) => q.name === params.questId
+  );
+  const questArcs = gameState?.quest_arc ?? [];
+  const questArc =
+    questIndex !== undefined && questIndex < questArcs.length
+      ? questArcs[questIndex]
+      : null;
 
   const twitterLink = new URL("https://twitter.com/intent/tweet");
   twitterLink.searchParams.set(
     "text",
-    `🎲 My AI Adventurer, ${gameState?.player?.name}, completed their quest! Along the way we found a ${quest?.new_items?.[0]?.name}! Can't wait to see what we find next 🤩 #aiadventure`
+    `🎲 Just completed another quest in #aiadventure. Check it out!`
   );
 
-  twitterLink.searchParams.set("url", `https://ai-adventure.steamship.com`);
+  const sharableSearchParams = new URLSearchParams();
+  sharableSearchParams.set("itemUrl", quest?.new_items?.[0]?.picture_url || "");
+  sharableSearchParams.set(
+    "title",
+    questArc ? questArc.location : `${gameState?.player.name}'s Adventure`
+  );
+  sharableSearchParams.set("description", quest?.text_summary || "");
+  sharableSearchParams.set("name", gameState?.player.name || "");
+  sharableSearchParams.set("itemName", quest?.new_items?.[0]?.name || "");
+
+  twitterLink.searchParams.set(
+    "url",
+    `${
+      process.env.NEXT_PUBLIC_BASE_URL
+    }/share/quest?${sharableSearchParams.toString()}`
+  );
 
   return (
     <Sheet>

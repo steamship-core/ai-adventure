@@ -17,6 +17,7 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { Cinzel } from "next/font/google";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -125,6 +126,18 @@ export default function Home() {
   const { user } = useUser();
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
+      <Head>
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@GetSteamship" />
+        <meta name="twitter:creator" content="@GetSteamship" />
+        <meta property="og:url" content="https://ai-adventure.steamship.com" />
+        <meta property="og:title" content="AI Adventure" />
+        <meta
+          property="og:description"
+          content="Fantasy Unbounded. Let AI Be your Dungeon Master"
+        />
+        <meta property="og:image" content="/adventurer.png" />
+      </Head>
       <MainCTA />
       <div className="relative flex-col pb-2 w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end">
         <div className="absolute right-4 top-4">
