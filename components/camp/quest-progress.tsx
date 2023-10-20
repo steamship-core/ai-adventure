@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { CheckCircle2Icon, CircleIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
@@ -16,6 +16,8 @@ const QuestProgressElement = ({
   isCompleteQuest,
   isCurrentquest,
   index,
+  isClamped,
+  setIsClamped,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string };
@@ -23,9 +25,10 @@ const QuestProgressElement = ({
   isCompleteQuest: boolean;
   isCurrentquest: boolean;
   index: number;
+  isClamped: boolean;
+  setIsClamped: Dispatch<SetStateAction<boolean>>;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [isClamped, setIsClamped] = useState(true);
 
   useEffect(() => {
     if (isCurrentquest) {
@@ -89,6 +92,8 @@ const QuestProgressElement = ({
 export const QuestProgress = () => {
   const gameState = useRecoilValue(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
+  const [isArcClamped, setIsArcClamped] = useState(true);
+
   const questArc = gameState?.quest_arc || [];
   const questCount = gameState?.current_quest
     ? gameState?.quests?.length - 1
@@ -120,6 +125,8 @@ export const QuestProgress = () => {
               isCurrentquest={isCurrentquest}
               index={i}
               key={i}
+              setIsClamped={setIsArcClamped}
+              isClamped={isArcClamped}
             />
           );
         })}

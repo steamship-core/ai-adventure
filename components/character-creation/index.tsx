@@ -125,14 +125,9 @@ export default function CharacterCreation() {
 
   const editCharacterFromTemplate = () => {
     setIsCompleteConfig(false);
-
-    console.log("setting active step to 0");
     setActiveStep(0);
     setStep(0);
   };
-
-  console.log("activeStep", activeStep);
-  console.log("step", step);
 
   return (
     <CreationContainer>
@@ -140,7 +135,6 @@ export default function CharacterCreation() {
         <CharacterCreationComplete
           config={configuration}
           onFocus={() => {
-            console.log("setting active step to 7");
             setActiveStep(7);
           }}
           isCurrent={activeStep === 7}

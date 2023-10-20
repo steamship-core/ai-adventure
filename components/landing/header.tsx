@@ -6,7 +6,7 @@ export const MainCTA = () => {
     <div className="w-full h-1/2 fixed top-0 overflow-hidden left-0 -z-20">
       <div className="w-full h-full relative">
         <Image
-          src="/adventurer-background.png"
+          src="/adventurer.png"
           alt="Adventurer standing over ravine"
           className="object-cover"
           sizes="1456px"
