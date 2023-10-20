@@ -10,15 +10,33 @@ export async function GET(request: Request) {
 
   return new ImageResponse(
     (
-      <img
-        width="512"
-        height="512"
-        src={`https://api.staging.steamship.com/api/v1/block/${blockId}/raw`}
-      />
+      <div
+        style={{
+          display: "flex",
+          fontSize: 60,
+          color: "black",
+          background: "#f6f6f6",
+          width: "100%",
+          height: "100%",
+          paddingTop: 50,
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          width="512"
+          height="512"
+          src={`https://api.staging.steamship.com/api/v1/block/${blockId}/raw`}
+          style={{
+            borderRadius: 128,
+          }}
+        />
+      </div>
     ),
     {
-      width: 512,
-      height: 512,
+      width: 1200,
+      height: 600,
     }
   );
 }
