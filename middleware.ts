@@ -8,6 +8,8 @@ export default authMiddleware({
   publicRoutes: ["/", "/api/webhooks/stripe", "/share/quest", "/_axiom/logs"],
   afterAuth(auth, req, evt) {
     console.log("user", auth.userId);
+    console.log("user obj", auth);
+    console.log("user str", JSON.stringify(auth));
 
     // handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
