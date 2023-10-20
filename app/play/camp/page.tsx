@@ -15,8 +15,6 @@ import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
 export default async function CampPage() {
   const { userId } = auth();
 

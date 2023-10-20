@@ -22,7 +22,9 @@ export const ImageBlock = ({ block }: { block: Block }) => {
   );
 
   const itemName = item?.value?.["string-value"];
-
+  if (itemName) {
+    console.log(block);
+  }
   return (
     <div>
       {itemName && <TypographyP>{itemName}</TypographyP>}

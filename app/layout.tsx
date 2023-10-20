@@ -1,3 +1,4 @@
+import { OpenAIBanner } from "@/components/status-banners/open-ai";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -15,10 +16,26 @@ const font = Barlow({
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
+  metadataBase: new URL("https://ai-adventure.steamship.com"),
   viewport: {
     width: "device-width",
     initialScale: 1,
     maximumScale: 1,
+  },
+  openGraph: {
+    url: "https://ai-adventure.steamship.com/",
+    type: "website",
+    title: "AI Adventure",
+    description: "Create your own AI Adventure",
+    images: "https://ai-adventure.steamship.com/adventurer.png",
+  },
+  twitter: {
+    creator: "@GetSteamship",
+    card: "summary_large_image",
+    title: "AI Adventure",
+    site: "@GetSteamship",
+    description: "Create your own AI Adventure",
+    images: "https://ai-adventure.steamship.com/adventurer.png",
   },
 };
 
@@ -56,6 +73,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <OpenAIBanner />
             {children}
             <Analytics />
           </ThemeProvider>
