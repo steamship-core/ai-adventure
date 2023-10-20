@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 const StartAdventureButton = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { loadingScreen, setIsVisible } = useLoadingScreen();
+  const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
   const gameState = useRecoilValue(recoilGameState);
 
   const questArc = gameState?.quest_arc || [];

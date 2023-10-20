@@ -3,7 +3,7 @@ import { CampMembers } from "@/camp-members";
 import { getGameState } from "@/lib/game/game-state.client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import {
   Sheet,
@@ -17,7 +17,7 @@ import {
 import { Skeleton } from "../ui/skeleton";
 
 export const CampImage = () => {
-  const gameState = useRecoilValue(recoilGameState);
+  const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [campPic, setCampPic] = useState<string | undefined>(
     gameState?.camp?.image_block_url
   );
@@ -37,6 +37,30 @@ export const CampImage = () => {
       clearInterval(interval);
     };
   }, [campPic]);
+
+  useEffect(() => {
+    const refreshInventory = async () => {
+      const start = Date.now();
+      const res = await fetch("/api/game/trade/refresh-inventory", {
+        method: "POST",
+        body: JSON.stringify({
+          npc_name: "The Merchant",
+        }),
+      });
+      const end = Date.now();
+      const elapsed = end - start;
+      console.log(`Refreshed inventory in ${elapsed}ms`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.updated) {
+          console.log("updating inv");
+          const gameState = await getGameState();
+          setGameState(gameState);
+        }
+      }
+    };
+    refreshInventory();
+  }, []);
 
   return (
     <div className="my-2">

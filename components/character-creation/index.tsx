@@ -85,7 +85,7 @@ export default function CharacterCreation() {
     {
       placeholder:
         "Thumblemore is a disheveled wizard with silver-white hair that cascades wildly, often obscuring his dazed blue eyes. He wears azure robes dotted with confusing maps and compasses, all misleadingly pointing in various directions. Around his neck dangle mismatched amulets from many misadventures, while he leans on a crooked staff etched with arcane symbols, some seemingly corrected in haste. His twisty beard seems to harbor its own mysteries, much like the rest of him.",
-      text: "Describe your character's appearence. An image will be generated based on your description - so be as detailed as you want!",
+      text: "Describe your character's appearance. An image will be generated based on your description - so be as detailed as you want!",
       buttonText: "Set appearance",
       initialValue: configuration.player.description,
       setConfiguration: (description: string) => {
@@ -125,14 +125,9 @@ export default function CharacterCreation() {
 
   const editCharacterFromTemplate = () => {
     setIsCompleteConfig(false);
-
-    console.log("setting active step to 0");
     setActiveStep(0);
     setStep(0);
   };
-
-  console.log("activeStep", activeStep);
-  console.log("step", step);
 
   return (
     <CreationContainer>
@@ -140,7 +135,6 @@ export default function CharacterCreation() {
         <CharacterCreationComplete
           config={configuration}
           onFocus={() => {
-            console.log("setting active step to 7");
             setActiveStep(7);
           }}
           isCurrent={activeStep === 7}

@@ -16,7 +16,7 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
   const { questId } = useParams();
 
   const questArcs = gameState?.quest_arc || [];
-  const questIndex = gameState.quests.findIndex((q) => q.name === questId);
+  const questIndex = gameState?.quests?.findIndex((q) => q.name === questId);
 
   const questArc = questIndex > questArcs.length ? null : questArcs[questIndex];
 

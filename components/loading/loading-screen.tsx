@@ -46,7 +46,7 @@ const LoadingScreen = ({ text }: { text?: string }) => {
 
   return (
     <div className="fixed top-0 left-0 h-[100dvh] z-50 w-full bg-background flex flex-col">
-      <div className="h-3/5 flex items-center justify-center flex-col">
+      <div className="h-3/5 flex items-center justify-center flex-col max-w-xs mx-auto text-center">
         <Player autoplay loop src="/fire-lottie.json" className="w-96" />
         {text && <TypographyMuted>{text}</TypographyMuted>}
       </div>

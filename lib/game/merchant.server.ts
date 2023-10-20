@@ -3,7 +3,7 @@ import { getSteamshipClient } from "../utils";
 export const updateInventory = async (agentBase: string, npc_name: string) => {
   const steamship = getSteamshipClient();
   try {
-    const resp = await steamship.agent.post({
+    return steamship.agent.post({
       url: agentBase,
       path: "/refresh_inventory",
       arguments: { npc_name },

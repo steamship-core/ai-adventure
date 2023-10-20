@@ -10,14 +10,10 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { updateInventory } from "@/lib/game/merchant.server";
 import { generateQuestArc } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
-import { differenceInHours } from "date-fns";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
-
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export default async function CampPage() {
   const { userId } = auth();
@@ -35,32 +31,15 @@ export default async function CampPage() {
 
   let gameState = await getGameState(agent?.agentUrl);
   let refreshGameState = false;
-  if (gameState.active_mode == "onboarding") {
+  if (gameState?.active_mode == "onboarding") {
     redirect("/character-creation");
   }
 
-  if (!gameState.quest_arc) {
+  if (!gameState?.quest_arc) {
     await generateQuestArc(agent?.agentUrl);
     refreshGameState = true;
   }
 
-  // Update the merchants inventory
-  const merchant = gameState?.camp?.npcs?.find(
-    (npc) => npc.name == "The Merchant"
-  );
-  if (merchant) {
-    const lastUpdatedAt = merchant.inventory_last_updated;
-    if (
-      !lastUpdatedAt ||
-      differenceInHours(Date.now(), new Date(lastUpdatedAt)) > 12
-    ) {
-      // No need to wait for this. It will update in the background and the user will see the updated inventory on the next page load
-      updateInventory(agent?.agentUrl, "The Merchant");
-      // HACK - wait for the inventory to update, then refresh the game state. Sometimes /refresh-inventory hangs.
-      await delay(5000);
-      refreshGameState = true;
-    }
-  }
   if (refreshGameState) {
     gameState = await getGameState(agent?.agentUrl);
   }

@@ -23,6 +23,18 @@ export async function POST(request: Request) {
   try {
     if (operation == "top-up-energy") {
       log.info(`Topping up energy for ${userId}: ${agent?.agentUrl}`);
+
+      if (process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP !== "true") {
+        // Don't allow!
+        return NextResponse.json(
+          {
+            error:
+              "To enable free debug top-ups, please modify your environment variables.",
+          },
+          { status: 500 }
+        );
+      }
+
       let gameState = await getGameState(agent?.agentUrl);
       await saveGameState(agent?.agentUrl, {
         ...gameState,
@@ -32,6 +44,18 @@ export async function POST(request: Request) {
       return NextResponse.json(gameState);
     } else if (operation == "deplete-energy") {
       log.info(`Depleting energy for ${userId}: ${agent?.agentUrl}`);
+
+      if (process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_DEPLETE !== "true") {
+        // Don't allow!
+        return NextResponse.json(
+          {
+            error:
+              "To enable debug depletes, please modify your environment variables.",
+          },
+          { status: 500 }
+        );
+      }
+
       console.log(`Depleting energy for ${userId}: ${agent?.agentUrl}`);
       let gameState = await getGameState(agent?.agentUrl);
       await saveGameState(agent?.agentUrl, {
