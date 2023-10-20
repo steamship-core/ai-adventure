@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { track } from "@vercel/analytics/react";
 import {
-  ArrowRightIcon,
   CircleDollarSignIcon,
   FingerprintIcon,
+  StarIcon,
   VenetianMaskIcon,
   WandIcon,
   ZapIcon,
@@ -128,7 +128,18 @@ export default function Home() {
       <MainCTA />
       <div className="relative flex-col pb-2 w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end">
         <div className="absolute right-4 top-4">
-          <UserButton />
+          <div className="flex gap-2 items-center justify-center">
+            <Button asChild>
+              <a
+                href="https://github.com/steamship-packages/ai-adventure"
+                target="_blank"
+                className="flex items-center justify-center"
+              >
+                <StarIcon size={16} className="mr-2" /> Star
+              </a>
+            </Button>
+            <UserButton />
+          </div>
         </div>
         <div className="pb-12 px-6 md:px-12">
           <h1 className="text-4xl md:text-6xl lg:text-7xl leading-6 font-bold mb-4">
@@ -248,32 +259,6 @@ export default function Home() {
                 </div>
               ))}
             </dl>
-          </Section>
-          <Section>
-            <Title
-              title="Powered by Steamship"
-              subtitle="Steamship is a platform for building AI-powered applications."
-            />
-            <Actions>
-              <Button asChild>
-                <a
-                  href="https://www.steamship.com/"
-                  target="_blank"
-                  className="flex items-center justify-center gap-2"
-                >
-                  Start Building
-                </a>
-              </Button>
-              <Button asChild variant="link">
-                <a
-                  href="https://docs.steamship.com/agent-guidebook"
-                  target="_blank"
-                  className="flex items-center justify-center gap-2"
-                >
-                  Learn more <ArrowRightIcon />
-                </a>
-              </Button>
-            </Actions>
           </Section>
         </div>
       </div>
