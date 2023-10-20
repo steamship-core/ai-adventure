@@ -4,7 +4,7 @@ import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import Head from "next/head";
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function ShareQuest() {
   const searchParams = useSearchParams();
@@ -13,10 +13,6 @@ export default function ShareQuest() {
   const itemUrl = searchParams.get("itemUrl");
   const name = searchParams.get("name");
   const itemName = searchParams.get("itemName");
-  const pathname = usePathname();
-  console.log(
-    `${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?${searchParams.toString()}`
-  );
 
   return (
     <>
