@@ -33,6 +33,7 @@ export async function generateMetadata(
       site: "@GetSteamship",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
+      images: `https://ai-adventure.steamship.com/og?blockId=${blockId}`,
     },
   };
 }
