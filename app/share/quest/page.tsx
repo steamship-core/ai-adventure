@@ -1,64 +1,46 @@
-"use client";
-import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
-import { TypographyP } from "@/components/ui/typography/TypographyP";
-import Head from "next/head";
-import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import SharedQuest from "@/components/share/shared-quest";
+import { Metadata, ResolvingMetadata } from "next";
+
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const title = searchParams.title;
+  const description = searchParams.description;
+  const itemUrl = searchParams.itemUrl;
+  const name = searchParams.name;
+  const itemName = searchParams.itemName;
+
+  // optionally access and extend (rather than replace) parent metadata
+  const parentMetadata = (await parent) || {};
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: (title as string) || "A Quest",
+    description: (description as string) || "A Quest",
+    openGraph: {
+      ...(parentMetadata.openGraph || {}),
+      url: "https://ai-adventure.steamship.com/",
+      images: [(itemUrl as string)!, ...previousImages],
+      title: (title as string) || "A Quest",
+      description: (description as string) || "A Quest",
+    },
+    twitter: {
+      creator: "@GetSteamship",
+      card: "summary_large_image",
+      site: "@GetSteamship",
+      title: (title as string) || "A Quest",
+      description: (description as string) || "A Quest",
+      images: [(itemUrl as string)!, ...previousImages],
+    },
+  };
+}
 
 export default function ShareQuest() {
-  const searchParams = useSearchParams();
-  const title = searchParams.get("title");
-  const description = searchParams.get("description");
-  const itemUrl = searchParams.get("itemUrl");
-  const name = searchParams.get("name");
-  const itemName = searchParams.get("itemName");
-
-  return (
-    <>
-      <Head>
-        {/* <!-- HTML Meta Tags --> */}
-        <title>{title!}</title>
-        <meta name="description" content={description!} />
-
-        {/* <!-- Facebook Meta Tags --> */}
-        <meta property="og:url" content="https://ai-adventure.steamship.com/" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title!} />
-        <meta property="og:description" content={description!} />
-        <meta property="og:image" content={itemUrl!} />
-
-        {/* <!-- Twitter Meta Tags --> */}
-        <meta name="twitter:site" content="@GetSteamship" />
-        <meta name="twitter:creator" content="@GetSteamship" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="twitter:domain" content="ai-adventure.steamship.com" />
-        <meta
-          property="twitter:url"
-          content="https://ai-adventure.steamship.com/"
-        />
-        <meta name="twitter:title" content={title!} />
-        <meta name="twitter:description" content={description!} />
-        <meta name="twitter:image" content={itemUrl!} />
-      </Head>
-      <div className="max-w-lg mx-auto flex justify-center items-center h-full">
-        <div className="flex flex-col gap-2">
-          <div>
-            <TypographyH1>A quest by {name}</TypographyH1>
-            <TypographyH3 className="mt-4">{title}</TypographyH3>
-            <TypographyP>{description}</TypographyP>
-            <TypographyP>
-              On their adventure, they found something incredible:
-            </TypographyP>
-          </div>
-          <div className="mt-4">
-            <TypographyH3 className="mb-2">{itemName}</TypographyH3>
-            <div className="w-44">
-              <Image alt="Quest Item" src={itemUrl!} height={512} width={512} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+  return <SharedQuest />;
 }
