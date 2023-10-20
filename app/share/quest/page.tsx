@@ -15,6 +15,7 @@ export async function generateMetadata(
   const blockId = searchParams.blockId;
   // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = (await parent) || {};
+  const previousImages = (await parent).openGraph?.images || [];
 
   return {
     title: (title as string) || "A Quest",
@@ -22,9 +23,9 @@ export async function generateMetadata(
     openGraph: {
       ...(parentMetadata.openGraph || {}),
       url: "https://ai-adventure.steamship.com/",
-      images: `/api/shared/block/${blockId}/asset.png`,
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
+      images: `https://ai-adventure.steamship.com/og?blockId=${blockId}`,
     },
     twitter: {
       creator: "@GetSteamship",
@@ -32,7 +33,6 @@ export async function generateMetadata(
       site: "@GetSteamship",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
-      images: `/api/shared/block/${blockId}/asset.png`,
     },
   };
 }
