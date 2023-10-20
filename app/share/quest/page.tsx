@@ -22,7 +22,7 @@ export async function generateMetadata(
     openGraph: {
       ...(parentMetadata.openGraph || {}),
       url: "https://ai-adventure.steamship.com/",
-      images: `/api/block/${blockId}/asset.png`,
+      images: `/api/shared/block/${blockId}/asset.png`,
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
     },
@@ -32,7 +32,7 @@ export async function generateMetadata(
       site: "@GetSteamship",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
-      images: `/api/block/${blockId}/asset.png`,
+      images: `/api/shared/block/${blockId}/asset.png`,
     },
   };
 }
