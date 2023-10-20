@@ -233,21 +233,25 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                   Buy Energy
                 </Button>
 
-                <Button
-                  onClick={(e) => {
-                    setEnergyTo0();
-                  }}
-                >
-                  Set Energy to 0
-                </Button>
+                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP === "true" && (
+                  <Button
+                    onClick={(e) => {
+                      setEnergyTo0();
+                    }}
+                  >
+                    Set Energy to 0
+                  </Button>
+                )}
 
-                <Button
-                  onClick={(e) => {
-                    setEnergyTo100();
-                  }}
-                >
-                  Set Energy to 100
-                </Button>
+                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP === "true" && (
+                  <Button
+                    onClick={(e) => {
+                      setEnergyTo100();
+                    }}
+                  >
+                    Set Energy to 100
+                  </Button>
+                )}
 
                 <Button
                   onClick={(e) => {
