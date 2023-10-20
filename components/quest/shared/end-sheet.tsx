@@ -120,9 +120,7 @@ const EndSheet = ({
 
   twitterLink.searchParams.set(
     "url",
-    `${
-      process.env.NEXT_PUBLIC_BASE_URL
-    }/share/quest?${sharableSearchParams.toString()}`
+    `https://ai-adventure.steamship.com/share/quest?${sharableSearchParams.toString()}`
   );
 
   return (
