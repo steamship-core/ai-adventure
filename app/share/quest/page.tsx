@@ -13,9 +13,6 @@ export async function generateMetadata(
   const title = searchParams.title;
   const description = searchParams.description;
   const itemUrl = searchParams.itemUrl;
-  const name = searchParams.name;
-  const itemName = searchParams.itemName;
-
   // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = (await parent) || {};
   const previousImages = (await parent).openGraph?.images || [];
@@ -26,7 +23,7 @@ export async function generateMetadata(
     openGraph: {
       ...(parentMetadata.openGraph || {}),
       url: "https://ai-adventure.steamship.com/",
-      images: [(itemUrl as string)!, ...previousImages],
+      images: (itemUrl as string)!,
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
     },
@@ -36,7 +33,7 @@ export async function generateMetadata(
       site: "@GetSteamship",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
-      images: [(itemUrl as string)!, ...previousImages],
+      images: (itemUrl as string)!,
     },
   };
 }
