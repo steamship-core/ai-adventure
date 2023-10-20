@@ -127,16 +127,41 @@ export default function Home() {
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <Head>
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@GetSteamship" />
-        <meta name="twitter:creator" content="@GetSteamship" />
-        <meta property="og:url" content="https://ai-adventure.steamship.com" />
+        {/* <!-- HTML Meta Tags --> */}
+        <title>AI Adventure</title>
+        <meta name="description" content="Create your own AI Adventure" />
+
+        {/* <!-- Facebook Meta Tags --> */}
+        <meta property="og:url" content="https://ai-adventure.steamship.com/" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="AI Adventure" />
         <meta
           property="og:description"
-          content="Fantasy Unbounded. Let AI Be your Dungeon Master"
+          content="Create your own AI Adventure"
         />
-        <meta property="og:image" content="/adventurer.png" />
+        <meta
+          property="og:image"
+          content="https://ai-adventure.steamship.com/adventurer.png"
+        />
+
+        {/* <!-- Twitter Meta Tags --> */}
+        <meta name="twitter:site" content="@GetSteamship" />
+        <meta name="twitter:creator" content="@GetSteamship" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="ai-adventure.steamship.com" />
+        <meta
+          property="twitter:url"
+          content="https://ai-adventure.steamship.com/"
+        />
+        <meta name="twitter:title" content="AI Adventure" />
+        <meta
+          name="twitter:description"
+          content="Create your own AI Adventure"
+        />
+        <meta
+          name="twitter:image"
+          content="https://ai-adventure.steamship.com/adventurer.png"
+        />
       </Head>
       <MainCTA />
       <div className="relative flex-col pb-2 w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end">

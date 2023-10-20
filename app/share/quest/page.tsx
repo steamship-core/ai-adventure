@@ -21,18 +21,29 @@ export default function ShareQuest() {
   return (
     <>
       <Head>
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@GetSteamship" />
-        <meta name="twitter:creator" content="@GetSteamship" />
-        <meta
-          property="og:url"
-          content={`${
-            process.env.NEXT_PUBLIC_BASE_URL
-          }${pathname}?${searchParams.toString()}`}
-        />
+        {/* <!-- HTML Meta Tags --> */}
+        <title>{title!}</title>
+        <meta name="description" content={description!} />
+
+        {/* <!-- Facebook Meta Tags --> */}
+        <meta property="og:url" content="https://ai-adventure.steamship.com/" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content={title!} />
         <meta property="og:description" content={description!} />
         <meta property="og:image" content={itemUrl!} />
+
+        {/* <!-- Twitter Meta Tags --> */}
+        <meta name="twitter:site" content="@GetSteamship" />
+        <meta name="twitter:creator" content="@GetSteamship" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="ai-adventure.steamship.com" />
+        <meta
+          property="twitter:url"
+          content="https://ai-adventure.steamship.com/"
+        />
+        <meta name="twitter:title" content={title!} />
+        <meta name="twitter:description" content={description!} />
+        <meta name="twitter:image" content={itemUrl!} />
       </Head>
       <div className="max-w-lg mx-auto flex justify-center items-center h-full">
         <div className="flex flex-col gap-2">
