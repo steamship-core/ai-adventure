@@ -233,7 +233,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                   Buy Energy
                 </Button>
 
-                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP && (
+                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP === "true" && (
                   <Button
                     onClick={(e) => {
                       setEnergyTo0();
@@ -243,7 +243,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                   </Button>
                 )}
 
-                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP && (
+                {process.env.NEXT_PUBLIC_ALLOW_FREE_DEBUG_TOPUP === "true" && (
                   <Button
                     onClick={(e) => {
                       setEnergyTo100();
