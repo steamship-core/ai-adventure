@@ -109,7 +109,7 @@ const EndSheet = ({
   );
 
   const sharableSearchParams = new URLSearchParams();
-  sharableSearchParams.set("itemUrl", quest?.new_items?.[0]?.picture_url || "");
+  sharableSearchParams.set("blockId", "7CDD43DE-D886-42B5-A24E-C88525107505"); //quest?.new_items?.[0]?.picture_url || "");
   sharableSearchParams.set(
     "title",
     questArc ? questArc.location : `${gameState?.player.name}'s Adventure`
