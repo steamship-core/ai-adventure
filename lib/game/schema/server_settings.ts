@@ -4,9 +4,9 @@ export type ServerSettings = {
   // STORY GENERATION
   // ****************************************************************************************************
 
-  default_llm_model?: string;
-  default_llm_temperature?: string;
-  default_llm_max_tokens?: string;
+  default_story_model?: string;
+  default_story_temperature?: number;
+  default_story_max_tokens?: number;
 
   // IMAGE GENERATION
   // ****************************************************************************************************

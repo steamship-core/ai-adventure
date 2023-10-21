@@ -1,6 +1,6 @@
 import { Prompt } from "@/lib/game/schema/prompt";
 import { ServerSettings } from "@/lib/game/schema/server_settings";
-import CampImagePrompt from "./prompts/camp_image_prompt";
+import CampImagePrompt from "./image_prompts/camp_image_prompt";
 
 function prompt_to_string(prompt: Prompt): string {
   let value = prompt.value;
@@ -13,38 +13,80 @@ function prompt_to_string(prompt: Prompt): string {
 
 /**
  * These settings are pushed into the game engine upon new game creation.
+ *
+ * See lib/game/schema/server_settings.ts for documentation.
  */
 const server_settings: ServerSettings = {
-  /**
-   * Game Engine Decision Model
-   *
-   * Used for in-game decision making.
-   *
-   * Valid values are:
-   *   - gpt-3.5-turbo
-   *   - gpt-4
-   */
-  default_function_capable_llm_model: "gpt-3.5-turbo",
-  default_function_capable_llm_temperature: 0.4,
-  default_function_capable_llm_max_tokens: 512,
+  // STORY GENERATION
+  // ****************************************************************************************************
 
-  /**
-   * Storytelling Model
-   *
-   * Used to generate story text.
-   *
-   * Valid models are:
-   *   - gpt-3.5-turbo
-   *   - gpt-4
-   */
   default_story_model: "gpt-4",
   default_story_temperature: 0.4,
   default_story_max_tokens: 256,
 
+  // IMAGE GENERATION
+  // ****************************************************************************************************
+
+  /**
+   * A list of Stable Diffusion Image themes.
+   *
+   * Including your own custom theme will let you apply it to image prompts.
+   *
+   */
+  image_themes: [
+
+  ],
+
+  /**
+   * The Stable Diffusion theme for generating camp images.
+   *
+   * Use a built-in theme: "pixel_art_1" | "pixel_art_2"
+   *
+   * Or reference one of the ones included in this file.
+   */
+  camp_image_theme: 'pixel_art_1',
+  camp_image_prompt: '{tone} {genre} camp.',
+  camp_image_negative_prompt: '',
+
+  /**
+   * The Stable Diffusion theme for generating item images.
+   *
+   * Use a built-in theme: "pixel_art_1" | "pixel_art_2"
+   *
+   * Or reference one of the ones included in this file.
+   */
+  item_image_theme?: 'pixel_art_1',
+  item_image_prompt?: `16-bit retro-game sprite for an item in a hero's inventory.
+  The items's name is: {name}.
+  The item's description is: {description}.`
+
+  /**
+   * The Stable Diffusion theme for generating profile images.
+   *
+   * Use a built-in theme: "pixel_art_1" | "pixel_art_2"
+   *
+   * Or reference one of the ones included in this file.
+   */
+  profile_image_theme?: string;
+  profile_image_prompt?: string;
+  profile_image_negative_prompt?: string;
+
+  /**
+   * The Stable Diffusion theme for generating quest background images.
+   *
+   * Use a built-in theme: "pixel_art_1" | "pixel_art_2"
+   *
+   * Or reference one of the ones included in this file.
+   */
+  quest_background_theme?: string;
+  quest_background_image_prompt?: string;
+  quest_background_image_negative_prompt?: string;
+
+  // STORY NARRATION
+  // ****************************************************************************************************
+
   /**
    * Narration Model
-   *
-   * Used to generate audio narration.
    *
    * Valid models are:
    *   - elevenlabs
@@ -62,9 +104,6 @@ const server_settings: ServerSettings = {
    * Profile Image
    */
   camp_image_prompt: prompt_to_string(CampImagePrompt),
-  camp_image_loras: {
-    "": "",
-  },
 };
 
 module.exports = server_settings;
