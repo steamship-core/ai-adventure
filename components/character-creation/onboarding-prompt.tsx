@@ -19,7 +19,6 @@ export const FocusableTextArea = ({
   value,
   isFinished,
   isCurrent,
-  onFocus,
   setValue,
   onKeyDown,
   placeholder,
@@ -28,7 +27,6 @@ export const FocusableTextArea = ({
   setValue: Dispatch<SetStateAction<string>>;
   isFinished: boolean;
   isCurrent: boolean;
-  onFocus: () => any;
   onKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => any;
   placeholder: string;
 }) => {
@@ -44,9 +42,7 @@ export const FocusableTextArea = ({
       ref={ref}
       onKeyDown={onKeyDown}
       disabled={!isFinished}
-      onFocus={onFocus}
       placeholder={placeholder}
-      autoFocus
     />
   );
 };
@@ -59,10 +55,11 @@ const OnboardingPrompt = ({
   options,
   step,
   totalSteps,
-  setStep,
   setActiveStep,
   setConfiguration,
   initialValue = "",
+  setCompletedSteps,
+  completedSteps,
 }: {
   isCurrent: boolean;
   text: string;
@@ -71,10 +68,11 @@ const OnboardingPrompt = ({
   options?: string[];
   step: number;
   totalSteps: number;
-  setStep: Dispatch<SetStateAction<number>>;
   setActiveStep: Dispatch<SetStateAction<number>>;
   setConfiguration: (option: string) => void;
   initialValue?: string;
+  setCompletedSteps: Dispatch<SetStateAction<Set<number>>>;
+  completedSteps: Set<number>;
 }) => {
   const { currentText, isFinished } = useTypeWriter({
     text,
@@ -91,20 +89,24 @@ const OnboardingPrompt = ({
   };
 
   const onContinue = (option: string) => {
-    setStep((prev) => (prev > step + 1 ? prev : step + 1));
+    setCompletedSteps((prev) => prev.add(step));
     setActiveStep((prev) => (prev > step + 1 ? prev : step + 1));
     setConfiguration(option);
   };
 
+  const isCompletedAnimation = completedSteps.has(step) ? true : isFinished;
+
   return (
-    <CreationContent isCurrent={isCurrent} onClick={() => setActiveStep(step)}>
+    <CreationContent isCurrent={isCurrent}>
       <TypographyMuted>
         {step}/{totalSteps}
       </TypographyMuted>
       <div>
-        <TypographyP>{currentText}</TypographyP>
+        <TypographyP>
+          {completedSteps.has(step) ? text : currentText}
+        </TypographyP>
       </div>
-      <CreationActions isFinished={isFinished}>
+      <CreationActions isFinished={isCompletedAnimation}>
         {options && (
           <div className="grid grid-cols-2 gap-2">
             {options.map((option) => (
@@ -117,6 +119,7 @@ const OnboardingPrompt = ({
                   setValue(option);
                   onContinue(option);
                 }}
+                autoFocus={false}
               >
                 {option}
               </Button>
@@ -135,27 +138,33 @@ const OnboardingPrompt = ({
               onContinue(value);
             }}
             className="flex gap-2 flex-col"
-            autoFocus={false}
           >
             <FocusableTextArea
               placeholder={placeholder}
-              onFocus={() => {
-                console.log("focus here");
-                setActiveStep(step);
-              }}
               onKeyDown={onEnterPress}
               value={value}
               setValue={setValue}
-              isFinished={isFinished}
+              isFinished={isCompletedAnimation}
               isCurrent={isCurrent}
             />
-            <Button
-              disabled={value.length < 1}
-              className="w-full"
-              type="submit"
-            >
-              {buttonText}
-            </Button>
+            <div className="flex w-full gap-2">
+              <Button
+                className="w-full"
+                type="button"
+                variant="outline"
+                onClick={() => setActiveStep(step - 1)}
+              >
+                Back
+              </Button>
+              <Button
+                disabled={value.length < 1}
+                className="w-full"
+                type="submit"
+                autoFocus
+              >
+                {buttonText}
+              </Button>
+            </div>
           </form>
         )}
       </CreationActions>

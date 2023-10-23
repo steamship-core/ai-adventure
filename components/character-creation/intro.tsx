@@ -8,29 +8,34 @@ import { CreationActions, CreationContent } from "./shared/components";
 const CharacterCreationIntro = ({
   onContinue,
   isCurrent,
+  completedSteps,
 }: {
   onContinue: () => any;
   isCurrent: boolean;
+  completedSteps: Set<number>;
 }) => {
   const ref = useRef<HTMLButtonElement>(null);
+  const text = `${GAME_INFO.description} Let's get started by creating your character.`;
   const { currentText, isFinished } = useTypeWriter({
-    text: `${GAME_INFO.description} Let's get started by creating your character.`,
+    text,
   });
 
+  const isCompletedAnimation = completedSteps.has(0) ? true : isFinished;
+
   useEffect(() => {
-    if (isCurrent && isFinished) {
+    if (isCurrent && isCompletedAnimation) {
       ref.current?.focus();
     }
-  }, [isCurrent, isFinished]);
+  }, [isCurrent, isCompletedAnimation]);
 
   return (
     <CreationContent isCurrent={isCurrent}>
-      <TypographyP>{currentText}</TypographyP>
-      <CreationActions isFinished={isFinished}>
+      <TypographyP>{completedSteps?.has(0) ? text : currentText}</TypographyP>
+      <CreationActions isFinished={isCompletedAnimation}>
         <Button
           ref={ref}
           onClick={onContinue}
-          disabled={!isFinished}
+          disabled={!isCompletedAnimation}
           className="w-full"
         >
           Start
