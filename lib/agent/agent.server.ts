@@ -1,21 +1,17 @@
-import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../db";
 import { getSteamshipClient } from "../utils";
 
-export const getAgent = async (
-  userId: string
-): Promise<Prisma.Prisma__AgentsClient<
-  {
-    id: number;
-    ownerId: string;
-    agentUrl: string;
-  },
-  never,
-  DefaultArgs
-> | null> => {
+export const getAgents = async (userId: string) => {
+  return await prisma.agents.findMany({
+    where: {
+      ownerId: userId!,
+    },
+  });
+};
+
+export const getAgent = async (userId: string) => {
   return await prisma.agents.findFirst({
     where: {
       ownerId: userId!,
@@ -23,7 +19,7 @@ export const getAgent = async (
   });
 };
 
-export const deleteAgent = async (userId: string): Promise<number> => {
+export const deleteAgent = async (userId: string) => {
   let res = await prisma.agents.deleteMany({
     where: {
       ownerId: userId!,
@@ -32,19 +28,7 @@ export const deleteAgent = async (userId: string): Promise<number> => {
   return res.count;
 };
 
-export const createAgent = async (
-  userId: string
-): Promise<
-  Prisma.Prisma__AgentsClient<
-    {
-      id: number;
-      ownerId: string;
-      agentUrl: string;
-    },
-    never,
-    DefaultArgs
-  >
-> => {
+export const createAgent = async (userId: string) => {
   if (!process.env.STEAMSHIP_AGENT_VERSION) {
     log.error("No steamship agent version");
     throw Error("Please set the STEAMSHIP_AGENT_VERSION environment variable.");
