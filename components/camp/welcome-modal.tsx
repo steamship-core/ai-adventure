@@ -36,8 +36,20 @@ const joyrideSteps: StepProps = [
     disableBeacon: true,
   },
   {
-    target: "#camp",
+    target: "#quest-progress",
     placement: "bottom",
+    title: "Quest Progress",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        This a list of the quests you have to go on to achieve your characters
+        goals. Click on a quest to expand its description
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+  {
+    target: "#camp",
+    placement: "center",
     title: "Camp",
     content: (
       <TypographyMuted className="text-base text-muted-foreground">

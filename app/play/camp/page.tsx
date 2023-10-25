@@ -62,7 +62,7 @@ export default async function CampPage() {
               <SummaryStats />
             </div>
             <div className="overflow-auto">
-              <div>
+              <div id="quest-progress">
                 <QuestProgress />
               </div>
               <div id="camp">
