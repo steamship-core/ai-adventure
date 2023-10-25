@@ -142,7 +142,7 @@ export default function CharacterCreation() {
     {
       placeholder:
         "Thumblemore was once a prodigious student at the Arcanum Academy, ...",
-      text: "Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?",
+      text: "Describe the background of your character. Where did they come from? What is their backstory?",
       buttonText: "Set background",
       initialValue: configuration.player.background,
       setConfiguration: (background: string) => {
