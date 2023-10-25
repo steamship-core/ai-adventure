@@ -8,6 +8,7 @@ import { AlertTriangleIcon } from "lucide-react";
 import Image from "next/image";
 import { useLayoutEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { BlockContainer } from "./block-container";
 export const ImageBlock = ({
   block,
   hideOutput,
@@ -50,7 +51,7 @@ export const ImageBlock = ({
     return null;
   }
   return (
-    <div>
+    <BlockContainer>
       {!itemName && (
         <TypographyP className="mb-4">
           {gameState?.player?.name} looks around and surveys their surroundings
@@ -110,6 +111,6 @@ export const ImageBlock = ({
           </>
         )}
       </div>
-    </div>
+    </BlockContainer>
   );
 };

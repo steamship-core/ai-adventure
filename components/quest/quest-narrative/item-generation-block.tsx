@@ -3,6 +3,7 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
 import { useMemo } from "react";
+import { BlockContainer } from "./block-container";
 import { useBlockStream } from "./use-block-stream";
 
 const CompletionBlock = ({
@@ -17,10 +18,12 @@ const CompletionBlock = ({
     return null;
   }
   return (
-    <div className={"p-4 border border-foreground/50 rounded-md flex flex-col"}>
+    <BlockContainer
+      className={"p-4 border border-foreground/50 rounded-md flex flex-col"}
+    >
       <TypographyLarge>Item Found! 🎉</TypographyLarge>
       <TypographyP className="whitespace-pre-wrap text-sm">{text}</TypographyP>
-    </div>
+    </BlockContainer>
   );
 };
 
@@ -38,14 +41,14 @@ export const ItemGenerationBlock = ({
 
   if (wasAlreadyComplete) {
     return (
-      <div
+      <BlockContainer
         className={"p-4 border border-foreground/50 rounded-md flex flex-col"}
       >
         <TypographyLarge>Item Found! 🎉</TypographyLarge>
         <TypographyP className="whitespace-pre-wrap text-sm">
           {block.text}
         </TypographyP>
-      </div>
+      </BlockContainer>
     );
   }
   return <CompletionBlock block={block} hideOutput={hideOutput} />;

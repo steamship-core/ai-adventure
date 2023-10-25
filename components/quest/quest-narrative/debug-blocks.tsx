@@ -2,6 +2,7 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { useDebugModeSetting } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
+import { BlockContainer } from "./block-container";
 
 export const DebugBlock = ({
   block,
@@ -17,7 +18,7 @@ export const DebugBlock = ({
     return null;
   }
   return (
-    <div
+    <BlockContainer
       className={cn(
         "p-2 border border-yellow-600 rounded-md opacity-70 text-sm",
         className
@@ -25,7 +26,7 @@ export const DebugBlock = ({
     >
       <TypographySmall>{title}</TypographySmall>
       <p>{block.text}</p>
-    </div>
+    </BlockContainer>
   );
 };
 

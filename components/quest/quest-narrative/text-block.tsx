@@ -1,3 +1,4 @@
+import { BlockContainer } from "./block-container";
 import { NarrationPlayer } from "./narration-player";
 
 import { useEffect, useState } from "react";
@@ -52,7 +53,7 @@ export const TextBlock = ({
   }
 
   return (
-    <div className="group">
+    <BlockContainer className="group">
       <div
         data-blocktype="text-block"
         className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
@@ -74,6 +75,6 @@ export const TextBlock = ({
           </div>
         </div>
       )}
-    </div>
+    </BlockContainer>
   );
 };
