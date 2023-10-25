@@ -1,14 +1,48 @@
 "use client";
 import { recoilGameState } from "@/components/providers/recoil";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { AlertTriangleIcon } from "lucide-react";
 import Image from "next/image";
-import { useLayoutEffect, useState } from "react";
+import { Dispatch, SetStateAction, useLayoutEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { BlockContainer } from "./block-container";
+
+const ImageWithFallback = ({
+  url,
+  setError,
+  itemName,
+}: {
+  url?: string;
+  setError: Dispatch<SetStateAction<boolean>>;
+  itemName?: string;
+}) => {
+  if (url) {
+    return (
+      <Image
+        src={url}
+        fill
+        alt={itemName || "generated image"}
+        onError={() => {
+          setError(true);
+        }}
+      />
+    );
+  }
+  return (
+    <Skeleton
+      className={cn("w-full", itemName ? "aspect-square" : "aspect-video")}
+    />
+  );
+};
 export const ImageBlock = ({
   block,
   hideOutput,
@@ -18,6 +52,7 @@ export const ImageBlock = ({
 }) => {
   const [url, setUrl] = useState<string | undefined>();
   const [error, setError] = useState(false);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
   const gameState = useRecoilValue(recoilGameState);
 
   useLayoutEffect(() => {
@@ -50,6 +85,11 @@ export const ImageBlock = ({
   if (hideOutput) {
     return null;
   }
+
+  const imageContainerClasses = cn(
+    "overflow-hidden rounded-md w-full relative mt-4",
+    itemName ? "aspect-square" : "aspect-video"
+  );
   return (
     <BlockContainer>
       {!itemName && (
@@ -84,33 +124,38 @@ export const ImageBlock = ({
           </div>
         ) : (
           <>
-            <div
-              className={cn(
-                "overflow-hidden rounded-md w-full relative",
-                itemName ? "aspect-square" : "aspect-video"
-              )}
+            <button
+              className={imageContainerClasses}
+              onClick={() => setIsDialogVisible(true)}
             >
-              {url ? (
-                <Image
-                  src={url}
-                  fill
-                  alt="generated image"
-                  onError={() => {
-                    setError(true);
-                  }}
-                />
-              ) : (
-                <Skeleton
-                  className={cn(
-                    "w-full",
-                    itemName ? "aspect-square" : "aspect-video"
-                  )}
-                />
-              )}
-            </div>
+              <ImageWithFallback
+                url={url}
+                itemName={itemName}
+                setError={setError}
+              />
+            </button>
           </>
         )}
       </div>
+      <Dialog
+        open={isDialogVisible}
+        onOpenChange={(open) => setIsDialogVisible(open)}
+      >
+        <DialogContent className="min-w-[calc(100vw-12rem)] lg:min-w-[calc(100vw-24rem)]">
+          {itemName && (
+            <DialogHeader>
+              <DialogTitle>{itemName}</DialogTitle>
+            </DialogHeader>
+          )}
+          <div className={imageContainerClasses}>
+            <ImageWithFallback
+              url={url}
+              itemName={itemName}
+              setError={setError}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </BlockContainer>
   );
 };
