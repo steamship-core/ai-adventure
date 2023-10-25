@@ -7,21 +7,11 @@ const Typewriter = ({ text, delay }: { text: string; delay: number }) => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // const scrollToBottom = () => {
-  //   const container = document.getElementById("narrative-container");
-  //   if (container && container.scrollTop < 0) {
-  //     const sc = document.getElementById("scroll-end-div");
-  //     sc?.scrollIntoView({ behavior: "instant" });
-  //     console.log("scrolled");
-  //   }
-  // };
-
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
         setCurrentText((prevText) => prevText + text[currentIndex]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
-        // scrollToBottom();
       }, delay);
 
       return () => clearTimeout(timeout);

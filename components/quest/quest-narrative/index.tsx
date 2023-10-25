@@ -160,6 +160,10 @@ export default function QuestNarrative({
   }, [priorBlocks]);
 
   useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
     const updateGameState = async () => {
       const gs = await getGameState();
       setGameState(gs);
@@ -207,10 +211,10 @@ export default function QuestNarrative({
       : null;
 
   let nonPersistedUserInput: string | null = null;
-  console.log("priorBlocks", priorBlocks);
+
   return (
     <>
-      <div className="flex h-full overflow-hidden relative">
+      <div className="flex h-full overflow-hidden">
         <QuestNarrativeContainer>
           {priorBlocks && (
             <NarrativeBlock
@@ -307,7 +311,9 @@ export default function QuestNarrative({
                   } else {
                     setChatHistory((prev) => [...prev, nextBlock.id]);
                   }
-                  scrollToBottom();
+                  setTimeout(() => {
+                    scrollToBottom();
+                  }, 150);
                 }}
                 className="w-full"
               >
