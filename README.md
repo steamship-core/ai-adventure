@@ -34,7 +34,7 @@ This README contains the following sections:
 
 Once you have access to [the environment variables you'll need](#set-up-environment-variables), deploy the example using [Vercel](https://vercel.com):
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/steamship-core/ai-adventure-game/tree/main&project-name=ai-adventure-game&repository-name=ai-adventure-game&env=CLERK_SECRET_KEY,NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,NEXT_PUBLIC_CLERK_SIGN_IN_URL,NEXT_PUBLIC_CLERK_SIGN_UP_URL,STEAMSHIP_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/steamship-core/ai-adventure/tree/main&project-name=ai-adventure&repository-name=ai-adventure&env=CLERK_SECRET_KEY,NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,NEXT_PUBLIC_CLERK_SIGN_IN_URL,NEXT_PUBLIC_CLERK_SIGN_UP_URL,STEAMSHIP_API_KEY)
 
 ## Set up Environment Variables
 
@@ -196,4 +196,4 @@ We hang out in the [Steamship Discord](https://steamship.com/discord)
 Related Repositories:
 
 - **Web Interface** The web interface is at [steamship-core/ai-adventure](https://github.com/steamship-core/ai-adventure)
-- **Game Engine** The game engine is at [steamship-core/ai-adventure-agent](https://github.com/steamship-packages/ai-adventure-agent)
+- **Game Engine** The game engine is at [steamship-core/ai-adventure-agent](https://github.com/steamship-core/ai-adventure-agent)

@@ -295,7 +295,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 <TypographySmall>Python</TypographySmall>
                 <Button asChild>
                   <a
-                    href="https://github.com/steamship-packages/ai-adventure/tree/main"
+                    href="https://github.com/steamship-core/ai-adventure-agent/tree/main"
                     target="_blank"
                   >
                     <StarIcon

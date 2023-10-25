@@ -131,7 +131,7 @@ export default function Home() {
           <div className="flex gap-2 items-center justify-center">
             <Button asChild>
               <a
-                href="https://github.com/steamship-packages/ai-adventure"
+                href="https://github.com/steamship-core/ai-adventure"
                 target="_blank"
                 className="flex items-center justify-center"
               >
@@ -230,7 +230,7 @@ export default function Home() {
             <Actions>
               <Button asChild>
                 <a
-                  href="https://github.com/steamship-packages/ai-adventure"
+                  href="https://github.com/steamship-core/ai-adventure"
                   target="_blank"
                   className="flex items-center justify-center gap-2"
                 >
