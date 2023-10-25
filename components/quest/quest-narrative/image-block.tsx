@@ -1,18 +1,28 @@
 "use client";
+import { recoilGameState } from "@/components/providers/recoil";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { AlertTriangleIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-export const ImageBlock = ({ block }: { block: Block }) => {
+import { useLayoutEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+export const ImageBlock = ({
+  block,
+  hideOutput,
+}: {
+  block: Block;
+  hideOutput?: boolean;
+}) => {
   const [url, setUrl] = useState<string | undefined>();
   const [error, setError] = useState(false);
+  const gameState = useRecoilValue(recoilGameState);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchImage = async () => {
       try {
+        console.log("fetching img");
         const res = await fetch(`/api/block/${block.id}`);
         if (res.ok) {
           const respBody = await res.blob();
@@ -36,8 +46,17 @@ export const ImageBlock = ({ block }: { block: Block }) => {
   if (itemName) {
     console.log(block);
   }
+  if (hideOutput) {
+    return null;
+  }
   return (
     <div>
+      {!itemName && (
+        <TypographyP className="mb-4">
+          {gameState?.player?.name} looks around and surveys their surroundings
+          ...{" "}
+        </TypographyP>
+      )}
       {itemName && <TypographyP>{itemName}</TypographyP>}
       <div className="overflow-hidden rounded-md mt-2 md:px-24">
         {error ? (
@@ -64,14 +83,13 @@ export const ImageBlock = ({ block }: { block: Block }) => {
           </div>
         ) : (
           <>
-            {url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <div
-                className={cn(
-                  "overflow-hidden rounded-md w-full relative",
-                  itemName ? "aspect-square" : "aspect-video"
-                )}
-              >
+            <div
+              className={cn(
+                "overflow-hidden rounded-md w-full relative",
+                itemName ? "aspect-square" : "aspect-video"
+              )}
+            >
+              {url ? (
                 <Image
                   src={url}
                   fill
@@ -80,15 +98,15 @@ export const ImageBlock = ({ block }: { block: Block }) => {
                     setError(true);
                   }}
                 />
-              </div>
-            ) : (
-              <Skeleton
-                className={cn(
-                  "w-full",
-                  itemName ? "aspect-square" : "aspect-video"
-                )}
-              />
-            )}
+              ) : (
+                <Skeleton
+                  className={cn(
+                    "w-full",
+                    itemName ? "aspect-square" : "aspect-video"
+                  )}
+                />
+              )}
+            </div>
           </>
         )}
       </div>

@@ -40,20 +40,15 @@ export const CampImage = () => {
 
   useEffect(() => {
     const refreshInventory = async () => {
-      const start = Date.now();
       const res = await fetch("/api/game/trade/refresh-inventory", {
         method: "POST",
         body: JSON.stringify({
           npc_name: "The Merchant",
         }),
       });
-      const end = Date.now();
-      const elapsed = end - start;
-      console.log(`Refreshed inventory in ${elapsed}ms`);
       if (res.ok) {
         const json = await res.json();
         if (json.updated) {
-          console.log("updating inv");
           const gameState = await getGameState();
           setGameState(gameState);
         }
@@ -73,6 +68,7 @@ export const CampImage = () => {
                 src={campPic}
                 alt="background"
                 className="object-cover -z-10"
+                sizes="528px"
               />
             ) : (
               <Skeleton className="w-full h-full" />

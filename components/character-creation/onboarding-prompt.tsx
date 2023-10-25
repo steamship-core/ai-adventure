@@ -7,12 +7,12 @@ import {
   useState,
 } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import Typewriter from "typewriter-effect";
 import { Button } from "../ui/button";
 import { inputClassNames } from "../ui/input";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import useFocus from "./hooks/use-focus";
-import { useTypeWriter } from "./hooks/use-typewriter";
 import { CreationActions, CreationContent } from "./shared/components";
 
 export const FocusableTextArea = ({
@@ -43,6 +43,7 @@ export const FocusableTextArea = ({
       onKeyDown={onKeyDown}
       disabled={!isFinished}
       placeholder={placeholder}
+      maxRows={8}
     />
   );
 };
@@ -74,9 +75,8 @@ const OnboardingPrompt = ({
   setCompletedSteps: Dispatch<SetStateAction<Set<number>>>;
   completedSteps: Set<number>;
 }) => {
-  const { currentText, isFinished } = useTypeWriter({
-    text,
-  });
+  const [isFinished, setIsFinished] = useState(false);
+
   const [value, setValue] = useState(initialValue);
   const [showForm, setShowForm] = useState(options ? false : true);
   const formRef = useRef<HTMLFormElement>(null);
@@ -102,9 +102,21 @@ const OnboardingPrompt = ({
         {step}/{totalSteps}
       </TypographyMuted>
       <div>
-        <TypographyP>
-          {completedSteps.has(step) ? text : currentText}
-        </TypographyP>
+        {!completedSteps.has(step) ? (
+          <Typewriter
+            onInit={(typewriter) => {
+              typewriter
+                .changeDelay(20)
+                .typeString(text)
+                .callFunction(() => {
+                  setIsFinished(true);
+                })
+                .start();
+            }}
+          />
+        ) : (
+          <TypographyP>{text}</TypographyP>
+        )}
       </div>
       <CreationActions isFinished={isCompletedAnimation}>
         {options && (

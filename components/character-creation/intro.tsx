@@ -1,8 +1,8 @@
 import GAME_INFO from "@/lib/game-info";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Typewriter from "typewriter-effect";
 import { Button } from "../ui/button";
 import { TypographyP } from "../ui/typography/TypographyP";
-import { useTypeWriter } from "./hooks/use-typewriter";
 import { CreationActions, CreationContent } from "./shared/components";
 
 const CharacterCreationIntro = ({
@@ -16,9 +16,7 @@ const CharacterCreationIntro = ({
 }) => {
   const ref = useRef<HTMLButtonElement>(null);
   const text = `${GAME_INFO.description} Let's get started by creating your character.`;
-  const { currentText, isFinished } = useTypeWriter({
-    text,
-  });
+  const [isFinished, setIsFinished] = useState(false);
 
   const isCompletedAnimation = completedSteps.has(0) ? true : isFinished;
 
@@ -30,7 +28,21 @@ const CharacterCreationIntro = ({
 
   return (
     <CreationContent isCurrent={isCurrent}>
-      <TypographyP>{completedSteps?.has(0) ? text : currentText}</TypographyP>
+      {!completedSteps.has(0) ? (
+        <Typewriter
+          onInit={(typewriter) => {
+            typewriter
+              .changeDelay(20)
+              .typeString(text)
+              .callFunction(() => {
+                setIsFinished(true);
+              })
+              .start();
+          }}
+        />
+      ) : (
+        <TypographyP>text</TypographyP>
+      )}
       <CreationActions isFinished={isCompletedAnimation}>
         <Button
           ref={ref}

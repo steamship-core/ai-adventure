@@ -3,7 +3,7 @@ import { ZapIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 const PlayLayout = ({ children }: { children: ReactNode }) => (
-  <div className="relative h-full pb-3">
+  <div className="relative h-full pb-3 overflow-hidden">
     {children}
     <div className="w-full text-center flex items-center justify-center absolute bottom-0 left-0 bg-background">
       <TypographySmall className="py-1">

@@ -116,7 +116,7 @@ export default function CharacterCreation() {
     },
     {
       placeholder: "Thumblemore the Often-Lost",
-      text: "Choose a name for your character. This can be anything you want!",
+      text: "Choose a name for your character.",
       buttonText: "Set name",
       initialValue: configuration.player.name,
       setConfiguration: (name: string) => {

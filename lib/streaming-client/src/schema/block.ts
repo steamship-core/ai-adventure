@@ -25,7 +25,7 @@ export type Block = IsSteamshipModel &
     url?: string;
     index: number;
     publicData: boolean;
-    streamState?: "started" | "completed" | "aborted";
+    streamState?: "started" | "complete" | "aborted";
   };
 
 export type PartialBlock = Partial<Block>;

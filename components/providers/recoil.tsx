@@ -50,6 +50,15 @@ export const recoilAudioActiveState = atom<boolean | undefined>({
   effects: [localStorageEffect("AudioActiveState")],
 });
 
+export const recoilBlockHistory = atom({
+  key: "ChatState",
+  default: [] as string[],
+});
+
+export const recoilInitialBlock = atom<string | undefined>({
+  key: "InitialChatBlock",
+});
+
 function initializeState(
   set: SetRecoilState,
   gameState: GameState,
@@ -61,6 +70,8 @@ function initializeState(
   set(recoilBackgroundAudioState, backgroundAudioState);
   set(recoilAudioActiveState, audioActiveState);
   set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
+  set(recoilBlockHistory, []);
+  set(recoilInitialBlock, undefined);
 }
 
 function RecoilProvider({

@@ -121,5 +121,5 @@ export const getFormattedBlocks = (
     return acc;
   }, [] as Block[]);
 
-  return combinedBlocks.reverse();
+  return combinedBlocks;
 };

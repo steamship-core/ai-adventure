@@ -102,11 +102,6 @@ const CharacterCreationComplete = ({
           >
             Create Character
           </Button>
-          {isCompleteConfig && (
-            <Button variant="outline" onClick={editCharacterFromTemplate}>
-              Edit Character
-            </Button>
-          )}
         </CreationActions>
       </CreationContent>
     </div>
