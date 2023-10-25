@@ -174,7 +174,7 @@ To customize the models used to generate camp, profile, quest, and item images, 
 
 The generative game engine is a [separate open-source project](https://github.com/steamship-core/ai-adventure-agent) deployed to [Steamship](https://steamship.com). It maintains most of the game state -- this web app is mostly a headless client.
 
-By default, this Vercel project is configured to use Steamship's [officially supported version of the game engine](https://steamship.com/packages/ai-adventure-game).
+By default, this Vercel project is configured to use Steamship's [officially supported version of the game engine](https://steamship.com/packages/ai-adventure).
 
 If the modifications you with to make are beyond the provided settings of the official engine, you can easily fork, change, deploy, and use your own. Just follow these steps:
 
@@ -195,5 +195,5 @@ We hang out in the [Steamship Discord](https://steamship.com/discord)
 
 Related Repositories:
 
-- **Web Interface** The web interface is at [steamship-core/ai-adventure-game](https://github.com/steamship-core/ai-adventure-game)
-- **Game Engine** The game engine is at [steamship-packages/ai-adventure-game](https://github.com/steamship-packages/ai-adventure-game)
+- **Web Interface** The web interface is at [steamship-core/ai-adventure](https://github.com/steamship-core/ai-adventure)
+- **Game Engine** The game engine is at [steamship-core/ai-adventure-agent](https://github.com/steamship-packages/ai-adventure-agent)
