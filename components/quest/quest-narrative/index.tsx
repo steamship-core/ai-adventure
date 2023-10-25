@@ -39,7 +39,7 @@ const ScrollButton = () => {
 
   return (
     <>
-      <div className="w-full">
+      <div className="w-full" id="anchor">
         <div ref={ref} id="scroll-end-div" className="w-full h-[1px]" />
       </div>
       {!inView && (

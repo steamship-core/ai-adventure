@@ -1,5 +1,4 @@
 import { BlockContainer } from "./block-container";
-import { NarrationPlayer } from "./narration-player";
 
 import { useEffect, useState } from "react";
 
@@ -54,7 +53,7 @@ export const TextBlock = ({
           <> {text} </>
         )}
       </div>
-      {blockId && offerAudio && didComplete && (
+      {/* {blockId && offerAudio && didComplete && (
         <div className="w-full flex items-center justify-center mt-2">
           <div className="w-full px-2">
             <div className="border-t border-foreground/20 w-full px-2" />
@@ -64,7 +63,7 @@ export const TextBlock = ({
             <div className="border-t border-foreground/20 w-full px-2" />
           </div>
         </div>
-      )}
+      )} */}
     </BlockContainer>
   );
 };
