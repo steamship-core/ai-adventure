@@ -6,7 +6,7 @@ import {
   getRanksUntilNextLevel,
 } from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
-import { UserButton } from "@clerk/nextjs";
+import { SignOutButton } from "@clerk/nextjs";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -126,7 +126,12 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
         className="w-100% h-[100dvh] flex flex-col pb-4 overflow-y-auto"
       >
         <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
-          <div className="flex items-center justify-center flex-col w-full gap-2">
+          <div className="flex items-center justify-center flex-col w-full gap-2 relative">
+            <div className="mt-2 absolute z-50 left-0 top-0">
+              <SignOutButton>
+                <Button variant="outline">Sign out</Button>
+              </SignOutButton>
+            </div>
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
               <Image
@@ -260,10 +265,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 >
                   Reset Character
                 </Button>
-              </div>
-
-              <div className="mt-2">
-                <UserButton afterSignOutUrl="/" />
               </div>
             </div>
           </div>
