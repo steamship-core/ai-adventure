@@ -1,5 +1,5 @@
 "use client";
-import { CampMembers } from "@/camp-members";
+import { CampMembers } from "@/components/camp/camp-members";
 import { getGameState } from "@/lib/game/game-state.client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
