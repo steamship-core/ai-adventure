@@ -1,8 +1,10 @@
 import { updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
+import { AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
@@ -40,15 +42,27 @@ const CharacterCreationComplete = ({
   );
   const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const onComplete = async () => {
     setIsVisible(true);
-    await updateGameState(config as GameState);
-    await fetch("/api/agent/completeOnboarding", {
-      method: "POST",
-      body: JSON.stringify({}),
-    });
-    router.push("/play/camp");
+    try {
+      await updateGameState(config as GameState);
+      const res = await fetch("/api/agent/completeOnboarding", {
+        method: "POST",
+        body: JSON.stringify({}),
+      });
+      if (!res.ok) {
+        setError("Something went wrong. Please try again");
+        setIsVisible(false);
+      } else {
+        router.push("/play/camp");
+      }
+    } catch (e) {
+      setError("Something went wrong. Please try again");
+      setIsVisible(false);
+      return;
+    }
   };
 
   return (
@@ -102,6 +116,13 @@ const CharacterCreationComplete = ({
           >
             Create Character
           </Button>
+          {error && (
+            <Alert>
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>Failed to create character</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
         </CreationActions>
       </CreationContent>
     </div>
