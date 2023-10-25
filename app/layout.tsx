@@ -1,3 +1,4 @@
+import QueryProvider from "@/components/providers/react-query";
 import { OpenAIBanner } from "@/components/status-banners/open-ai";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
@@ -67,16 +68,18 @@ export default function RootLayout({
           />
         </head>
         <body className={cn(font.className)}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <OpenAIBanner />
-            {children}
-            <Analytics />
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <OpenAIBanner />
+              {children}
+              <Analytics />
+            </ThemeProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

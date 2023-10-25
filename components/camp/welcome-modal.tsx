@@ -103,6 +103,7 @@ export const WelcomeModal = () => {
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [runTour, setRunTour] = useState(false);
+
   useEffect(() => {
     if (!isOpen) return;
     const loadProfilePic = async () => {

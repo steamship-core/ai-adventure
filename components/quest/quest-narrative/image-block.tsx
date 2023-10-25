@@ -10,32 +10,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { AlertTriangleIcon } from "lucide-react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { BlockContainer } from "./block-container";
 
 const ImageWithFallback = ({
   url,
-  setError,
   itemName,
 }: {
   url?: string;
-  setError: Dispatch<SetStateAction<boolean>>;
   itemName?: string;
 }) => {
   if (url) {
-    return (
-      <Image
-        src={url}
-        fill
-        alt={itemName || "generated image"}
-        onError={() => {
-          setError(true);
-        }}
-      />
-    );
+    return <Image src={url} fill alt={itemName || "generated image"} />;
   }
   return (
     <Skeleton
@@ -50,29 +40,28 @@ export const ImageBlock = ({
   block: Block;
   hideOutput?: boolean;
 }) => {
-  const [url, setUrl] = useState<string | undefined>();
-  const [error, setError] = useState(false);
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const gameState = useRecoilValue(recoilGameState);
 
-  useLayoutEffect(() => {
-    const fetchImage = async () => {
+  // Make a specific query retry a certain number of times
+  const { data: url, error } = useQuery({
+    queryKey: ["image-block", block.id],
+    queryFn: async () => {
       try {
-        console.log("fetching img");
         const res = await fetch(`/api/block/${block.id}`);
         if (res.ok) {
           const respBody = await res.blob();
-          setUrl(URL.createObjectURL(respBody));
+          return URL.createObjectURL(respBody);
         } else {
-          setError(true);
+          throw Error("failed to fetch image");
         }
       } catch (e) {
         console.log("error fetching image", e);
-        setError(true);
+        throw Error("failed to fetch image");
       }
-    };
-    fetchImage();
-  }, [block.id]);
+    },
+    retry: 3,
+  });
 
   const item = block.tags?.find(
     (tag) => tag.kind === "item" && tag.name === "name"
@@ -106,14 +95,7 @@ export const ImageBlock = ({
               "overflow-hidden rounded-md w-full relative aspect-video"
             )}
           >
-            <Image
-              src="/adventurer.png"
-              fill
-              alt="generated image"
-              onError={() => {
-                setError(true);
-              }}
-            />
+            <Image src="/adventurer.png" fill alt="generated image" />
             <div className="absolute top-0 left-0 z-10 bg-background opacity-80 w-full h-full">
               <div className="flex h-full w-full items-center justify-center">
                 <TypographyP className="flex gap-2 items-center">
@@ -128,11 +110,7 @@ export const ImageBlock = ({
               className={imageContainerClasses}
               onClick={() => setIsDialogVisible(true)}
             >
-              <ImageWithFallback
-                url={url}
-                itemName={itemName}
-                setError={setError}
-              />
+              <ImageWithFallback url={url} itemName={itemName} />
             </button>
           </>
         )}
@@ -148,11 +126,7 @@ export const ImageBlock = ({
             </DialogHeader>
           )}
           <div className={imageContainerClasses}>
-            <ImageWithFallback
-              url={url}
-              itemName={itemName}
-              setError={setError}
-            />
+            <ImageWithFallback url={url} itemName={itemName} />
           </div>
         </DialogContent>
       </Dialog>
