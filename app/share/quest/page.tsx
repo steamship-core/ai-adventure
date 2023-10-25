@@ -15,7 +15,6 @@ export async function generateMetadata(
   const blockId = searchParams.blockId;
   // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = (await parent) || {};
-  const previousImages = (await parent).openGraph?.images || [];
 
   return {
     title: (title as string) || "A Quest",
