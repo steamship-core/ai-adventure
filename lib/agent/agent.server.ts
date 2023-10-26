@@ -1,30 +1,31 @@
-import { sql } from "@vercel/postgres";
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
+import prisma from "../db";
 import { getSteamshipClient } from "../utils";
 
-type Agent = {
-  id: number;
-  ownerId: string;
-  agentUrl: string;
-  handle: string;
-};
-
 export const getAgents = async (userId: string) => {
-  const { rows } =
-    await sql`SELECT * FROM "Agents" WHERE "ownerId" = ${userId};`;
-  return rows as Agent[];
+  return await prisma.agents.findMany({
+    where: {
+      ownerId: userId,
+    },
+  });
 };
 
 export const getAgent = async (userId: string) => {
-  const { rows } =
-    await sql`SELECT * FROM "Agents" WHERE "ownerId" = ${userId} LIMIT 1;`;
-  return rows.length > 0 ? (rows as Agent[])[0] : null;
+  return await prisma.agents.findFirst({
+    where: {
+      ownerId: userId,
+    },
+  });
 };
 
 export const deleteAgent = async (userId: string) => {
-  const { rows } = await sql`DELETE FROM "Agents" WHERE "ownerId" = ${userId};`;
-  return rows.length;
+  let res = await prisma.agents.deleteMany({
+    where: {
+      ownerId: userId,
+    },
+  });
+  return res.count;
 };
 
 export const createAgent = async (userId: string) => {
@@ -62,10 +63,13 @@ export const createAgent = async (userId: string) => {
 
     log.info(`New agent URL: ${agentUrl}`);
 
-    // Create a new agent record in the database.
-    const { rows } =
-      await sql`INSERT INTO "Agents" ("ownerId", "agentUrl", "handle") VALUES (${userId}, ${agentUrl}, ${workspaceHandle}) RETURNING *;`;
-    return rows.length > 0 ? (rows as Agent[])[0] : null;
+    return await prisma.agents.create({
+      data: {
+        ownerId: userId!,
+        agentUrl: agentUrl,
+        handle: workspaceHandle,
+      },
+    });
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
