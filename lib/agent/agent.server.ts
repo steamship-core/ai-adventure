@@ -8,6 +8,9 @@ type Agent = {
   ownerId: string;
   agentUrl: string;
   handle: string;
+  createdAt: Date;
+  questName: string;
+  questDescription: string;
 };
 
 export const getAgents = async (userId: string) => {
