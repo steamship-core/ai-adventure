@@ -41,7 +41,6 @@ export default async function CampPage() {
                 <TypographySmall className="text-muted-foreground">
                   Quest
                 </TypographySmall>
-                <TypographyLarge>{agent.questName}</TypographyLarge>
               </div>
               <div>
                 <TypographySmall className="text-muted-foreground">
