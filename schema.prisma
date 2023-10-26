@@ -8,14 +8,25 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model Adventure {
+  id           String   @id @default(uuid())
+  creatorId    String
+  createdBy    String
+  createdAt    DateTime @default(now())
+  name         String   @default("Epic Quest")
+  description  String   @default("A custom pixel art style adventure.")
+  agentVersion String   @default("ai-adventure")
+  agents       Agents[]
+}
+
 model Agents {
-  id               Int      @id @default(autoincrement())
-  ownerId          String
-  agentUrl         String
-  handle           String   @default("agent")
-  createdAt        DateTime @default(now())
-  questName        String   @default("Epic Quest")
-  questDescription String   @default("A custom pixel art style adventure.")
+  id           Int        @id @default(autoincrement())
+  ownerId      String
+  agentUrl     String
+  handle       String     @default("agent")
+  createdAt    DateTime   @default(now())
+  Adventure    Adventure? @relation(fields: [adventuresId], references: [id])
+  adventuresId String?
 }
 
 model Subscriptions {

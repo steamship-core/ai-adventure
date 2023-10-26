@@ -8,6 +8,15 @@ export const getAgents = async (userId: string) => {
     where: {
       ownerId: userId,
     },
+    include: {
+      Adventure: {
+        select: {
+          name: true,
+          description: true,
+          createdAt: true,
+        },
+      },
+    },
   });
 };
 
