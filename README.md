@@ -73,7 +73,7 @@ More on setting up your database can be found here: https://vercel.com/docs/stor
 
 ### Configure PostGres Tables
 
-We use prisma to talk to our database.
+We use prisma to manage database updates, and @vercel/posgress for running queries
 
 1. Install the vercel cli `npm i -g vercel`
 2. Install repo dependencies `npm i`

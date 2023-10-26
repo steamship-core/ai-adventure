@@ -8,5 +8,8 @@
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
-  "eslint.validate": ["javascript"]
+  "eslint.validate": ["javascript"],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }

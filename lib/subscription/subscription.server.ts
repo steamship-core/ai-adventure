@@ -1,89 +1,44 @@
-import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
+import { sql } from "@vercel/postgres";
 import { log } from "next-axiom";
-import prisma from "../db";
 
-export const getSubscription = async (
-  userId: string
-): Promise<Prisma.Prisma__SubscriptionsClient<
-  {
-    id: number;
-    ownerId: string;
-    stripeId: string;
-    priceId: string;
-    subscriptionId: string;
-  },
-  never,
-  DefaultArgs
-> | null> => {
-  return await prisma.subscriptions.findFirst({
-    where: {
-      ownerId: userId!,
-    },
-  });
+type Subscriptions = {
+  id: number;
+  ownerId: string;
+  stripeId: string;
+  priceId: string;
+  subscriptionId: string;
 };
 
-export const getSubscriptionFromStripeId = async (
-  stripeId: string
-): Promise<Prisma.Prisma__SubscriptionsClient<
-  {
-    id: number;
-    ownerId: string;
-    stripeId: string;
-    priceId: string;
-    subscriptionId: string;
-  },
-  never,
-  DefaultArgs
-> | null> => {
-  return await prisma.subscriptions.findFirst({
-    where: {
-      stripeId: stripeId!,
-    },
-  });
+export const getSubscription = async (userId: string) => {
+  const { rows } =
+    await sql`SELECT * FROM "Subscriptions" WHERE "ownerId" = ${userId} LIMIT 1;`;
+  return rows.length > 0 ? (rows as Subscriptions[])[0] : null;
 };
 
-export const deleteSubscription = async (
-  subscriptionId: string
-): Promise<number> => {
+export const getSubscriptionFromStripeId = async (stripeId: string) => {
+  const { rows } =
+    await sql`SELECT * FROM "Subscriptions" WHERE "stripeId" = ${stripeId} LIMIT 1;`;
+  return rows.length > 0 ? (rows as Subscriptions[])[0] : null;
+};
+
+export const deleteSubscription = async (subscriptionId: string) => {
   log.info(`Deleting Subscription: ${subscriptionId}`);
-
-  let res = await prisma.subscriptions.deleteMany({
-    where: {
-      subscriptionId: subscriptionId!,
-    },
-  });
-  return res.count;
+  const { rows } =
+    await sql`DELETE FROM "Subscriptions" WHERE "subscriptionId" = ${subscriptionId};`;
+  return rows.length;
 };
 
 export const createSubscription = async (
   userId: string,
   stripeId: string,
   subscriptionId: string
-): Promise<
-  Prisma.Prisma__SubscriptionsClient<
-    {
-      id: number;
-      ownerId: string;
-      stripeId: string;
-      priceId: string;
-      subscriptionId: string;
-    },
-    never,
-    DefaultArgs
-  >
-> => {
+) => {
   log.info(`Creating TopUp: ${userId} ${stripeId} ${subscriptionId}`);
 
   try {
-    return await prisma.subscriptions.create({
-      data: {
-        ownerId: userId!,
-        stripeId: stripeId!,
-        priceId: process.env.STRIPE_PRICE_ID || "",
-        subscriptionId: subscriptionId!,
-      },
-    });
+    const { rows } =
+      await sql`INSERT INTO "Subscriptions" ("ownerId", "stripeId", "subscriptionId") VALUES (${userId}, ${stripeId}, ${subscriptionId}) RETURNING *;`;
+    return rows.length > 0 ? (rows as Subscriptions[])[0] : null;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
