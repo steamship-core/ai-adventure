@@ -1,16 +1,7 @@
-import { sql } from "@vercel/postgres";
 import { log } from "next-axiom";
 import { getAgent } from "../agent/agent.server";
+import prisma from "../db";
 import { getSteamshipClient } from "../utils";
-
-type TopUps = {
-  id: number;
-  ownerId: string;
-  agentUrl: string;
-  amountPaidCents: number;
-  creditIncrease: number;
-  reference: string;
-};
 
 export const createTopUp = async (
   userId: string,
@@ -45,9 +36,16 @@ export const createTopUp = async (
         `Failed to add energy for ${userId} (${agentUrl}, ${amountPaidCents}, ${creditIncrease}, ${reference}). ${await result.text()}`
       );
     }
-    const { rows } =
-      await sql`INSERT INTO "TopUps" ("ownerId", "agentUrl", "amountPaidCents", "creditIncrease", "reference") VALUES (${userId}, ${agentUrl}, ${amountPaidCents}, ${creditIncrease}, ${reference}) RETURNING *;`;
-    return rows.length > 0 ? (rows as TopUps[])[0] : null;
+
+    return await prisma.topUps.create({
+      data: {
+        ownerId: userId!,
+        agentUrl: agentUrl!,
+        amountPaidCents: amountPaidCents!,
+        creditIncrease: creditIncrease!,
+        reference: reference!,
+      },
+    });
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
