@@ -132,8 +132,6 @@ const EndSheet = ({
   );
   twitterLink.searchParams.set("url", sharePage.toString());
 
-  console.log(twitterLink.href);
-
   return (
     <Sheet>
       <SheetTrigger asChild>
