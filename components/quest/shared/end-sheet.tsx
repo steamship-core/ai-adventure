@@ -63,8 +63,8 @@ const ItemsGained = ({
             </div>
           </div>
           <div className="w-full flex flex-col">
-            <TypographyLarge>{item.name}</TypographyLarge>
-            <TypographyMuted>{item.description}</TypographyMuted>
+            <TypographyLarge>{item?.name}</TypographyLarge>
+            <TypographyMuted>{item?.description}</TypographyMuted>
           </div>
         </div>
       ))}
@@ -92,9 +92,9 @@ const EndSheet = ({
     updateGameState();
   }, []);
 
-  const quest = gameState?.quests?.find((q) => q.name === params.questId);
+  const quest = gameState?.quests?.find((q) => q?.name === params.questId);
   const questIndex = gameState?.quests?.findIndex(
-    (q) => q.name === params.questId
+    (q) => q?.name === params.questId
   );
   const questArcs = gameState?.quest_arc ?? [];
   const questArc =
@@ -114,10 +114,10 @@ const EndSheet = ({
   sharePage.searchParams.set("itemImage", itemImageUrl);
   sharePage.searchParams.set(
     "title",
-    questArc ? questArc.location : `${gameState?.player.name}'s Adventure`
+    questArc ? questArc.location : `${gameState?.player?.name}'s Adventure`
   );
   sharePage.searchParams.set("description", quest?.text_summary || "");
-  sharePage.searchParams.set("name", gameState?.player.name || "");
+  sharePage.searchParams.set("name", gameState?.player?.name || "");
   sharePage.searchParams.set(
     "itemName",
     quest?.new_items?.[0]?.name || "Unknown Item"
