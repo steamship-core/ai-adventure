@@ -102,26 +102,35 @@ const EndSheet = ({
       ? questArcs[questIndex]
       : null;
 
+  // THIS IS THE SHARE PAGE -- THE ACTUAL PAGE WE'RE SHARING
+
+  const sharePage = new URL(
+    `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/share/quest`
+  );
+  const itemImageUrl =
+    quest?.new_items?.[0]?.picture_url ||
+    `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/share-card-404.png`;
+
+  sharePage.searchParams.set("itemImage", itemImageUrl);
+  sharePage.searchParams.set(
+    "title",
+    questArc ? questArc.location : `${gameState?.player.name}'s Adventure`
+  );
+  sharePage.searchParams.set("description", quest?.text_summary || "");
+  sharePage.searchParams.set("name", gameState?.player.name || "");
+  sharePage.searchParams.set(
+    "itemName",
+    quest?.new_items?.[0]?.name || "Unknown Item"
+  );
+
+  // THIS IS THE TWITTER LINK - THE ACTUAL THING THEY'LL CLICK ON
+
   const twitterLink = new URL("https://twitter.com/intent/tweet");
   twitterLink.searchParams.set(
     "text",
     `🎲 Just completed another quest in #aiadventure. Check it out!`
   );
-
-  const sharableSearchParams = new URLSearchParams();
-  sharableSearchParams.set("blockId", "7CDD43DE-D886-42B5-A24E-C88525107505"); //quest?.new_items?.[0]?.picture_url || "");
-  sharableSearchParams.set(
-    "title",
-    questArc ? questArc.location : `${gameState?.player?.name}'s Adventure`
-  );
-  sharableSearchParams.set("description", quest?.text_summary || "");
-  sharableSearchParams.set("name", gameState?.player?.name || "");
-  sharableSearchParams.set("itemName", quest?.new_items?.[0]?.name || "");
-
-  twitterLink.searchParams.set(
-    "url",
-    `https://ai-adventure.steamship.com/share/quest?${sharableSearchParams.toString()}`
-  );
+  twitterLink.searchParams.set("url", sharePage.toString());
 
   return (
     <Sheet>
