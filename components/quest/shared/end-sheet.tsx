@@ -112,10 +112,10 @@ const EndSheet = ({
   sharableSearchParams.set("blockId", "7CDD43DE-D886-42B5-A24E-C88525107505"); //quest?.new_items?.[0]?.picture_url || "");
   sharableSearchParams.set(
     "title",
-    questArc ? questArc.location : `${gameState?.player.name}'s Adventure`
+    questArc ? questArc.location : `${gameState?.player?.name}'s Adventure`
   );
   sharableSearchParams.set("description", quest?.text_summary || "");
-  sharableSearchParams.set("name", gameState?.player.name || "");
+  sharableSearchParams.set("name", gameState?.player?.name || "");
   sharableSearchParams.set("itemName", quest?.new_items?.[0]?.name || "");
 
   twitterLink.searchParams.set(

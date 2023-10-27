@@ -6,6 +6,8 @@ import {
 } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { inputClassNames } from "@/components/ui/input";
+import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
+import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
@@ -13,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
@@ -85,7 +88,7 @@ export default function QuestNarrative({
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
-
+  const router = useRouter();
   const {
     messages,
     append,
@@ -93,6 +96,7 @@ export default function QuestNarrative({
     handleInputChange,
     handleSubmit,
     isLoading,
+    error,
   } = useChat({
     body: {
       context_id: id,
@@ -210,6 +214,20 @@ export default function QuestNarrative({
 
   let nonPersistedUserInput: string | null = null;
 
+  if (error) {
+    return (
+      <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
+        <TypographyH3>An unexpected error occured</TypographyH3>
+        <TypographyP>
+          We enountered an error while attemping to load this chat session. This
+          can happen while we are experiencing heavy traffic.
+        </TypographyP>
+        <Button onClick={() => router.refresh()} className="mt-4">
+          Retry
+        </Button>
+      </div>
+    );
+  }
   return (
     <>
       <div className="flex h-full overflow-hidden">
