@@ -12,7 +12,7 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
 const BackgroundAudioToggle = dynamic(
-  () => import("../background-audio-toggle"),
+  () => import("../audio/background-audio-toggle"),
   { ssr: false }
 );
 
