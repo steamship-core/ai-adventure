@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   }
 
   const { operation } = (await request.json()) as {
-    operation: "top-up-energy" | "reset" | "deplete-energy";
+    operation: "top-up-energy" | "reset" | "deplete-energy" | "dump-state";
   };
 
   try {
@@ -42,6 +42,27 @@ export async function POST(request: Request) {
       });
       gameState = await getGameState(agent?.agentUrl);
       return NextResponse.json(gameState);
+    } else if (operation == "dump-state") {
+      log.info(`Dumping state for ${userId}: ${agent?.agentUrl}`);
+
+      if (process.env.NEXT_PUBLIC_OFFER_STATE_DUMP !== "true") {
+        // Don't allow!
+        return NextResponse.json(
+          {
+            error:
+              "To enable state dumping, please modify your environment variables.",
+          },
+          { status: 500 }
+        );
+      }
+      console.log(`Dumping state for ${userId}: ${agent?.agentUrl}`);
+      let gameState = await getGameState(agent?.agentUrl);
+      const ret = {
+        gameState,
+        agentUrl: agent?.agentUrl,
+      };
+      log.info(JSON.stringify(ret));
+      return NextResponse.json(ret);
     } else if (operation == "deplete-energy") {
       log.info(`Depleting energy for ${userId}: ${agent?.agentUrl}`);
 

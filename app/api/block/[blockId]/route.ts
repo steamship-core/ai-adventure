@@ -12,6 +12,7 @@ const POST = async (req: Request, context: { params: any }) => {
   if (response.body) {
     return new StreamingTextResponse(response.body);
   }
+  log.error(`No response body`);
   throw Error("No response body");
 };
 
