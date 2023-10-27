@@ -18,6 +18,7 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
       console.log(data);
       return data.url || "";
     },
+    refetchOnWindowFocus: false,
   });
 
   const [audio, state, controls, ref] = useAudio({

@@ -33,7 +33,7 @@ export const loadExistingQuestBlocks = async (
       return block;
     });
   }
-  return [];
+  throw new Error("Failed to load quest blocks");
 };
 
 export const generateQuestArc = async (agentBase: string) => {

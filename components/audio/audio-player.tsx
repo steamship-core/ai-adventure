@@ -16,19 +16,13 @@ export default function AudioPlayer({
     loop,
   });
 
-  // useEffect(() => {
-  //   if (ref && ref.current && loop) {
-  //     ref.current?.setAttribute("loop", "true");
-  //   }
-  // }, [ref, loop]);
-
   useEffect(() => {
     if (active == true && url) {
-      console.log("playing ", url);
       controls.play();
     } else {
       controls.pause();
     }
   }, [active, url]); // NOTE: Adding the audio dependencies here causes an infinite loop!
+
   return audio;
 }

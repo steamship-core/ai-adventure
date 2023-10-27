@@ -124,13 +124,6 @@ export default function QuestNarrative({
           let blocks = ((await response.json()) || {})
             .blocks as ExtendedBlock[];
           if (blocks && blocks.length > 0) {
-            console.log("got blocks", [...blocks]);
-            // let reversedArray = [];
-            // for (let i = blocks.length - 1; i >= 0; i--) {
-            //   console.log(blocks[i]);
-            //   reversedArray.push(blocks[i]);
-            // }
-            // console.log("reveresed blocks", reversedArray);
             setPriorBlocks([...blocks]);
           } else {
             // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest
@@ -219,8 +212,8 @@ export default function QuestNarrative({
       <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
         <TypographyH3>An unexpected error occured</TypographyH3>
         <TypographyP>
-          We enountered an error while attemping to load this chat session. This
-          can happen while we are experiencing heavy traffic.
+          We encountered an error while attemping to load this chat session.
+          This can happen while we are experiencing heavy traffic.
         </TypographyP>
         <Button onClick={() => router.refresh()} className="mt-4">
           Retry

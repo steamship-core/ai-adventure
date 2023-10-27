@@ -51,15 +51,12 @@ export async function GET(request: Request) {
 
   try {
     let blocks = await loadExistingQuestBlocks(agent!.agentUrl, questId);
-    for (let block of blocks) {
-      block;
-    }
     return NextResponse.json({ blocks }, { status: 200 });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
-      { error: "Failed to create agent." },
-      { status: 404 }
+      { error: "Failed to load quest blocks." },
+      { status: 500 }
     );
   }
 }
