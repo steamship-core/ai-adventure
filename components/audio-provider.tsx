@@ -3,8 +3,6 @@
 import { useBackgroundMusic } from "@/lib/hooks";
 import { useEffect } from "react";
 import { useAudio } from "react-use";
-import { useRecoilState } from "recoil";
-import { recoilAudioActiveState } from "./providers/recoil";
 
 export interface AudioProviderProps {
   children?: React.ReactNode;
@@ -19,8 +17,6 @@ export function AudioPlayer({
   url?: string;
   loop?: boolean;
 }) {
-  const [active, _] = useRecoilState(recoilAudioActiveState);
-
   const [audio, state, controls, ref] = useAudio({
     src: url || "",
     autoPlay: allowed == true,
@@ -34,13 +30,13 @@ export function AudioPlayer({
 
   useEffect(() => {
     if (controls && ref) {
-      if (allowed == true && url && active) {
+      if (allowed == true && url) {
         controls.play();
       } else {
         controls.pause();
       }
     }
-  }, [allowed, url, active]); // NOTE: Adding the audio dependencies here causes an infinite loop!
+  }, [allowed, url]); // NOTE: Adding the audio dependencies here causes an infinite loop!
 
   return audio;
 }

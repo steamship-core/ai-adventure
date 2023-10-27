@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  recoilAudioActiveState,
   recoilBlockHistory,
   recoilGameState,
 } from "@/components/providers/recoil";
@@ -84,7 +83,6 @@ export default function QuestNarrative({
   const formRef = useRef<HTMLFormElement>(null);
 
   const [_, _2, _3, setBackgroundMusicUrl] = useBackgroundMusic();
-  const [offerAudio, _4] = useRecoilState(recoilAudioActiveState);
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
 
@@ -219,7 +217,7 @@ export default function QuestNarrative({
           {priorBlocks && (
             <NarrativeBlock
               blocks={priorBlocks}
-              offerAudio={offerAudio}
+              offerAudio
               onSummary={onSummary}
               onComplete={onComplete}
               orderedBlocks={orderedBlocks}
@@ -234,7 +232,7 @@ export default function QuestNarrative({
             return (
               <NarrativeBlock
                 key={message.id}
-                offerAudio={offerAudio}
+                offerAudio
                 blocks={getFormattedBlocks(message, nonPersistedUserInput)}
                 onSummary={onSummary}
                 onComplete={onComplete}

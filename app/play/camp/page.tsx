@@ -1,4 +1,3 @@
-import { BackgroundAudio } from "@/components/audio-provider";
 import { ActionBar } from "@/components/camp/action-bar";
 import { CampImage } from "@/components/camp/camp-image";
 import { CharacterSheet } from "@/components/camp/character-sheet";
@@ -79,7 +78,6 @@ export default async function CampPage() {
           </div>
         </div>
       </main>
-      <BackgroundAudio />
     </RecoilProvider>
   );
 }
