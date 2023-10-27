@@ -1,5 +1,6 @@
 "use client";
 
+import { useBackgroundMusic } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import { Volume2Icon } from "lucide-react";
 import { useRecoilState } from "recoil";
@@ -12,10 +13,15 @@ const BackgroundAudioToggle = ({
   text?: string;
 }) => {
   const [isActive, setActive] = useRecoilState(recoilAudioActiveState);
+  const { isAllowed } = useBackgroundMusic();
 
   const toggle = () => {
     setActive((active) => !active);
   };
+
+  if (!isAllowed) {
+    return null;
+  }
 
   return (
     <Button variant={isActive ? undefined : "outline"} onClick={toggle}>
