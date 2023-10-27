@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { log } from "next-axiom";
 import { getAgent } from "../agent/agent.server";
 import prisma from "../db";
@@ -11,20 +9,7 @@ export const createTopUp = async (
   amountPaidCents: number,
   creditIncrease: number,
   reference: string
-): Promise<
-  Prisma.Prisma__SubscriptionsClient<
-    {
-      id: number;
-      ownerId: string;
-      agentUrl: string;
-      amountPaidCents: number;
-      creditIncrease: number;
-      reference: string;
-    },
-    never,
-    DefaultArgs
-  >
-> => {
+) => {
   log.info(
     `Creating TopUp: ${userId} ${agentUrl} ${amountPaidCents} ${creditIncrease} ${reference}`
   );

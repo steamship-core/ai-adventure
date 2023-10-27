@@ -18,13 +18,13 @@ export default async function CharacterCreationPage() {
   if (!agent) {
     agent = await createAgent(userId);
     return <CharacterCreation />;
-  } else {
-    // We already have an agent. Need to check if we're still onboarding.
-    let gameState = await getGameState(agent.agentUrl);
-    if (gameState?.active_mode == "onboarding") {
-      return <CharacterCreation />;
-    } else {
-      redirect("/play/camp");
-    }
   }
+
+  // We already have an agent. Need to check if we're still onboarding.
+  let gameState = await getGameState(agent.agentUrl);
+  if (gameState?.active_mode == "onboarding") {
+    return <CharacterCreation />;
+  }
+
+  redirect("/play/camp");
 }

@@ -1,32 +1,36 @@
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Agents {
-  id        Int      @id @default(autoincrement())
-  ownerId   String
-  agentUrl  String
+  id               Int      @id @default(autoincrement())
+  ownerId          String
+  agentUrl         String
+  handle           String   @default("agent")
+  createdAt        DateTime @default(now())
+  questName        String   @default("Epic Quest")
+  questDescription String   @default("A custom pixel art style adventure.")
 }
 
 model Subscriptions {
-  id        Int      @id @default(autoincrement())
-  ownerId   String
-  stripeId  String
-  priceId    String
-  subscriptionId  String
+  id             Int    @id @default(autoincrement())
+  ownerId        String
+  stripeId       String
+  priceId        String
+  subscriptionId String
 }
 
 model TopUps {
-  id        Int      @id @default(autoincrement())
-  ownerId           String
-  agentUrl          String
-  amountPaidCents    Int     // Amount paid
-  creditIncrease     Int     // Energy Added
-  reference String  // Stripe reference
+  id              Int    @id @default(autoincrement())
+  ownerId         String
+  agentUrl        String
+  amountPaidCents Int // Amount paid
+  creditIncrease  Int // Energy Added
+  reference       String // Stripe reference
 }

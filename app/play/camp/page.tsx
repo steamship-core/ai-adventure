@@ -1,4 +1,3 @@
-import { BackgroundAudio } from "@/components/audio-provider";
 import { ActionBar } from "@/components/camp/action-bar";
 import { CampImage } from "@/components/camp/camp-image";
 import { CharacterSheet } from "@/components/camp/character-sheet";
@@ -7,7 +6,6 @@ import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
 import RecoilProvider from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
-import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { generateQuestArc } from "@/lib/game/quest.server";
@@ -35,7 +33,7 @@ export default async function CampPage() {
     redirect("/character-creation");
   }
 
-  if (!gameState?.quest_arc) {
+  if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
     await generateQuestArc(agent?.agentUrl);
     refreshGameState = true;
   }
@@ -62,14 +60,11 @@ export default async function CampPage() {
               <SummaryStats />
             </div>
             <div className="overflow-auto">
-              <div>
+              <div id="quest-progress">
                 <QuestProgress />
               </div>
               <div id="camp">
-                <TypographyLarge className="mt-4">Camp</TypographyLarge>
-                <TypographyMuted>
-                  Click on the image to view camp members
-                </TypographyMuted>
+                <TypographyLarge className="mt-4 mb-2">Camp</TypographyLarge>
                 <CampImage />
               </div>
             </div>
@@ -79,7 +74,6 @@ export default async function CampPage() {
           </div>
         </div>
       </main>
-      <BackgroundAudio />
     </RecoilProvider>
   );
 }

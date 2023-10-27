@@ -15,6 +15,7 @@ export const InventoryList = ({
   isItemSelected?: (item: Item) => boolean;
   localStorageKey?: string;
 }) => {
+  console.log("inventory", inventory);
   return (
     <>
       <div className="w-full grid grid-cols-3 gap-3 mt-8 pb-8">

@@ -34,7 +34,7 @@ This README contains the following sections:
 
 Once you have access to [the environment variables you'll need](#set-up-environment-variables), deploy the example using [Vercel](https://vercel.com):
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/steamship-core/ai-adventure-game/tree/main&project-name=ai-adventure-game&repository-name=ai-adventure-game&env=CLERK_SECRET_KEY,NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,NEXT_PUBLIC_CLERK_SIGN_IN_URL,NEXT_PUBLIC_CLERK_SIGN_UP_URL,STEAMSHIP_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/steamship-core/ai-adventure/tree/main&project-name=ai-adventure&repository-name=ai-adventure&env=CLERK_SECRET_KEY,NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL,NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL,NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,NEXT_PUBLIC_CLERK_SIGN_IN_URL,NEXT_PUBLIC_CLERK_SIGN_UP_URL,STEAMSHIP_API_KEY)
 
 ## Set up Environment Variables
 
@@ -73,7 +73,7 @@ More on setting up your database can be found here: https://vercel.com/docs/stor
 
 ### Configure PostGres Tables
 
-We use prisma to talk to our database.
+We use prisma to manage database updates, and @vercel/postgress for running queries
 
 1. Install the vercel cli `npm i -g vercel`
 2. Install repo dependencies `npm i`
@@ -193,16 +193,20 @@ To reset your running game to see these changes, click on your profile image and
 
 ## Advanced Customization
 
-The generative game engine is a [separate open-source project](https://github.com/steamship-packages/ai-adventure-game) deployed to [Steamship](https://steamship.com). It maintains most of the game state -- this web app is mostly a headless client.
+The generative game engine is a [separate open-source project](https://github.com/steamship-core/ai-adventure-agent) deployed to [Steamship](https://steamship.com). It maintains most of the game state -- this web app is mostly a headless client.
 
-By default, this Vercel project is configured to use Steamship's [officially supported version of the game engine](https://steamship.com/packages/ai-adventure-game).
+By default, this Vercel project is configured to use Steamship's [officially supported version of the game engine](https://steamship.com/packages/ai-adventure).
 
 If the modifications you with to make are beyond the provided settings of the official engine, you can easily fork, change, deploy, and use your own. Just follow these steps:
 
-1. Fork the [game engine repository](https://github.com/steamship-packages/ai-adventure-game)
-2. Make any modifications you wish
+1. Fork the [game engine repository](https://github.com/steamship-core/ai-adventure-agent)
+2. Make any modifications you wish.
 3. Deploy it as your own Steamship package (`ship deploy`)
 4. Change the `STEAMSHIP_AGENT_VERSION` environment variable in this Vercel project to match your own game engine's handle. If you want to pin it to a specific version, use `handle@version` format.
+
+> [!NOTE]  
+> This agent is under **very actively** development. We suggest focusing your changes on `quest_agent.py`
+> Please join our [our discord](https://steamship.com/discord) to build-test with us!
 
 ## Learn More
 
@@ -212,5 +216,5 @@ We hang out in the [Steamship Discord](https://steamship.com/discord)
 
 Related Repositories:
 
-- **Web Interface** The web interface is at [steamship-core/ai-adventure-game](https://github.com/steamship-core/ai-adventure-game)
-- **Game Engine** The game engine is at [steamship-packages/ai-adventure-game](https://github.com/steamship-packages/ai-adventure-game)
+- **Web Interface** The web interface is at [steamship-core/ai-adventure](https://github.com/steamship-core/ai-adventure)
+- **Game Engine** The game engine is at [steamship-core/ai-adventure-agent](https://github.com/steamship-core/ai-adventure-agent)

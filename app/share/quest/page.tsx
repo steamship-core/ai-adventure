@@ -11,11 +11,18 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const title = searchParams.title;
-  const description = searchParams.description;
-  const blockId = searchParams.blockId;
+  let description = searchParams.description as string;
   // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = (await parent) || {};
-  const previousImages = (await parent).openGraph?.images || [];
+
+  let url = new URL(
+    "https://ai-adventure.steamship.com/share/quest/og-image.png"
+  );
+  url.searchParams.set("title", searchParams.itemName as string);
+  url.searchParams.set("description", description as string);
+  url.searchParams.set("itemImage", searchParams.itemImage as string);
+
+  const imageUrl = url.toString();
 
   return {
     title: (title as string) || "A Quest",
@@ -25,7 +32,7 @@ export async function generateMetadata(
       url: "https://ai-adventure.steamship.com/",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
-      images: `https://ai-adventure.steamship.com/og?blockId=${blockId}`,
+      images: imageUrl,
     },
     twitter: {
       creator: "@GetSteamship",
@@ -33,7 +40,7 @@ export async function generateMetadata(
       site: "@GetSteamship",
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
-      images: `https://ai-adventure.steamship.com/og?blockId=${blockId}`,
+      images: imageUrl,
     },
   };
 }

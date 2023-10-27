@@ -1,11 +1,11 @@
 "use client";
 
 import { useRecoilValue } from "recoil";
-import InteractionSheet from "./components/interaction-sheet";
-import { recoilGameState } from "./components/providers/recoil";
-import { TypographyMuted } from "./components/ui/typography/TypographyMuted";
-import { TypographyP } from "./components/ui/typography/TypographyP";
-import { TypographySmall } from "./components/ui/typography/TypographySmall";
+import InteractionSheet from "../interaction-sheet";
+import { recoilGameState } from "../providers/recoil";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { TypographyP } from "../ui/typography/TypographyP";
+import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const CampMembers = () => {
   const gameState = useRecoilValue(recoilGameState);

@@ -36,14 +36,24 @@ const joyrideSteps: StepProps = [
     disableBeacon: true,
   },
   {
-    target: "#camp",
+    target: "#quest-progress",
     placement: "bottom",
+    title: "Quest Progress",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        This a list of the quests you have to go on to achieve your characters
+        goals. Click on a quest to expand its description
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+  {
+    target: "#camp",
+    placement: "center",
     title: "Camp",
     content: (
       <TypographyMuted className="text-base text-muted-foreground">
-        Every adventurer needs a place to rest. This is your campsite, where you
-        trade items you have found with The Merchant, go on quests, view your
-        inventory, or browse past quests.
+        Every adventurer needs a place to rest. This is an image of your camp.
       </TypographyMuted>
     ),
     disableBeacon: true,
@@ -91,6 +101,7 @@ export const WelcomeModal = () => {
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [runTour, setRunTour] = useState(false);
+
   useEffect(() => {
     if (!isOpen) return;
     const loadProfilePic = async () => {

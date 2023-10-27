@@ -1,56 +1,28 @@
-import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { log } from "next-axiom";
 import prisma from "../db";
 
-export const getSubscription = async (
-  userId: string
-): Promise<Prisma.Prisma__SubscriptionsClient<
-  {
-    id: number;
-    ownerId: string;
-    stripeId: string;
-    priceId: string;
-    subscriptionId: string;
-  },
-  never,
-  DefaultArgs
-> | null> => {
+export const getSubscription = async (userId: string) => {
   return await prisma.subscriptions.findFirst({
     where: {
-      ownerId: userId!,
+      ownerId: userId,
     },
   });
 };
 
-export const getSubscriptionFromStripeId = async (
-  stripeId: string
-): Promise<Prisma.Prisma__SubscriptionsClient<
-  {
-    id: number;
-    ownerId: string;
-    stripeId: string;
-    priceId: string;
-    subscriptionId: string;
-  },
-  never,
-  DefaultArgs
-> | null> => {
+export const getSubscriptionFromStripeId = async (stripeId: string) => {
   return await prisma.subscriptions.findFirst({
     where: {
-      stripeId: stripeId!,
+      stripeId: stripeId,
     },
   });
 };
 
-export const deleteSubscription = async (
-  subscriptionId: string
-): Promise<number> => {
+export const deleteSubscription = async (subscriptionId: string) => {
   log.info(`Deleting Subscription: ${subscriptionId}`);
 
   let res = await prisma.subscriptions.deleteMany({
     where: {
-      subscriptionId: subscriptionId!,
+      subscriptionId: subscriptionId,
     },
   });
   return res.count;
@@ -60,19 +32,7 @@ export const createSubscription = async (
   userId: string,
   stripeId: string,
   subscriptionId: string
-): Promise<
-  Prisma.Prisma__SubscriptionsClient<
-    {
-      id: number;
-      ownerId: string;
-      stripeId: string;
-      priceId: string;
-      subscriptionId: string;
-    },
-    never,
-    DefaultArgs
-  >
-> => {
+) => {
   log.info(`Creating TopUp: ${userId} ${stripeId} ${subscriptionId}`);
 
   try {

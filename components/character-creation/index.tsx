@@ -1,12 +1,54 @@
 "use client";
+import { cn } from "@/lib/utils";
+import { animated, useSpring } from "@react-spring/web";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import CharacterCreationComplete, {
   CharacterConfig,
 } from "./complete-character";
 import CharacterCreationIntro from "./intro";
 import OnboardingPrompt from "./onboarding-prompt";
 import { CreationContainer } from "./shared/components";
+
+const MAX_STEPS = 7;
+
+const ProgressPoint = ({
+  setActiveStep,
+  activeStep,
+  index,
+  completedSteps,
+}: {
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  activeStep: number;
+  index: number;
+  completedSteps: Set<number>;
+}) => {
+  const [springs, api] = useSpring(() => ({
+    from: { scale: 1, opacity: 0.5 },
+  }));
+
+  useEffect(() => {
+    if (activeStep === index) {
+      api.start({ scale: 2, opacity: 1 });
+    } else {
+      api.start({ scale: 1, opacity: 0.5 });
+    }
+  }, [activeStep]);
+
+  return (
+    <animated.button
+      className={cn(
+        "bg-foreground rounded-full flex items-center justify-center h-3 w-3",
+        activeStep === index && "bg-foreground",
+        completedSteps.has(index) && activeStep !== index && "bg-blue-500"
+      )}
+      onClick={() => setActiveStep(index)}
+      style={{
+        ...springs,
+      }}
+    ></animated.button>
+  );
+};
 
 export default function CharacterCreation() {
   const searchParams = useSearchParams();
@@ -19,8 +61,10 @@ export default function CharacterCreation() {
       searchParams.has("motivation")
   );
 
-  const [activeStep, setActiveStep] = useState(isCompleteConfig ? 7 : 0);
-  const [step, setStep] = useState(isCompleteConfig ? 7 : 0);
+  const [activeStep, setActiveStep] = useState(
+    isCompleteConfig ? MAX_STEPS : 0
+  );
+  const [completedSteps, setCompletedSteps] = useState(new Set<number>());
 
   const [configuration, setConfiguration] = useState<CharacterConfig>({
     player: {
@@ -72,7 +116,7 @@ export default function CharacterCreation() {
     },
     {
       placeholder: "Thumblemore the Often-Lost",
-      text: "Choose a name for your character. This can be anything you want!",
+      text: "Choose a name for your character.",
       buttonText: "Set name",
       initialValue: configuration.player.name,
       setConfiguration: (name: string) => {
@@ -84,7 +128,7 @@ export default function CharacterCreation() {
     },
     {
       placeholder:
-        "Thumblemore is a disheveled wizard with silver-white hair that cascades wildly, often obscuring his dazed blue eyes. He wears azure robes dotted with confusing maps and compasses, all misleadingly pointing in various directions. Around his neck dangle mismatched amulets from many misadventures, while he leans on a crooked staff etched with arcane symbols, some seemingly corrected in haste. His twisty beard seems to harbor its own mysteries, much like the rest of him.",
+        "Thumblemore is a disheveled wizard with silver-white hair that cascades wildly, ...",
       text: "Describe your character's appearance. An image will be generated based on your description - so be as detailed as you want!",
       buttonText: "Set appearance",
       initialValue: configuration.player.description,
@@ -97,8 +141,8 @@ export default function CharacterCreation() {
     },
     {
       placeholder:
-        "Thumblemore was once a prodigious student at the Arcanum Academy, but an experiment gone awry with a teleportation spell left his sense of direction—both physically and magically—utterly skewed. Despite his frequent misadventures and unintended destinations, his heart remains as true as his compass is not. Each mishap, from conversing with trees to accidentally attending dragon conventions, has only enriched his knowledge, making him an unexpected, yet invaluable, repository of arcane oddities.",
-      text: "Set the background of your character. Is your character a noble, a peasant, a thief - maybe a wizard or a knight?",
+        "Thumblemore was once a prodigious student at the Arcanum Academy, ...",
+      text: "Describe the background of your character. Where did they come from? What is their backstory?",
       buttonText: "Set background",
       initialValue: configuration.player.background,
       setConfiguration: (background: string) => {
@@ -110,7 +154,7 @@ export default function CharacterCreation() {
     },
     {
       placeholder:
-        'Thumblemore\'s primary goal is to find the elusive "True North" spell, an ancient and forgotten magic rumored to correct any misdirection, whether physical or arcane. He believes that with this spell, he can finally regain his once impeccable magical precision and stop his unintentional jaunts into the unknown—though a part of him has grown fond of the unexpected adventures his "condition" brings.',
+        'Thumblemore\'s primary goal is to find the elusive "True North" spell, an ancient ...',
       text: "What primary motivation does your character have? This will be used to generate quests and storylines for your character.",
       buttonText: "Set motivation",
       initialValue: configuration.player.motivation,
@@ -126,48 +170,65 @@ export default function CharacterCreation() {
   const editCharacterFromTemplate = () => {
     setIsCompleteConfig(false);
     setActiveStep(0);
-    setStep(0);
   };
 
   return (
     <CreationContainer>
-      {step > 6 && (
-        <CharacterCreationComplete
-          config={configuration}
-          onFocus={() => {
-            setActiveStep(7);
-          }}
-          isCurrent={activeStep === 7}
-          isCompleteConfig={isCompleteConfig}
-          editCharacterFromTemplate={editCharacterFromTemplate}
-        />
-      )}
-      {!isCompleteConfig && (
-        <>
-          {steps
-            .map((stepConfig, index) => {
-              if (index + 1 > step) return null;
-              return (
-                <OnboardingPrompt
-                  setStep={setStep}
-                  setActiveStep={setActiveStep}
-                  isCurrent={activeStep === index + 1}
-                  totalSteps={6}
-                  key={stepConfig.text}
-                  step={index + 1}
-                  {...stepConfig}
-                />
-              );
-            })
-            .reverse()}
+      <div className="flex items-end flex-1 w-full">
+        {activeStep === MAX_STEPS && (
+          <CharacterCreationComplete
+            config={configuration}
+            isCurrent={activeStep === MAX_STEPS}
+            isCompleteConfig={isCompleteConfig}
+            editCharacterFromTemplate={editCharacterFromTemplate}
+            setActiveStep={setActiveStep}
+          />
+        )}
+        {steps
+          .map((stepConfig, index) => {
+            if (index + 1 !== activeStep) return null;
+            return (
+              <OnboardingPrompt
+                setActiveStep={setActiveStep}
+                isCurrent={activeStep === index + 1}
+                totalSteps={MAX_STEPS - 1}
+                key={stepConfig.text}
+                step={index + 1}
+                setCompletedSteps={setCompletedSteps}
+                completedSteps={completedSteps}
+                {...stepConfig}
+              />
+            );
+          })
+          .reverse()}
+        {activeStep === 0 && (
           <CharacterCreationIntro
             onContinue={() => {
-              setStep(1);
+              setCompletedSteps((prev) => prev.add(0));
               setActiveStep(1);
             }}
+            completedSteps={completedSteps}
             isCurrent={activeStep === 0}
           />
-        </>
+        )}
+      </div>
+      {activeStep > 0 && activeStep < MAX_STEPS && (
+        <div className="flex items-start">
+          <div className="flex gap-4 justify-center items-center h-10">
+            {Array.from({ length: MAX_STEPS }).map((_, index) => {
+              if (index === 0) return null;
+              return (
+                <ProgressPoint
+                  key={index}
+                  activeStep={activeStep}
+                  setActiveStep={setActiveStep}
+                  index={index}
+                  completedSteps={completedSteps}
+                />
+              );
+            })}
+          </div>
+        </div>
       )}
     </CreationContainer>
   );

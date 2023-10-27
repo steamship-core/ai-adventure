@@ -1,4 +1,4 @@
-import { BackgroundAudio } from "@/components/audio-provider";
+import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-audio";
 import RecoilProvider from "@/components/providers/recoil";
 import Quest from "@/components/quest/quest";
 import { getAgent } from "@/lib/agent/agent.server";
@@ -29,7 +29,7 @@ export default async function QuestPage() {
       backgroundAudioUrlState={"/music.wav"}
     >
       <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />
-      <BackgroundAudio />
+      <DynamicBackgroundAudio />
     </RecoilProvider>
   );
 }

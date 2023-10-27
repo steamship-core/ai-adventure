@@ -1,4 +1,7 @@
+import { recoilBlockHistory } from "@/components/providers/recoil";
 import { Block } from "@/lib/streaming-client/src";
+import { useMemo } from "react";
+import { useRecoilState } from "recoil";
 import { CompletionBlock } from "./completion-block";
 import {
   BackgroundAudioBlock,
@@ -22,28 +25,50 @@ export const NarrativeBlock = ({
   onSummary,
   onComplete,
   offerAudio,
+  orderedBlocks,
+  isPrior,
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
   onComplete: () => void;
   offerAudio?: boolean;
+  orderedBlocks: Block[];
+  isPrior?: boolean;
 }) => {
+  const [chatHistory] = useRecoilState(recoilBlockHistory);
+
+  const sortedBlocks = useMemo(
+    () =>
+      blocks
+        .toSorted((a, b) => {
+          if (typeof a.index == "undefined") {
+            return -1;
+          }
+          if (typeof b.index == "undefined") {
+            return 1;
+          }
+          if (a.index == b.index) {
+            return 0;
+          }
+          return a.index > b.index ? -1 : 1;
+        })
+        .toReversed(),
+    [blocks]
+  );
+
   // Begin Debug Information State Management
   try {
-    const formattedBlocks = blocks.sort((a, b) => {
-      if (typeof a.index == "undefined") {
-        return -1;
-      }
-      if (typeof b.index == "undefined") {
-        return 1;
-      }
-      if (a.index == b.index) {
-        return 0;
-      }
-      return a.index > b.index ? -1 : 1;
-    });
+    return sortedBlocks.map((block) => {
+      let hideOutput = false;
+      if (!isPrior && orderedBlocks.length > 0) {
+        const isFirstBlock = block.id === orderedBlocks[0].id;
+        const isInChatHistory = chatHistory.find((id) => id === block.id);
 
-    return formattedBlocks.map((block) => {
+        if (!(isFirstBlock || isInChatHistory)) {
+          hideOutput = true;
+        }
+      }
+
       switch (getMessageType(block)) {
         case MessageTypes.TEXT:
           return (
@@ -52,6 +77,7 @@ export const NarrativeBlock = ({
               offerAudio={offerAudio}
               blockId={block.id}
               text={block.text!}
+              hideOutput={hideOutput}
             />
           );
         case MessageTypes.STATUS_MESSAGE:
@@ -83,6 +109,7 @@ export const NarrativeBlock = ({
               key={block.id}
               offerAudio={offerAudio}
               block={block}
+              hideOutput={hideOutput}
             />
           );
         case MessageTypes.QUEST_COMPLETE:
@@ -102,9 +129,17 @@ export const NarrativeBlock = ({
             />
           );
         case MessageTypes.ITEM_GENERATION_CONTENT:
-          return <ItemGenerationBlock key={block.id} block={block} />;
+          return (
+            <ItemGenerationBlock
+              key={block.id}
+              block={block}
+              hideOutput={hideOutput}
+            />
+          );
         case MessageTypes.IMAGE:
-          return <ImageBlock key={block.id} block={block} />;
+          return (
+            <ImageBlock key={block.id} block={block} hideOutput={hideOutput} />
+          );
         case MessageTypes.SCENE_AUDIO:
           return <BackgroundAudioBlock key={block.id} block={block} />;
         case MessageTypes.QUEST_ARC:
