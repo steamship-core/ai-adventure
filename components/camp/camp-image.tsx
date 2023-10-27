@@ -25,7 +25,6 @@ export const CampImage = () => {
         return url;
       }
     },
-    refetchInterval: 1500,
   });
 
   useEffect(() => {
