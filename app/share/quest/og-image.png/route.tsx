@@ -44,8 +44,6 @@ export async function GET(request: Request) {
     itemDescription = _description;
   }
 
-  console.log(imageUrl);
-
   return new ImageResponse(
     (
       <div
