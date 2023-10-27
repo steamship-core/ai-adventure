@@ -11,7 +11,6 @@ export const runtime = "edge";
 const TWITTER_WIDTH = 800;
 const TWITTER_HEIGHT = 418;
 const OUTER_PAD_X = 35;
-const OUTER_PAD_Y = 25;
 
 const ITEM_EMBED_SIZE = 300; // Has to be less than TWITTER-HEIGHT - 2 * OUTER_PAD - IMAGE_PAD
 const ITEM_PAD = 9;
@@ -48,44 +47,28 @@ export async function GET(request: Request) {
         style={{
           display: "flex",
           color: "black",
-          background: "#f6f6f6",
           width: TWITTER_WIDTH,
           height: TWITTER_HEIGHT,
-          paddingTop: OUTER_PAD_Y,
-          paddingBottom: OUTER_PAD_Y,
-          paddingLeft: OUTER_PAD_X,
-          paddingRight: OUTER_PAD_X,
           flexDirection: "row",
           justifyContent: "center",
           alignItems: "center",
           overflow: "hidden",
         }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          width={ITEM_EMBED_SIZE}
-          height={ITEM_EMBED_SIZE}
           src={imageUrl}
           style={{
-            border: "1px solid #363636",
-            background: "#d6d6d6",
-            paddingTop: ITEM_PAD,
-            paddingBottom: ITEM_PAD,
-            paddingLeft: ITEM_PAD,
-            paddingRight: ITEM_PAD,
-            marginTop: ITEM_PAD,
-            marginBottom: ITEM_PAD,
-            marginLeft: ITEM_PAD,
-            marginRight: ITEM_PAD,
+            height: "80%",
+            borderRadius: 10,
           }}
+          alt={itemTitle}
         />
         <div
           style={{
             display: "flex",
-            paddingTop: ITEM_PAD * 2,
-            marginTop: ITEM_PAD,
-            paddingLeft: ITEM_PAD,
-            paddingBottom: ITEM_PAD,
-            marginBottom: ITEM_PAD,
+            paddingLeft: "20px",
+            paddingRight: "12px",
             color: "black",
             width: TEXT_WIDTH,
             height: "100%",
@@ -94,32 +77,28 @@ export async function GET(request: Request) {
             alignItems: "flex-start",
           }}
         >
-          <div
+          <h1
             style={{
               fontSize: 36,
-              marginBottom: 10,
-              marginTop: 10,
+              marginBottom: 2,
               fontWeight: "bolder",
             }}
           >
             {itemTitle}
-          </div>
-          <div
+          </h1>
+          <p
             style={{
               fontSize: 24,
-              marginBottom: 10,
-              height: 180,
               maxWidth: "100%",
               display: "-webkit-box",
               WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 5,
+              WebkitLineClamp: 9,
               textOverflow: "ellipsis",
               overflow: "hidden",
             }}
-            className="bg-red"
           >
             {itemDescription}
-          </div>
+          </p>
         </div>
       </div>
     ),
