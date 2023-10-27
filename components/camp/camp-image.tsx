@@ -1,5 +1,6 @@
 "use client";
 import { getGameState } from "@/lib/game/game-state.client";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -11,6 +12,21 @@ export const CampImage = () => {
   const [campPic, setCampPic] = useState<string | undefined>(
     gameState?.camp?.image_block_url
   );
+  console.log(gameState?.camp);
+
+  const { data: imageUrl } = useQuery({
+    queryKey: ["camp-image", gameState?.camp?.image_block_url],
+    queryFn: async () => {
+      if (!gameState?.camp?.image_block_url) return;
+      const res = await fetch(gameState?.camp?.image_block_url);
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        return url;
+      }
+    },
+    refetchInterval: 1500,
+  });
 
   useEffect(() => {
     const refreshCampPic = async () => {
@@ -49,10 +65,10 @@ export const CampImage = () => {
 
   return (
     <div className="relative rounded-lg overflow-hidden w-full aspect-video">
-      {campPic ? (
+      {imageUrl ? (
         <Image
           fill
-          src={campPic}
+          src={imageUrl}
           alt="background"
           className="object-cover -z-10"
           sizes="528px"
