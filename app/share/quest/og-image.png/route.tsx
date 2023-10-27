@@ -1,9 +1,7 @@
 /*
  * This page returns an IMAGE.
  *
- * The URL to be shared on social media is two levels up: `/share/quest?args`
- *
- * It is two levels up because we need to support any filename
+ * The URL to be shared on social media is one level up: `/share/quest?args`
  * That page will use an image generated from this page.
  */
 import { ImageResponse } from "next/server";
