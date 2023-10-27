@@ -29,7 +29,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const { push } = useRouter();
 
   const rank = gameState?.player?.rank || 0;
-  const [backgroundAllowed, setBackgroundAllowed, _1, _2] =
+  const { isAllowed: backgroundAllowed, setAllowed: setBackgroundAllowed } =
     useBackgroundMusic();
 
   const setEnergyTo100 = async () => {

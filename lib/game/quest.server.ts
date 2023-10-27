@@ -25,12 +25,15 @@ export const loadExistingQuestBlocks = async (
       quest_id: questId,
     },
   });
-  let blocks = (await resp.json()) as ExtendedBlock[];
-  return blocks.map((block) => {
-    block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
-    block.historical = true;
-    return block;
-  });
+  if (resp.ok) {
+    let blocks = (await resp.json()) as ExtendedBlock[];
+    return blocks.map((block) => {
+      block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
+      block.historical = true;
+      return block;
+    });
+  }
+  throw new Error("Failed to load quest blocks");
 };
 
 export const generateQuestArc = async (agentBase: string) => {
