@@ -53,9 +53,7 @@ const joyrideSteps: StepProps = [
     title: "Camp",
     content: (
       <TypographyMuted className="text-base text-muted-foreground">
-        Every adventurer needs a place to rest. This is your campsite, where you
-        trade items you have found with The Merchant, go on quests, view your
-        inventory, or browse past quests.
+        Every adventurer needs a place to rest. This is an image of your camp.
       </TypographyMuted>
     ),
     disableBeacon: true,

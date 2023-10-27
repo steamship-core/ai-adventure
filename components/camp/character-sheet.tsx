@@ -7,6 +7,7 @@ import {
 } from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { SignOutButton } from "@clerk/nextjs";
+import { useQueryClient } from "@tanstack/react-query";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -65,6 +66,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const buyEnergy = async () => {
     push("/account/plan");
   };
+  const queryClient = useQueryClient();
 
   const resetCharacter = async () => {
     const response = await fetch("/api/game/debug", {
@@ -76,6 +78,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     if (!response.ok) {
       console.error(response);
     } else {
+      await queryClient.invalidateQueries();
       push("/");
     }
   };

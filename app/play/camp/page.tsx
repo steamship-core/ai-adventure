@@ -6,7 +6,6 @@ import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
 import RecoilProvider from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
-import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { generateQuestArc } from "@/lib/game/quest.server";
@@ -65,10 +64,7 @@ export default async function CampPage() {
                 <QuestProgress />
               </div>
               <div id="camp">
-                <TypographyLarge className="mt-4">Camp</TypographyLarge>
-                <TypographyMuted>
-                  Click on the image to view camp members
-                </TypographyMuted>
+                <TypographyLarge className="mt-4 mb-2">Camp</TypographyLarge>
                 <CampImage />
               </div>
             </div>
