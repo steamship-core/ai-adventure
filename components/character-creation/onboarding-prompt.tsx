@@ -106,7 +106,7 @@ const OnboardingPrompt = ({
           <Typewriter
             onInit={(typewriter) => {
               typewriter
-                .changeDelay(20)
+                .changeDelay(18)
                 .typeString(text)
                 .callFunction(() => {
                   setIsFinished(true);

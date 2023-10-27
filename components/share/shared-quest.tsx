@@ -9,9 +9,9 @@ export default function SharedQuest() {
   const searchParams = useSearchParams();
   const title = searchParams.get("title");
   const description = searchParams.get("description");
-  const blockId = searchParams.get("blockId");
+  const itemImage = searchParams.get("itemImage");
   const name = searchParams.get("name");
-  const itemName = searchParams.get("itemName");
+  const itemName = searchParams.get("itemName") as string;
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function SharedQuest() {
             <div className="w-44">
               <Image
                 alt="Quest Item"
-                src={`/api/shared/block/${blockId}/asset.png`}
+                src={itemImage || ""}
                 height={512}
                 width={512}
               />

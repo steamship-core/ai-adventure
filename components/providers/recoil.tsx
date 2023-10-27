@@ -41,13 +41,9 @@ export const recoilBackgroundAudioUrlState = atom<string | undefined>({
   default: undefined,
 });
 
-export const recoilAudioActiveState = atom<boolean | undefined>({
+export const recoilAudioActiveState = atom<boolean>({
   key: "AudioActiveState",
-  default:
-    typeof window != "undefined" &&
-    window.localStorage &&
-    localStorage?.getItem("AudioActiveState") === "true",
-  effects: [localStorageEffect("AudioActiveState")],
+  default: false,
 });
 
 export const recoilBlockHistory = atom({
@@ -63,7 +59,7 @@ function initializeState(
   set: SetRecoilState,
   gameState: GameState,
   backgroundAudioState?: boolean,
-  audioActiveState?: boolean,
+  audioActiveState: boolean = false,
   backgroundAudioUrl?: string
 ) {
   set(recoilGameState, gameState);

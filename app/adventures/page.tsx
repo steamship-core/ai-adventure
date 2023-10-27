@@ -74,6 +74,7 @@ export default async function AdventuresPage() {
                   Quest
                 </TypographySmall>
                 <TypographyLarge>
+                  {/* @ts-expect-error */}
                   {agent?.Adventure?.name || "Epic Quest"}
                 </TypographyLarge>
               </div>

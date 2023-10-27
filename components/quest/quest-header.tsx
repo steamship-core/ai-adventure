@@ -1,15 +1,20 @@
 "use client";
 import { ArrowLeftIcon, PackageIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useRecoilValue } from "recoil";
-import AudioSheet from "../audio-sheet";
 import { CharacterSheet } from "../camp/character-sheet";
 import InventorySheet from "../inventory-sheet";
 import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
+
+const BackgroundAudioToggle = dynamic(
+  () => import("../audio/background-audio-toggle"),
+  { ssr: false }
+);
 
 export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
   const gameState = useRecoilValue(recoilGameState);
@@ -45,7 +50,7 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
         )}
       </div>
       <div className="flex items-center justify-center">
-        <AudioSheet text="" /> &nbsp;
+        <BackgroundAudioToggle text="" /> &nbsp;
         <InventorySheet>
           <Button variant="outline" size="icon">
             <PackageIcon size={16} />

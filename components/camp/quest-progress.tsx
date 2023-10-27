@@ -1,9 +1,10 @@
 "use client";
 
+import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
-import { CheckCircle2Icon, CircleIcon } from "lucide-react";
+import { CheckCircle2Icon, CircleIcon, Loader2Icon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
@@ -90,9 +91,30 @@ const QuestProgressElement = ({
 };
 
 export const QuestProgress = () => {
-  const gameState = useRecoilValue(recoilGameState);
+  const [isLoading, setIsLoading] = useState(false);
+  const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
+
+  useEffect(() => {
+    const refetchInterval = setInterval(async () => {
+      if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
+        setIsLoading(true);
+        const gameState = await getGameState();
+        if (gameState) {
+          setGameState(gameState);
+        }
+      } else {
+        setIsLoading(false);
+        clearInterval(refetchInterval);
+      }
+    }, 3000);
+
+    return () => {
+      setIsLoading(false);
+      clearInterval(refetchInterval);
+    };
+  }, [gameState?.quest_arc, setGameState]);
 
   const questArc = gameState?.quest_arc || [];
   const questCount = gameState?.current_quest
@@ -111,6 +133,11 @@ export const QuestProgress = () => {
           {gameState?.player?.motivation}
         </TypographyMuted>
       </button>
+      <div className="flex items-center justify-center">
+        {questArc.length === 0 && isLoading && (
+          <Loader2Icon className="animate-spin" />
+        )}
+      </div>
       <div className="flex flex-row gap-4 overflow-x-auto mt-2">
         {questArc.map((quest, i) => {
           const isCurrentquest = questCount === i;

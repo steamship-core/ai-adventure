@@ -1,5 +1,4 @@
 import ReturnToCampButton from "@/components/account/return-to-camp-button";
-import { BackgroundAudio } from "@/components/audio-provider";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { SummaryStats } from "@/components/camp/summary-stats";
 import RecoilProvider from "@/components/providers/recoil";
@@ -60,7 +59,6 @@ export default async function AccountPlanPage() {
           </div>
         </div>
       </main>
-      <BackgroundAudio />
     </RecoilProvider>
   );
 }

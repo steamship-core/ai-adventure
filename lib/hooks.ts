@@ -37,7 +37,7 @@ export const useDebugModeSetting = () => {
 export const useBackgroundMusic = () => {
   const [isAllowed, setAllowed] = useRecoilState(recoilBackgroundAudioState);
   const [url, setUrl] = useRecoilState(recoilBackgroundAudioUrlState);
-  return [isAllowed, setAllowed, url as string, setUrl];
+  return { isAllowed, setAllowed, url, setUrl };
 };
 
 export const useCurrentQuestArc = () => {
