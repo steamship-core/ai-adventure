@@ -33,7 +33,7 @@ export default async function CampPage() {
     redirect("/character-creation");
   }
 
-  if (!gameState?.quest_arc) {
+  if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
     await generateQuestArc(agent?.agentUrl);
     refreshGameState = true;
   }
