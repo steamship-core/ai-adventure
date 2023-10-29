@@ -8,11 +8,6 @@
  */
 import { ServerSettings } from "./schema/server_settings";
 
-import * as _camp_image_prompt from "@/configuration/image_prompts/camp_image_prompt";
-import * as _item_image_prompt from "@/configuration/item_image_prompt";
-import * as _music_prompt from "@/configuration/music_prompt";
-import * as _profile_image_prompt from "@/configuration/profile_image_prompt";
-import * as _quest_background_image_prompt from "@/configuration/quest_background_image_prompt";
 import * as _server_settings_base from "@/configuration/server_settings";
 
 interface IPrompt {
@@ -34,12 +29,6 @@ function register(base_settings: any, prompts: IPrompt[]): ServerSettings {
   return base_settings as ServerSettings;
 }
 
-const server_settings = register(_server_settings_base, [
-  _quest_background_image_prompt,
-  _profile_image_prompt,
-  _music_prompt,
-  _item_image_prompt,
-  _camp_image_prompt,
-]);
+const server_settings = register(_server_settings_base, []);
 
 export default server_settings;
