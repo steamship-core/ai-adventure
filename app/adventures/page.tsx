@@ -9,6 +9,7 @@ import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { log } from "next-axiom";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function AdventuresPage() {
   const { userId } = auth();
@@ -20,6 +21,7 @@ export default async function AdventuresPage() {
 
   const adventures = await getAdventures();
   const agents = await getAgents(userId);
+
   return (
     <div className="flex flex-col gap-6">
       <TypographyH1>AI Adventures</TypographyH1>
@@ -60,9 +62,9 @@ export default async function AdventuresPage() {
       <TypographyH2>Your Adventures</TypographyH2>
       <div className="grid grid-cols-4 gap-4">
         {agents.map((agent) => (
-          <a
+          <Link
             key={agent.agentUrl}
-            href={agent.agentUrl}
+            href={`/play/${agent.handle}/camp`}
             className="rounded-md border-foreground/20 border overflow-hidden "
           >
             <div className="relative aspect-video ">
@@ -74,7 +76,6 @@ export default async function AdventuresPage() {
                   Quest
                 </TypographySmall>
                 <TypographyLarge>
-                  {/* @ts-expect-error */}
                   {agent?.Adventure?.name || "Epic Quest"}
                 </TypographyLarge>
               </div>
@@ -87,7 +88,7 @@ export default async function AdventuresPage() {
                 </TypographyLarge>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>

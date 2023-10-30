@@ -7,7 +7,11 @@ import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
-export default async function QuestPage() {
+export default async function QuestPage({
+  params,
+}: {
+  params: { handle: string };
+}) {
   const { userId } = auth();
 
   if (!userId) {
@@ -15,9 +19,9 @@ export default async function QuestPage() {
     throw new Error("no user");
   }
 
-  const agent = await getAgent(userId);
+  const agent = await getAgent(userId, params.handle);
   if (!agent) {
-    redirect("/character-creation");
+    redirect("/adventures");
   }
 
   const gameState = await getGameState(agent?.agentUrl);

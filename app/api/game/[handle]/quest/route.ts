@@ -3,12 +3,15 @@ import { loadExistingQuestBlocks, startQuest } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: { handle: string } }
+) {
   const { userId } = auth();
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  const agent = await getAgent(userId);
+  const agent = await getAgent(userId, params.handle);
 
   if (!agent) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
@@ -26,7 +29,10 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+  { params }: { params: { handle: string } }
+) {
   const { userId } = auth();
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -42,7 +48,7 @@ export async function GET(request: Request) {
     );
   }
 
-  const agent = await getAgent(userId);
+  const agent = await getAgent(userId, params.handle);
 
   if (!agent) {
     console.log("no agent");

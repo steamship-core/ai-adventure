@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
@@ -84,7 +84,7 @@ export default function QuestNarrative({
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-
+  const params = useParams<{ handle: string }>();
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
@@ -119,24 +119,26 @@ export default function QuestNarrative({
     if (!initialized.current) {
       initialized.current = true;
       // On the first load, get the quest history
-      fetch(`/api/game/quest?questId=${id}`).then(async (response) => {
-        if (response.ok) {
-          let blocks = ((await response.json()) || {})
-            .blocks as ExtendedBlock[];
-          if (blocks && blocks.length > 0) {
-            setPriorBlocks([...blocks]);
-          } else {
-            // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest
-            // if it hasn't already been started.
-            // TODO: We could find a way to kick off the quest proactively.
-            append({
-              id: "000-000-000",
-              content: "Let's go on an adventure!",
-              role: "user",
-            });
+      fetch(`/api/game/${params.handle}/quest?questId=${id}`).then(
+        async (response) => {
+          if (response.ok) {
+            let blocks = ((await response.json()) || {})
+              .blocks as ExtendedBlock[];
+            if (blocks && blocks.length > 0) {
+              setPriorBlocks([...blocks]);
+            } else {
+              // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest
+              // if it hasn't already been started.
+              // TODO: We could find a way to kick off the quest proactively.
+              append({
+                id: "000-000-000",
+                content: "Let's go on an adventure!",
+                role: "user",
+              });
+            }
           }
         }
-      });
+      );
     }
   }, []);
 
@@ -160,7 +162,7 @@ export default function QuestNarrative({
 
   useEffect(() => {
     const updateGameState = async () => {
-      const gs = await getGameState();
+      const gs = await getGameState(params.handle);
       setGameState(gs);
     };
 

@@ -20,10 +20,11 @@ export const getAgents = async (userId: string) => {
   });
 };
 
-export const getAgent = async (userId: string) => {
+export const getAgent = async (userId: string, handle: string) => {
   return await prisma.agents.findFirst({
     where: {
       ownerId: userId,
+      handle,
     },
   });
 };
@@ -37,7 +38,7 @@ export const deleteAgent = async (userId: string) => {
   return res.count;
 };
 
-export const createAgent = async (userId: string) => {
+export const createAgent = async (userId: string, adventureId: string) => {
   if (!process.env.STEAMSHIP_AGENT_VERSION) {
     log.error("No steamship agent version");
     throw Error("Please set the STEAMSHIP_AGENT_VERSION environment variable.");
@@ -77,6 +78,7 @@ export const createAgent = async (userId: string) => {
         ownerId: userId!,
         agentUrl: agentUrl,
         handle: workspaceHandle,
+        adventureId: adventureId,
       },
     });
   } catch (e) {

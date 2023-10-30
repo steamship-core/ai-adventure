@@ -13,25 +13,31 @@ import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
-export default async function CampPage() {
+export default async function CampPage({
+  params,
+}: {
+  params: { handle: string };
+}) {
   const { userId } = auth();
 
   if (!userId) {
     log.error("No user");
     throw new Error("no user");
   }
-
-  const agent = await getAgent(userId);
+  console.log("fetching agent", userId, params.handle);
+  const agent = await getAgent(userId, params.handle);
 
   if (!agent) {
-    redirect("/character-creation");
+    console.log("no agent- redirecting to character creation");
+    redirect(`/adventures`);
   }
 
   let gameState = await getGameState(agent?.agentUrl);
   let refreshGameState = false;
 
   if (gameState?.active_mode == "onboarding") {
-    redirect("/character-creation");
+    console.log("onboarding- redirecting to character creation");
+    redirect(`/play/${params.handle}/character-creation`);
   }
 
   if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {

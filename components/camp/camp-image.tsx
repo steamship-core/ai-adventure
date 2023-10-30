@@ -2,6 +2,7 @@
 import { getGameState } from "@/lib/game/game-state.client";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
@@ -12,7 +13,7 @@ export const CampImage = () => {
   const [campPic, setCampPic] = useState<string | undefined>(
     gameState?.camp?.image_block_url
   );
-  console.log(gameState?.camp);
+  const params = useParams<{ handle: string }>();
 
   const { data: imageUrl } = useQuery({
     queryKey: ["camp-image", gameState?.camp?.image_block_url],
@@ -29,7 +30,7 @@ export const CampImage = () => {
 
   useEffect(() => {
     const refreshCampPic = async () => {
-      const gs = await getGameState();
+      const gs = await getGameState(params.handle);
       if (gs?.camp?.image_block_url) {
         setCampPic(gs.camp.image_block_url);
       }

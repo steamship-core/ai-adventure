@@ -18,7 +18,7 @@ const BackgroundAudioToggle = dynamic(
 
 export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
   const gameState = useRecoilValue(recoilGameState);
-  const { questId } = useParams();
+  const { questId, handle } = useParams();
 
   const questArcs = gameState?.quest_arc || [];
   const questIndex = gameState?.quests?.findIndex((q) => q.name === questId);
@@ -30,7 +30,7 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
       <div className="flex items-center justify-center">
         {!isComplete ? (
           <Button asChild variant="link" className="pl-0">
-            <Link href="/play/camp">
+            <Link href={`/play/${handle}/camp`}>
               <ArrowLeftIcon size={16} />
             </Link>
           </Button>

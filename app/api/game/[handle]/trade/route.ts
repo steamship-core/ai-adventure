@@ -1,31 +1,34 @@
 import { getAgent } from "@/lib/agent/agent.server";
-import { completeOnboarding } from "@/lib/game/onboarding";
+import { tradeItems } from "@/lib/game/trade";
 import { auth } from "@clerk/nextjs";
-import { log } from "next-axiom";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request,
+  { params }: { params: { handle: string } }
+) {
   const { userId } = auth();
   if (!userId) {
-    log.error("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-
-  const agent = await getAgent(userId);
+  const agent = await getAgent(userId, params.handle);
 
   if (!agent) {
     return NextResponse.json({ error: "Agent not found" }, { status: 404 });
   }
 
+  const { counter_party, sell, buy } = await request.json();
+
   try {
-    // TODO: Filter what the user can send to the agent.
-    await completeOnboarding(agent.agentUrl);
-    return NextResponse.json({ agent }, { status: 200 });
+    return tradeItems(agent!.agentUrl, {
+      counter_party,
+      sell,
+      buy,
+    });
   } catch (e) {
-    log.error(`${e}`);
     console.error(e);
     return NextResponse.json(
-      { error: "Failed to complete onboarding." },
+      { error: "Failed to create agent." },
       { status: 404 }
     );
   }

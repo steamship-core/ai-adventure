@@ -155,9 +155,7 @@ export default function Home() {
           asChild
           className="bg-indigo-600 hover:bg-indigo-800 text-white py-6 text-large mt-8 font-bold"
         >
-          <Link href="/character-creation">
-            {user ? "Continue Your Journey" : "Create your Character"}
-          </Link>
+          <Link href="/adventures">Begin Your Adventure</Link>
         </Button>
         <div className="w-full text-center flex items-center justify-center mt-4">
           <TypographySmall>
@@ -195,7 +193,7 @@ export default function Home() {
                 return (
                   <div key={i} className="p-6 w-full">
                     <a
-                      href={`/character-creation?${searchParams.toString()}`}
+                      href={`/adventures/1?${searchParams.toString()}`}
                       className="flex h-full text-center w-full relative rounded-md aspect-[1/1] md:aspect-[1/1.5]  overflow-hidden border border-foreground/20 hover:border-indigo-500"
                       onClick={() => {
                         track("Character Selected", {

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { CoinsIcon, PackageIcon } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { InventoryList } from "./inventory-list";
@@ -28,6 +29,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
   const [selectedToSell, setSelectedToSell] = useState<Item[]>([]);
   const [selectedToBuy, setSelectedToBuy] = useState<Item[]>([]);
   const [isTrading, setIsTrading] = useState(false);
+  const params = useParams<{ handle: string }>();
 
   const trade = async () => {
     setIsTrading(true);
@@ -41,7 +43,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
       itemsToBuy: buy.length,
     });
 
-    const resp = await fetch("/api/game/trade", {
+    const resp = await fetch(`/api/game/${params.handle}/trade`, {
       method: "POST",
       body: JSON.stringify({
         counter_party,
@@ -49,7 +51,7 @@ const MerchantSheet = ({ member }: { member: NpcCharacter }) => {
         buy,
       }),
     });
-    const newGameState = await getGameState();
+    const newGameState = await getGameState(params.handle);
     setGameState(newGameState);
     setSelectedToBuy([]);
     setSelectedToSell([]);
