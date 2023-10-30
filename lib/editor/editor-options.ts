@@ -202,11 +202,6 @@ export const VoiceModelOptions: Setting[] = [
     default: "adam",
     options: [
       {
-        value: "adam",
-        label: "Adam",
-        description: "A standard American English accent.",
-      },
-      {
         value: "knightly",
         label: "Knightly",
         description:
