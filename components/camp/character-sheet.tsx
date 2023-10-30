@@ -48,6 +48,21 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     }
   };
 
+  const dumpGameState = async () => {
+    const response = await fetch("/api/game/debug", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "dump-state",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let output = await response.json();
+      console.log(output);
+    }
+  };
+
   const setEnergyTo0 = async () => {
     const response = await fetch("/api/game/debug", {
       method: "POST",
@@ -258,6 +273,16 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                     }}
                   >
                     Set Energy to 100
+                  </Button>
+                )}
+
+                {process.env.NEXT_PUBLIC_OFFER_STATE_DUMP === "true" && (
+                  <Button
+                    onClick={(e) => {
+                      dumpGameState();
+                    }}
+                  >
+                    Dump GameState log
                   </Button>
                 )}
 
