@@ -3,6 +3,7 @@
 import { Setting } from "@/lib/editor/editor-options";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { AudioPreview } from "./audio-preview";
 
 export default function SettingElement({
   setting,
@@ -69,7 +70,12 @@ export default function SettingElement({
                   onChange={onTextboxChange}
                 />
                 <label className="select-none" htmlFor={option.value}>
-                  {option.label}
+                  <div className="flex flex-row">
+                    {option?.audioSample && (
+                      <AudioPreview voiceId={option.audioSample} />
+                    )}
+                    {option.label}
+                  </div>
                   {option.description && (
                     <pre className="text-sm text-muted-foreground">
                       {option.description}

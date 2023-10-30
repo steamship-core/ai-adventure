@@ -1,6 +1,7 @@
 export type OptionValue = {
   value: string;
   label: string;
+  audioSample?: string;
   description?: string;
 };
 
@@ -203,50 +204,59 @@ export const VoiceModelOptions: Setting[] = [
     options: [
       {
         value: "knightly",
+        audioSample: "knightly",
         label: "Knightly",
         description:
           "Old male british man. A deep and smooth voice for storytelling and podcast.",
       },
       {
         value: "oswald",
+        audioSample: "oswald",
         label: "Oswald",
         description: "Intelligent Professor.",
       },
       {
         value: "marcus",
+        audioSample: "marcus",
         label: "Marcus",
         description:
           "An authoritative and deep voice. Great for audio books or news.",
       },
       {
         value: "bria",
+        audioSample: "bria",
         label: "Bria",
         description:
           "A young female with a softly spoken tone, perfect for storytelling or ASMR.",
       },
       {
         value: "alex",
+        audioSample: "alex",
         label: "Alex",
         description: "Young american man. Is a strong and expressive narrator.",
       },
       {
         value: "valentino",
+        audioSample: "valentino",
         label: "Valentino",
         description:
           "A great voice with depth. The voice is deep with a great accent, and works well for meditations.",
       },
       {
         value: "natasha",
+        audioSample: "natasha",
         label: "Natasha",
         description: "A valley girl female voice. Great for shorts.",
       },
       {
         value: "brian",
+        audioSample: "brian",
         label: "Brian",
         description: "Great voice for nature documentaries.",
       },
       {
         value: "joanne",
+        audioSample: "joanne",
         label: "Joanne",
         description:
           "Young american woman. A soft and pleasant voice for a great character.",
