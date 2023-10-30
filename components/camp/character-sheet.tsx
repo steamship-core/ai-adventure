@@ -145,11 +145,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
       >
         <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2 relative">
-            <div className="mt-2 absolute z-50 left-0 top-0">
-              <SignOutButton>
-                <Button variant="outline">Sign out</Button>
-              </SignOutButton>
-            </div>
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
               <Image
@@ -350,6 +345,11 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 </Button>
               </div>
             </div>
+            <SignOutButton>
+              <Button variant="outline" className="mt-4 w-full">
+                Sign out
+              </Button>
+            </SignOutButton>
           </div>
         </div>
       </SheetContent>
