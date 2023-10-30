@@ -1,8 +1,13 @@
 import { log } from "next-axiom";
 import prisma from "../db";
 
-export const getAdventures = async () => {
-  return prisma.adventure.findMany({});
+export const getAdventures = async (limit?: number) => {
+  return prisma.adventure.findMany({
+    ...(limit && { take: limit }),
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 export const getAdventure = async (userId: string, adventureId: string) => {
