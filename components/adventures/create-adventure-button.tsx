@@ -20,5 +20,5 @@ export const CreateAdventureButton = () => {
     }
   };
 
-  return <Button onClick={onClick}>Create a new adventure</Button>;
+  return <Button onClick={onClick}>Create a new adventure template</Button>;
 };

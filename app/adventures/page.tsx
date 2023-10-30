@@ -1,4 +1,3 @@
-import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
@@ -23,22 +22,23 @@ export default async function AdventuresPage() {
   const agents = await getAgents(userId);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-4 px-6 lg:px-20 py-8">
       <TypographyH1>AI Adventures</TypographyH1>
-      <div>
+      {/* <div>
         <CreateAdventureButton />
-      </div>
+      </div> */}
       <TypographyH2>Find an Adventure</TypographyH2>
       <div className="grid grid-cols-4 gap-4">
         {adventures.map((adventure) => (
-          <div
+          <Link
             key={adventure.id}
+            href={`/adventures/${adventure.id}`}
             className="rounded-md border-foreground/20 border overflow-hidden "
           >
             <div className="relative aspect-video ">
               <Image src={"/adventurer.png"} fill alt="Adventurer" />
             </div>
-            <div className="p-4 flex flex-col">
+            <div className="pb-2 px-4 flex flex-col">
               <div>
                 <TypographySmall className="text-muted-foreground">
                   Quest
@@ -49,18 +49,18 @@ export default async function AdventuresPage() {
               </div>
               <div>
                 <TypographySmall className="text-muted-foreground">
-                  Created at
+                  Description
                 </TypographySmall>
-                <TypographyLarge>
-                  {format(adventure.createdAt, "MMM d, yyyy")}
+                <TypographyLarge className="line-clamp-3">
+                  {adventure.description}
                 </TypographyLarge>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <TypographyH2>Your Adventures</TypographyH2>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {agents.map((agent) => (
           <Link
             key={agent.agentUrl}
@@ -70,7 +70,7 @@ export default async function AdventuresPage() {
             <div className="relative aspect-video ">
               <Image src={"/adventurer.png"} fill alt="Adventurer" />
             </div>
-            <div className="p-4 flex flex-col">
+            <div className="pb-2 px-4 flex flex-col">
               <div>
                 <TypographySmall className="text-muted-foreground">
                   Quest
