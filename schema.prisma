@@ -16,8 +16,8 @@ model Adventure {
   name             String   @default("Epic Quest")
   description      String   @default("Set the scene for your adventure, create your character, and dive into an adventure completely unique to you.")
   agentVersion     String   @default("ai-adventure")
-  agentConfig      Json
-  agentDevConfig   Json
+  agentConfig      Json?
+  agentDevConfig   Json?
   shortDescription String   @default("A custom pixel art style adventure.")
   agents           Agents[]
 }
