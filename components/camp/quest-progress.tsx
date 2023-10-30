@@ -92,7 +92,6 @@ const QuestProgressElement = ({
 };
 
 export const QuestProgress = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
@@ -100,19 +99,16 @@ export const QuestProgress = () => {
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
       if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
-        setIsLoading(true);
         const gameState = await getGameState();
         if (gameState) {
           setGameState(gameState);
         }
       } else {
-        setIsLoading(false);
         clearInterval(refetchInterval);
       }
     }, 3000);
 
     return () => {
-      setIsLoading(false);
       clearInterval(refetchInterval);
     };
   }, [gameState?.quest_arc, setGameState]);
@@ -121,8 +117,7 @@ export const QuestProgress = () => {
   const questCount = gameState?.current_quest
     ? gameState?.quests?.length - 1
     : gameState?.quests?.length;
-  // A horiztonally scrolling list of the players quest arc.
-  // Each quest is represented by a card with the quest name and a progress bar.
+
   return (
     <>
       <TypographyLarge className="">Quest Progress</TypographyLarge>
