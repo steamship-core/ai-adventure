@@ -1,4 +1,5 @@
 "use client";
+import CharacterMap from "@/components/character-map";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
@@ -8,7 +9,6 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { characters } from "@/lib/characters";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { track } from "@vercel/analytics/react";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
@@ -139,43 +139,7 @@ export default function Home() {
               title="Select a Character"
               subtitle="Pick from one of three templates"
             />
-            <div className="grid grid-cols-1 md:grid-cols-3">
-              {characters.map((character, i) => {
-                const searchParams = new URLSearchParams();
-                searchParams.set("genre", character.genre);
-                searchParams.set("tone", character.tone);
-                searchParams.set("background", character.background);
-                searchParams.set("motivation", character.motivation);
-                searchParams.set("description", character.description);
-                searchParams.set("name", character.name);
-                return (
-                  <div key={i} className="p-6 w-full">
-                    <a
-                      href={`/adventures/1?${searchParams.toString()}`}
-                      className="flex h-full text-center w-full relative rounded-md aspect-[1/1] md:aspect-[1/1.5]  overflow-hidden border border-foreground/20 hover:border-indigo-500"
-                      onClick={() => {
-                        track("Character Selected", {
-                          character: character.name,
-                        });
-                      }}
-                    >
-                      <Image
-                        fill
-                        src={character.image}
-                        alt="Nox Umbra"
-                        className="object-cover z-10"
-                      />
-                      <div className="z-20 absolute bottom-0 left-0 bg-background/80 w-full">
-                        <div className="w-full">
-                          <TypographySmall>{character.name}</TypographySmall>
-                          <TypographyMuted>{character.class}</TypographyMuted>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                );
-              })}
-            </div>
+            <CharacterMap characters={characters} />
           </Section>
           <Section>
             <Title
