@@ -2,10 +2,11 @@
 
 import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
-import { CheckCircle2Icon, CircleIcon, Loader2Icon } from "lucide-react";
+import { CheckCircle2Icon, CircleIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
+import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
@@ -134,8 +135,10 @@ export const QuestProgress = () => {
         </TypographyMuted>
       </button>
       <div className="flex items-center justify-center">
-        {questArc.length === 0 && isLoading && (
-          <Loader2Icon className="animate-spin" />
+        {questArc.length === 0 && (
+          <Skeleton className="w-full h-24 mt-2 flex items-center justify-center text-sm">
+            Generating quest arc
+          </Skeleton>
         )}
       </div>
       <div className="flex flex-row gap-4 overflow-x-auto mt-2">

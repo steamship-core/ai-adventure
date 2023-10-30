@@ -76,7 +76,12 @@ const StartAdventureButton = () => {
       <Button
         onClick={onClick}
         isLoading={isLoading}
-        disabled={isLoading || lowEnergy}
+        disabled={
+          isLoading ||
+          lowEnergy ||
+          !gameState.quest_arc ||
+          gameState.quest_arc.length === 0
+        }
         className="w-full flex justify-start"
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
