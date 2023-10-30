@@ -9,13 +9,11 @@ datasource db {
 }
 
 model Agents {
-  id               Int      @id @default(autoincrement())
-  ownerId          String
-  agentUrl         String
-  handle           String   @default("agent")
-  createdAt        DateTime @default(now())
-  questName        String   @default("Epic Quest")
-  questDescription String   @default("A custom pixel art style adventure.")
+  id        Int      @id @default(autoincrement())
+  ownerId   String
+  agentUrl  String
+  handle    String   @default("agent")
+  createdAt DateTime @default(now())
 }
 
 model Subscriptions {
