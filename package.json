@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:db-push": "dotenv -e .env.local prisma db push",
+    "dev:db-push": "dotenv -e .env.development.local prisma db push",
     "prod:db-push": "dotenv -e .env.production.local prisma db push",
     "postinstall": "prisma generate"
   },

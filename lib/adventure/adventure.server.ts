@@ -1,6 +1,7 @@
 import { log } from "next-axiom";
 
 export const getAdventure = async (adventureId: string) => {
+  console.log("TODO: getAdventure", adventureId);
   // return await prisma.adventures.findFirst({
   //   where: {
   //     ownerId: adventureId,

@@ -1,20 +1,23 @@
 "use client";
 
+import { SettingGroup } from "@/lib/editor/editor-options";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { SettingGroup } from "@/lib/game/editor/editor-options";
-import { cn } from "@/lib/utils";
-
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string;
-    title: string;
-  }[];
+  items: SettingGroup[];
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const pathname = usePathname();
+
+  // Add on the /editor/ADVENTURE-ID/ prefix
+  const parts = pathname?.split("/");
+  let pathPrefix = `/editor/`;
+  if (parts && parts.length > 2) {
+    pathPrefix = `/editor/${parts[2]}/`;
+  }
 
   return (
     <nav
@@ -35,7 +38,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         ) : (
           <Link
             key={item.href}
-            href={item.href!}
+            href={`${pathPrefix}${item.href}`}
             className={cn(
               "hover:bg-accent hover:text-accent-foreground",
               pathname === item.href

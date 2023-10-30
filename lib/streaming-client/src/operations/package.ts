@@ -16,7 +16,7 @@ async function delay(timeSeconds: number): Promise<void> {
   );
 }
 
-type GetPackageInstanceParams = {
+export type GetPackageInstanceParams = {
   /**
    * Handle of the package you are fetching.
    */
@@ -177,11 +177,9 @@ export class PackageClient implements IPackageClient {
     handle,
     id,
   }: {
-    timeoutSeconds: number;
-    retryCount: number;
+    timeoutSeconds?: number;
+    retryCount?: number;
   } & GetPackageInstanceParams): Promise<boolean> {
-    let i = 0;
-
     for (let i = 0; i < retryCount; i++) {
       const initStatus = await this.getInstanceInitStatus({ id, handle });
       if (initStatus === "complete" || initStatus === "notNeeded") {
@@ -189,6 +187,7 @@ export class PackageClient implements IPackageClient {
       } else if (initStatus === "failed") {
         return false;
       }
+      await delay(timeoutSeconds);
     }
     throw new Error(
       `Max tries await for package initialization exceeded: ${retryCount}`

@@ -89,8 +89,8 @@ export interface IPackageClient {
     handle,
     id,
   }: {
-    timeoutSeconds: number;
-    retryCount: number;
+    timeoutSeconds?: number;
+    retryCount?: number;
   } & GetPackageInstanceParams): Promise<boolean>;
 
   getInstanceInitStatus(

@@ -1,8 +1,33 @@
 "use client";
 
-import { Setting } from "@/lib/game/editor/editor-options";
+import { Setting } from "@/lib/editor/editor-options";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
-export default function SettingElement({ setting }: { setting: Setting }) {
+export default function SettingElement({
+  setting,
+  updateFn,
+}: {
+  setting: Setting;
+  updateFn: (key: string, value: any) => void;
+}) {
+  const onTextboxChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newValue = e.target.value;
+    updateFn(setting.name, newValue);
+  };
+
+  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked === true;
+    updateFn(setting.name, newValue);
+  };
+
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = e.target.value;
+    updateFn(setting.name, newValue);
+  };
+
   return (
     <div>
       <div className="space-y-6">{setting.label}</div>
@@ -13,9 +38,9 @@ export default function SettingElement({ setting }: { setting: Setting }) {
       )}
       <div>
         {setting.type == "text" ? (
-          <input type="text" />
+          <Input type="text" onChange={onTextboxChange} />
         ) : setting.type == "select" ? (
-          <select>
+          <select onChange={onSelectChange}>
             {setting.options?.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -24,20 +49,26 @@ export default function SettingElement({ setting }: { setting: Setting }) {
           </select>
         ) : setting.type == "boolean" ? (
           <div key={setting.name}>
-            <input type="checkbox" id={setting.name} name={setting.name} />
+            <Input
+              type="checkbox"
+              id={setting.name}
+              name={setting.name}
+              onChange={onCheckboxChange}
+            />
             <label htmlFor={setting.name}>&nbsp;Yes</label>
           </div>
         ) : setting.type == "options" ? (
-          <div>
+          <div className="space-y-2">
             {setting.options?.map((option) => (
-              <div key={option.value}>
-                <input
+              <div key={option.value} className="flex flex-row items-start">
+                <Input
                   type="radio"
-                  id={setting.name}
-                  name={option.value}
+                  id={option.value}
+                  name={setting.name}
                   value={option.value}
+                  onChange={onTextboxChange}
                 />
-                <label htmlFor={setting.name}>
+                <label className="select-none" htmlFor={option.value}>
                   {option.label}
                   {option.description && (
                     <pre className="text-sm text-muted-foreground">
@@ -49,7 +80,7 @@ export default function SettingElement({ setting }: { setting: Setting }) {
             ))}
           </div>
         ) : setting.type == "longtext" ? (
-          <textarea></textarea>
+          <Textarea onChange={onTextboxChange}></Textarea>
         ) : (
           <></>
         )}

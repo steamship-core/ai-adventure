@@ -1,10 +1,10 @@
 import { getAgent } from "@/lib/agent/agent.server";
 import { completeOnboarding } from "@/lib/game/onboarding";
 import { auth } from "@clerk/nextjs";
-import { log } from "next-axiom";
+import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export const POST = withAxiom(async (request: Request) => {
   const { userId } = auth();
   if (!userId) {
     log.error("No user");
@@ -29,4 +29,4 @@ export async function POST(request: Request) {
       { status: 404 }
     );
   }
-}
+});

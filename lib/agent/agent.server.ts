@@ -51,6 +51,7 @@ export const createAgent = async (userId: string) => {
     });
 
     log.info(`Switching to workspace: ${workspaceHandle}`);
+    log.info(`Switching to workspace: ${workspaceHandle}`);
 
     const packageInstance = await steamship.package.createInstance({
       package: _package,
