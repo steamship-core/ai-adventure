@@ -170,13 +170,23 @@ export default function QuestNarrative({
   }, [isComplete]);
 
   const formattedBlocks = useMemo(() => {
-    const mostRecentUserMessage =
+    const mostRecentMessage =
       messages.length > 0 ? messages[messages.length - 1] : null;
-    if (!mostRecentUserMessage) {
+    if (!mostRecentMessage) {
       return [];
     }
-    return getFormattedBlocks(mostRecentUserMessage, null);
+    return getFormattedBlocks(mostRecentMessage, null);
   }, [messages]);
+
+  useEffect(() => {
+    for (let block of formattedBlocks) {
+      if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
+        (setBackgroundMusicUrl as any)(
+          `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
+        );
+      }
+    }
+  }, [formattedBlocks]);
 
   const orderedBlocks = formattedBlocks.filter((block) => {
     const messageType = getMessageType(block);
