@@ -18,7 +18,7 @@ export const POST = withAxiom(async (request: Request) => {
     );
 
     if (operation === "update") {
-      await updateAdventure(data, id);
+      await updateAdventure(userId, id, data);
       return NextResponse.json(data, { status: 200 });
     } else {
       return NextResponse.json(

@@ -1,17 +1,60 @@
 import { log } from "next-axiom";
+import prisma from "../db";
 
-export const getAdventure = async (adventureId: string) => {
-  console.log("TODO: getAdventure", adventureId);
-  // return await prisma.adventures.findFirst({
-  //   where: {
-  //     ownerId: adventureId,
-  //   },
-  // });
-  return {};
+export const getAdventures = async (limit?: number) => {
+  return prisma.adventure.findMany({
+    ...(limit && { take: limit }),
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
-export const updateAdventure = async (updateObj: any, adventureId: string) => {
-  const adventure = getAdventure(adventureId);
+export const getAdventure = async (userId: string, adventureId: string) => {
+  return await prisma.adventure.findFirst({
+    where: {
+      id: adventureId,
+      creatorId: userId,
+    },
+  });
+};
+
+export const createAdventure = async ({
+  creatorId,
+  createdBy,
+  name,
+  description,
+  agentVersion,
+}: {
+  creatorId: string;
+  createdBy: string;
+  name: string;
+  description: string;
+  agentVersion: string;
+}) => {
+  try {
+    return await prisma.adventure.create({
+      data: {
+        creatorId,
+        createdBy,
+        name,
+        description,
+        agentVersion,
+      },
+    });
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw Error("Failed to create adventure.");
+  }
+};
+
+export const updateAdventure = async (
+  userId: string,
+  adventureId: string,
+  updateObj: any
+) => {
+  const adventure = await getAdventure(userId, adventureId);
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
   }

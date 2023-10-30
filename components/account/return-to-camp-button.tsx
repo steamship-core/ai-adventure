@@ -1,14 +1,14 @@
 "use client";
 import { track } from "@vercel/analytics/react";
 import { HomeIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
 const ReturnToCampButton = () => {
   const router = useRouter();
-
+  const params = useParams();
   const onClick = async () => {
-    router.push("/play/camp");
+    router.push(`/play/${params.handle}/camp`);
     track("Click Button", {
       buttonName: "Return to Camp",
       location: "Account",

@@ -6,8 +6,6 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAdventures } from "@/lib/adventure/adventure.server";
 import { getAgents } from "@/lib/agent/agent.server";
 import { auth } from "@clerk/nextjs";
-import { format } from "date-fns";
-import { ArrowRightIcon } from "lucide-react";
 import { log } from "next-axiom";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +18,7 @@ export default async function AdventuresPage() {
     throw new Error("no user");
   }
 
-  const adventures = await getAdventures(3);
+  const adventures = await getAdventures();
   const agents = await getAgents(userId);
 
   return (
@@ -29,43 +27,6 @@ export default async function AdventuresPage() {
       {/* <div>
         <CreateAdventureButton />
       </div> */}
-      <div>
-        <TypographyH2 className="border-none">Your Adventures</TypographyH2>
-        <TypographyMuted className="text-lg">
-          Continue an adventure you have already started
-        </TypographyMuted>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {agents.map((agent) => (
-          <Link
-            key={agent.agentUrl}
-            href={`/play/${agent.handle}/camp`}
-            className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
-          >
-            <div className="relative aspect-video ">
-              <Image src={"/adventurer.png"} fill alt="Adventurer" />
-            </div>
-            <div className="pb-2 px-4 flex flex-col">
-              <div>
-                <TypographySmall className="text-muted-foreground">
-                  Quest
-                </TypographySmall>
-                <TypographyLarge>
-                  {agent?.Adventure?.name || "Epic Quest"}
-                </TypographyLarge>
-              </div>
-              <div>
-                <TypographySmall className="text-muted-foreground">
-                  Started at
-                </TypographySmall>
-                <TypographyLarge>
-                  {format(agent.createdAt, "MMM d, yyyy")}
-                </TypographyLarge>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
       <div>
         <TypographyH2 className="border-none">Find an Adventure</TypographyH2>
         <TypographyMuted className="text-lg">
@@ -102,13 +63,6 @@ export default async function AdventuresPage() {
             </div>
           </Link>
         ))}
-        <Link
-          href={`/adventures/all`}
-          className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600 flex justify-center items-center"
-        >
-          <TypographyLarge>See All Adventures</TypographyLarge>
-          <ArrowRightIcon size={24} className="ml-2" />
-        </Link>
       </div>
     </div>
   );

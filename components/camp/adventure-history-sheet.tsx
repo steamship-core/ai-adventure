@@ -3,6 +3,7 @@
 import { Player } from "@lottiefiles/react-lottie-player";
 import { track } from "@vercel/analytics/react";
 import { CompassIcon, MoreHorizontalIcon } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
@@ -19,6 +20,7 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const AdventureHistorySheet = () => {
   const gameState = useRecoilValue(recoilGameState);
+  const params = useParams();
   const questArcs = gameState?.quest_arc || [];
   return (
     <Sheet>
@@ -59,7 +61,7 @@ export const AdventureHistorySheet = () => {
               const questArc = i < questArcs.length ? questArcs[i] : null;
               return (
                 <a
-                  href={`/play/quest/${quest.name}`}
+                  href={`/play/${params.handle}/quest/${quest.name}`}
                   key={quest.name}
                   className="relative"
                 >

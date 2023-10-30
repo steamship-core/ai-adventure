@@ -98,8 +98,6 @@ export const getFormattedBlocks = (
         try {
           return JSON.parse(block) as Block;
         } catch (e) {
-          console.log("getFormattedBlock error", e);
-          console.log("failed to parse block", block);
           return null;
         }
       }

@@ -3,6 +3,7 @@
 import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
 import { CheckCircle2Icon, CircleIcon, Loader2Icon } from "lucide-react";
+import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
@@ -95,12 +96,13 @@ export const QuestProgress = () => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
+  const params = useParams<{ handle: string }>();
 
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
       if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
         setIsLoading(true);
-        const gameState = await getGameState();
+        const gameState = await getGameState(params.handle);
         if (gameState) {
           setGameState(gameState);
         }

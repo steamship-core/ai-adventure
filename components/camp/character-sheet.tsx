@@ -10,7 +10,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
@@ -28,13 +28,13 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
   const { push } = useRouter();
-
+  const params = useParams();
   const rank = gameState?.player?.rank || 0;
   const { isAllowed: backgroundAllowed, setAllowed: setBackgroundAllowed } =
     useBackgroundMusic();
 
   const setEnergyTo100 = async () => {
-    const response = await fetch("/api/game/debug", {
+    const response = await fetch(`/api/game/${params.handle}/debug`, {
       method: "POST",
       body: JSON.stringify({
         operation: "top-up-energy",
@@ -48,8 +48,23 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     }
   };
 
+  const dumpGameState = async () => {
+    const response = await fetch(`/api/game/${params.handle}/debug`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "dump-state",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let output = await response.json();
+      console.log(output);
+    }
+  };
+
   const setEnergyTo0 = async () => {
-    const response = await fetch("/api/game/debug", {
+    const response = await fetch(`/api/game/${params.handle}/debug`, {
       method: "POST",
       body: JSON.stringify({
         operation: "deplete-energy",
@@ -69,7 +84,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const queryClient = useQueryClient();
 
   const resetCharacter = async () => {
-    const response = await fetch("/api/game/debug", {
+    const response = await fetch(`/api/game/${params.handle}/debug`, {
       method: "POST",
       body: JSON.stringify({
         operation: "reset",
@@ -258,6 +273,16 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                     }}
                   >
                     Set Energy to 100
+                  </Button>
+                )}
+
+                {process.env.NEXT_PUBLIC_OFFER_STATE_DUMP === "true" && (
+                  <Button
+                    onClick={(e) => {
+                      dumpGameState();
+                    }}
+                  >
+                    Dump GameState log
                   </Button>
                 )}
 
