@@ -1,6 +1,7 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
@@ -8,24 +9,31 @@ import { AudioPreview } from "./audio-preview";
 export default function SettingElement({
   setting,
   updateFn,
+  valueAtLoad,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
+  valueAtLoad: any;
 }) {
+  let [value, setValue] = useState(valueAtLoad);
+
   const onTextboxChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = e.target.value;
+    setValue(newValue);
     updateFn(setting.name, newValue);
   };
 
   const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.checked === true;
+    setValue(newValue);
     updateFn(setting.name, newValue);
   };
 
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
+    setValue(newValue);
     updateFn(setting.name, newValue);
   };
 
@@ -36,12 +44,12 @@ export default function SettingElement({
         <pre className="text-sm text-muted-foreground">
           {setting.description}
         </pre>
-      )}
+      )}{" "}
       <div>
         {setting.type == "text" ? (
-          <Input type="text" onChange={onTextboxChange} />
+          <Input type="text" value={value} onChange={onTextboxChange} />
         ) : setting.type == "select" ? (
-          <select onChange={onSelectChange}>
+          <select onChange={onSelectChange} value={value}>
             {setting.options?.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -52,6 +60,7 @@ export default function SettingElement({
           <div key={setting.name}>
             <Input
               type="checkbox"
+              checked={value ? true : undefined}
               id={setting.name}
               name={setting.name}
               onChange={onCheckboxChange}
@@ -64,6 +73,7 @@ export default function SettingElement({
               <div key={option.value} className="flex flex-row items-start">
                 <Input
                   type="radio"
+                  checked={value === option.value ? true : undefined}
                   id={option.value}
                   name={setting.name}
                   value={option.value}
@@ -86,7 +96,7 @@ export default function SettingElement({
             ))}
           </div>
         ) : setting.type == "longtext" ? (
-          <Textarea onChange={onTextboxChange}></Textarea>
+          <Textarea onChange={onTextboxChange}>{value}</Textarea>
         ) : (
           <></>
         )}

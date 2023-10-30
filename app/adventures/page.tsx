@@ -1,3 +1,4 @@
+import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
@@ -69,7 +70,8 @@ export default async function AdventuresPage() {
       <div>
         <TypographyH2 className="border-none">Find an Adventure</TypographyH2>
         <TypographyMuted className="text-lg">
-          Discover adventures created by the community
+          Discover adventures created by the community. Or{" "}
+          <CreateAdventureButton />{" "}
         </TypographyMuted>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

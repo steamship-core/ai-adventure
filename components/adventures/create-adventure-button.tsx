@@ -16,7 +16,7 @@ export const CreateAdventureButton = () => {
     });
     if (res.ok && res.status === 201) {
       const { adventure } = (await res.json()) as { adventure: Adventure };
-      router.push(`/adventures/${adventure.id}`);
+      router.push(`/editor/${adventure.id}`);
     }
   };
 

@@ -32,6 +32,14 @@ export const GeneralOptions: Setting[] = [
     default: "",
     required: true,
   },
+  {
+    name: "adventure_description",
+    label: "Short Description",
+    description: "What one-sentence description describes this adventure?",
+    type: "text",
+    default: "",
+    required: true,
+  },
 ];
 
 export const WorldOptions: Setting[] = [

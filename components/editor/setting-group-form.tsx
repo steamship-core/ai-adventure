@@ -7,7 +7,11 @@ import { Button } from "../ui/button";
 import SettingElement from "./setting-element";
 
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
-export default function SettingGroupForm() {
+export default function SettingGroupForm({
+  existing,
+}: {
+  existing: Record<string, any>;
+}) {
   /*
    * Routing
    */
@@ -77,6 +81,7 @@ export default function SettingGroupForm() {
             key={setting.name}
             setting={setting}
             updateFn={setKeyValue}
+            valueAtLoad={existing ? existing[setting.name] : null}
           />
         ))}
         <Button type="submit" value="Save" onClick={onSubmit}>
