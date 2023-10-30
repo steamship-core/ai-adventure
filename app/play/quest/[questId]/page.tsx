@@ -16,7 +16,6 @@ export default async function QuestPage() {
   }
 
   const agent = await getAgent(userId);
-
   if (!agent) {
     redirect("/character-creation");
   }

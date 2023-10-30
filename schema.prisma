@@ -27,9 +27,6 @@ model Agents {
   createdAt    DateTime   @default(now())
   Adventure    Adventure? @relation(fields: [adventuresId], references: [id])
   adventuresId String?
-
-  questName        String @default("Epic Quest")
-  questDescription String @default("A custom pixel art style adventure.")
 }
 
 model Subscriptions {
