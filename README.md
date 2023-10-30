@@ -73,7 +73,7 @@ More on setting up your database can be found here: https://vercel.com/docs/stor
 
 ### Configure PostGres Tables
 
-We use prisma to manage database updates, and @vercel/postgress for running queries
+We use prisma to manage database updates, and @vercel/postgres for running queries
 
 1. Install the vercel cli `npm i -g vercel`
 2. Install repo dependencies `npm i`
@@ -161,35 +161,7 @@ When running on localhost, your browser will update automatically when you edit 
 
 ### Customizing Generated Images
 
-To customize the models used to generate camp, profile, quest, and item images, edit the following files:
-
-- `configuration/server_settings.js` - Models and their parameters
-- `configuration/camp_image_prompt.js` - Camp image prompt
-- `configuration/item_image_prompt.js` - Item image prompt
-- `configuration/profile_image_prompt.js` - Profile image prompt
-- `configuration/quest_background_image_prompt.js` - Quest background prompt
-
-New games will automatically adopt these new settings.
-To reset your running game to see these changes, click on your profile image and then click "Reset Game".
-
-### Customizing Music
-
-To customize the models used to generate music, edit the following files:
-
-- `configuration/server_settings.js` - Models and their parameters
-- `configuration/music_prompt.js` - Music prompt
-
-New games will automatically adopt these new settings.
-To reset your running game to see these changes, click on your profile image and then click "Reset Game".
-
-### Customizing Generated Storyline
-
-To customize the quest storyline, edit the following files:
-
-- `configuration/server_settings.js` - Models and their parameters
-
-New games will automatically adopt these new settings.
-To reset your running game to see these changes, click on your profile image and then click "Reset Game".
+TODO: Document `configuration/`
 
 ## Advanced Customization
 
