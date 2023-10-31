@@ -15,7 +15,7 @@ const PublishButton = ({ className = "" }: { className?: string }) => {
     setIsLoading(true);
     track("Click Button", {
       buttonName: "Publish Adventure",
-      location: "Camp",
+      location: "Editor",
     });
 
     const resp = await fetch("/api/editor", {
