@@ -1,23 +1,27 @@
-"use client";
-
-import { ActivityIcon, BadgeDollarSignIcon } from "lucide-react";
-import { useRecoilValue } from "recoil";
-import { recoilGameState } from "../providers/recoil";
+import prisma from "@/lib/db";
+import { auth } from "@clerk/nextjs";
+import { ActivityIcon } from "lucide-react";
+import { log } from "next-axiom";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
-export const SummaryStats = () => {
-  const gameState = useRecoilValue(recoilGameState);
+export const SummaryStats = async () => {
+  const { userId } = auth();
+
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+  const energy = await prisma.userEnergy.findFirst({
+    where: {
+      userId,
+    },
+  });
 
   return (
     <div className="flex flex-col items-end gap-2" id="stats">
       <TypographySmall className="flex items-center">
         <ActivityIcon size={16} className="mr-2 text-indigo-400" />
-        {/* @ts-ignore */}
-        {gameState?.player?.energy}
-      </TypographySmall>
-      <TypographySmall className="flex items-center">
-        <BadgeDollarSignIcon size={16} className="mr-2 text-yellow-400" />
-        {gameState?.player?.gold || 0}
+        {energy?.energy || 0}
       </TypographySmall>
     </div>
   );
