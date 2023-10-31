@@ -44,6 +44,15 @@ model Agents {
   adventureId String?
 }
 
+model UserEnergy {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  energy    Int      @default(100)
+  energyMax Int      @default(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Subscriptions {
   id             Int    @id @default(autoincrement())
   ownerId        String
@@ -55,7 +64,6 @@ model Subscriptions {
 model TopUps {
   id              Int    @id @default(autoincrement())
   ownerId         String
-  agentUrl        String
   amountPaidCents Int // Amount paid
   creditIncrease  Int // Energy Added
   reference       String // Stripe reference

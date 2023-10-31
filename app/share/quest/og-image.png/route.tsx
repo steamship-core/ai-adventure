@@ -4,7 +4,7 @@
  * The URL to be shared on social media is one level up: `/share/quest?args`
  * That page will use an image generated from this page.
  */
-import { ImageResponse } from "next/server";
+import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 

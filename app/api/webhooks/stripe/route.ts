@@ -1,4 +1,3 @@
-import { getAgent } from "@/lib/agent/agent.server";
 import {
   createSubscription,
   deleteSubscription,
@@ -85,15 +84,14 @@ export async function POST(req: Request) {
 
       if (topUp) {
         /* Add the payment; for Top-Up we do this on the Checkout Complete event. */
-        const agent = await getAgent(userId);
+        // const agent = await getAgent(userId);
 
-        if (!agent) {
-          throw new Error(`Agent not found, ${userId}`);
-        }
+        // if (!agent) {
+        //   throw new Error(`Agent not found, ${userId}`);
+        // }
 
         await createTopUp(
           userId,
-          agent.agentUrl,
           amountPaidCents,
           TOP_UP_ENERGY,
           JSON.stringify({
@@ -129,18 +127,17 @@ export async function POST(req: Request) {
         await createSubscription(userId, stripeId, subscriptionId);
 
         /* Add the payment; for Top-Up we do this on the Checkout Complete event. */
-        const agent = await getAgent(userId);
+        // const agent = await getAgent(userId);
 
-        if (!agent) {
-          throw new Error(`Agent not found, ${userId}`);
-        }
+        // if (!agent) {
+        //   throw new Error(`Agent not found, ${userId}`);
+        // }
 
         log.info(
           `Topping up new subscription for ${userId}, stripeId=${stripeId}`
         );
         await createTopUp(
           userId,
-          agent.agentUrl,
           amountPaidCents,
           TOP_UP_ENERGY,
           JSON.stringify({
@@ -255,18 +252,17 @@ export async function POST(req: Request) {
         throw Error(msg);
       }
 
-      const agent = await getAgent(userId);
+      // const agent = await getAgent(userId);
 
-      if (!agent) {
-        throw new Error(`Agent not found, ${userId}`);
-      }
+      // if (!agent) {
+      //   throw new Error(`Agent not found, ${userId}`);
+      // }
 
       log.info(
         `Topping up existing subscription for ${userId}, stripeId=${stripeId}`
       );
       await createTopUp(
         userId,
-        agent.agentUrl,
         amountPaidCents,
         TOP_UP_ENERGY,
         JSON.stringify({
