@@ -42,7 +42,7 @@ export default function SettingElement({
       <div className="space-y-6">{setting.label}</div>
       {setting.unused && (
         <div className="text-sm bg-red-200">
-          <b>Coming Soon</b>. This setting isn't yet wired in to gameplay.
+          <b>Coming Soon</b>. This setting isn&apos;t yet wired in to gameplay.
         </div>
       )}
       {setting.description && (
