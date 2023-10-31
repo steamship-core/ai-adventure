@@ -1,6 +1,6 @@
 import PublishButton from "@/components/editor/publish-button";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
-import { Button } from "@/components/ui/button";
+import TestButton from "@/components/editor/test-button";
 import { SettingGroups } from "@/lib/editor/editor-options";
 import { Metadata } from "next";
 import { ReactNode } from "react";
@@ -20,7 +20,7 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
           Create a completely custom adventure to share with your friends.
         </p>
         <div className="flex flex-row">
-          <Button className="mr-2">Play Test</Button>
+          <TestButton className="mr-2" />
           <PublishButton className="mr-2" />
         </div>
       </div>
