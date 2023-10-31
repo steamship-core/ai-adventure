@@ -12,11 +12,11 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const pathname = usePathname();
 
-  // Add on the /editor/ADVENTURE-ID/ prefix
+  // Add on the /adventures/editor/ADVENTURE-ID/ prefix
   const parts = pathname?.split("/");
-  let pathPrefix = `/editor/`;
+  let pathPrefix = `/adventures/editor/`;
   if (parts && parts.length > 2) {
-    pathPrefix = `/editor/${parts[2]}/`;
+    pathPrefix = `/adventures/editor/${parts[2]}/`;
   }
 
   return (
