@@ -2,11 +2,12 @@
 
 import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
-import { CheckCircle2Icon, CircleIcon, Loader2Icon } from "lucide-react";
+import { CheckCircle2Icon, CircleIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
+import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
@@ -92,7 +93,6 @@ const QuestProgressElement = ({
 };
 
 export const QuestProgress = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
@@ -101,19 +101,16 @@ export const QuestProgress = () => {
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
       if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
-        setIsLoading(true);
         const gameState = await getGameState(params.handle);
         if (gameState) {
           setGameState(gameState);
         }
       } else {
-        setIsLoading(false);
         clearInterval(refetchInterval);
       }
     }, 3000);
 
     return () => {
-      setIsLoading(false);
       clearInterval(refetchInterval);
     };
   }, [gameState?.quest_arc, setGameState]);
@@ -122,8 +119,7 @@ export const QuestProgress = () => {
   const questCount = gameState?.current_quest
     ? gameState?.quests?.length - 1
     : gameState?.quests?.length;
-  // A horiztonally scrolling list of the players quest arc.
-  // Each quest is represented by a card with the quest name and a progress bar.
+
   return (
     <>
       <TypographyLarge className="">Quest Progress</TypographyLarge>
@@ -136,8 +132,10 @@ export const QuestProgress = () => {
         </TypographyMuted>
       </button>
       <div className="flex items-center justify-center">
-        {questArc.length === 0 && isLoading && (
-          <Loader2Icon className="animate-spin" />
+        {questArc.length === 0 && (
+          <Skeleton className="w-full h-24 mt-2 flex items-center justify-center text-sm">
+            Generating quest arc
+          </Skeleton>
         )}
       </div>
       <div className="flex flex-row gap-4 overflow-x-auto mt-2">

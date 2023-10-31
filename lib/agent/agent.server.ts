@@ -1,5 +1,7 @@
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
+import { pushAdventureToAgent } from "../adventure/adventure-agent.server";
+import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
 import { getSteamshipClient } from "../utils";
 
@@ -60,6 +62,7 @@ export const createAgent = async (userId: string, adventureId: string) => {
     });
 
     log.info(`Switching to workspace: ${workspaceHandle}`);
+    log.info(`Switching to workspace: ${workspaceHandle}`);
 
     const packageInstance = await steamship.package.createInstance({
       package: _package,
@@ -73,7 +76,7 @@ export const createAgent = async (userId: string, adventureId: string) => {
 
     log.info(`New agent URL: ${agentUrl}`);
 
-    return await prisma.agents.create({
+    const agent = await prisma.agents.create({
       data: {
         ownerId: userId!,
         agentUrl: agentUrl,
@@ -81,6 +84,22 @@ export const createAgent = async (userId: string, adventureId: string) => {
         adventureId: adventureId,
       },
     });
+
+    const adventure = await getAdventure(adventureId);
+
+    if (!adventure) {
+      log.error(`Failed to get adventure: ${adventureId}`);
+      throw new Error(`Failed to get adventure: ${adventureId}`);
+    }
+
+    // Now we need to await the agent's startup loop. This is critical
+    // because if we perform an operation to quickly after initialization it will fail.
+    await steamship.package.waitForInit(packageInstance);
+
+    // Now we need to set the server settings.
+    await pushAdventureToAgent(agent.agentUrl, adventure);
+
+    return agent;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);

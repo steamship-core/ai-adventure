@@ -73,7 +73,7 @@ More on setting up your database can be found here: https://vercel.com/docs/stor
 
 ### Configure PostGres Tables
 
-We use prisma to manage database updates, and @vercel/posgress for running queries
+We use prisma to manage database updates, and @vercel/postgres for running queries
 
 1. Install the vercel cli `npm i -g vercel`
 2. Install repo dependencies `npm i`
@@ -159,16 +159,9 @@ The non-generative portions of the Game UI are all contained within this NextJS 
 You can start exploring by looking at the pages in `app/pages`.
 When running on localhost, your browser will update automatically when you edit and save a file.
 
-## Customizing Game Mechanics
+### Customizing Generated Images
 
-> [!NOTE]  
-> We are **very actively** working on a low-code game customization mechanism.
-> Please join our [our discord](https://steamship.com/discord) to build-test with us!
-
-To customize the models used to generate camp, profile, quest, and item images, edit the following files:
-
-- `configuration/server_settings.js` - Models and their parameters
-- `configuration/camp_image_prompt.js` - Camp image prompt
+TODO: Document `configuration/`
 
 ## Advanced Customization
 

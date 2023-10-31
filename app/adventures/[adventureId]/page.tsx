@@ -94,6 +94,16 @@ export default async function AdventurePage({
             />
           </div>
         </div>
+        <div className="mt-6">
+          <TypographyH2 className="border-none">Edit Adventure</TypographyH2>
+          <TypographyMuted className="text-lg">
+            This is your adventure, so you may edit it! Editing this adventure
+            only affects future players -- not those who have already begun one.
+          </TypographyMuted>
+          <div className="mt-2  max-w-4xl">
+            <a href={`/editor/${params.adventureId}`}>Edit Adventure</a>
+          </div>
+        </div>
       </div>
     </div>
   );
