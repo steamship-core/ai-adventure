@@ -9,11 +9,13 @@ export type Setting = {
   name: string;
   label: string;
   description: string;
-  type: "select" | "text" | "longtext" | "options" | "boolean";
+  type: "select" | "text" | "longtext" | "options" | "boolean" | "list";
+  listof?: "object" | "text";
   default?: string;
   options?: OptionValue[];
   required?: boolean;
   unused?: boolean;
+  listSchema?: Setting[];
 };
 
 export type SettingGroup = {
@@ -88,6 +90,45 @@ Or reference one you have defined in the **Image Settings** tab.`,
   },
 ];
 
+export const PremadeCharacterOptions: Setting[] = [
+  {
+    name: "characters",
+    label: "Characters",
+    description: "Characters",
+    type: "list",
+    listof: "object",
+    listSchema: [
+      {
+        name: "name",
+        label: "Name",
+        description: "Name of the preset character.",
+        type: "text",
+      },
+      {
+        name: "description",
+        label: "Description",
+        description:
+          "Description of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+      {
+        name: "background",
+        label: "Background",
+        description:
+          "Background of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+      {
+        name: "motivation",
+        label: "Motivation",
+        description:
+          "Motivation of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+    ],
+  },
+];
+
 export const PlayerAppearanceOptions: Setting[] = [
   {
     name: "profile_image_theme",
@@ -151,6 +192,15 @@ The item's description is: {description}.`,
     label: "Item Image Negative Prompt",
     description: "The negative prompt for generating item images.",
     type: "longtext",
+    default: "",
+    unused: true,
+  },
+  {
+    name: "items",
+    label: "Items Possible to Get",
+    description: "The list of items to grant a person.",
+    type: "list",
+    listof: "text",
     default: "",
     unused: true,
   },
@@ -365,7 +415,7 @@ export const SettingGroups: SettingGroup[] = [
     title: "Pre-made Characters",
     description: "Suggested characters.",
     href: "player-suggestions",
-    settings: PlayerAppearanceOptions,
+    settings: PremadeCharacterOptions,
   },
   {
     spacer: true,
