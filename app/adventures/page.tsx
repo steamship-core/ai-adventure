@@ -1,4 +1,5 @@
 import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
+import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
@@ -6,7 +7,6 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAdventures } from "@/lib/adventure/adventure.server";
 import { getAgents } from "@/lib/agent/agent.server";
-import { cn } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { ArrowRightIcon } from "lucide-react";
@@ -22,7 +22,7 @@ export default async function AdventuresPage() {
     throw new Error("no user");
   }
 
-  const adventures = await getAdventures(3);
+  const adventures = await getAdventures(4);
 
   const agents = await getAgents(userId);
 
@@ -79,53 +79,57 @@ export default async function AdventuresPage() {
           </Link>
         ))}
       </div>
-      <div>
-        <TypographyH2 className="border-none">Find an Adventure</TypographyH2>
-        <TypographyMuted className="text-lg">
-          Discover adventures created by the community. Or{" "}
-          <CreateAdventureButton />{" "}
-        </TypographyMuted>
-      </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {adventures.map((adventure) => (
-          <Link
-            key={adventure.id}
-            href={`/adventures/${adventure.id}`}
-            className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
-          >
-            <div className="relative aspect-video ">
-              <Image src={"/adventurer.png"} fill alt="Adventurer" />
+
+      <div className="mt-12">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="col-span-1 lg:col-span-2">
+            <TypographyH2 className="border-none">
+              Find an Adventure
+            </TypographyH2>
+            <TypographyMuted className="text-lg">
+              Discover adventures created by the community. You can also create
+              your own adventure and share it with the world.
+            </TypographyMuted>
+            <div className="mt-4 flex flex-col gap-6 w-1/2">
+              <CreateAdventureButton />
+              <Button asChild variant="outline">
+                <Link href={`/adventures/all`}>
+                  See All Adventures{" "}
+                  <ArrowRightIcon size={16} className="ml-2" />
+                </Link>
+              </Button>
             </div>
-            <div className="pb-2 px-4 flex flex-col">
-              <div>
-                <TypographySmall className="text-muted-foreground">
-                  Quest
-                </TypographySmall>
-                <TypographyLarge>
-                  {adventure.name || "Epic Quest"}
-                </TypographyLarge>
+          </div>
+          {adventures.map((adventure) => (
+            <Link
+              key={adventure.id}
+              href={`/adventures/${adventure.id}`}
+              className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
+            >
+              <div className="relative aspect-video ">
+                <Image src={"/adventurer.png"} fill alt="Adventurer" />
               </div>
-              <div>
-                <TypographySmall className="text-muted-foreground">
-                  Description
-                </TypographySmall>
-                <TypographyLarge className="line-clamp-3">
-                  {adventure.description}
-                </TypographyLarge>
+              <div className="pb-2 px-4 flex flex-col">
+                <div>
+                  <TypographySmall className="text-muted-foreground">
+                    Quest
+                  </TypographySmall>
+                  <TypographyLarge>
+                    {adventure.name || "Epic Quest"}
+                  </TypographyLarge>
+                </div>
+                <div>
+                  <TypographySmall className="text-muted-foreground">
+                    Description
+                  </TypographySmall>
+                  <TypographyLarge className="line-clamp-3">
+                    {adventure.description}
+                  </TypographyLarge>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-        <Link
-          href={`/adventures/all`}
-          className={cn(
-            "rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600 flex justify-center items-center",
-            adventures.length === 0 && "aspect-square"
-          )}
-        >
-          <TypographyLarge>See All Adventures</TypographyLarge>
-          <ArrowRightIcon size={24} className="ml-2" />
-        </Link>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
