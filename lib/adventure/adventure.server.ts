@@ -18,6 +18,18 @@ export const getAdventure = async (adventureId: string) => {
   });
 };
 
+export const getAdventureForUser = async (
+  userId: string,
+  adventureId: string
+) => {
+  return await prisma.adventure.findFirst({
+    where: {
+      id: adventureId,
+      creatorId: userId,
+    },
+  });
+};
+
 export const createAdventure = async ({
   creatorId,
   createdBy,
@@ -77,6 +89,9 @@ export const updateAdventure = async (
       } else if (key == "adventure_description") {
         adventure.description = value as string;
         // Special Case 2
+      } else if (key == "adventure_short_description") {
+        adventure.shortDescription = value as string;
+        // Special Case 3
       } else {
         devConfig[key as string] = value;
       }
@@ -88,6 +103,7 @@ export const updateAdventure = async (
       data: {
         name: adventure.name,
         description: adventure.description,
+        shortDescription: adventure.shortDescription,
         agentDevConfig: devConfig,
       },
     });

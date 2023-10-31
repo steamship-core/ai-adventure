@@ -16,6 +16,7 @@ export const getAgents = async (userId: string) => {
           name: true,
           description: true,
           createdAt: true,
+          image: true,
         },
       },
     },

@@ -48,7 +48,11 @@ export default async function AdventuresPage() {
             <div className="p-4 flex flex-col gap-4 bg-muted">
               <div>
                 <div className="relative w-full aspect-video rounded-md overflow-hidden">
-                  <Image src={"/adventurer.png"} fill alt="Adventurer" />
+                  <Image
+                    src={agent.Adventure?.image || "/adventurer.png"}
+                    fill
+                    alt="Adventurer"
+                  />
                 </div>
               </div>
               <div>
@@ -102,7 +106,11 @@ export default async function AdventuresPage() {
               className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
             >
               <div className="relative aspect-video ">
-                <Image src={"/adventurer.png"} fill alt="Adventurer" />
+                <Image
+                  src={adventure.image || "/adventurer.png"}
+                  fill
+                  alt="Adventurer"
+                />
               </div>
               <div className="pb-2 px-4 flex flex-col">
                 <div>
@@ -118,7 +126,7 @@ export default async function AdventuresPage() {
                     Description
                   </TypographySmall>
                   <TypographyLarge className="line-clamp-3">
-                    {adventure.description}
+                    {adventure.shortDescription}
                   </TypographyLarge>
                 </div>
               </div>

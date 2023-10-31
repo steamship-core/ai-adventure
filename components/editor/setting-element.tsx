@@ -2,7 +2,7 @@
 
 import { Setting } from "@/lib/editor/editor-options";
 import { AlertTriangleIcon } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -11,10 +11,12 @@ import { AudioPreview } from "./audio-preview";
 export default function SettingElement({
   setting,
   updateFn,
+  setBgFile,
   valueAtLoad,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
+  setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
 }) {
   let [value, setValue] = useState(valueAtLoad);
@@ -36,6 +38,13 @@ export default function SettingElement({
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
+    updateFn(setting.name, newValue);
+  };
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const newValue = e.target.files[0];
+    setBgFile(newValue);
     updateFn(setting.name, newValue);
   };
 
@@ -108,6 +117,15 @@ export default function SettingElement({
           </div>
         ) : setting.type == "longtext" ? (
           <Textarea onChange={onTextboxChange}>{value}</Textarea>
+        ) : setting.type == "image" ? (
+          <div className="mt-2">
+            <Input
+              onChange={onInputChange}
+              id="picture"
+              type="file"
+              className="hover:cursor-pointer"
+            />
+          </div>
         ) : (
           <></>
         )}
