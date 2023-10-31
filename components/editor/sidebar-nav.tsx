@@ -23,15 +23,15 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const pathname = usePathname();
   const params = useParams<{ adventureId: string; section: string }>();
-
-  console.log(params);
   const { section } = params;
 
   // tranform section-name into Section Name
   const sectionName = section
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    ? section
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    : "General Settings";
   return (
     <>
       <nav
