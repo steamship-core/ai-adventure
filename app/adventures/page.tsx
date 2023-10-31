@@ -45,22 +45,17 @@ export default async function AdventuresPage() {
             href={`/play/${agent.handle}/camp`}
             className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
           >
-            <div className="p-4 flex flex-col md:flex-row lg:flex-col xl:flex-row gap-4 bg-muted">
+            <div className="p-4 flex flex-col gap-4 bg-muted">
               <div>
-                <div className="relative w-full aspect-video md:aspect-auto md:w-24 md:h-24 rounded-md overflow-hidden">
-                  <Image
-                    src={"/adventurer.png"}
-                    fill
-                    alt="Adventurer"
-                    className="object-cover"
-                  />
+                <div className="relative w-full aspect-video rounded-md overflow-hidden">
+                  <Image src={"/adventurer.png"} fill alt="Adventurer" />
                 </div>
               </div>
               <div>
                 <TypographyLarge>
                   {agent?.Adventure?.name || "Epic Quest"}
                 </TypographyLarge>
-                <TypographyMuted>
+                <TypographyMuted className="line-clamp-1">
                   {agent?.Adventure?.description ||
                     "An epic quest filled with danger and adventure"}
                 </TypographyMuted>
@@ -82,7 +77,7 @@ export default async function AdventuresPage() {
 
       <div className="mt-12">
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="col-span-1 lg:col-span-2">
+          <div className="col-span-2 lg:col-span-2">
             <TypographyH2 className="border-none">
               Find an Adventure
             </TypographyH2>
@@ -90,7 +85,7 @@ export default async function AdventuresPage() {
               Discover adventures created by the community. You can also create
               your own adventure and share it with the world.
             </TypographyMuted>
-            <div className="mt-4 flex flex-col gap-6 w-1/2">
+            <div className="mt-4 flex flex-col gap-2 md:gap-6 md:w-1/2">
               <CreateAdventureButton />
               <Button asChild variant="outline">
                 <Link href={`/adventures/all`}>
