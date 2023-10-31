@@ -22,6 +22,7 @@ export default async function AdventuresPage() {
   }
 
   const adventures = await getAdventures(3);
+
   const agents = await getAgents(userId);
 
   return (
