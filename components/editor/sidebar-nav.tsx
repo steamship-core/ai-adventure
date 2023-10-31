@@ -15,6 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: SettingGroup[];
@@ -40,26 +42,26 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       >
         {items.map((item: SettingGroup) =>
           item.spacer === true ? (
-            <div
-              key={item.title}
-              className="pt-4 text-sm border-b-2 mb-2 capitalize"
-            >
-              {item.title}
-            </div>
+            <TypographyLarge key={item.title}>{item.title}</TypographyLarge>
           ) : (
             <Link
               key={item.href}
               href={`/adventures/editor/${params.adventureId}/${item.href}`}
               className={cn(
-                "hover:bg-accent hover:text-accent-foreground",
-                pathname ===
-                  `/adventures/editor/${params.adventureId}/${item.href}`
-                  ? "bg-muted hover:bg-muted"
-                  : "hover:bg-transparent hover:underline",
+                "flex items-start py-2 justify-center hover:underline rounded-r-md font-normal",
+                section === item.href &&
+                  "border-l-2 pl-2 border-indigo-600 font-bold",
                 "justify-start"
               )}
             >
-              {item.title}
+              <TypographyMuted
+                className={cn(
+                  "font-normal",
+                  section === item.href && "text-primary"
+                )}
+              >
+                {item.title}
+              </TypographyMuted>
             </Link>
           )
         )}

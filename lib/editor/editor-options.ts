@@ -346,7 +346,11 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
 
 export const SettingGroups: SettingGroup[] = [
   {
-    title: "General Settings",
+    spacer: true,
+    title: "General",
+  },
+  {
+    title: "Settings",
     description: "Settings for your game.",
     href: "general-settings",
     settings: GeneralOptions,
