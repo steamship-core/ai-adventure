@@ -1,7 +1,7 @@
 "use client";
 
 import { SettingGroups } from "@/lib/editor/editor-options";
-import { usePathname } from "next/navigation";
+import { useEditorRouting } from "@/lib/editor/use-editor";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import SettingElement from "./setting-element";
@@ -12,20 +12,7 @@ export default function SettingGroupForm({
 }: {
   existing: Record<string, any>;
 }) {
-  /*
-   * Routing
-   */
-  let pathname = usePathname();
-
-  const parts = pathname?.split("/");
-  let groupName = `general-settings`;
-  let adventureId = "";
-  if (parts && parts.length > 3) {
-    groupName = parts[3];
-    adventureId = parts[2];
-  } else if (parts && parts.length > 2) {
-    adventureId = parts[2];
-  }
+  const { groupName, adventureId } = useEditorRouting();
 
   const sg = SettingGroups.filter((group) => groupName === group.href)[0];
 
@@ -40,8 +27,6 @@ export default function SettingGroupForm({
   const onSubmit = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("[TODO] Save Setting");
-    console.log(dataToUpdate);
     fetch("/api/editor", {
       method: "POST",
       body: JSON.stringify({

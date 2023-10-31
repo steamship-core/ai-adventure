@@ -17,15 +17,15 @@ export const POST = withAxiom(async (request: Request) => {
     const { operation, id, data } = await request.json();
 
     if (operation === "update") {
-      await updateAdventure(userId, id, data);
-      return NextResponse.json(data, { status: 200 });
+      const adventure = await updateAdventure(userId, id, data);
+      return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "publish") {
-      await publishAdventure(userId, id, data);
-      return NextResponse.json(data, { status: 200 });
+      const adventure = await publishAdventure(userId, id, data);
+      return NextResponse.json(adventure, { status: 200 });
     } else {
       return NextResponse.json(
         { error: `Unknown operation: ${operation}.` },
-        { status: 404 }
+        { status: 500 }
       );
     }
   } catch (e) {

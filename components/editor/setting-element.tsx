@@ -40,6 +40,11 @@ export default function SettingElement({
   return (
     <div>
       <div className="space-y-6">{setting.label}</div>
+      {setting.unused && (
+        <div className="text-sm bg-red-200">
+          <b>Coming Soon</b>. This setting isn't yet wired in to gameplay.
+        </div>
+      )}
       {setting.description && (
         <pre className="text-sm text-muted-foreground">
           {setting.description}

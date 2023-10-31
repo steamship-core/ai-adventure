@@ -13,6 +13,7 @@ export type Setting = {
   default?: string;
   options?: OptionValue[];
   required?: boolean;
+  unused?: boolean;
 };
 
 export type SettingGroup = {
@@ -50,6 +51,7 @@ export const WorldOptions: Setting[] = [
     type: "longtext",
     default: "",
     required: true,
+    unused: true,
   },
 ];
 
@@ -66,6 +68,7 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
+    unused: true,
   },
   {
     name: "camp_image_prompt",
@@ -73,6 +76,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The theme name for generating camp image.",
     type: "longtext",
     default: "{tone} {genre} camp.",
+    unused: true,
   },
   {
     name: "camp_image_negative_prompt",
@@ -80,6 +84,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The negative prompt for generating camp images.",
     type: "longtext",
     default: "",
+    unused: true,
   },
 ];
 
@@ -96,6 +101,7 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
+    unused: true,
   },
   {
     name: "profile_image_prompt",
@@ -103,6 +109,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The theme name for generating profile image.",
     type: "longtext",
     default: "{tone} {genre} profile picture.",
+    unused: true,
   },
   {
     name: "profile_image_negative_prompt",
@@ -110,6 +117,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The negative prompt for generating profile images.",
     type: "longtext",
     default: "",
+    unused: true,
   },
 ];
 
@@ -126,6 +134,7 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
+    unused: true,
   },
   {
     name: "camp_image_prompt",
@@ -135,6 +144,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     default: `16-bit retro-game sprite for an item in a hero's inventory.
 The items's name is: {name}.
 The item's description is: {description}.`,
+    unused: true,
   },
   {
     name: "camp_image_negative_prompt",
@@ -142,6 +152,7 @@ The item's description is: {description}.`,
     description: "The negative prompt for generating item images.",
     type: "longtext",
     default: "",
+    unused: true,
   },
 ];
 
@@ -152,6 +163,7 @@ export const QuestOptions: Setting[] = [
     description: "The number of quests to encounter in an adventure.",
     type: "text",
     default: "3",
+    unused: true,
   },
   {
     name: "quest_background_theme",
@@ -165,6 +177,7 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
+    unused: true,
   },
   {
     name: "quest_background_prompt",
@@ -174,6 +187,7 @@ Or reference one you have defined in the **Image Settings** tab.`,
     default: `16-bit retro-game sprite for an item in a hero's inventory.
 The items's name is: {name}.
 The item's description is: {description}.`,
+    unused: true,
   },
   {
     name: "quest_background_negative_prompt",
@@ -181,6 +195,7 @@ The item's description is: {description}.`,
     description: "The negative prompt for generating quest background.",
     type: "longtext",
     default: "",
+    unused: true,
   },
 ];
 
@@ -191,6 +206,7 @@ export const ObstacleOptions: Setting[] = [
     description: "The number of obstacles to encounter in a quest.",
     type: "text",
     default: "3",
+    unused: true,
   },
   {
     name: "TODO - Realism",
@@ -199,6 +215,7 @@ export const ObstacleOptions: Setting[] = [
       "Whether to consider realism in the player's response to obstacles.",
     type: "boolean",
     default: "true",
+    unused: true,
   },
 ];
 
@@ -209,6 +226,7 @@ export const VoiceModelOptions: Setting[] = [
     description: "Voice used to generate narration.",
     type: "options",
     default: "adam",
+    unused: true,
     options: [
       {
         value: "knightly",
@@ -286,6 +304,7 @@ This is used to generate the narrator's general style and will be an instruction
 Fill this in as if it was the instruction in a page of short notes to an actor.`,
     type: "longtext",
     default: "Short and pithy. Writes like a poet. Uses lots of metaphors.",
+    unused: true,
   },
   {
     name: "default_story_model",
@@ -293,6 +312,7 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
     description: "Model used to generate story text.",
     type: "select",
     default: "gpt-3.5-turbo",
+    unused: true,
     options: [
       {
         value: "gpt-3.5-turbo",
@@ -311,6 +331,7 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
       "Temperature (creativity-factor) for the narrative generation. 0=Robot, 1=Bonkers, 0.4=Default",
     type: "text",
     default: "0.4",
+    unused: true,
   },
   {
     name: "default_story_max_tokens",
@@ -319,6 +340,7 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
       "Maximum number of tokens permitted during generation. 256=Default",
     type: "text",
     default: "256",
+    unused: true,
   },
 ];
 
