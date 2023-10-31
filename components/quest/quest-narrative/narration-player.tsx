@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useAudio } from "react-use";
 
 export function NarrationPlayer({ blockId }: { blockId: string }) {
   const [didPlay, setDidPlay] = useState(false);
-
+  const params = useParams();
   const { data: url } = useQuery({
     queryKey: ["narration", blockId],
     queryFn: async () => {
-      const resp = await fetch("/api/game/narrate", {
+      const resp = await fetch(`/api/game/${params.handle}/narrate`, {
         method: "POST",
         body: JSON.stringify({ block_id: blockId }),
       });

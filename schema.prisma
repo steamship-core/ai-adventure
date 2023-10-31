@@ -8,12 +8,49 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model Adventure {
+  id                String              @id @default(uuid())
+  creatorId         String
+  createdBy         String
+  createdAt         DateTime            @default(now())
+  name              String              @default("Epic Quest")
+  description       String              @default("Set the scene for your adventure, create your character, and dive into an adventure completely unique to you.")
+  agentVersion      String              @default("ai-adventure")
+  shortDescription  String              @default("A custom pixel art style adventure.")
+  agentConfig       Json?
+  agentDevConfig    Json?
+  Agents            Agents[]
+  CharacterTemplate CharacterTemplate[]
+}
+
+model CharacterTemplate {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Adventure   Adventure? @relation(fields: [adventureId], references: [id])
+  adventureId String?
+}
+
 model Agents {
+  id          Int        @id @default(autoincrement())
+  ownerId     String
+  agentUrl    String
+  handle      String     @default("agent")
+  createdAt   DateTime   @default(now())
+  Adventure   Adventure? @relation(fields: [adventureId], references: [id])
+  adventureId String?
+}
+
+model UserEnergy {
   id        Int      @id @default(autoincrement())
-  ownerId   String
-  agentUrl  String
-  handle    String   @default("agent")
+  userId    String
+  energy    Int      @default(100)
+  energyMax Int      @default(100)
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Subscriptions {
@@ -27,7 +64,6 @@ model Subscriptions {
 model TopUps {
   id              Int    @id @default(autoincrement())
   ownerId         String
-  agentUrl        String
   amountPaidCents Int // Amount paid
   creditIncrease  Int // Energy Added
   reference       String // Stripe reference

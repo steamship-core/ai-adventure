@@ -14,15 +14,16 @@ const font = Barlow({
   display: "swap",
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
   metadataBase: new URL("https://ai-adventure.steamship.com"),
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-  },
   openGraph: {
     url: "https://ai-adventure.steamship.com/",
     type: "website",

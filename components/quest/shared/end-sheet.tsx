@@ -81,12 +81,12 @@ const EndSheet = ({
   summary: Block | null;
   completeButtonText?: string;
 }) => {
-  const params = useParams();
+  const params = useParams<{ handle: string; questId: string }>();
   const [gameState, setGameState] = useState<GameState | null>(null);
 
   useEffect(() => {
     const updateGameState = async () => {
-      const gs = await getGameState();
+      const gs = await getGameState(params.handle);
       setGameState(gs);
     };
     updateGameState();
@@ -177,7 +177,7 @@ const EndSheet = ({
             </div>
             <div className="flex flex-col gap-2 items-center justify-center">
               <Button asChild>
-                <a href="/play/camp">Back to camp</a>
+                <a href={`/play/${params.handle}/camp`}>Back to camp</a>
               </Button>
               <a
                 className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"

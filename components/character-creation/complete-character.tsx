@@ -1,7 +1,7 @@
 import { updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { AlertTriangle } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -43,20 +43,24 @@ const CharacterCreationComplete = ({
   const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const params = useParams<{ handle: string }>();
 
   const onComplete = async () => {
     setIsVisible(true);
     try {
-      await updateGameState(config as GameState);
-      const res = await fetch("/api/agent/completeOnboarding", {
-        method: "POST",
-        body: JSON.stringify({}),
-      });
+      await updateGameState(config as GameState, params.handle);
+      const res = await fetch(
+        `/api/agent/${params.handle}/completeOnboarding`,
+        {
+          method: "POST",
+          body: JSON.stringify({}),
+        }
+      );
       if (!res.ok) {
         setError("Something went wrong. Please try again");
         setIsVisible(false);
       } else {
-        router.push("/play/camp");
+        router.push(`/play/${params.handle}/camp`);
       }
     } catch (e) {
       setError("Something went wrong. Please try again");

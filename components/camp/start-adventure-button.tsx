@@ -3,7 +3,7 @@ import { Quest } from "@/lib/game/schema/quest";
 import { track } from "@vercel/analytics/react";
 import { SparklesIcon } from "lucide-react";
 import { log } from "next-axiom";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import useLoadingScreen from "../loading/use-loading-screen";
@@ -15,7 +15,7 @@ const StartAdventureButton = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
   const gameState = useRecoilValue(recoilGameState);
-
+  const params = useParams();
   const questArc = gameState?.quest_arc || [];
   const questCount = gameState?.current_quest
     ? gameState?.quests?.length - 1
@@ -35,12 +35,14 @@ const StartAdventureButton = () => {
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
-      router.push(`/play/quest/${gameState?.current_quest}`);
+      router.push(`/play/${params.handle}/quest/${gameState?.current_quest}`);
       setIsLoading(false);
       return;
     }
 
-    const resp = await fetch("/api/game/quest", { method: "POST" });
+    const resp = await fetch(`/api/game/${params.handle}/quest`, {
+      method: "POST",
+    });
     if (!resp.ok) {
       setIsLoading(false);
       setIsVisible(false);
@@ -64,7 +66,7 @@ const StartAdventureButton = () => {
 
     log.debug(`Activating new quest: ${questId}`);
     if (questId) {
-      router.push(`/play/quest/${questId}`);
+      router.push(`/play/${params.handle}/quest/${questId}`);
     }
     setIsLoading(false);
   };

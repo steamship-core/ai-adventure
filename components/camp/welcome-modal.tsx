@@ -3,6 +3,7 @@ import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { StepProps, TooltipRenderProps } from "react-joyride";
 import { useRecoilValue } from "recoil";
@@ -101,12 +102,13 @@ export const WelcomeModal = () => {
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [runTour, setRunTour] = useState(false);
+  const params = useParams<{ handle: string }>();
 
   useEffect(() => {
     if (!isOpen) return;
     const loadProfilePic = async () => {
       setImageLoaded(false);
-      const gs = await getGameState();
+      const gs = await getGameState(params.handle);
       if (gs && gs.profile_image_url) {
         setProfilePic(gs.profile_image_url);
         setImageLoaded(true);
