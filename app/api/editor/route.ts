@@ -1,4 +1,7 @@
-import { updateAdventure } from "@/lib/adventure/adventure.server";
+import {
+  publishAdventure,
+  updateAdventure,
+} from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
@@ -13,12 +16,11 @@ export const POST = withAxiom(async (request: Request) => {
   try {
     const { operation, id, data } = await request.json();
 
-    console.log(
-      "TODO: Make sure userId owns adventureId. Otherwise security hole."
-    );
-
     if (operation === "update") {
       await updateAdventure(userId, id, data);
+      return NextResponse.json(data, { status: 200 });
+    } else if (operation == "publish") {
+      await publishAdventure(userId, id, data);
       return NextResponse.json(data, { status: 200 });
     } else {
       return NextResponse.json(
