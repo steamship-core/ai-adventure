@@ -1,7 +1,9 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
+import { AlertTriangleIcon } from "lucide-react";
 import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
@@ -41,9 +43,13 @@ export default function SettingElement({
     <div>
       <div className="space-y-6">{setting.label}</div>
       {setting.unused && (
-        <div className="text-sm bg-red-200">
-          <b>Coming Soon</b>. This setting isn&apos;t yet wired in to gameplay.
-        </div>
+        <Alert className="my-2 border-red-200">
+          <AlertTriangleIcon className="h-4 w-4 mt-2" />
+          <AlertTitle className="text-lg">Coming Soon</AlertTitle>
+          <AlertDescription>
+            This setting isn&apos;t yet wired in to gameplay.
+          </AlertDescription>
+        </Alert>
       )}
       {setting.description && (
         <pre className="text-sm text-muted-foreground">
