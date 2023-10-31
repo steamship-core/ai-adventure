@@ -1,4 +1,3 @@
-import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import prisma from "../db";
 
@@ -12,11 +11,11 @@ export const getAdventures = async (limit?: number) => {
 };
 
 export const getAdventure = async (adventureId: string) => {
-  return (await prisma.adventure.findFirst({
+  return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
     },
-  })) as Adventure;
+  });
 };
 
 export const createAdventure = async ({
@@ -55,7 +54,7 @@ export const updateAdventure = async (
   updateObj: any
 ) => {
   console.log(`User ${userId} attempting to update adventure ${adventureId}`);
-  const adventure: Adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -107,7 +106,7 @@ export const publishAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
-  const adventure: Adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);

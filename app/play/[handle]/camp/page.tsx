@@ -24,7 +24,6 @@ export default async function CampPage({
     log.error("No user");
     throw new Error("no user");
   }
-  console.log("fetching agent", userId, params.handle);
   const agent = await getAgent(userId, params.handle);
 
   if (!agent) {

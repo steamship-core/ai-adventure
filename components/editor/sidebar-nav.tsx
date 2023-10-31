@@ -3,7 +3,7 @@
 import { SettingGroup } from "@/lib/editor/editor-options";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: SettingGroup[];
@@ -11,13 +11,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const pathname = usePathname();
-
-  // Add on the /adventures/editor/ADVENTURE-ID/ prefix
-  const parts = pathname?.split("/");
-  let pathPrefix = `/adventures/editor/`;
-  if (parts && parts.length > 2) {
-    pathPrefix = `/adventures/editor/${parts[2]}/`;
-  }
+  const params = useParams();
 
   return (
     <nav
@@ -38,10 +32,11 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         ) : (
           <Link
             key={item.href}
-            href={`${pathPrefix}${item.href}`}
+            href={`/adventures/editor/${params.adventureId}/${item.href}`}
             className={cn(
               "hover:bg-accent hover:text-accent-foreground",
-              pathname === item.href
+              pathname ===
+                `/adventures/editor/${params.adventureId}/${item.href}`
                 ? "bg-muted hover:bg-muted"
                 : "hover:bg-transparent hover:underline",
               "justify-start"
