@@ -1,4 +1,4 @@
-import { ImageResponse } from "next/server";
+import { ImageResponse } from "next/og";
 // App router includes @vercel/og.
 // No need to install it.
 
@@ -24,6 +24,7 @@ export async function GET(request: Request) {
           alignItems: "center",
         }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           width="512"
           height="512"
@@ -31,6 +32,7 @@ export async function GET(request: Request) {
           style={{
             borderRadius: 128,
           }}
+          alt="Generated item image"
         />
       </div>
     ),
