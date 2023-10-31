@@ -107,7 +107,7 @@ export const publishAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
-  const adventure: Adventure = await getAdventure(userId);
+  const adventure: Adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -117,15 +117,14 @@ export const publishAdventure = async (
     throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
   }
 
+  const oldConfig = adventure.agentConfig || {};
+  const newConfig = adventure.agentDevConfig || {};
+
   console.log(
-    `Publishing adventure. Old config was  ${JSON.stringify(
-      adventure.agentConfig
-    )}.`
+    `Publishing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
   );
   log.info(
-    `Publishing adventure. Old config was  ${JSON.stringify(
-      adventure.agentConfig
-    )}.`
+    `Publishing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
   );
 
   try {
@@ -133,10 +132,9 @@ export const publishAdventure = async (
     await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
-        agentConfig: adventure.agentDevConfig as any,
+        agentConfig: newConfig,
       },
     });
-
     return adventure;
   } catch (e) {
     log.error(`${e}`);

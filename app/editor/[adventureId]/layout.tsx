@@ -1,3 +1,4 @@
+import PublishButton from "@/components/editor/publish-button";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import { Button } from "@/components/ui/button";
 import { SettingGroups } from "@/lib/editor/editor-options";
@@ -20,8 +21,7 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
         </p>
         <div className="flex flex-row">
           <Button className="mr-2">Play Test</Button>
-          <Button className="mr-2">Save</Button>
-          <Button className="mr-2">Publish</Button>
+          <PublishButton className="mr-2" />
         </div>
       </div>
       {/* <Separator className="my-6" /> */}
