@@ -10,6 +10,7 @@ export default async function Image({
   const params = new URLSearchParams(searchParams);
   const blockId = params.get("blockId");
 
+  // @ts-ignore
   return new ImageResponse(
     (
       <div
