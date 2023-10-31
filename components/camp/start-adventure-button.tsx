@@ -96,8 +96,8 @@ const StartAdventureButton = () => {
         ) : (
           <p className="line-clamp-1 text-left">
             {currentQuestArc
-              ? `Start Adventure: ${currentQuestArc.location}`
-              : "Go on an Adventure"}{" "}
+              ? `Start Quest: ${currentQuestArc.location}`
+              : "Go on a Quest"}{" "}
           </p>
         )}
       </Button>

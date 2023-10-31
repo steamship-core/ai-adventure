@@ -36,7 +36,7 @@ export const AdventureHistorySheet = () => {
           className="w-full flex justify-start"
         >
           <CompassIcon size={16} className="h-4 w-4 md:h-6 md:w-6 mr-2" />
-          Past Adventures
+          Past Quests
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -45,7 +45,7 @@ export const AdventureHistorySheet = () => {
       >
         <SheetHeader>
           <div className="flex items-center flex-col justify-center">
-            Adventure History
+            Quest History
             <Player
               autoplay
               src="/book-lottie.json"
@@ -88,7 +88,7 @@ export const AdventureHistorySheet = () => {
             })}
             {gameState?.quests?.length === 0 && (
               <div className="w-full flex flex-col items-center justify-center">
-                You haven&apos;t been on any adventures yet.
+                You haven&apos;t been on any quests yet.
               </div>
             )}
           </div>
