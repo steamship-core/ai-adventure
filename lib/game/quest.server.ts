@@ -38,9 +38,18 @@ export const loadExistingQuestBlocks = async (
 
 export const generateQuestArc = async (agentBase: string) => {
   const steamship = getSteamshipClient();
-  const resp = await steamship.agent.post({
-    url: agentBase,
-    path: "/generate_quest_arc",
-    arguments: {},
-  });
+  let attempts = 0;
+  const maxAttempts = 3;
+
+  while (attempts < maxAttempts) {
+    attempts++;
+    const resp = await steamship.agent.post({
+      url: agentBase,
+      path: "/generate_quest",
+      arguments: {},
+    });
+    if (resp.ok) {
+      return;
+    }
+  }
 };
