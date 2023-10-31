@@ -44,18 +44,28 @@ export default async function AdventuresPage() {
             href={`/play/${agent.handle}/camp`}
             className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
           >
-            <div className="relative aspect-video ">
-              <Image src={"/adventurer.png"} fill alt="Adventurer" />
-            </div>
-            <div className="pb-2 px-4 flex flex-col">
+            <div className="p-4 flex gap-4 bg-muted">
               <div>
-                <TypographySmall className="text-muted-foreground">
-                  Quest
-                </TypographySmall>
+                <div className="relative w-24 h-24 rounded-md overflow-hidden">
+                  <Image
+                    src={"/adventurer.png"}
+                    fill
+                    alt="Adventurer"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+              <div>
                 <TypographyLarge>
                   {agent?.Adventure?.name || "Epic Quest"}
                 </TypographyLarge>
+                <TypographyMuted>
+                  {agent?.Adventure?.description ||
+                    "An epic quest filled with danger and adventure"}
+                </TypographyMuted>
               </div>
+            </div>
+            <div className=" p-4 flex flex-col">
               <div>
                 <TypographySmall className="text-muted-foreground">
                   Started at
