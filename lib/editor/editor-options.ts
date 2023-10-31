@@ -341,7 +341,136 @@ export const VoiceModelOptions: Setting[] = [
   },
 ];
 
-export const ImageModelOptions: Setting[] = [];
+export const ImageModelOptions: Setting[] = [
+  {
+    name: "themes",
+    label: "Image Themes",
+    description: `Themes available to use in image generation. Reference these from the **Camp**, **Quests**, and **Items** settings pages.`,
+    type: "list",
+    listof: "object",
+    listSchema: [
+      {
+        name: "name",
+        label: "Name",
+        description: "Name of the theme.",
+        type: "text",
+      },
+      {
+        name: "prompt_prefix",
+        label: "Prompt Prefix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "prompt_suffix",
+        label: "Prompt",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "negative_prompt_prefix",
+        label: "Negative Prompt Suffix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "negative_prompt_suffix",
+        label: "Negative Prompt Suffix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "model",
+        label: "Generation Model",
+        description: "Which model to use.",
+        type: "select",
+        options: [
+          {
+            label: "Stable Diffusion 1.5",
+            value: "runwayml/stable-diffusion-v1-5",
+          },
+          {
+            label: "Stable Diffusion XL 1.0",
+            value: "stabilityai/stable-diffusion-xl-base-1.0",
+          },
+        ],
+      },
+      {
+        name: "loras",
+        label: "Loras",
+        description: "List of LoRAs to use for image generation",
+        type: "list",
+        listof: "text",
+      },
+      {
+        name: "seed",
+        label: "Random Seed",
+        description:
+          "The same seed and prompt passed to the same version of StableDiffusion will output the same image every time.",
+        type: "text",
+      },
+      {
+        name: "num_inference_steps",
+        label: "Num Inference Steps",
+        description:
+          "Increasing the number of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image.",
+        type: "text",
+      },
+      {
+        name: "guidance_scale",
+        label: "Guidance Scale",
+        description:
+          "The CFG(Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
+        type: "text",
+      },
+      {
+        name: "clip_skip",
+        label: "Clip Skip",
+        description:
+          "Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too.",
+        type: "text",
+      },
+      {
+        name: "scheduler",
+        label: "Scheduler",
+        description:
+          "Scheduler (or sampler) to use for the image denoising process.",
+        type: "select",
+        options: [
+          {
+            label: "DPM++ 2M",
+            value: "DPM++ 2M",
+          },
+          {
+            label: "DPM++ 2M Karras",
+            value: "DPM++ 2M Karras",
+          },
+          {
+            label: "DPM++ 2M SDE",
+            value: "DPM++ 2M SDE",
+          },
+          {
+            label: "DPM++ 2M SDE Karras",
+            value: "DPM++ 2M SDE Karras",
+          },
+          {
+            label: "Euler",
+            value: "Euler",
+          },
+          {
+            label: "Euler A",
+            value: "Euler A",
+          },
+        ],
+      },
+    ],
+    unused: true,
+  },
+];
 
 export const NarrativeModelOptions: Setting[] = [
   {
