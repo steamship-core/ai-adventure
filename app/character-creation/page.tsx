@@ -16,6 +16,7 @@ export default async function CharacterCreationPage() {
   let agent = await getAgent(userId);
 
   if (!agent) {
+    log.info("User does not yet have an agent.");
     agent = await createAgent(userId);
     return <CharacterCreation />;
   }
