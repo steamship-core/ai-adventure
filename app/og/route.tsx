@@ -1,12 +1,14 @@
 import { ImageResponse } from "next/og";
-// App router includes @vercel/og.
-// No need to install it.
 
 export const runtime = "edge";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const blockId = searchParams.get("blockId");
+export default async function Image({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string };
+}) {
+  const params = new URLSearchParams(searchParams);
+  const blockId = params.get("blockId");
 
   return new ImageResponse(
     (
