@@ -10,11 +10,10 @@ export const getAdventures = async (limit?: number) => {
   });
 };
 
-export const getAdventure = async (userId: string, adventureId: string) => {
+export const getAdventure = async (adventureId: string) => {
   return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
-      creatorId: userId,
     },
   });
 };

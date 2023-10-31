@@ -20,8 +20,7 @@ export default async function AdventurePage({
   const { userId } = auth();
   if (!userId) throw new Error("no user");
 
-  const adventure = await getAdventure(userId, params.adventureId);
-
+  const adventure = await getAdventure(params.adventureId);
   if (!adventure) {
     redirect(`/adventures`);
   }
