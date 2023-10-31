@@ -22,7 +22,14 @@ export default async function EditorPage({
     throw new Error("no user");
   }
 
-  const adventure = await getAdventure(userId, params.adventureId);
+  const adventure = await getAdventure(params.adventureId);
+
+  if (adventure.creatorId != userId) {
+    log.error(
+      `User ${userId} does not have permission to edit ${adventure.id}`
+    );
+    redirect("/adventures");
+  }
 
   if (!adventure) {
     redirect("/adventures");

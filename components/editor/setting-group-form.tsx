@@ -23,6 +23,8 @@ export default function SettingGroupForm({
   if (parts && parts.length > 3) {
     groupName = parts[3];
     adventureId = parts[2];
+  } else if (parts && parts.length > 2) {
+    adventureId = parts[2];
   }
 
   const sg = SettingGroups.filter((group) => groupName === group.href)[0];

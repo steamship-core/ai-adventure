@@ -54,7 +54,8 @@ export const updateAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
-  const adventure: Adventure = await getAdventure(userId, adventureId);
+  console.log(`User ${userId} attempting to update adventure ${adventureId}`);
+  const adventure: Adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -106,7 +107,7 @@ export const publishAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
-  const adventure: Adventure = await getAdventure(userId, adventureId);
+  const adventure: Adventure = await getAdventure(userId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
