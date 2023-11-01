@@ -1,4 +1,3 @@
-import AdventureEditInvitationSection from "@/components/adventures/adventure-edit-invitation-section";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -7,7 +6,7 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PencilIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -24,6 +23,7 @@ export default async function AdventurePage({
   if (!adventure) {
     redirect(`/adventures`);
   }
+
   return (
     <div>
       <div className="relative h-96 w-full">
@@ -34,12 +34,19 @@ export default async function AdventurePage({
           className="object-cover"
         />
         <div className="flex justify-between flex-col p-4 gap-2 md:p-6 absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-background">
-          <div>
+          <div className="w-full flex justify-between">
             <Button variant="outline" asChild>
               <Link href={`/adventures`}>
                 <ArrowLeftIcon size={16} className="mr-2" /> Back
               </Link>
             </Button>
+            {adventure.creatorId === userId && (
+              <Button variant="outline" asChild>
+                <Link href={`/adventures/editor/${params.adventureId}`}>
+                  <PencilIcon size={16} className="mr-2" /> Edit
+                </Link>
+              </Button>
+            )}
           </div>
           <div className="flex gap-2">
             <div className="bg-indigo-600 rounded-full text-sm px-2">
@@ -79,10 +86,6 @@ export default async function AdventurePage({
           </div>
         </div>
         <CharacterTemplatesSection adventureId={params.adventureId} />
-        <AdventureEditInvitationSection
-          adventureId={params.adventureId}
-          userId={userId}
-        />
       </div>
     </div>
   );
