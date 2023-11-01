@@ -45,7 +45,7 @@ export const generateQuestArc = async (agentBase: string) => {
     attempts++;
     const resp = await steamship.agent.post({
       url: agentBase,
-      path: "/generate_quest",
+      path: "/generate_quest_arc",
       arguments: {},
     });
     if (resp.ok) {
