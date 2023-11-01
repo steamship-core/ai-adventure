@@ -3,9 +3,10 @@
 import { SettingGroups } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { useState } from "react";
+import { parse, stringify } from "yaml";
 import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 import SettingElement from "./setting-element";
-
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
@@ -23,10 +24,43 @@ export default function SettingGroupForm({
    * those fields which were changed.
    */
   const [dataToUpdate, setDataToUpdate] = useState<Record<string, any>>({});
+  const [importYaml, setImportYaml] = useState("");
 
-  const onSubmit = (e: any) => {
+  const onImport = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
+
+    let data = {};
+    try {
+      data = parse(importYaml);
+    } catch (e) {
+      console.log(e);
+      alert(e);
+      return;
+    }
+
+    fetch("/api/editor", {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "import",
+        id: adventureId,
+        data,
+      }),
+    }).then(
+      (res) => {
+        alert("Imported!");
+        location.reload();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
+
+  const onSave = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     fetch("/api/editor", {
       method: "POST",
       body: JSON.stringify({
@@ -36,7 +70,7 @@ export default function SettingGroupForm({
       }),
     }).then(
       (res) => {
-        console.log("TODO: UI Notify save success!");
+        alert("Saved!");
       },
       (error) => {
         console.log(error);
@@ -55,6 +89,11 @@ export default function SettingGroupForm({
     return <div>Error: unable to find setting group {groupName} </div>;
   }
 
+  let yaml = "";
+  if (sg.href == "export") {
+    yaml = stringify(existing);
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -62,19 +101,41 @@ export default function SettingGroupForm({
         <p className="text-sm text-muted-foreground">{sg.description}</p>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-8">
-        {sg.settings?.map((setting) => (
-          <SettingElement
-            key={setting.name}
-            setting={setting}
-            updateFn={setKeyValue}
-            valueAtLoad={existing ? existing[setting.name] : null}
+      {sg.href == "import" ? (
+        <form onSubmit={onImport} className="space-y-8">
+          <Textarea
+            onChange={(e) => {
+              setImportYaml(e.target.value);
+            }}
+            rows={10}
+            className="min-h-48"
+            value={importYaml}
           />
-        ))}
-        <Button type="submit" value="Save" onClick={onSubmit}>
-          Save
-        </Button>
-      </form>
+          <Button type="submit" value="Save" onClick={onImport}>
+            Save
+          </Button>
+        </form>
+      ) : sg.href == "export" ? (
+        <div className="space-y-8">
+          <code className="text-sm">
+            <pre>{yaml}</pre>
+          </code>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {sg.settings?.map((setting) => (
+            <SettingElement
+              key={setting.name}
+              setting={setting}
+              updateFn={setKeyValue}
+              valueAtLoad={existing ? existing[setting.name] : null}
+            />
+          ))}
+          <Button type="submit" value="Save" onClick={onSave}>
+            Save
+          </Button>
+        </div>
+      )}
 
       {/* todo 
       <Separator />

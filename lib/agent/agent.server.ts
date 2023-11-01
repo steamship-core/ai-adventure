@@ -9,6 +9,7 @@ export const getAgents = async (userId: string) => {
   return await prisma.agents.findMany({
     where: {
       ownerId: userId,
+      isDevelopment: false,
     },
     include: {
       Adventure: {

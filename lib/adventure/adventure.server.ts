@@ -102,11 +102,7 @@ export const updateAdventure = async (
   }
 };
 
-export const publishAdventure = async (
-  userId: string,
-  adventureId: string,
-  updateObj: any
-) => {
+export const publishAdventure = async (userId: string, adventureId: string) => {
   const adventure: Adventure = await getAdventure(adventureId);
 
   if (!adventure) {
@@ -128,11 +124,51 @@ export const publishAdventure = async (
   );
 
   try {
-    adventure.agentConfig = adventure.agentDevConfig;
     await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
         agentConfig: newConfig,
+      },
+    });
+    return adventure;
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw Error("Failed to create agent.");
+  }
+};
+
+export const importAdventure = async (
+  userId: string,
+  adventureId: string,
+  importObj: any
+) => {
+  const adventure: Adventure = await getAdventure(adventureId);
+
+  if (!adventure) {
+    throw Error(`Failed to get adventure: ${adventureId}`);
+  }
+
+  if (adventure.creatorId !== userId) {
+    throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
+  }
+
+  const oldConfig = adventure.agentConfig || {};
+
+  console.log(
+    `Importing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
+  );
+  log.info(
+    `Importing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
+  );
+
+  try {
+    await prisma.adventure.update({
+      where: { id: adventure.id },
+      data: {
+        name: importObj["adventure_name"],
+        description: importObj["adventure_description"],
+        agentDevConfig: importObj,
       },
     });
     return adventure;

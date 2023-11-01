@@ -1,6 +1,11 @@
 import { Item } from "./objects";
 
 export type Character = {
+  tone?: string;
+  genre?: string;
+
+  tagline: string;
+
   /** The name of the character. */
   name: string;
 

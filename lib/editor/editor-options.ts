@@ -105,6 +105,12 @@ export const PremadeCharacterOptions: Setting[] = [
         type: "text",
       },
       {
+        name: "tagline",
+        label: "Tag Line",
+        description: "A short tagline for your character.",
+        type: "text",
+      },
+      {
         name: "description",
         label: "Description",
         description:
@@ -525,12 +531,6 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
 
 export const SettingGroups: SettingGroup[] = [
   {
-    title: "General Settings",
-    description: "Settings for your game.",
-    href: "general-settings",
-    settings: GeneralOptions,
-  },
-  {
     spacer: true,
     title: "Player Design",
   },
@@ -549,6 +549,12 @@ export const SettingGroups: SettingGroup[] = [
   {
     spacer: true,
     title: "Game Design",
+  },
+  {
+    title: "General",
+    description: "Settings for your game.",
+    href: "general-settings",
+    settings: GeneralOptions,
   },
   {
     title: "World",
@@ -601,5 +607,21 @@ export const SettingGroups: SettingGroup[] = [
     description: "Settings that control your story's image generation.",
     href: "image-model",
     settings: ImageModelOptions,
+  },
+  {
+    spacer: true,
+    title: "Advanced",
+  },
+  {
+    title: "Import",
+    description:
+      "Import an entire adventure template at once by pasting exported YAML and clicking Save.",
+    href: "import",
+  },
+  {
+    title: "Export",
+    description:
+      "Save or share your adventure settings by copying this block of YAML code.",
+    href: "export",
   },
 ];

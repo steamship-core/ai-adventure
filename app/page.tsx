@@ -1,5 +1,5 @@
 "use client";
-import CharacterMap from "@/components/character-map";
+import CharacterMap from "@/components/adventures/character-map";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";

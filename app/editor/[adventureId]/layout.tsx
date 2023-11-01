@@ -1,11 +1,9 @@
+import { EditorBackButton } from "@/components/editor/editor-back-button";
 import PublishButton from "@/components/editor/publish-button";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import TestButton from "@/components/editor/test-button";
-import { Button } from "@/components/ui/button";
 import { SettingGroups } from "@/lib/editor/editor-options";
-import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
-import Link from "next/link";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -17,12 +15,8 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
   <div className="relative h-96 w-full flex flex-col">
     <div className="flex justify-between flex-col p-4 gap-2 md:p-6 w-full">
       <div className="flex flex-row items-center">
-        <Button variant="outline" asChild>
-          <Link href={`/adventures`}>
-            <ArrowLeftIcon size={16} className="mr-2" /> Back
-          </Link>
-        </Button>
-        <h2>Adventure Editor</h2>
+        <EditorBackButton />
+        EditorBackButton <h2>Adventure Editor</h2>
         <TestButton />
         <PublishButton />
       </div>

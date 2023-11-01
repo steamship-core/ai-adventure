@@ -1,11 +1,11 @@
-import CharacterMap from "@/components/character-map";
+import AdventureEditInvitationSection from "@/components/adventures/adventure-edit-invitation-section";
+import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
-import { characters } from "@/lib/characters";
 import { auth } from "@clerk/nextjs";
 import { ArrowLeftIcon } from "lucide-react";
 import Image from "next/image";
@@ -78,35 +78,11 @@ export default async function AdventurePage({
             </Button>
           </div>
         </div>
-        <div className="mt-6">
-          <TypographyH2 className="border-none">
-            Character Templates
-          </TypographyH2>
-          <TypographyMuted className="text-lg">
-            Choose from a selection of pre-made characters. Their character
-            details are already filled out, so you can jump right into the
-            adventure. If you want, you can customize before you start.
-          </TypographyMuted>
-          <div className="mt-2  max-w-4xl">
-            <CharacterMap
-              characters={characters}
-              adventureId={params.adventureId}
-            />
-          </div>
-        </div>
-        {params.adventureId == userId && (
-          <div className="mt-6">
-            <TypographyH2 className="border-none">Edit Adventure</TypographyH2>
-            <TypographyMuted className="text-lg">
-              This is your adventure, so you may edit it! Editing this adventure
-              only affects future players -- not those who have already begun
-              one.
-            </TypographyMuted>
-            <div className="mt-2  max-w-4xl">
-              <a href={`/editor/${params.adventureId}`}>Edit Adventure</a>
-            </div>
-          </div>
-        )}
+        <CharacterTemplatesSection adventureId={params.adventureId} />
+        <AdventureEditInvitationSection
+          adventureId={params.adventureId}
+          userId={userId}
+        />
       </div>
     </div>
   );
