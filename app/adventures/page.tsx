@@ -33,7 +33,6 @@ export default async function AdventuresPage() {
 
   async function deleteAgent(agentId: number) {
     "use server";
-    // ...
     await prisma.agents.delete({
       where: {
         id: agentId,
