@@ -2,6 +2,7 @@ import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-au
 import RecoilProvider from "@/components/providers/recoil";
 import Quest from "@/components/quest/quest";
 import { getAgent } from "@/lib/agent/agent.server";
+import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
@@ -25,9 +26,12 @@ export default async function QuestPage({
   }
 
   const gameState = await getGameState(agent?.agentUrl);
+  let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
+
   return (
     <RecoilProvider
       gameState={gameState}
+      energyState={energyState}
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >

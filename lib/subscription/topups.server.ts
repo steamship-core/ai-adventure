@@ -1,5 +1,6 @@
 import { log } from "next-axiom";
 import prisma from "../db";
+import { addEnergy } from "../energy/energy.server";
 
 export const createTopUp = async (
   userId: string,
@@ -11,7 +12,7 @@ export const createTopUp = async (
     `Creating TopUp: ${userId} ${amountPaidCents} ${creditIncrease} ${reference}`
   );
   try {
-    return await prisma.topUps.create({
+    const topUp = await prisma.topUps.create({
       data: {
         ownerId: userId!,
         amountPaidCents: amountPaidCents!,
@@ -19,6 +20,11 @@ export const createTopUp = async (
         reference: reference!,
       },
     });
+
+    // Now add the energy to the userEnergy table
+    await addEnergy(userId, creditIncrease);
+
+    return topUp;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);

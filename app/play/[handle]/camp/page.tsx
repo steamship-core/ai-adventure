@@ -33,6 +33,8 @@ export default async function CampPage({
   }
 
   let gameState = await getGameState(agent?.agentUrl);
+  let energyState = await getOrCreateUserEnergy(userId);
+
   let refreshGameState = false;
 
   if (gameState?.active_mode == "onboarding") {
@@ -52,6 +54,7 @@ export default async function CampPage({
   return (
     <RecoilProvider
       gameState={gameState}
+      energyState={energyState}
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >
