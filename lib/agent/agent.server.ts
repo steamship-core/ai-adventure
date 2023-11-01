@@ -42,7 +42,11 @@ export const deleteAgent = async (userId: string) => {
   return res.count;
 };
 
-export const createAgent = async (userId: string, adventureId: string) => {
+export const createAgent = async (
+  userId: string,
+  adventureId: string,
+  isDevelopment: boolean = false
+) => {
   if (!process.env.STEAMSHIP_AGENT_VERSION) {
     log.error("No steamship agent version");
     throw Error("Please set the STEAMSHIP_AGENT_VERSION environment variable.");
@@ -84,6 +88,7 @@ export const createAgent = async (userId: string, adventureId: string) => {
         agentUrl: agentUrl,
         handle: workspaceHandle,
         adventureId: adventureId,
+        isDevelopment: isDevelopment,
       },
     });
 
@@ -99,7 +104,7 @@ export const createAgent = async (userId: string, adventureId: string) => {
     await steamship.package.waitForInit(packageInstance);
 
     // Now we need to set the server settings.
-    await pushAdventureToAgent(agent.agentUrl, adventure);
+    await pushAdventureToAgent(agent.agentUrl, adventure, isDevelopment);
 
     return agent;
   } catch (e) {
