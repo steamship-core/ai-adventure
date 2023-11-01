@@ -4,7 +4,6 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAdventures } from "@/lib/adventure/adventure.server";
-import { getAgents } from "@/lib/agent/agent.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import Image from "next/image";
@@ -19,7 +18,6 @@ export default async function AdventuresPage() {
   }
 
   const adventures = await getAdventures();
-  const agents = await getAgents(userId);
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
@@ -41,7 +39,11 @@ export default async function AdventuresPage() {
             className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
           >
             <div className="relative aspect-video ">
-              <Image src={"/adventurer.png"} fill alt="Adventurer" />
+              <Image
+                src={adventure.image || "/adventurer.png"}
+                fill
+                alt="Adventurer"
+              />
             </div>
             <div className="pb-2 px-4 flex flex-col">
               <div>

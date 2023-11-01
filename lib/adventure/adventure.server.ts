@@ -30,6 +30,14 @@ export const getAdventureForUser = async (
   });
 };
 
+export const getAdventuresForUser = async (userId: string) => {
+  return await prisma.adventure.findMany({
+    where: {
+      creatorId: userId,
+    },
+  });
+};
+
 export const createAdventure = async ({
   creatorId,
   createdBy,
