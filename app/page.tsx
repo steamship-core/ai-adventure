@@ -29,6 +29,8 @@ const font = Cinzel({
   display: "swap",
 });
 
+const DEFAULT_ADVENTURE = "c15ecc46-833b-4e39-87c1-d97095a14c54";
+
 const features = [
   {
     name: "On the fly generation",
@@ -139,7 +141,10 @@ export default function Home() {
               title="Select a Character"
               subtitle="Pick from one of three templates"
             />
-            <CharacterMap characters={characters} />
+            <CharacterMap
+              adventureId={DEFAULT_ADVENTURE}
+              characters={characters as any}
+            />
           </Section>
           <Section>
             <Title
