@@ -1,3 +1,4 @@
+import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
 import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -10,6 +11,7 @@ import {
   getAdventuresForUser,
 } from "@/lib/adventure/adventure.server";
 import { getAgents } from "@/lib/agent/agent.server";
+import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { ArrowRightIcon } from "lucide-react";
@@ -28,6 +30,16 @@ export default async function AdventuresPage() {
   const adventures = await getAdventures(4);
   const adventureTemplates = await getAdventuresForUser(userId);
   const agents = await getAgents(userId);
+
+  async function deleteAgent(agentId: number) {
+    "use server";
+    await prisma.agents.delete({
+      where: {
+        id: agentId,
+        ownerId: userId!,
+      },
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
@@ -67,7 +79,7 @@ export default async function AdventuresPage() {
                     </TypographyMuted>
                   </div>
                 </div>
-                <div className=" p-4 flex flex-col">
+                <div className="p-4 flex justify-between items-center">
                   <div>
                     <TypographySmall className="text-muted-foreground">
                       Started at
@@ -76,6 +88,10 @@ export default async function AdventuresPage() {
                       {format(agent.createdAt, "MMM d, yyyy")}
                     </TypographyLarge>
                   </div>
+                  <AdventureInstanceDropdown
+                    agentId={agent.id}
+                    deleteAgent={deleteAgent}
+                  />
                 </div>
               </Link>
             ))}

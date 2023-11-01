@@ -48,7 +48,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
               key={item.href}
               href={`/adventures/editor/${params.adventureId}/${item.href}`}
               className={cn(
-                "flex items-start py-2 justify-center hover:underline rounded-r-md font-normal",
+                "flex items-start justify-center hover:underline rounded-r-md font-normal",
                 section === item.href &&
                   "border-l-2 pl-2 border-indigo-600 font-bold",
                 "justify-start"

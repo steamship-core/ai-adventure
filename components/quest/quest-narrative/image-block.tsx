@@ -68,9 +68,6 @@ export const ImageBlock = ({
   );
 
   const itemName = item?.value?.["string-value"];
-  if (itemName) {
-    console.log(block);
-  }
   if (hideOutput) {
     return null;
   }

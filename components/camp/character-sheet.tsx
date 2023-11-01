@@ -10,6 +10,7 @@ import { SignOutButton } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { recoilGameState } from "../providers/recoil";
@@ -375,6 +376,10 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 </Button>
               </div>
             </div>
+
+            <Button asChild variant="outline" className="mt-4 w-full">
+              <Link href="/adventures">Leave Adventure</Link>
+            </Button>
             <SignOutButton>
               <Button variant="outline" className="mt-4 w-full">
                 Sign out
