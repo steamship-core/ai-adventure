@@ -2,6 +2,8 @@
 
 import { SettingGroups } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import { useMutation } from "@tanstack/react-query";
+import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { parse, stringify } from "yaml";
 import { Button } from "../ui/button";
@@ -14,6 +16,28 @@ export default function SettingGroupForm({
   existing: Record<string, any>;
 }) {
   const { groupName, adventureId } = useEditorRouting();
+  const [bgFile, setBgFile] = useState<File | null>(null);
+  const { mutate, isPending, submittedAt, isSuccess } = useMutation({
+    mutationFn: async (data: any) => {
+      if (bgFile) {
+        await fetch(
+          `/api/adventure/${adventureId}/image?filename=${bgFile.name}`,
+          {
+            method: "POST",
+            body: bgFile,
+          }
+        );
+      }
+      return fetch("/api/editor", {
+        method: "POST",
+        body: JSON.stringify({
+          operation: "update",
+          id: adventureId,
+          data,
+        }),
+      });
+    },
+  });
 
   const sg = SettingGroups.filter((group) => groupName === group.href)[0];
 
@@ -29,7 +53,6 @@ export default function SettingGroupForm({
   const onImport = (e: any) => {
     e.preventDefault();
     e.stopPropagation();
-
     let data = {};
     try {
       data = parse(importYaml);
@@ -58,24 +81,7 @@ export default function SettingGroupForm({
   };
 
   const onSave = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    fetch("/api/editor", {
-      method: "POST",
-      body: JSON.stringify({
-        operation: "update",
-        id: adventureId,
-        data: dataToUpdate,
-      }),
-    }).then(
-      (res) => {
-        alert("Saved!");
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    mutate(dataToUpdate);
   };
 
   const setKeyValue = (key: string, value: any) => {
@@ -128,12 +134,19 @@ export default function SettingGroupForm({
               key={setting.name}
               setting={setting}
               updateFn={setKeyValue}
+              setBgFile={setBgFile}
               valueAtLoad={existing ? existing[setting.name] : null}
             />
           ))}
-          <Button type="submit" value="Save" onClick={onSave}>
-            Save
+          <Button value="Save" onClick={onSave}>
+            {isPending ? "Saving..." : "Save"}
           </Button>
+          {submittedAt && isSuccess ? (
+            <div className="text-sm text-muted-foreground flex items-center gap-2">
+              <CheckIcon size={14} />
+              Adventure Updated
+            </div>
+          ) : null}
         </div>
       )}
 

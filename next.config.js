@@ -9,6 +9,11 @@ module.exports = withAxiom({
         port: "",
         pathname: "/api/v1/**/raw",
       },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        port: "",
+      },
     ],
   },
 });

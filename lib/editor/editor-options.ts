@@ -9,7 +9,14 @@ export type Setting = {
   name: string;
   label: string;
   description: string;
-  type: "select" | "text" | "longtext" | "options" | "boolean" | "list";
+  type:
+    | "select"
+    | "text"
+    | "longtext"
+    | "options"
+    | "boolean"
+    | "list"
+    | "image";
   listof?: "object" | "text";
   default?: string;
   options?: OptionValue[];
@@ -36,10 +43,26 @@ export const GeneralOptions: Setting[] = [
     required: true,
   },
   {
-    name: "adventure_description",
+    name: "adventure_short_description",
     label: "Short Description",
-    description: "What one-sentence description describes this adventure?",
+    description: "What one-sentence description describes this adventure",
     type: "text",
+    default: "",
+    required: true,
+  },
+  {
+    name: "adventure_description",
+    label: "Description",
+    description: "A longer description of this adventure. Go into detail!",
+    type: "text",
+    default: "",
+    required: true,
+  },
+  {
+    name: "adventure_image",
+    label: "Image",
+    description: "Select an image to represent this adventure.",
+    type: "image",
     default: "",
     required: true,
   },

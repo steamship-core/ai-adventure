@@ -23,7 +23,10 @@ export default async function EditorPage({
   }
 
   const adventure = await getAdventure(params.adventureId);
-
+  if (!adventure) {
+    log.error("No adventure");
+    throw new Error("no adventure");
+  }
   if (adventure.creatorId != userId) {
     log.error(
       `User ${userId} does not have permission to edit ${adventure.id}`
@@ -38,6 +41,7 @@ export default async function EditorPage({
   let config = {
     adventure_name: adventure.name,
     adventure_description: adventure.description,
+    adventure_short_description: adventure.shortDescription,
     ...((adventure.agentDevConfig as any) || {}),
   };
 

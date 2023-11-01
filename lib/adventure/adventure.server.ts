@@ -12,11 +12,23 @@ export const getAdventures = async (limit?: number) => {
 };
 
 export const getAdventure = async (adventureId: string) => {
-  return (await prisma.adventure.findFirst({
+  return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
     },
-  })) as Adventure;
+  });
+};
+
+export const getAdventureForUser = async (
+  userId: string,
+  adventureId: string
+) => {
+  return await prisma.adventure.findFirst({
+    where: {
+      id: adventureId,
+      creatorId: userId,
+    },
+  });
 };
 
 export const createAdventure = async ({
@@ -55,7 +67,7 @@ export const updateAdventure = async (
   updateObj: any
 ) => {
   console.log(`User ${userId} attempting to update adventure ${adventureId}`);
-  const adventure: Adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -78,6 +90,9 @@ export const updateAdventure = async (
       } else if (key == "adventure_description") {
         adventure.description = value as string;
         // Special Case 2
+      } else if (key == "adventure_short_description") {
+        adventure.shortDescription = value as string;
+        // Special Case 3
       } else {
         devConfig[key as string] = value;
       }
@@ -89,6 +104,7 @@ export const updateAdventure = async (
       data: {
         name: adventure.name,
         description: adventure.description,
+        shortDescription: adventure.shortDescription,
         agentDevConfig: devConfig,
       },
     });

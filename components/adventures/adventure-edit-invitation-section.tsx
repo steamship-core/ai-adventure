@@ -38,7 +38,7 @@ const AdventureEditInvitationSection = ({
         affects future players -- not those who have already begun one.
       </TypographyMuted>
       <div className="mt-2  max-w-4xl">
-        <a href={`/editor/${adventureId}`}>Edit Adventure</a>
+        <a href={`/adventures/editor/${adventureId}`}>Edit Adventure</a>
       </div>
     </div>
   );

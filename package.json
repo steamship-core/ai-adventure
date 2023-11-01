@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:db-push": "dotenv -e .env.development.local prisma db push",
+    "dev:db-push": "dotenv -e .env.local prisma db push",
     "prod:db-push": "dotenv -e .env.production.local prisma db push",
     "postinstall": "prisma generate"
   },
@@ -17,7 +17,9 @@
     "@prisma/client": "5.5.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-hover-card": "^1.0.7",
+    "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-progress": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",

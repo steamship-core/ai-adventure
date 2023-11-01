@@ -1,8 +1,13 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
-import { MinusCircleIcon, PlusCircleIcon } from "lucide-react";
-import { useState } from "react";
+import {
+  AlertTriangleIcon,
+  MinusCircleIcon,
+  PlusCircleIcon,
+} from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
@@ -10,15 +15,24 @@ import { AudioPreview } from "./audio-preview";
 export default function SettingElement({
   setting,
   updateFn,
+  setBgFile,
   valueAtLoad,
   inlined = false,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
+  setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
   inlined?: boolean;
 }) {
   let [value, setValue] = useState(valueAtLoad);
+
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const newValue = e.target.files[0];
+    setBgFile(newValue);
+    updateFn(setting.name, newValue);
+  };
 
   const onTextboxChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -97,6 +111,15 @@ export default function SettingElement({
 
   if (setting.type == "text") {
     innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
+  } else if (setting.type == "image") {
+    innerField = (
+      <Input
+        onChange={onInputChange}
+        id="picture"
+        type="file"
+        className="hover:cursor-pointer"
+      />
+    );
   } else if (setting.type == "boolean") {
     innerField = (
       <div key={setting.name}>
@@ -218,9 +241,13 @@ export default function SettingElement({
     <div>
       {!inlined && <div className="space-y-6">{setting.label}</div>}
       {!inlined && setting.unused && (
-        <div className="text-sm bg-red-200 text-black">
-          <b>Coming Soon</b>. This setting isn&apos;t yet wired in to gameplay.
-        </div>
+        <Alert className="my-2 border-red-200">
+          <AlertTriangleIcon className="h-4 w-4 mt-2" />
+          <AlertTitle className="text-lg">Coming Soon</AlertTitle>
+          <AlertDescription>
+            This setting isn&apos;t yet wired in to gameplay.
+          </AlertDescription>
+        </Alert>
       )}
       {!inlined && setting.description && (
         <pre className="text-sm text-muted-foreground">
