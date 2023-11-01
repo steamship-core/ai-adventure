@@ -39,6 +39,7 @@ export default async function CampPage({
   let refreshGameState = false;
 
   if (gameState?.active_mode == "onboarding") {
+    console.log(JSON.stringify(gameState));
     console.log("onboarding- redirecting to character creation");
     redirect(`/play/${params.handle}/character-creation`);
   }

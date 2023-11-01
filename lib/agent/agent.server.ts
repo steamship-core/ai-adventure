@@ -80,18 +80,18 @@ export const createAgent = async (
 
     const agentUrl = packageInstance.invocationURL;
 
-    log.info(`New agent URL: ${agentUrl}`);
+    const agentData = {
+      ownerId: userId!,
+      agentUrl: agentUrl,
+      handle: workspaceHandle,
+      adventureId: adventureId,
+      isDevelopment: isDevelopment,
+    };
 
-    const agent = await prisma.agents.create({
-      data: {
-        ownerId: userId!,
-        agentUrl: agentUrl,
-        handle: workspaceHandle,
-        adventureId: adventureId,
-        isDevelopment: isDevelopment,
-      },
-    });
+    log.info(`New agent: ${console.log(agentData)}`);
+    console.log(`New agent: ${console.log(agentData)}`);
 
+    const agent = await prisma.agents.create({ data: agentData });
     const adventure = await getAdventure(adventureId);
 
     if (!adventure) {

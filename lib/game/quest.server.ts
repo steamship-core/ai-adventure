@@ -24,7 +24,14 @@ export const startQuest = async (userId: string, agentBase: string) => {
   });
   const quest = await resp.json();
 
-  consumeEnergy(
+  console.log(
+    `User ${userId} consuming energy ${REQUIRED_ENERGY_FOR_QUEST} for quest ${quest.name}`
+  );
+  log.info(
+    `User ${userId} consuming energy ${REQUIRED_ENERGY_FOR_QUEST} for quest ${quest.name}`
+  );
+
+  await consumeEnergy(
     userId,
     REQUIRED_ENERGY_FOR_QUEST,
     JSON.stringify({ questName: quest.name, agentBase: agentBase })
