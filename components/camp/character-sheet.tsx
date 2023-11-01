@@ -10,10 +10,9 @@ import { SignOutButton } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
 import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useRecoilState } from "recoil";
-import { recoilGameState } from "../providers/recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -27,6 +26,8 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
+  const energy = useRecoilValue(recoilEnergyState);
+
   const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
   const { push } = useRouter();
   const params = useParams();
@@ -35,7 +36,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     useBackgroundMusic();
 
   const setEnergyTo100 = async () => {
-    const response = await fetch(`/api/game/${params.handle}/debug`, {
+    const response = await fetch(`/api/game/debug`, {
       method: "POST",
       body: JSON.stringify({
         operation: "top-up-energy",
@@ -79,13 +80,12 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
       let parts = agentUrl.split("//");
       let path = parts[1].split("/");
       let workspace = path[1];
-
       window.location.href = `https://steamship.com/dashboard/agents/workspaces/${workspace}`;
     }
   };
 
   const setEnergyTo0 = async () => {
-    const response = await fetch(`/api/game/${params.handle}/debug`, {
+    const response = await fetch(`/api/game/debug`, {
       method: "POST",
       body: JSON.stringify({
         operation: "deplete-energy",
@@ -178,7 +178,7 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
             <div className="flex flex-col items-center justify-center gap-2 w-full">
               <TypographyP className="flex items-center">
                 <ActivityIcon size={20} className="mr-2 text-indigo-400" />
-                {gameState?.player?.energy || 0}
+                {energy || 0}
               </TypographyP>
               <TypographyP className="flex !mt-0 items-center">
                 <BadgeDollarSignIcon
@@ -376,10 +376,6 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                 </Button>
               </div>
             </div>
-
-            <Button asChild variant="outline" className="mt-4 w-full">
-              <Link href="/adventures">Leave Adventure</Link>
-            </Button>
             <SignOutButton>
               <Button variant="outline" className="mt-4 w-full">
                 Sign out

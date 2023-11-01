@@ -17,6 +17,19 @@ export const getOrCreateUserEnergy = async (userId: string) => {
   return newEnergy;
 };
 
+export const setEnergy = async (userId: string, amount: number) => {
+  const energy = await getOrCreateUserEnergy(userId);
+  energy.energy = amount;
+  return await prisma.userEnergy.update({
+    where: {
+      id: energy.id,
+    },
+    data: {
+      energy: energy.energy,
+    },
+  });
+};
+
 export const addEnergy = async (userId: string, amount: number) => {
   const energy = await getOrCreateUserEnergy(userId);
   energy.energy += amount;
