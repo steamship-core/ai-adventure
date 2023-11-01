@@ -12,7 +12,9 @@ export default async function AdventurePage({
   const { userId } = auth();
   if (!userId) throw new Error("no user");
 
-  const agent = await createAgent(userId, params.adventureId);
+  const isDevelopment = searchParams["isDevelopment"] === "true";
+
+  const agent = await createAgent(userId, params.adventureId, isDevelopment);
   const search = new URLSearchParams(searchParams);
   redirect(`/play/${agent.handle}/character-creation?${search.toString()}`);
 }

@@ -63,6 +63,26 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
     }
   };
 
+  const visitSteamshipConsole = async () => {
+    const response = await fetch(`/api/game/${params.handle}/debug`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "dump-state",
+      }),
+    });
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let output = await response.json();
+      let agentUrl = output.agentUrl;
+      let parts = agentUrl.split("//");
+      let path = parts[1].split("/");
+      let workspace = path[1];
+
+      window.location.href = `https://steamship.com/dashboard/agents/workspaces/${workspace}`;
+    }
+  };
+
   const setEnergyTo0 = async () => {
     const response = await fetch(`/api/game/${params.handle}/debug`, {
       method: "POST",
@@ -278,6 +298,16 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
                     }}
                   >
                     Dump GameState log
+                  </Button>
+                )}
+
+                {process.env.NEXT_PUBLIC_OFFER_STATE_DUMP === "true" && (
+                  <Button
+                    onClick={(e) => {
+                      visitSteamshipConsole();
+                    }}
+                  >
+                    Visit Steamship Console
                   </Button>
                 )}
 

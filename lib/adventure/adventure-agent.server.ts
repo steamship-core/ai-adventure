@@ -28,11 +28,18 @@ export const pushServerSettingsToAgent = async (
 
 export const pushAdventureToAgent = async (
   agentBase: string,
-  adventure: Adventure
+  adventure: Adventure,
+  isDevelopment: boolean = false
 ) => {
-  console.log(`Pushing adventure ${adventure.id} to agent ${agentBase}`);
-  log.info(`Pushing adventure ${adventure.id} to agent ${agentBase}`);
-  const settings = adventure.agentConfig as any;
+  console.log(
+    `Pushing adventure ${adventure.id} to agent ${agentBase}. isDevelopment=${isDevelopment}`
+  );
+  log.info(
+    `Pushing adventure ${adventure.id} to agent ${agentBase}. isDevelopment=${isDevelopment}`
+  );
+  const settings = (
+    isDevelopment ? adventure.agentDevConfig : adventure.agentConfig
+  ) as any;
   return pushServerSettingsToAgent(agentBase, settings);
 };
 

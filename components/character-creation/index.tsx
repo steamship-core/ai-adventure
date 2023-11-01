@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { animated, useSpring } from "@react-spring/web";
 import { useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { PlayTestBanner } from "../status-banners/play-test";
 import CharacterCreationComplete, {
   CharacterConfig,
 } from "./complete-character";
@@ -50,7 +51,11 @@ const ProgressPoint = ({
   );
 };
 
-export default function CharacterCreation() {
+export default function CharacterCreation({
+  isDevelopment = false,
+}: {
+  isDevelopment: boolean;
+}) {
   const searchParams = useSearchParams();
   const [isCompleteConfig, setIsCompleteConfig] = useState(
     searchParams.has("genre") &&
@@ -174,6 +179,7 @@ export default function CharacterCreation() {
 
   return (
     <CreationContainer>
+      {isDevelopment && <PlayTestBanner />}
       <div className="flex items-end flex-1 w-full">
         {activeStep === MAX_STEPS && (
           <CharacterCreationComplete

@@ -31,7 +31,11 @@ export default async function QuestPage({
       backgroundAudioState={false}
       backgroundAudioUrlState={"/music.wav"}
     >
-      <Quest gameState={gameState} agentBaseUrl={agent.agentUrl} />
+      <Quest
+        gameState={gameState}
+        agentBaseUrl={agent.agentUrl}
+        isDevelopment={agent.isDevelopment || false}
+      />
       <DynamicBackgroundAudio />
     </RecoilProvider>
   );

@@ -22,5 +22,5 @@ export default async function CharacterCreationPage({
     log.error("No agent");
     redirect(`/adventures`);
   }
-  return <CharacterCreation />;
+  return <CharacterCreation isDevelopment={agent.isDevelopment || false} />;
 }
