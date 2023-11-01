@@ -28,7 +28,7 @@ export default async function AdventurePage({
     <div>
       <div className="relative h-96 w-full">
         <Image
-          src={"/adventurer.png"}
+          src={adventure.image || "/adventurer.png"}
           fill
           alt="Adventurer"
           className="object-cover"
