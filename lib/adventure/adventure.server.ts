@@ -1,4 +1,3 @@
-import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import prisma from "../db";
 
@@ -119,7 +118,7 @@ export const updateAdventure = async (
 };
 
 export const publishAdventure = async (userId: string, adventureId: string) => {
-  const adventure: Adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -159,7 +158,7 @@ export const importAdventure = async (
   adventureId: string,
   importObj: any
 ) => {
-  const adventure: Adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);

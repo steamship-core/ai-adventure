@@ -41,14 +41,14 @@ const CharacterMap = ({
             >
               <Image
                 fill
-                src={character.image}
+                src={character.image!}
                 alt="Nox Umbra"
                 className="object-cover z-10"
               />
               <div className="z-20 absolute bottom-0 left-0 bg-background/80 w-full">
                 <div className="w-full">
                   <TypographySmall>{character.name}</TypographySmall>
-                  <TypographyMuted>{character.class}</TypographyMuted>
+                  <TypographyMuted>{character.tagline}</TypographyMuted>
                 </div>
               </div>
             </a>

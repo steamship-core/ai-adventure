@@ -4,7 +4,8 @@ export type Character = {
   tone?: string;
   genre?: string;
 
-  tagline: string;
+  tagline?: string;
+  image?: string;
 
   /** The name of the character. */
   name: string;

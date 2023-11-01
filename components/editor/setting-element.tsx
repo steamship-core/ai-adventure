@@ -201,6 +201,7 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
+                          setBgFile={setBgFile}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -215,6 +216,7 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
+                      setBgFile={setBgFile}
                       setting={{
                         ...setting,
                         type: setting.listof as any,
