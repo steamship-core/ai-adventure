@@ -7,7 +7,6 @@ import { useRecoilValue } from "recoil";
 import { CharacterSheet } from "../camp/character-sheet";
 import InventorySheet from "../inventory-sheet";
 import { recoilGameState } from "../providers/recoil";
-import { PlayTestBanner } from "../status-banners/play-test";
 import { Button } from "../ui/button";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographySmall } from "../ui/typography/TypographySmall";
@@ -17,13 +16,7 @@ const BackgroundAudioToggle = dynamic(
   { ssr: false }
 );
 
-export const QuestHeader = ({
-  isComplete,
-  isDevelopment,
-}: {
-  isComplete: boolean;
-  isDevelopment: boolean;
-}) => {
+export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
   const gameState = useRecoilValue(recoilGameState);
   const { questId, handle } = useParams();
 
@@ -58,8 +51,6 @@ export const QuestHeader = ({
       </div>
       <div className="flex items-center justify-center">
         <BackgroundAudioToggle text="" /> &nbsp;
-        {JSON.stringify(isDevelopment)}
-        {isDevelopment && <PlayTestBanner />}
         <InventorySheet>
           <Button variant="outline" size="icon">
             <PackageIcon size={16} />

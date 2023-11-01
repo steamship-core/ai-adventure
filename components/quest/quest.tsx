@@ -4,15 +4,18 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { PlayTestBanner } from "../status-banners/play-test";
 import { QuestHeader } from "./quest-header";
 import QuestNarrative from "./quest-narrative";
 
 export default function Quest({
   gameState,
   agentBaseUrl,
+  isDevelopment = false,
 }: {
   gameState: GameState;
   agentBaseUrl: string;
+  isDevelopment: boolean;
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
@@ -46,6 +49,7 @@ export default function Quest({
       {questId && (
         <>
           <QuestHeader isComplete={isComplete} />
+          {isDevelopment && <PlayTestBanner />}
           <QuestNarrative
             id={questId as string}
             onSummary={onSummary}
