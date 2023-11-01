@@ -2,7 +2,7 @@ export const characters = [
   {
     image: "/programmer.png",
     name: "Pro Grammer",
-    class: "Build an AI Game",
+    tagline: "Build an AI Game",
     genre: "Realistic",
     tone: "Serious",
     description:
@@ -15,7 +15,7 @@ export const characters = [
   {
     image: "/sarah.png",
     name: "Lawyer Sarah Suit",
-    class: "Sue everyone",
+    tagline: "Sue everyone",
     genre: "Realistic",
     tone: "Serious",
     description:
@@ -28,7 +28,7 @@ export const characters = [
   {
     image: "/meatball.png",
     name: "Mr. Meatball",
-    class: "Be the Biggest Meatball",
+    tagline: "Be the Biggest Meatball",
     genre: "Fantasy",
     tone: "Silly",
     description:

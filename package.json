@@ -62,7 +62,8 @@
     "tailwindcss-animate": "^1.0.7",
     "typewriter-effect": "^2.21.0",
     "uuid": "^9.0.1",
-    "xstate": "^4.38.2"
+    "xstate": "^4.38.2",
+    "yaml": "^2.3.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.14",

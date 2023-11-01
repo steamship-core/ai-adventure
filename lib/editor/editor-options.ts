@@ -9,11 +9,20 @@ export type Setting = {
   name: string;
   label: string;
   description: string;
-  type: "select" | "text" | "longtext" | "options" | "boolean" | "image";
+  type:
+    | "select"
+    | "text"
+    | "longtext"
+    | "options"
+    | "boolean"
+    | "list"
+    | "image";
+  listof?: "object" | "text";
   default?: string;
   options?: OptionValue[];
   required?: boolean;
   unused?: boolean;
+  listSchema?: Setting[];
 };
 
 export type SettingGroup = {
@@ -104,6 +113,51 @@ Or reference one you have defined in the **Image Settings** tab.`,
   },
 ];
 
+export const PremadeCharacterOptions: Setting[] = [
+  {
+    name: "characters",
+    label: "Characters",
+    description: "Characters",
+    type: "list",
+    listof: "object",
+    listSchema: [
+      {
+        name: "name",
+        label: "Name",
+        description: "Name of the preset character.",
+        type: "text",
+      },
+      {
+        name: "tagline",
+        label: "Tag Line",
+        description: "A short tagline for your character.",
+        type: "text",
+      },
+      {
+        name: "description",
+        label: "Description",
+        description:
+          "Description of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+      {
+        name: "background",
+        label: "Background",
+        description:
+          "Background of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+      {
+        name: "motivation",
+        label: "Motivation",
+        description:
+          "Motivation of the preset character. This influences gameplay.",
+        type: "longtext",
+      },
+    ],
+  },
+];
+
 export const PlayerAppearanceOptions: Setting[] = [
   {
     name: "profile_image_theme",
@@ -167,6 +221,15 @@ The item's description is: {description}.`,
     label: "Item Image Negative Prompt",
     description: "The negative prompt for generating item images.",
     type: "longtext",
+    default: "",
+    unused: true,
+  },
+  {
+    name: "items",
+    label: "Items Possible to Get",
+    description: "The list of items to grant a person.",
+    type: "list",
+    listof: "text",
     default: "",
     unused: true,
   },
@@ -307,7 +370,136 @@ export const VoiceModelOptions: Setting[] = [
   },
 ];
 
-export const ImageModelOptions: Setting[] = [];
+export const ImageModelOptions: Setting[] = [
+  {
+    name: "themes",
+    label: "Image Themes",
+    description: `Themes available to use in image generation. Reference these from the **Camp**, **Quests**, and **Items** settings pages.`,
+    type: "list",
+    listof: "object",
+    listSchema: [
+      {
+        name: "name",
+        label: "Name",
+        description: "Name of the theme.",
+        type: "text",
+      },
+      {
+        name: "prompt_prefix",
+        label: "Prompt Prefix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "prompt_suffix",
+        label: "Prompt",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "negative_prompt_prefix",
+        label: "Negative Prompt Suffix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "negative_prompt_suffix",
+        label: "Negative Prompt Suffix",
+        description:
+          "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
+        type: "longtext",
+      },
+      {
+        name: "model",
+        label: "Generation Model",
+        description: "Which model to use.",
+        type: "select",
+        options: [
+          {
+            label: "Stable Diffusion 1.5",
+            value: "runwayml/stable-diffusion-v1-5",
+          },
+          {
+            label: "Stable Diffusion XL 1.0",
+            value: "stabilityai/stable-diffusion-xl-base-1.0",
+          },
+        ],
+      },
+      {
+        name: "loras",
+        label: "Loras",
+        description: "List of LoRAs to use for image generation",
+        type: "list",
+        listof: "text",
+      },
+      {
+        name: "seed",
+        label: "Random Seed",
+        description:
+          "The same seed and prompt passed to the same version of StableDiffusion will output the same image every time.",
+        type: "text",
+      },
+      {
+        name: "num_inference_steps",
+        label: "Num Inference Steps",
+        description:
+          "Increasing the number of steps tells Stable Diffusion that it should take more steps to generate your final result which can increase the amount of detail in your image.",
+        type: "text",
+      },
+      {
+        name: "guidance_scale",
+        label: "Guidance Scale",
+        description:
+          "The CFG(Classifier Free Guidance) scale is a measure of how close you want the model to stick to your prompt when looking for a related image to show you.",
+        type: "text",
+      },
+      {
+        name: "clip_skip",
+        label: "Clip Skip",
+        description:
+          "Skips part of the image generation process, leading to slightly different results. This means the image renders faster, too.",
+        type: "text",
+      },
+      {
+        name: "scheduler",
+        label: "Scheduler",
+        description:
+          "Scheduler (or sampler) to use for the image denoising process.",
+        type: "select",
+        options: [
+          {
+            label: "DPM++ 2M",
+            value: "DPM++ 2M",
+          },
+          {
+            label: "DPM++ 2M Karras",
+            value: "DPM++ 2M Karras",
+          },
+          {
+            label: "DPM++ 2M SDE",
+            value: "DPM++ 2M SDE",
+          },
+          {
+            label: "DPM++ 2M SDE Karras",
+            value: "DPM++ 2M SDE Karras",
+          },
+          {
+            label: "Euler",
+            value: "Euler",
+          },
+          {
+            label: "Euler A",
+            value: "Euler A",
+          },
+        ],
+      },
+    ],
+    unused: true,
+  },
+];
 
 export const NarrativeModelOptions: Setting[] = [
   {
@@ -363,16 +555,6 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
 export const SettingGroups: SettingGroup[] = [
   {
     spacer: true,
-    title: "General",
-  },
-  {
-    title: "Settings",
-    description: "Settings for your game.",
-    href: "general-settings",
-    settings: GeneralOptions,
-  },
-  {
-    spacer: true,
     title: "Player Design",
   },
   {
@@ -385,11 +567,17 @@ export const SettingGroups: SettingGroup[] = [
     title: "Pre-made Characters",
     description: "Suggested characters.",
     href: "player-suggestions",
-    settings: PlayerAppearanceOptions,
+    settings: PremadeCharacterOptions,
   },
   {
     spacer: true,
     title: "Game Design",
+  },
+  {
+    title: "General",
+    description: "Settings for your game.",
+    href: "general-settings",
+    settings: GeneralOptions,
   },
   {
     title: "World",
@@ -442,5 +630,21 @@ export const SettingGroups: SettingGroup[] = [
     description: "Settings that control your story's image generation.",
     href: "image-model",
     settings: ImageModelOptions,
+  },
+  {
+    spacer: true,
+    title: "Advanced",
+  },
+  {
+    title: "Import",
+    description:
+      "Import an entire adventure template at once by pasting exported YAML and clicking Save.",
+    href: "import",
+  },
+  {
+    title: "Export",
+    description:
+      "Save or share your adventure settings by copying this block of YAML code.",
+    href: "export",
   },
 ];

@@ -1,4 +1,5 @@
 import {
+  importAdventure,
   publishAdventure,
   updateAdventure,
 } from "@/lib/adventure/adventure.server";
@@ -19,8 +20,15 @@ export const POST = withAxiom(async (request: Request) => {
     if (operation === "update") {
       const adventure = await updateAdventure(userId, id, data);
       return NextResponse.json(adventure, { status: 200 });
+    } else if (operation == "import") {
+      if (typeof data["adventure_name"] == "undefined") {
+        data["adventure_name"] = "Untitled Adventure";
+        data["adventure_description"] = "Empty Description";
+      }
+      const adventure = await importAdventure(userId, id, data);
+      return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "publish") {
-      const adventure = await publishAdventure(userId, id, data);
+      const adventure = await publishAdventure(userId, id);
       return NextResponse.json(adventure, { status: 200 });
     } else {
       return NextResponse.json(

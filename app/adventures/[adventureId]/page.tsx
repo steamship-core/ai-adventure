@@ -1,11 +1,10 @@
-import CharacterMap from "@/components/character-map";
+import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
-import { characters } from "@/lib/characters";
 import { auth } from "@clerk/nextjs";
 import { ArrowLeftIcon, PencilIcon } from "lucide-react";
 import Image from "next/image";
@@ -86,22 +85,7 @@ export default async function AdventurePage({
             </Button>
           </div>
         </div>
-        <div className="mt-6">
-          <TypographyH2 className="border-none">
-            Character Templates
-          </TypographyH2>
-          <TypographyMuted className="text-lg">
-            Choose from a selection of pre-made characters. Their character
-            details are already filled out, so you can jump right into the
-            adventure. If you want, you can customize before you start.
-          </TypographyMuted>
-          <div className="mt-2  max-w-4xl">
-            <CharacterMap
-              characters={characters}
-              adventureId={params.adventureId}
-            />
-          </div>
-        </div>
+        <CharacterTemplatesSection adventureId={params.adventureId} />
       </div>
     </div>
   );

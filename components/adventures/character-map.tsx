@@ -1,19 +1,9 @@
 "use client";
+import { Character } from "@/lib/game/schema/characters";
 import { track } from "@vercel/analytics/react";
 import Image from "next/image";
-import { TypographyMuted } from "./ui/typography/TypographyMuted";
-import { TypographySmall } from "./ui/typography/TypographySmall";
-
-type Character = {
-  image: string;
-  name: string;
-  class: string;
-  genre: string;
-  tone: string;
-  description: string;
-  background: string;
-  motivation: string;
-};
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { TypographySmall } from "../ui/typography/TypographySmall";
 
 const DEFAULT_ADVENTURE = "c15ecc46-833b-4e39-87c1-d97095a14c54";
 
@@ -28,8 +18,8 @@ const CharacterMap = ({
     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
       {characters.map((character, i) => {
         const searchParams = new URLSearchParams();
-        searchParams.set("genre", character.genre);
-        searchParams.set("tone", character.tone);
+        searchParams.set("genre", character.genre || "");
+        searchParams.set("tone", character.tone || "");
         searchParams.set("background", character.background);
         searchParams.set("motivation", character.motivation);
         searchParams.set("description", character.description);
@@ -51,14 +41,14 @@ const CharacterMap = ({
             >
               <Image
                 fill
-                src={character.image}
+                src={character.image!}
                 alt="Nox Umbra"
                 className="object-cover z-10"
               />
               <div className="z-20 absolute bottom-0 left-0 bg-background/80 w-full">
                 <div className="w-full">
                   <TypographySmall>{character.name}</TypographySmall>
-                  <TypographyMuted>{character.class}</TypographyMuted>
+                  <TypographyMuted>{character.tagline}</TypographyMuted>
                 </div>
               </div>
             </a>
