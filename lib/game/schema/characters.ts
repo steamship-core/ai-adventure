@@ -42,7 +42,4 @@ export type HumanCharacter = Character & {
 
   /** The gold the player has. Gold can be used buy items from the Merchant. Gold is acquired by selling items to the Merchant and after every quest. */
   gold?: number;
-
-  /** The energy the player has. Going on a quest requires and expends energy. This is the unit of monetization for the game. */
-  energy?: number;
 };

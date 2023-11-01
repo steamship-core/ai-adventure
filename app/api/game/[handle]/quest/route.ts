@@ -18,7 +18,7 @@ export async function POST(
   }
 
   try {
-    const quest = await startQuest(agent!.agentUrl);
+    const quest = await startQuest(userId, agent!.agentUrl);
     return NextResponse.json({ quest }, { status: 200 });
   } catch (e) {
     console.error(e);

@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import useLoadingScreen from "../loading/use-loading-screen";
-import { recoilGameState } from "../providers/recoil";
+import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
 
 const StartAdventureButton = () => {
@@ -15,6 +15,8 @@ const StartAdventureButton = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
   const gameState = useRecoilValue(recoilGameState);
+  const energy = useRecoilValue(recoilEnergyState);
+
   const params = useParams();
   const questArc = gameState?.quest_arc || [];
   const questCount = gameState?.current_quest
@@ -40,6 +42,7 @@ const StartAdventureButton = () => {
       return;
     }
 
+    // IF we're still here, then we need to start a new quest.
     const resp = await fetch(`/api/game/${params.handle}/quest`, {
       method: "POST",
     });
@@ -49,7 +52,11 @@ const StartAdventureButton = () => {
       let res = "";
       try {
         res = await resp.text();
-      } catch {}
+      } catch {
+        log.error(`Failed to start quest: ${res}`);
+        return;
+      }
+      alert(`Failed to start quest: ${res}`);
       log.error(`Failed to start quest: ${res}`);
       return;
     }
@@ -71,7 +78,7 @@ const StartAdventureButton = () => {
     setIsLoading(false);
   };
 
-  const lowEnergy = (gameState?.player?.energy || 0) < 10;
+  const lowEnergy = (energy || 0) < 10;
 
   return (
     <>

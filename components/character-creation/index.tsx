@@ -78,7 +78,6 @@ export default function CharacterCreation({
       background: searchParams.get("background") || "",
       motivation: searchParams.get("motivation") || "",
       rank: 1,
-      energy: 100,
       gold: 0,
       inventory: [],
     },

@@ -1,15 +1,42 @@
 import { ExtendedBlock } from "@/components/quest/quest-narrative/utils";
+import { log } from "next-axiom";
+import { consumeEnergy, getOrCreateUserEnergy } from "../energy/energy.server";
 import { getSteamshipClient } from "../utils";
 import { Quest } from "./schema/quest";
 
-export const startQuest = async (agentBase: string) => {
+const REQUIRED_ENERGY_FOR_QUEST = 10;
+
+export const startQuest = async (userId: string, agentBase: string) => {
   const steamship = getSteamshipClient();
+
+  const energy = await getOrCreateUserEnergy(userId);
+  if (energy.energy < REQUIRED_ENERGY_FOR_QUEST) {
+    log.error(
+      `User ${userId} had ${energy.energy} but needed ${REQUIRED_ENERGY_FOR_QUEST} to start a quest.`
+    );
+    throw new Error("Not enough energy to start quest");
+  }
+
   const resp = await steamship.agent.post({
     url: agentBase,
     path: "/start_quest",
     arguments: {},
   });
   const quest = await resp.json();
+
+  console.log(
+    `User ${userId} consuming energy ${REQUIRED_ENERGY_FOR_QUEST} for quest ${quest.name}`
+  );
+  log.info(
+    `User ${userId} consuming energy ${REQUIRED_ENERGY_FOR_QUEST} for quest ${quest.name}`
+  );
+
+  await consumeEnergy(
+    userId,
+    REQUIRED_ENERGY_FOR_QUEST,
+    JSON.stringify({ questName: quest.name, agentBase: agentBase })
+  );
+
   return quest as Quest;
 };
 
