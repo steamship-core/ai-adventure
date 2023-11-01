@@ -15,6 +15,7 @@ export const MessageTypes = {
   SCENE_AUDIO: "SCENE_AUDIO",
   TEXT: "TEXT",
   QUEST_ARC: "QUEST_ARC",
+  DICE_ROLL: "DICE_ROLL",
 } as const;
 
 export type ExtendedBlock = Block & {
@@ -31,6 +32,9 @@ export type ExtendedBlock = Block & {
 };
 
 export const getMessageType = (block: Block) => {
+  if (block.tags?.find((tag) => tag.name === "dice_roll")) {
+    return MessageTypes.DICE_ROLL;
+  }
   if (block.tags?.find((tag) => tag.name === "item_generation_content")) {
     return MessageTypes.ITEM_GENERATION_CONTENT;
   }

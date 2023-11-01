@@ -12,6 +12,7 @@ import {
   SystemDebugBlock,
   UserMessageDebugBlock,
 } from "./debug-blocks";
+import { DiceRollBlock } from "./dice-block";
 import { ImageBlock } from "./image-block";
 import { ItemGenerationBlock } from "./item-generation-block";
 import { QuestSummaryBlock } from "./quest-summary-block";
@@ -78,6 +79,14 @@ export const NarrativeBlock = ({
               blockId={block.id}
               text={block.text!}
               hideOutput={hideOutput}
+            />
+          );
+        case MessageTypes.DICE_ROLL:
+          return (
+            <DiceRollBlock
+              key={block.id}
+              block={block}
+              disableAnimation={isPrior === true}
             />
           );
         case MessageTypes.STATUS_MESSAGE:
