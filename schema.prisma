@@ -48,7 +48,7 @@ model Agents {
 
 model UserEnergy {
   id        Int      @id @default(autoincrement())
-  userId    String
+  userId    String   @unique
   energy    Int      @default(100)
   energyMax Int      @default(100)
   createdAt DateTime @default(now())
@@ -57,7 +57,7 @@ model UserEnergy {
 
 model Subscriptions {
   id             Int      @id @default(autoincrement())
-  ownerId        String
+  ownerId        String   @unique
   stripeId       String
   priceId        String
   subscriptionId String
