@@ -42,6 +42,7 @@ const StartAdventureButton = () => {
       return;
     }
 
+    // IF we're still here, then we need to start a new quest.
     const resp = await fetch(`/api/game/${params.handle}/quest`, {
       method: "POST",
     });
