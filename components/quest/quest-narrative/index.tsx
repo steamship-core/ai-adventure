@@ -62,6 +62,7 @@ const validTypes = [
   MessageTypes.TEXT,
   MessageTypes.STREAMING_BLOCK,
   MessageTypes.ITEM_GENERATION_CONTENT,
+  MessageTypes.DICE_ROLL,
 ] as string[];
 
 export default function QuestNarrative({
