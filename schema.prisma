@@ -56,17 +56,30 @@ model UserEnergy {
 }
 
 model Subscriptions {
-  id             Int    @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   ownerId        String
   stripeId       String
   priceId        String
   subscriptionId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model TopUps {
-  id              Int    @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   ownerId         String
   amountPaidCents Int // Amount paid
   creditIncrease  Int // Energy Added
   reference       String // Stripe reference
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model DrawDowns {
+  id             Int      @id @default(autoincrement())
+  ownerId        String
+  creditDecrease Int // Energy Removed
+  reference      String // Stripe reference
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
