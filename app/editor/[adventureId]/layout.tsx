@@ -1,8 +1,11 @@
 import PublishButton from "@/components/editor/publish-button";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import TestButton from "@/components/editor/test-button";
+import { Button } from "@/components/ui/button";
 import { SettingGroups } from "@/lib/editor/editor-options";
+import { ArrowLeftIcon } from "lucide-react";
 import { Metadata } from "next";
+import Link from "next/link";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
@@ -11,26 +14,25 @@ export const metadata: Metadata = {
 };
 
 const AdventuresLayout = ({ children }: { children: ReactNode }) => (
-  <div className="relative h-full p-4">
-    <div className="md:hidden"></div>
-    <div className="hidden space-y-6 p-10 pb-16 md:block">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Adventure Editor</h2>
-        <p className="text-muted-foreground">
-          Create a completely custom adventure to share with your friends.
-        </p>
-        <div className="flex flex-row">
-          <TestButton className="mr-2" />
-          <PublishButton className="mr-2" />
-        </div>
+  <div className="relative h-96 w-full flex flex-col">
+    <div className="flex justify-between flex-col p-4 gap-2 md:p-6 w-full">
+      <div className="flex flex-row items-center">
+        <Button variant="outline" asChild>
+          <Link href={`/adventures`}>
+            <ArrowLeftIcon size={16} className="mr-2" /> Back
+          </Link>
+        </Button>
+        <h2>Adventure Editor</h2>
+        <TestButton />
+        <PublishButton />
       </div>
-      {/* <Separator className="my-6" /> */}
-      <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-        <aside className="-mx-4 lg:w-1/5">
-          <SidebarNav items={SettingGroups} />
-        </aside>
-        <div className="flex-1 lg:max-w-2xl">{children}</div>
-      </div>
+    </div>
+
+    <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12">
+      <aside className="lg:w-1/5">
+        <SidebarNav items={SettingGroups} />
+      </aside>
+      <div className="flex-1 lg:max-w-2xl">{children}</div>
     </div>
   </div>
 );
