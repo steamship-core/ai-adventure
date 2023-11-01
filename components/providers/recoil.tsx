@@ -27,6 +27,11 @@ export const recoilGameState = atom({
   default: {} as GameState,
 });
 
+export const recoilEnergyState = atom({
+  key: "EnergyState",
+  default: 0 as number,
+});
+
 export const recoilBackgroundAudioState = atom<boolean | undefined>({
   key: "BackgroundAudioState",
   default:
@@ -58,11 +63,13 @@ export const recoilInitialBlock = atom<string | undefined>({
 function initializeState(
   set: SetRecoilState,
   gameState: GameState,
+  energyState: number = 0,
   backgroundAudioState?: boolean,
   audioActiveState: boolean = false,
   backgroundAudioUrl?: string
 ) {
   set(recoilGameState, gameState);
+  set(recoilEnergyState, energyState);
   set(recoilBackgroundAudioState, backgroundAudioState);
   set(recoilAudioActiveState, audioActiveState);
   set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
@@ -73,12 +80,14 @@ function initializeState(
 function RecoilProvider({
   children,
   gameState,
+  energyState,
   backgroundAudioState,
   audioActiveState,
   backgroundAudioUrlState,
 }: {
   children: ReactNode;
   gameState: GameState;
+  energyState: number;
   backgroundAudioState?: boolean;
   audioActiveState?: boolean;
   backgroundAudioUrlState?: string;
@@ -89,6 +98,7 @@ function RecoilProvider({
         initializeState(
           set,
           gameState,
+          energyState,
           backgroundAudioState,
           audioActiveState,
           backgroundAudioUrlState

@@ -8,6 +8,7 @@ import RecoilProvider from "@/components/providers/recoil";
 import { PlayTestBanner } from "@/components/status-banners/play-test";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { getAgent } from "@/lib/agent/agent.server";
+import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { generateQuestArc } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
@@ -33,7 +34,7 @@ export default async function CampPage({
   }
 
   let gameState = await getGameState(agent?.agentUrl);
-  let energyState = await getOrCreateUserEnergy(userId);
+  let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
 
   let refreshGameState = false;
 

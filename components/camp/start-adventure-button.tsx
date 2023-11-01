@@ -52,7 +52,11 @@ const StartAdventureButton = () => {
       let res = "";
       try {
         res = await resp.text();
-      } catch {}
+      } catch {
+        log.error(`Failed to start quest: ${res}`);
+        return;
+      }
+      alert(`Failed to start quest: ${res}`);
       log.error(`Failed to start quest: ${res}`);
       return;
     }
