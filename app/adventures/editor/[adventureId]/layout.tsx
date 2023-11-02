@@ -1,7 +1,9 @@
 import { EditorBackButton } from "@/components/editor/editor-back-button";
+import LayoutImage from "@/components/editor/layout-image";
 import PublishButton from "@/components/editor/publish-button";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import TestButton from "@/components/editor/test-button";
+import RecoilProvider from "@/components/providers/recoil";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { SettingGroups } from "@/lib/editor/editor-options";
@@ -14,23 +16,30 @@ export const metadata: Metadata = {
 };
 
 const AdventuresLayout = ({ children }: { children: ReactNode }) => (
-  <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
-    <TypographyH1>Adventure Editor</TypographyH1>
-    <TypographyMuted className="text-lg">
-      Create a custom adventure to share with your friends.
-    </TypographyMuted>
-    <div className="flex flex-row space-x-2">
-      <EditorBackButton />
-      <TestButton className="mr-2" />
-      <PublishButton className="mr-2" />
+  <RecoilProvider>
+    <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
+      <div className="flex flex-col md:flex-row justify-between">
+        <div>
+          <TypographyH1>Adventure Editor</TypographyH1>
+          <TypographyMuted className="text-lg">
+            Create a custom adventure to share with your friends.
+          </TypographyMuted>
+        </div>
+        <LayoutImage />
+      </div>
+      <div className="flex flex-row space-x-2">
+        <EditorBackButton />
+        <TestButton className="mr-2" />
+        <PublishButton className="mr-2" />
+      </div>
+      <div className="flex flex-col md:flex-row gap-6">
+        <aside className="lg:w-1/5">
+          <SidebarNav items={SettingGroups} />
+        </aside>
+        <div className="flex-1 lg:max-w-2xl">{children}</div>
+      </div>
     </div>
-    <div className="flex flex-col md:flex-row gap-6">
-      <aside className="lg:w-1/5">
-        <SidebarNav items={SettingGroups} />
-      </aside>
-      <div className="flex-1 lg:max-w-2xl">{children}</div>
-    </div>
-  </div>
+  </RecoilProvider>
 );
 
 export default AdventuresLayout;

@@ -3,9 +3,12 @@
 import { SettingGroups } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { useMutation } from "@tanstack/react-query";
+import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
+import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import SettingElement from "./setting-element";
@@ -17,16 +20,21 @@ export default function SettingGroupForm({
 }) {
   const { groupName, adventureId } = useEditorRouting();
   const [bgFile, setBgFile] = useState<File | null>(null);
+  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationFn: async (data: any) => {
       if (bgFile) {
-        await fetch(
+        const res = await fetch(
           `/api/adventure/${adventureId}/image?filename=${bgFile.name}`,
           {
             method: "POST",
             body: bgFile,
           }
         );
+        if (res.ok) {
+          const blobJson = (await res.json()) as PutBlobResult;
+          setEditorLayoutImage(blobJson.url);
+        }
       }
       return fetch("/api/editor", {
         method: "POST",
@@ -38,6 +46,12 @@ export default function SettingGroupForm({
       });
     },
   });
+
+  useEffect(() => {
+    if (existing?.image) {
+      setEditorLayoutImage(existing.image);
+    }
+  }, []);
 
   const sg = SettingGroups.filter((group) => groupName === group.href)[0];
 

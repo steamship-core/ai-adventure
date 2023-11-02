@@ -41,6 +41,7 @@ export default async function EditorPage({
   let config = {
     adventure_name: adventure.name,
     adventure_description: adventure.description,
+    image: adventure.image,
     ...((adventure.agentDevConfig as any) || {}),
   };
 
