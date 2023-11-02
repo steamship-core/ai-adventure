@@ -1,4 +1,3 @@
-import BackButton from "@/components/adventures/back-button";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -24,7 +23,9 @@ export default async function AdventurePage({
   if (!adventure) {
     redirect(`/adventures`);
   }
-  console.log("adventure", adventure);
+  const isCreator = adventure.creatorId === userId;
+
+  console.log(adventure);
 
   return (
     <div>
@@ -37,8 +38,8 @@ export default async function AdventurePage({
         />
         <div className="flex justify-between flex-col p-4 gap-2 md:p-6 absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-background">
           <div className="w-full flex justify-between">
-            <BackButton />
-            {adventure.creatorId === userId && (
+            <div />
+            {isCreator && (
               <Button variant="outline" asChild>
                 <Link href={`/adventures/editor/${params.adventureId}`}>
                   <PencilIcon size={16} className="mr-2" /> Edit
