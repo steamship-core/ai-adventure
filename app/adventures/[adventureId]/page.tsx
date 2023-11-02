@@ -1,7 +1,6 @@
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
@@ -19,7 +18,8 @@ export default async function AdventurePage({
   const { userId } = auth();
   if (!userId) throw new Error("no user");
 
-  const adventure = await getAdventure(params.adventureId);
+  const adventure = (await getAdventure(params.adventureId)) as any;
+
   if (!adventure) {
     redirect(`/adventures`);
   }
@@ -28,7 +28,7 @@ export default async function AdventurePage({
     <div>
       <div className="relative h-96 w-full">
         <Image
-          src={adventure.image || "/adventurer.png"}
+          src={adventure?.agentConfig?.image || "/adventurer.png"}
           fill
           alt="Adventurer"
           className="object-cover"
@@ -49,12 +49,18 @@ export default async function AdventurePage({
             )}
           </div>
           <div className="flex gap-2">
-            <div className="bg-indigo-600 rounded-full text-sm px-2">
-              Open-ended
-            </div>
-            <div className="bg-blue-600 rounded-full text-sm px-2">
-              Pixel-Art
-            </div>
+            {(adventure?.agentConfig?.adventure_tags || []).map(
+              (tag: string) => {
+                return (
+                  <div
+                    key={tag}
+                    className="bg-indigo-600 rounded-full text-sm px-2"
+                  >
+                    {tag}
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       </div>
@@ -68,24 +74,12 @@ export default async function AdventurePage({
             {adventure.description}
           </TypographyMuted>
         </div>
-
-        <div className="mt-6">
-          <TypographyH2 className="border-none">
-            Create a character
-          </TypographyH2>
-          <TypographyMuted className="text-lg">
-            Create a custom character to go on this adventure. You&apos;ll be
-            able to set your own name, appearance, and description.
-          </TypographyMuted>
-          <div className="mt-2">
-            <Button asChild className="text-xl py-6 px-6 mt-2">
-              <Link href={`/adventures/${params.adventureId}/create-instance`}>
-                Create a character
-              </Link>
-            </Button>
-          </div>
-        </div>
-        <CharacterTemplatesSection adventureId={params.adventureId} />
+        <CharacterTemplatesSection
+          adventureId={params.adventureId}
+          playerSingularNoun={
+            adventure?.agentConfig?.adventure_player_singular_noun
+          }
+        />
       </div>
     </div>
   );

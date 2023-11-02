@@ -13,10 +13,10 @@ model Adventure {
   creatorId         String
   createdBy         String
   createdAt         DateTime            @default(now())
-  name              String              @default("Epic Quest")
-  description       String              @default("Set the scene for your adventure, create your character, and dive into an adventure completely unique to you.")
+  name              String              @default("Untitled Adventure")
+  description       String              @default("No description provivded.")
   agentVersion      String              @default("ai-adventure")
-  shortDescription  String              @default("A custom pixel art style adventure.")
+  shortDescription  String              @default("No short description provided.")
   image             String?             @default("")
   agentConfig       Json?
   agentDevConfig    Json?
