@@ -13,6 +13,7 @@ import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
+import { Message } from "ai";
 import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -99,6 +100,12 @@ export default function QuestNarrative({
     isLoading,
     error,
   } = useChat({
+    onFinish: (message: Message) => {
+      console.log(`onChat call finished`, message);
+    },
+    onError: (error: Error) => {
+      console.log(`onChat call errored`, error);
+    },
     body: {
       context_id: id,
       agentBaseUrl,
