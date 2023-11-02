@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     log.error("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-  log.debug("Begin POST /api/chat");
+  log.debug(`/api/chat [user ${userId}] Begin`);
 
   // Extract the `prompt` from the body of the request
   // TODO: It's not secure to allow the web user to pass the agentBaseUrl, but
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     agentBaseUrl: string;
   };
 
-  log.debug(`Agent base url: ${agentBaseUrl}`);
+  log.debug(`/api/chat [user ${userId}] Base url: ${agentBaseUrl}`);
 
   log.debug(
     `Begin message length=${messages?.length} context_id=${context_id}`
@@ -58,6 +58,5 @@ export async function POST(req: Request) {
     format: "json-no-inner-stream",
   });
 
-  // Respond with a stream of Markdown
   return new Response(stream);
 }
