@@ -19,7 +19,7 @@ import { UserButton } from "@clerk/nextjs";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
-  StarIcon,
+  SparklesIcon,
   VenetianMaskIcon,
   WandIcon,
 } from "lucide-react";
@@ -98,35 +98,34 @@ export default async function Home() {
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
-      <div className="relative flex-col w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end pb-20 md:pb-44">
-        <div className="absolute right-4 top-4">
+      <div className="relative flex-col w-full bg-gradient-to-b text-center from-transparent via-background/50 to-background flex h-1/2">
+        <div className="flex w-full justify-end py-2 px-6">
           <div className="flex gap-2 items-center justify-center">
-            <Button asChild>
-              <a
-                href="https://github.com/steamship-core/ai-adventure"
-                target="_blank"
-                className="flex items-center justify-center"
-              >
-                <StarIcon size={16} className="mr-2" /> Star
-              </a>
-            </Button>
             <UserButton />
           </div>
         </div>
-        <div className="pb-12 px-6 md:px-12">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl leading-6 font-bold mb-4">
-            Fantasy Unbounded
-          </h1>
-          <TypographyH2 className="border-none font-normal text-2xl md:text-4xl lg:text-5xl">
-            Let AI Be Your Dungeon Master.
-          </TypographyH2>
+        <div className="flex flex-1 flex-col justify-center items-center py-10">
+          <div className="pb-12 px-6 md:px-12">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl leading-6 font-bold mb-4">
+              Fantasy Unbounded
+            </h1>
+            <TypographyH2 className="border-none font-normal text-2xl md:text-4xl lg:text-5xl">
+              Let AI Be Your Dungeon Master.
+            </TypographyH2>
+          </div>
+          <Button
+            asChild
+            className="bg-indigo-600 text-primary hover:bg-indigo-800 font-bold"
+          >
+            <Link href="/adventures">
+              <SparklesIcon className="mr-2" />
+              Play Now
+            </Link>
+          </Button>
         </div>
-        <Button asChild>
-          <Link href="/adventures">Play Now</Link>
-        </Button>
       </div>
       <div className="bg-background py-12 md:py-32 flex flex-col px-6 md:px-12">
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32 -mt-20 md:-mt-44 z-20">
+        <div className="max-w-6xl mx-auto w-full flex flex-col gap-32 z-20">
           <Section>
             <Title
               title="Choose Your Adventure"
