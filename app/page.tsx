@@ -125,7 +125,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="bg-background py-12 md:py-32 flex flex-col px-6 md:px-12">
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32 z-20">
+        <div className="max-w-6xl mx-auto w-full flex flex-col gap-32 z-20">
           <Section>
             <Title
               title="Choose Your Adventure"
