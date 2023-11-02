@@ -29,31 +29,38 @@ const CharacterTemplatesSection = ({
     }
   }, [adventureId]);
 
-  // Don't show this section if we don't have any pre-made characters
-  if (!characters || !characters.length) {
-    return null;
-  }
+  const hasPremadeCharacters = characters && characters.length > 0;
+
+  const createDescription = hasPremadeCharacters ? (
+    <TypographyMuted className="text-lg">
+      Create a custom {playerSingularNoun.toLocaleLowerCase()} whose profile
+      will influence gameplay and outcomes.
+    </TypographyMuted>
+  ) : (
+    <TypographyMuted className="text-lg">
+      The profile you choose will influence gameplay and outcomes.
+    </TypographyMuted>
+  );
 
   return (
     <>
-      <ErrorBoundary>
-        <div className="mt-6">
-          <TypographyH2 className="border-none">
-            Choose your {playerSingularNoun}
-          </TypographyH2>
-          <div className="mt-2  max-w-4xl">
-            <CharacterMap characters={characters} adventureId={adventureId} />
+      {hasPremadeCharacters && (
+        <ErrorBoundary>
+          <div className="mt-6">
+            <TypographyH2 className="border-none">
+              Choose your {playerSingularNoun}
+            </TypographyH2>
+            <div className="mt-2  max-w-4xl">
+              <CharacterMap characters={characters} adventureId={adventureId} />
+            </div>
           </div>
-        </div>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      )}
       <div className="mt-6">
         <TypographyH2 className="border-none">
           Create your own {playerSingularNoun.toLocaleLowerCase()}
         </TypographyH2>
-        <TypographyMuted className="text-lg">
-          Create a custom {playerSingularNoun.toLocaleLowerCase()} whose profile
-          will influence gameplay and outcomes.
-        </TypographyMuted>
+        {createDescription}
         <div className="mt-2">
           <Button asChild className="text-xl py-6 px-6 mt-2">
             <Link href={`/adventures/${adventureId}/create-instance`}>
