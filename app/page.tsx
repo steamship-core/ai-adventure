@@ -100,7 +100,7 @@ export default async function Home() {
       <MainCTA />
       <div className="relative flex-col w-full bg-gradient-to-b text-center from-transparent via-background/50 to-background flex h-1/2">
         <div className="flex w-full justify-end py-2 px-6">
-          <div className="flex gap-2 items-center justify-center">
+          <div className="flex gap-2 items-center justify-center h-[32px]">
             <UserButton />
           </div>
         </div>
