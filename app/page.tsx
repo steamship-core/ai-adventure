@@ -1,9 +1,19 @@
+import AdventureListElement from "@/components/adventures/adventure-list-element";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
+import prisma from "@/lib/db";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 import {
@@ -76,16 +86,24 @@ const Actions = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-const adventures = [
-  {
-    id: "1",
-    name: "The Lost Mine of Phandelver",
-    shortDescription: "A classic adventure for new players",
-    image: "/adventures/phandelver.png",
-  },
-];
-
-export default function Home() {
+export default async function Home() {
+  const featuredAdventures = await prisma.adventure.findMany({
+    where: {
+      featured: true,
+    },
+    take: 3,
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+  await prisma.adventure.update({
+    where: {
+      id: "715bb9c0-2c5d-48a5-9024-05be3674e6d4",
+    },
+    data: {
+      featured: true,
+    },
+  });
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
@@ -144,13 +162,28 @@ export default function Home() {
               title="Choose Your Adventure"
               subtitle="Select from a variety of adventures created by the community."
             />
-            <div className="grid grid-cols-1 md:grid-cols-3">
-              {/* {adventures.map((adventure) => (
-                <AdventureListElement
-                  key={adventure.id}
-                  adventure={adventure}
-                />
-              ))} */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {featuredAdventures.map((adventure) => (
+                <Dialog key={adventure.id}>
+                  <DialogTrigger>
+                    <AdventureListElement adventure={adventure} link={false} />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Coming soon!</DialogTitle>
+                      <DialogDescription>
+                        We&apos;re working hard to bring fully customizable
+                        quests. Stay tuned! For now, while we are in beta, all
+                        adventures are versions of our demo adventure. Create an
+                        adventure at our{" "}
+                        <Link href="/adventure" className="text-blue-600">
+                          adventures page.
+                        </Link>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              ))}
             </div>
           </Section>
           <Section>

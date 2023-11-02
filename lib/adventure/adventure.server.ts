@@ -1,5 +1,6 @@
 import { log } from "next-axiom";
 import prisma from "../db";
+import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
 
 export const getAdventures = async (limit?: number) => {
   return prisma.adventure.findMany({
@@ -85,42 +86,16 @@ export const updateAdventure = async (
   }
 
   try {
-    let devConfig: Record<string, any> = {
-      ...(adventure.agentDevConfig as object),
-    };
-
-    for (const [key, value] of Object.entries(updateObj)) {
-      console.log("set", key, value);
-      if (key == "adventure_name") {
-        // Special Case 1
-        adventure.name = value as string;
-      } else if (key == "adventure_description") {
-        adventure.description = value as string;
-        // Special Case 2
-      } else if (key == "adventure_short_description") {
-        adventure.shortDescription = value as string;
-        // Special Case 3
-      } else if (key == "adventure_image") {
-        adventure.image = value as string;
-        // Special Case 4
-      } else {
-        devConfig[key as string] = value;
-      }
-    }
-
-    adventure.agentDevConfig = devConfig;
     await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
-        name: adventure.name,
-        description: adventure.description,
-        shortDescription: adventure.shortDescription,
-        image: adventure.image,
-        agentDevConfig: devConfig,
+        ...getTopLevelUpdatesFromAdventureConfig(updateObj),
+        agentDevConfig: {
+          ...(adventure.agentDevConfig as object),
+          ...updateObj,
+        },
       },
     });
-
-    console.log(`Updated adventure ${adventure.id}`);
     return adventure;
   } catch (e) {
     log.error(`${e}`);
@@ -193,10 +168,7 @@ export const importAdventure = async (
     await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
-        name: importObj["adventure_name"],
-        description: importObj["adventure_description"],
-        shortDescription: importObj["adventure_short_description"],
-        image: importObj["image"],
+        ...getTopLevelUpdatesFromAdventureConfig(importObj),
         agentDevConfig: importObj,
       },
     });
