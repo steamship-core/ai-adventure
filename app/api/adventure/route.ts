@@ -1,4 +1,5 @@
 import { createAdventure } from "@/lib/adventure/adventure.server";
+import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { NextResponse } from "next/server";
@@ -30,4 +31,52 @@ export async function POST(request: Request) {
     );
   }
   return NextResponse.json({ adventure }, { status: 201 });
+}
+
+export async function GET(request: Request) {
+  const searchParams = new URL(request.url).searchParams;
+  const cursor = searchParams.get("cursor") || null;
+  const search = searchParams.get("search") || null;
+  const take = 10;
+
+  const results = await prisma.adventure.findMany({
+    take,
+    skip: cursor ? 1 : 0,
+    ...(cursor && { cursor: { id: cursor } }),
+    orderBy: {
+      createdAt: "desc",
+    },
+    ...(search && {
+      where: {
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            shortDescription: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+    }),
+  });
+
+  const lastPostInResults = results.length === take ? results[take - 1] : null;
+  const nextCursor = lastPostInResults ? lastPostInResults.id : null;
+  return NextResponse.json({
+    nextCursor,
+    prevCusor: cursor ? cursor : null,
+    results,
+  });
 }
