@@ -33,6 +33,33 @@ export type SettingGroup = {
   settings?: Setting[];
 };
 
+/**
+ * The keys here are what would be found in the agentConfig.
+ * The values are the top-level keys that are on an Adventure object.
+ */
+export const TopLevelSpecialCases = {
+  adventure_name: "name",
+  adventure_description: "description",
+  adventure_short_description: "shortDescription",
+  adventure_image: "image",
+  adventure_tags: "tags",
+};
+
+/**
+ * Return any top-level update to the Adventure object from an agentConfig object.
+ * @param agentConfig
+ * @returns
+ */
+export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
+  let topLevelUpdates: Record<string, any> = {};
+  for (const [agentConfigName, topLevelName] of Object.entries(
+    TopLevelSpecialCases
+  )) {
+    topLevelUpdates[topLevelName as string] = agentConfig[agentConfigName];
+  }
+  return topLevelUpdates;
+}
+
 export const GeneralOptions: Setting[] = [
   {
     name: "adventure_name",
@@ -570,6 +597,16 @@ Fill this in as if it was the instruction in a page of short notes to an actor.`
 export const SettingGroups: SettingGroup[] = [
   {
     spacer: true,
+    title: "General Settings",
+  },
+  {
+    title: "General",
+    description: "Settings for your game.",
+    href: "general-settings",
+    settings: GeneralOptions,
+  },
+  {
+    spacer: true,
     title: "Player Design",
   },
   {
@@ -587,12 +624,6 @@ export const SettingGroups: SettingGroup[] = [
   {
     spacer: true,
     title: "Game Design",
-  },
-  {
-    title: "General",
-    description: "Settings for your game.",
-    href: "general-settings",
-    settings: GeneralOptions,
   },
   {
     title: "World",
