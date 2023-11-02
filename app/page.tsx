@@ -22,7 +22,6 @@ import {
   StarIcon,
   VenetianMaskIcon,
   WandIcon,
-  ZapIcon,
 } from "lucide-react";
 import { Cinzel } from "next/font/google";
 import Image from "next/image";
@@ -96,18 +95,10 @@ export default async function Home() {
       createdAt: "asc",
     },
   });
-  await prisma.adventure.update({
-    where: {
-      id: "715bb9c0-2c5d-48a5-9024-05be3674e6d4",
-    },
-    data: {
-      featured: true,
-    },
-  });
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
-      <div className="relative flex-col pb-2 w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end">
+      <div className="relative flex-col w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end pb-20 md:pb-44">
         <div className="absolute right-4 top-4">
           <div className="flex gap-2 items-center justify-center">
             <Button asChild>
@@ -130,33 +121,12 @@ export default async function Home() {
             Let AI Be Your Dungeon Master.
           </TypographyH2>
         </div>
-      </div>
-      <div className="w-full flex items-center justify-center flex-col bg-background pb-8">
-        <Button
-          asChild
-          className="bg-indigo-600 hover:bg-indigo-800 text-white py-6 text-large mt-8 font-bold"
-        >
-          <Link href="/adventures">Begin Your Adventure</Link>
+        <Button asChild>
+          <Link href="/adventures">Play Now</Link>
         </Button>
-        <div className="w-full text-center flex items-center justify-center mt-4">
-          <TypographySmall>
-            <ZapIcon
-              size={16}
-              className="fill-yellow-600 inline text-yellow-600"
-            />{" "}
-            by{" "}
-            <a
-              href="https://steamship.com"
-              target="_blank"
-              className="underline"
-            >
-              Steamship
-            </a>
-          </TypographySmall>
-        </div>
       </div>
       <div className="bg-background py-12 md:py-32 flex flex-col px-6 md:px-12">
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32">
+        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32 -mt-20 md:-mt-44 z-20">
           <Section>
             <Title
               title="Choose Your Adventure"

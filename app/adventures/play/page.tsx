@@ -1,0 +1,94 @@
+import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
+import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
+import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
+import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
+import { TypographySmall } from "@/components/ui/typography/TypographySmall";
+import { getAgents } from "@/lib/agent/agent.server";
+import prisma from "@/lib/db";
+import { auth } from "@clerk/nextjs";
+import { format } from "date-fns";
+import { log } from "next-axiom";
+import Image from "next/image";
+import Link from "next/link";
+
+export default async function AdventuresPage() {
+  const { userId } = auth();
+
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+
+  const agents = await getAgents(userId);
+
+  async function deleteAgent(agentId: number) {
+    "use server";
+    await prisma.agents.delete({
+      where: {
+        id: agentId,
+        ownerId: userId!,
+      },
+    });
+  }
+
+  return (
+    <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
+      <div className="flex flex-col justify-between">
+        <TypographyH2 className="border-none">
+          Continue An Adventure
+        </TypographyH2>
+        <TypographyMuted className="text-lg">
+          Continue an adventure you have already started
+        </TypographyMuted>
+      </div>
+      {agents.length > 0 && (
+        <>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {agents.map((agent) => (
+              <Link
+                key={agent.agentUrl}
+                href={`/play/${agent.handle}/camp`}
+                className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
+              >
+                <div className="p-4 flex flex-col gap-4 bg-muted">
+                  <div>
+                    <div className="relative w-full aspect-video rounded-md overflow-hidden">
+                      <Image
+                        src={agent.Adventure?.image || "/adventurer.png"}
+                        fill
+                        alt="Adventurer"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <TypographyLarge>
+                      {agent?.Adventure?.name || "Epic Quest"}
+                    </TypographyLarge>
+                    <TypographyMuted className="line-clamp-1">
+                      {agent?.Adventure?.description ||
+                        "An epic quest filled with danger and adventure"}
+                    </TypographyMuted>
+                  </div>
+                </div>
+                <div className="p-4 flex justify-between items-center">
+                  <div>
+                    <TypographySmall className="text-muted-foreground">
+                      Started at
+                    </TypographySmall>
+                    <TypographyLarge>
+                      {format(agent.createdAt, "MMM d, yyyy")}
+                    </TypographyLarge>
+                  </div>
+                  <AdventureInstanceDropdown
+                    agentId={agent.id}
+                    deleteAgent={deleteAgent}
+                  />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

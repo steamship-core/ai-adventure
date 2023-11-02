@@ -29,12 +29,12 @@ const NavBarLink = ({
 };
 
 const AdventureNavBar = () => {
-  const pathname = usePathname();
   return (
     <nav className="w-full flex justify-between px-4 md:px-6 items-center border-b border-muted">
       <div className="flex gap-6">
-        <NavBarLink href="/adventures">Home</NavBarLink>
-        <NavBarLink href="/adventures/all">Discover</NavBarLink>
+        <NavBarLink href="/adventures">Discover</NavBarLink>
+        <NavBarLink href="/adventures/build">Build</NavBarLink>
+        <NavBarLink href="/adventures/play">Play</NavBarLink>
       </div>
       <UserButton />
     </nav>
