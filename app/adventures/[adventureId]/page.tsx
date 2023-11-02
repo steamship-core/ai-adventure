@@ -46,18 +46,16 @@ export default async function AdventurePage({
             )}
           </div>
           <div className="flex gap-2">
-            {(adventure?.agentConfig?.adventure_tags || []).map(
-              (tag: string) => {
-                return (
-                  <div
-                    key={tag}
-                    className="bg-indigo-600 rounded-full text-sm px-2"
-                  >
-                    {tag}
-                  </div>
-                );
-              }
-            )}
+            {(adventure?.tags || []).map((tag: string) => {
+              return (
+                <div
+                  key={tag}
+                  className="bg-indigo-600 rounded-full text-sm px-2"
+                >
+                  {tag}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
