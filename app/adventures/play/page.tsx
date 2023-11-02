@@ -44,48 +44,54 @@ export default async function AdventuresPage() {
       {agents.length > 0 && (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {agents.map((agent) => (
-              <Link
-                key={agent.agentUrl}
-                href={`/play/${agent.handle}/camp`}
-                className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
-              >
-                <div className="p-4 flex flex-col gap-4 bg-muted">
-                  <div>
-                    <div className="relative w-full aspect-video rounded-md overflow-hidden">
-                      <Image
-                        src={agent.Adventure?.image || "/adventurer.png"}
-                        fill
-                        alt="Adventurer"
-                      />
+            {agents.map((agent) => {
+              if (!agent?.handle) {
+                // Note: Some old database rows seem to lack this.
+                return null;
+              }
+              return (
+                <Link
+                  key={agent.agentUrl}
+                  href={`/play/${agent.handle}/camp`}
+                  className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
+                >
+                  <div className="p-4 flex flex-col gap-4 bg-muted">
+                    <div>
+                      <div className="relative w-full aspect-video rounded-md overflow-hidden">
+                        <Image
+                          src={agent.Adventure?.image || "/adventurer.png"}
+                          fill
+                          alt="Adventurer"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <TypographyLarge>
+                        {agent?.Adventure?.name || "Epic Quest"}{" "}
+                      </TypographyLarge>
+                      <TypographyMuted className="line-clamp-1">
+                        {agent?.Adventure?.description ||
+                          "An epic quest filled with danger and adventure"}
+                      </TypographyMuted>
                     </div>
                   </div>
-                  <div>
-                    <TypographyLarge>
-                      {agent?.Adventure?.name || "Epic Quest"}
-                    </TypographyLarge>
-                    <TypographyMuted className="line-clamp-1">
-                      {agent?.Adventure?.description ||
-                        "An epic quest filled with danger and adventure"}
-                    </TypographyMuted>
+                  <div className="p-4 flex justify-between items-center">
+                    <div>
+                      <TypographySmall className="text-muted-foreground">
+                        Started at
+                      </TypographySmall>
+                      <TypographyLarge>
+                        {format(agent.createdAt, "MMM d, yyyy")}
+                      </TypographyLarge>
+                    </div>
+                    <AdventureInstanceDropdown
+                      agentId={agent.id}
+                      deleteAgent={deleteAgent}
+                    />
                   </div>
-                </div>
-                <div className="p-4 flex justify-between items-center">
-                  <div>
-                    <TypographySmall className="text-muted-foreground">
-                      Started at
-                    </TypographySmall>
-                    <TypographyLarge>
-                      {format(agent.createdAt, "MMM d, yyyy")}
-                    </TypographyLarge>
-                  </div>
-                  <AdventureInstanceDropdown
-                    agentId={agent.id}
-                    deleteAgent={deleteAgent}
-                  />
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </>
       )}
