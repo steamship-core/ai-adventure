@@ -14,6 +14,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.26.1",
     "@lottiefiles/react-lottie-player": "^3.5.3",
+    "@monaco-editor/react": "^4.6.0",
     "@prisma/client": "5.5.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-dialog": "^1.0.5",
