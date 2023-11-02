@@ -117,7 +117,9 @@ export default async function Home() {
             asChild
             className="bg-indigo-600 text-primary hover:bg-indigo-800 font-bold"
           >
-            <a href="/adventures/fda6110c-1764-4117-a4f4-d1e7c7008d43/create-instance">
+            <a
+              href={`/adventures/${process.env.NEXT_PUBLIC_DEFAULT_ADVENTURE_ID}/create-instance`}
+            >
               <SparklesIcon className="mr-2" />
               Play Now
             </a>
