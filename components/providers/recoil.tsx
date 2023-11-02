@@ -60,13 +60,26 @@ export const recoilInitialBlock = atom<string | undefined>({
   key: "InitialChatBlock",
 });
 
+export const EditorLayoutImage = {
+  UNSET: "UNSET",
+  DEFAULT: "DEFAULT",
+} as const;
+
+export const recoilEditorLayoutImage = atom<
+  string | keyof typeof EditorLayoutImage
+>({
+  key: "EditorLayoutImage",
+  default: EditorLayoutImage.UNSET,
+});
+
 function initializeState(
   set: SetRecoilState,
   gameState: GameState,
   energyState: number = 0,
   backgroundAudioState?: boolean,
   audioActiveState: boolean = false,
-  backgroundAudioUrl?: string
+  backgroundAudioUrl?: string,
+  editorLayoutImage: string = EditorLayoutImage.UNSET
 ) {
   set(recoilGameState, gameState);
   set(recoilEnergyState, energyState);
@@ -75,22 +88,25 @@ function initializeState(
   set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
   set(recoilBlockHistory, []);
   set(recoilInitialBlock, undefined);
+  set(recoilEditorLayoutImage, editorLayoutImage);
 }
 
 function RecoilProvider({
   children,
-  gameState,
-  energyState,
+  gameState = {} as GameState,
+  energyState = 0,
   backgroundAudioState,
   audioActiveState,
   backgroundAudioUrlState,
+  editorLayoutImage,
 }: {
   children: ReactNode;
-  gameState: GameState;
-  energyState: number;
+  gameState?: GameState;
+  energyState?: number;
   backgroundAudioState?: boolean;
   audioActiveState?: boolean;
   backgroundAudioUrlState?: string;
+  editorLayoutImage?: string;
 }) {
   return (
     <RecoilRoot
@@ -101,7 +117,8 @@ function RecoilProvider({
           energyState,
           backgroundAudioState,
           audioActiveState,
-          backgroundAudioUrlState
+          backgroundAudioUrlState,
+          editorLayoutImage
         )
       }
     >
