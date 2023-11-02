@@ -1,12 +1,16 @@
 import { log } from "next-axiom";
 import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
+import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
 
-export const getAdventures = async (limit?: number) => {
+export const getAdventures = async (limit?: number, onlyPublic?: boolean) => {
   return prisma.adventure.findMany({
     ...(limit && { take: limit }),
     orderBy: {
       createdAt: "desc",
+    },
+    where: {
+      ...(onlyPublic === true ? { public: true } : {}),
     },
   });
 };
@@ -83,6 +87,17 @@ export const updateAdventure = async (
 
   if (adventure.creatorId !== userId) {
     throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
+  }
+
+  if (updateObj.adventure_public === true) {
+    const userApproval = await getOrCreateUserApprovals(userId);
+    if (!userApproval.isApproved) {
+      console.log(
+        `Warning: User ${userId} is not approved for public adventures`
+      );
+      log.warn(`Warning: User ${userId} is not approved for public adventures`);
+      updateObj.adventure_public = false;
+    }
   }
 
   try {
@@ -163,6 +178,17 @@ export const importAdventure = async (
   log.info(
     `Importing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
   );
+
+  if (importObj.adventure_public === true) {
+    const userApproval = await getOrCreateUserApprovals(userId);
+    if (!userApproval.isApproved) {
+      console.log(
+        `Warning: User ${userId} is not approved for public adventures`
+      );
+      log.warn(`Warning: User ${userId} is not approved for public adventures`);
+      importObj.adventure_public = false;
+    }
+  }
 
   try {
     await prisma.adventure.update({
