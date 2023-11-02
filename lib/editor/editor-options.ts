@@ -140,10 +140,19 @@ Or reference one you have defined in the **Image Settings** tab.`,
   {
     name: "camp_image_prompt",
     label: "Camp Image Prompt",
-    description: "The theme name for generating camp image.",
+    description: `Prompt for generating the camp image.
+    
+You can use the following variables:
+  - {tone} for the tone of the story
+  - {genre} for the genre of the story.
+
+Example: 
+
+  {tone} {genre} camp.
+        
+    `,
     type: "longtext",
     default: "{tone} {genre} camp.",
-    unused: true,
   },
   {
     name: "camp_image_negative_prompt",
