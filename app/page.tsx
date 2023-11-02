@@ -176,7 +176,7 @@ export default async function Home() {
                         quests. Stay tuned! For now, while we are in beta, all
                         adventures are versions of our demo adventure. Create an
                         adventure at our{" "}
-                        <Link href="/adventure" className="text-blue-600">
+                        <Link href="/adventures" className="text-blue-600">
                           adventures page.
                         </Link>
                       </DialogDescription>
