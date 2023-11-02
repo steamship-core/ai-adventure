@@ -4,6 +4,7 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 
+// set Adventure to features in SQL
 export default async function AdventuresPage() {
   const { userId } = auth();
 

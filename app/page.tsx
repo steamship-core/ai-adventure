@@ -95,14 +95,6 @@ export default async function Home() {
       createdAt: "asc",
     },
   });
-  await prisma.adventure.update({
-    where: {
-      id: "715bb9c0-2c5d-48a5-9024-05be3674e6d4",
-    },
-    data: {
-      featured: true,
-    },
-  });
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
