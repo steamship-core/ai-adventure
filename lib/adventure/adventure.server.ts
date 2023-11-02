@@ -191,6 +191,7 @@ export const importAdventure = async (
       data: {
         name: importObj["adventure_name"],
         description: importObj["adventure_description"],
+        shortDescription: importObj["adventure_short_description"],
         agentDevConfig: importObj,
       },
     });

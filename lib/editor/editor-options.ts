@@ -66,6 +66,21 @@ export const GeneralOptions: Setting[] = [
     default: "",
     required: true,
   },
+  {
+    name: "adventure_player_singular_noun",
+    label: "Noun for a 'Player'",
+    description:
+      "The singular noun used to refer to the pre-made player options. E.g.: Choose your Player (Adventurer, Hero, etc.)",
+    type: "text",
+    default: "Player",
+  },
+  {
+    name: "adventure_tags",
+    label: "Tags",
+    description: "A list of short string tags.",
+    type: "list",
+    listof: "text",
+  },
 ];
 
 export const WorldOptions: Setting[] = [

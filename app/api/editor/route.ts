@@ -15,16 +15,21 @@ export const POST = withAxiom(async (request: Request) => {
   }
 
   try {
-    const { operation, id, data } = await request.json();
+    let { operation, id, data } = await request.json();
 
     if (operation === "update") {
       const adventure = await updateAdventure(userId, id, data);
       return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "import") {
-      if (typeof data["adventure_name"] == "undefined") {
-        data["adventure_name"] = "Untitled Adventure";
-        data["adventure_description"] = "Empty Description";
-      }
+      data = {
+        ...{
+          // Defaults
+          adventure_name: "Untitled Adventure",
+          adventure_description: "Empty Description",
+          adventure_short_description: "Empty Short Description",
+        },
+        ...data,
+      };
       const adventure = await importAdventure(userId, id, data);
       return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "publish") {

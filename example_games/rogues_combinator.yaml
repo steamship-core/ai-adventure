@@ -1,0 +1,42 @@
+adventure_name: "Rogue's Combinator"
+image: /examples/rogues-combinator.png
+adventure_short_description: "Can you make it to IPO as a flawed founder?"
+adventure_description: "Found a company, raise capital, grow team, and seek the ultimate return. But watch out for the pitfalls of founder life... especially those you create yourself."
+adventure_player_singular_noun: "Founder"
+adventure_tags:
+  - Gonzo
+  - Hard Mode
+characters:
+  - name: Richard Stallman
+    tagline: Inspires an army. But makes everything free.
+    genre: Gonzo Adventure
+    tone: Silly
+    image: /examples/richard-stallman.png
+    description: |
+      TODO
+    background: |
+      TODO
+    motivation: |
+      TODO
+  - name: Elizabeth Holmes
+    tagline: Mingles with insiders. But can't stop lying.
+    genre: Gonzo Adventure
+    tone: Silly
+    image: /examples/elizabeth-holmes.png
+    description: |
+      TODO
+    background: |
+      TODO
+    motivation: |
+      TODO
+  - name: Bighead
+    tagline: Nobody sees him coming. Especially him.
+    genre: Gonzo Comic Tragedy
+    tone: Silly
+    image: /examples/bighead.png
+    description: |
+      TODO
+    background: |
+      TODO
+    motivation: |
+      TODO
