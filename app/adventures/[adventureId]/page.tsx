@@ -25,8 +25,6 @@ export default async function AdventurePage({
   }
   const isCreator = adventure.creatorId === userId;
 
-  console.log(adventure);
-
   return (
     <div>
       <div className="relative h-96 w-full">

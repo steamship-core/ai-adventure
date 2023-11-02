@@ -1,14 +1,16 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
+import { cn } from "@/lib/utils";
 import {
   AlertTriangleIcon,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Input } from "../ui/input";
+import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
 
@@ -118,6 +120,18 @@ export default function SettingElement({
         id="picture"
         type="file"
         className="hover:cursor-pointer"
+      />
+    );
+  } else if (setting.type === "textarea") {
+    innerField = (
+      <TextareaAutosize
+        className={cn(
+          inputClassNames,
+          "w-full py-[.6rem] resize-none disabled:cursor-default"
+        )}
+        value={value}
+        onChange={onTextboxChange}
+        maxRows={8}
       />
     );
   } else if (setting.type == "boolean") {
