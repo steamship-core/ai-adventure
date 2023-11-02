@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 const BackButton = () => {
   return (
     <Button variant="outline" asChild>
-      <Link href={`/adventures/all`}>
+      <Link href={`/adventures`}>
         <ArrowLeftIcon size={16} className="mr-2" /> All Adventures
       </Link>
     </Button>

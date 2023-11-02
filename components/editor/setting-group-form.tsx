@@ -2,6 +2,7 @@
 
 import { SettingGroups } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
@@ -10,8 +11,8 @@ import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
 import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import SettingElement from "./setting-element";
+
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
@@ -22,7 +23,9 @@ export default function SettingGroupForm({
   const [bgFile, setBgFile] = useState<File | null>(null);
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
+    mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
+      const dataToSave = data;
       if (bgFile) {
         const res = await fetch(
           `/api/adventure/${adventureId}/image?filename=${bgFile.name}`,
@@ -34,14 +37,16 @@ export default function SettingGroupForm({
         if (res.ok) {
           const blobJson = (await res.json()) as PutBlobResult;
           setEditorLayoutImage(blobJson.url);
+          dataToSave.adventure_image = blobJson.url;
         }
       }
+      console.log("dataToSave", dataToSave);
       return fetch("/api/editor", {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
           id: adventureId,
-          data,
+          data: dataToSave,
         }),
       });
     },
@@ -123,13 +128,20 @@ export default function SettingGroupForm({
 
       {sg.href == "import" ? (
         <form onSubmit={onImport} className="space-y-8">
-          <Textarea
-            onChange={(e) => {
-              setImportYaml(e.target.value);
-            }}
-            rows={10}
-            className="min-h-48"
+          <Editor
+            language="yaml"
+            theme="vs-dark"
+            height="400px"
+            width="100%"
             value={importYaml}
+            options={{
+              minimap: {
+                enabled: false,
+              },
+            }}
+            onChange={(newVal?: string) => {
+              setImportYaml(newVal || "");
+            }}
           />
           <Button type="submit" value="Save" onClick={onImport}>
             Save
@@ -137,9 +149,19 @@ export default function SettingGroupForm({
         </form>
       ) : sg.href == "export" ? (
         <div className="space-y-8">
-          <code className="text-sm">
-            <pre>{yaml}</pre>
-          </code>
+          <Editor
+            language="yaml"
+            theme="vs-dark"
+            height="400px"
+            width="100%"
+            options={{
+              readOnly: true,
+              minimap: {
+                enabled: false,
+              },
+            }}
+            value={yaml}
+          />
         </div>
       ) : (
         <div className="space-y-8">

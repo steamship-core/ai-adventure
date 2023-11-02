@@ -1,21 +1,27 @@
-"use client";
-import CharacterMap from "@/components/adventures/character-map";
+import AdventureListElement from "@/components/adventures/adventure-list-element";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { characters } from "@/lib/characters";
+import prisma from "@/lib/db";
 import { cn } from "@/lib/utils";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
   StarIcon,
   VenetianMaskIcon,
   WandIcon,
-  ZapIcon,
 } from "lucide-react";
 import { Cinzel } from "next/font/google";
 import Image from "next/image";
@@ -67,7 +73,7 @@ const Section = ({ children }: { children: ReactNode }) => (
 const Title = ({ title, subtitle }: { title: string; subtitle: string }) => (
   <div className="flex flex-col items-center justify-center w-full text-center mb-16">
     <TypographyH3 className="text-xl md:text-3xl">{title}</TypographyH3>
-    <TypographyMuted className="text-lg md:text-2xl mt-4 max-w-md">
+    <TypographyMuted className="text-lg md:text-xl mt-4 max-w-lg">
       {subtitle}
     </TypographyMuted>
   </div>
@@ -79,12 +85,20 @@ const Actions = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-export default function Home() {
-  const { user } = useUser();
+export default async function Home() {
+  const featuredAdventures = await prisma.adventure.findMany({
+    where: {
+      featured: true,
+    },
+    take: 3,
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
-      <div className="relative flex-col pb-2 w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end">
+      <div className="relative flex-col w-full h-1/2 bg-gradient-to-b text-center from-transparent via-background/50 to-background flex items-center justify-end pb-20 md:pb-44">
         <div className="absolute right-4 top-4">
           <div className="flex gap-2 items-center justify-center">
             <Button asChild>
@@ -107,42 +121,40 @@ export default function Home() {
             Let AI Be Your Dungeon Master.
           </TypographyH2>
         </div>
-      </div>
-      <div className="w-full flex items-center justify-center flex-col bg-background pb-8">
-        <Button
-          asChild
-          className="bg-indigo-600 hover:bg-indigo-800 text-white py-6 text-large mt-8 font-bold"
-        >
-          <Link href="/adventures">Begin Your Adventure</Link>
+        <Button asChild>
+          <Link href="/adventures">Play Now</Link>
         </Button>
-        <div className="w-full text-center flex items-center justify-center mt-4">
-          <TypographySmall>
-            <ZapIcon
-              size={16}
-              className="fill-yellow-600 inline text-yellow-600"
-            />{" "}
-            by{" "}
-            <a
-              href="https://steamship.com"
-              target="_blank"
-              className="underline"
-            >
-              Steamship
-            </a>
-          </TypographySmall>
-        </div>
       </div>
       <div className="bg-background py-12 md:py-32 flex flex-col px-6 md:px-12">
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32">
+        <div className="max-w-4xl mx-auto w-full flex flex-col gap-32 -mt-20 md:-mt-44 z-20">
           <Section>
             <Title
-              title="Select a Character"
-              subtitle="Pick from one of three templates"
+              title="Choose Your Adventure"
+              subtitle="Select from a variety of adventures created by the community."
             />
-            <CharacterMap
-              adventureId={process.env.NEXT_PUBLIC_DEFAULT_ADVENTURE_ID}
-              characters={characters as any}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {featuredAdventures.map((adventure) => (
+                <Dialog key={adventure.id}>
+                  <DialogTrigger>
+                    <AdventureListElement adventure={adventure} link={false} />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Coming soon!</DialogTitle>
+                      <DialogDescription>
+                        We&apos;re working hard to bring fully customizable
+                        quests. Stay tuned! For now, while we are in beta, all
+                        adventures are versions of our demo adventure. Create an
+                        adventure at our{" "}
+                        <Link href="/adventures" className="text-blue-600">
+                          adventures page.
+                        </Link>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              ))}
+            </div>
           </Section>
           <Section>
             <Title
