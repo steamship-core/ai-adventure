@@ -1,3 +1,4 @@
+import BackButton from "@/components/adventures/back-button";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -5,7 +6,7 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
-import { ArrowLeftIcon, PencilIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -35,11 +36,7 @@ export default async function AdventurePage({
         />
         <div className="flex justify-between flex-col p-4 gap-2 md:p-6 absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-background">
           <div className="w-full flex justify-between">
-            <Button variant="outline" asChild>
-              <Link href={`/adventures`}>
-                <ArrowLeftIcon size={16} className="mr-2" /> Back
-              </Link>
-            </Button>
+            <BackButton />
             {adventure.creatorId === userId && (
               <Button variant="outline" asChild>
                 <Link href={`/adventures/editor/${params.adventureId}`}>
