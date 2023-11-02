@@ -22,7 +22,9 @@ export default function SettingGroupForm({
   const [bgFile, setBgFile] = useState<File | null>(null);
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
+    mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
+      const dataToSave = data;
       if (bgFile) {
         const res = await fetch(
           `/api/adventure/${adventureId}/image?filename=${bgFile.name}`,
@@ -34,14 +36,16 @@ export default function SettingGroupForm({
         if (res.ok) {
           const blobJson = (await res.json()) as PutBlobResult;
           setEditorLayoutImage(blobJson.url);
+          dataToSave.adventure_image = blobJson.url;
         }
       }
+      console.log("dataToSave", dataToSave);
       return fetch("/api/editor", {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
           id: adventureId,
-          data,
+          data: dataToSave,
         }),
       });
     },

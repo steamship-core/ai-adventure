@@ -1,4 +1,5 @@
 import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
+import AdventureListElement from "@/components/adventures/adventure-list-element";
 import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -172,37 +173,7 @@ export default async function AdventuresPage() {
             </div>
           </div>
           {adventures.map((adventure) => (
-            <Link
-              key={adventure.id}
-              href={`/adventures/${adventure.id}`}
-              className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
-            >
-              <div className="relative aspect-video ">
-                <Image
-                  src={adventure.image || "/adventurer.png"}
-                  fill
-                  alt="Adventurer"
-                />
-              </div>
-              <div className="pb-2 px-4 flex flex-col">
-                <div>
-                  <TypographySmall className="text-muted-foreground">
-                    Quest
-                  </TypographySmall>
-                  <TypographyLarge>
-                    {adventure.name || "Epic Quest"}
-                  </TypographyLarge>
-                </div>
-                <div>
-                  <TypographySmall className="text-muted-foreground">
-                    Description
-                  </TypographySmall>
-                  <TypographyLarge className="line-clamp-3">
-                    {adventure.shortDescription}
-                  </TypographyLarge>
-                </div>
-              </div>
-            </Link>
+            <AdventureListElement key={adventure.id} adventure={adventure} />
           ))}
         </div>
       </div>

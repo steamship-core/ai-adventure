@@ -24,6 +24,7 @@ export default async function AdventurePage({
   if (!adventure) {
     redirect(`/adventures`);
   }
+  console.log("adventure", adventure);
 
   return (
     <div>

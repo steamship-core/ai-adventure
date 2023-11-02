@@ -1,14 +1,11 @@
-"use client";
-import CharacterMap from "@/components/adventures/character-map";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
-import { characters } from "@/lib/characters";
 import { cn } from "@/lib/utils";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
@@ -67,7 +64,7 @@ const Section = ({ children }: { children: ReactNode }) => (
 const Title = ({ title, subtitle }: { title: string; subtitle: string }) => (
   <div className="flex flex-col items-center justify-center w-full text-center mb-16">
     <TypographyH3 className="text-xl md:text-3xl">{title}</TypographyH3>
-    <TypographyMuted className="text-lg md:text-2xl mt-4 max-w-md">
+    <TypographyMuted className="text-lg md:text-xl mt-4 max-w-lg">
       {subtitle}
     </TypographyMuted>
   </div>
@@ -79,8 +76,16 @@ const Actions = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
+const adventures = [
+  {
+    id: "1",
+    name: "The Lost Mine of Phandelver",
+    shortDescription: "A classic adventure for new players",
+    image: "/adventures/phandelver.png",
+  },
+];
+
 export default function Home() {
-  const { user } = useUser();
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
@@ -136,13 +141,17 @@ export default function Home() {
         <div className="max-w-4xl mx-auto w-full flex flex-col gap-32">
           <Section>
             <Title
-              title="Select a Character"
-              subtitle="Pick from one of three templates"
+              title="Choose Your Adventure"
+              subtitle="Select from a variety of adventures created by the community."
             />
-            <CharacterMap
-              adventureId={process.env.NEXT_PUBLIC_DEFAULT_ADVENTURE_ID}
-              characters={characters as any}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3">
+              {/* {adventures.map((adventure) => (
+                <AdventureListElement
+                  key={adventure.id}
+                  adventure={adventure}
+                />
+              ))} */}
+            </div>
           </Section>
           <Section>
             <Title

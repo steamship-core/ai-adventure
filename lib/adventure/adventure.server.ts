@@ -100,6 +100,9 @@ export const updateAdventure = async (
       } else if (key == "adventure_short_description") {
         adventure.shortDescription = value as string;
         // Special Case 3
+      } else if (key == "adventure_image") {
+        adventure.image = value as string;
+        // Special Case 4
       } else {
         devConfig[key as string] = value;
       }
@@ -112,6 +115,7 @@ export const updateAdventure = async (
         name: adventure.name,
         description: adventure.description,
         shortDescription: adventure.shortDescription,
+        image: adventure.image,
         agentDevConfig: devConfig,
       },
     });
@@ -192,6 +196,7 @@ export const importAdventure = async (
         name: importObj["adventure_name"],
         description: importObj["adventure_description"],
         shortDescription: importObj["adventure_short_description"],
+        image: importObj["image"],
         agentDevConfig: importObj,
       },
     });

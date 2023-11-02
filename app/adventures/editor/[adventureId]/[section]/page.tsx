@@ -42,6 +42,7 @@ export default async function EditorPage({
     adventure_name: adventure.name,
     adventure_description: adventure.description,
     adventure_short_description: adventure.shortDescription,
+    adventure_image: adventure.image,
     ...((adventure.agentDevConfig as any) || {}),
   };
 

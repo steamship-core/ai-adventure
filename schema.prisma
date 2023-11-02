@@ -21,6 +21,7 @@ model Adventure {
   image             String?             @default("")
   agentConfig       Json?
   agentDevConfig    Json?
+  featured          Boolean             @default(false)
   Agents            Agents[]
   CharacterTemplate CharacterTemplate[]
 }
