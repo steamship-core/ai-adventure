@@ -117,10 +117,10 @@ export default async function Home() {
             asChild
             className="bg-indigo-600 text-primary hover:bg-indigo-800 font-bold"
           >
-            <Link href="/adventures">
+            <a href="/adventures/fda6110c-1764-4117-a4f4-d1e7c7008d43/create-instance">
               <SparklesIcon className="mr-2" />
               Play Now
-            </Link>
+            </a>
           </Button>
         </div>
       </div>
