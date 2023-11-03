@@ -194,15 +194,10 @@ export default function SettingElement({
     const _value = Array.isArray(value) ? value : [];
     innerField = (
       <TagListElement
-        setting={setting}
         value={_value}
-        removeItem={removeItem}
-        setValue={(tag: string) => {
-          setValue((old: any) => {
-            const ret = [...(Array.isArray(old) ? old : []), tag];
-            updateFn(setting.name, ret);
-            return ret;
-          });
+        setValue={(newArr: string[]) => {
+          setValue(newArr);
+          updateFn(setting.name, newArr);
         }}
       />
     );
