@@ -9,7 +9,7 @@ import {
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
@@ -21,18 +21,17 @@ import {
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
+import TagListElement from "./tag-list-element";
 
 export default function SettingElement({
   setting,
   updateFn,
-  setBgFile,
   valueAtLoad,
   inlined = false,
   existingDynamicThemes = [],
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
-  setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
@@ -44,7 +43,6 @@ export default function SettingElement({
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const newValue = e.target.files[0];
-    setBgFile(newValue);
     updateFn(setting.name, newValue);
   };
 
@@ -223,6 +221,17 @@ export default function SettingElement({
     );
   } else if (setting.type == "longtext") {
     innerField = <Textarea onChange={onTextboxChange} value={value} />;
+  } else if (setting.type == "tag-list") {
+    const _value = Array.isArray(value) ? value : [];
+    innerField = (
+      <TagListElement
+        value={_value}
+        setValue={(newArr: string[]) => {
+          setValue(newArr);
+          updateFn(setting.name, newArr);
+        }}
+      />
+    );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
     console.log("value", _value);
@@ -249,7 +258,6 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
-                          setBgFile={setBgFile}
                           existingDynamicThemes={existingDynamicThemes}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
@@ -265,7 +273,6 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
-                      setBgFile={setBgFile}
                       existingDynamicThemes={existingDynamicThemes}
                       setting={{
                         ...setting,

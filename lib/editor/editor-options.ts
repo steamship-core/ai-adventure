@@ -17,6 +17,7 @@ export type Setting = {
     | "options"
     | "boolean"
     | "list"
+    | "tag-list"
     | "image";
   listof?: "object" | "text";
   default?: string;
@@ -107,6 +108,13 @@ export const GeneralOptions: Setting[] = [
     required: true,
   },
   {
+    name: "adventure_tags",
+    label: "Tags",
+    description: "A list of short string tags.",
+    type: "tag-list",
+    listof: "text",
+  },
+  {
     name: "adventure_image",
     label: "Image",
     description: "Select an image to represent this adventure.",
@@ -121,13 +129,6 @@ export const GeneralOptions: Setting[] = [
       "The singular noun used to refer to the pre-made player options. E.g.: Choose your Player (Adventurer, Hero, etc.)",
     type: "text",
     default: "Player",
-  },
-  {
-    name: "adventure_tags",
-    label: "Tags",
-    description: "A list of short string tags.",
-    type: "list",
-    listof: "text",
   },
 ];
 
@@ -181,6 +182,12 @@ export const CharacterOptions: Setting[] = [
         label: "Name",
         description: "Name of the preset character.",
         type: "text",
+      },
+      {
+        name: "image",
+        label: "Image",
+        description: "Image of the preset character.",
+        type: "image",
       },
       {
         name: "tagline",
