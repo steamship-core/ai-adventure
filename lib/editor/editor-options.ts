@@ -162,6 +162,7 @@ Use a pre-selected theme or add more in the **Image Settings** tab.`,
       },
     ],
     default: "pixel_art_1",
+    includeDynamicOptions: "image-themes",
   },
   {
     name: "camp_image_prompt",

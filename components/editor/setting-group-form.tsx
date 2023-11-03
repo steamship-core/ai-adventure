@@ -19,9 +19,24 @@ export default function SettingGroupForm({
 }: {
   existing: Record<string, any>;
 }) {
+  const existingThemesFromConfig = (_config: any) => {
+    const _existingThemes = (_config as any)?.themes || [];
+    const _existingDynamicThemes = _existingThemes.map((theme: any) => {
+      return {
+        label: theme.name,
+        value: theme.name,
+      };
+    });
+    return _existingDynamicThemes;
+  };
+
   const { groupName, adventureId } = useEditorRouting();
   const [bgFile, setBgFile] = useState<File | null>(null);
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
+  const [existingThemes, setExistingThemes] = useState<
+    { value: string; label: string }[]
+  >(existingThemesFromConfig(existing));
+
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
@@ -41,6 +56,11 @@ export default function SettingGroupForm({
         }
       }
       console.log("dataToSave", dataToSave);
+
+      if (typeof dataToSave.themes != "undefined") {
+        setExistingThemes(existingThemesFromConfig(dataToSave));
+      }
+
       return fetch("/api/editor", {
         method: "POST",
         body: JSON.stringify({
@@ -67,6 +87,7 @@ export default function SettingGroupForm({
    * those fields which were changed.
    */
   const [dataToUpdate, setDataToUpdate] = useState<Record<string, any>>({});
+
   const [importYaml, setImportYaml] = useState("");
 
   const onImport = (e: any) => {
@@ -120,13 +141,8 @@ export default function SettingGroupForm({
   }
 
   // The editor has special knowledge of the image themes so that it can display a dropdown
-  const existingThemes = (existing as any)?.themes || [];
-  const existingDynamicThemes = existingThemes.map((theme: any) => {
-    return {
-      label: theme.name,
-      value: theme.name,
-    };
-  });
+
+  console.log("ETT", existingThemes);
 
   return (
     <div className="space-y-6">
@@ -181,6 +197,7 @@ export default function SettingGroupForm({
               updateFn={setKeyValue}
               setBgFile={setBgFile}
               valueAtLoad={existing ? existing[setting.name] : null}
+              existingDynamicThemes={existingThemes}
             />
           ))}
           <Button value="Save" onClick={onSave}>
