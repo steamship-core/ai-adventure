@@ -20,6 +20,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographySmall } from "../ui/typography/TypographySmall";
+import AdventureTag from "./adventure-tag";
 
 const fetchPage = async (
   pageParam?: string | undefined | null,
@@ -173,7 +174,7 @@ const AdventureList = () => {
               <Link
                 key={adventure.id}
                 href={`/adventures/${adventure.id}`}
-                className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
+                className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600 flex flex-col"
               >
                 <div className="relative aspect-video ">
                   <Image
@@ -182,22 +183,29 @@ const AdventureList = () => {
                     alt="Adventurer"
                   />
                 </div>
-                <div className="pb-2 px-4 flex flex-col">
+                <div className="pb-2 px-4 flex flex-1 flex-col justify-between">
                   <div>
-                    <TypographySmall className="text-muted-foreground">
-                      Quest
-                    </TypographySmall>
-                    <TypographyLarge>
-                      {adventure.name || "Epic Quest"}
-                    </TypographyLarge>
+                    <div>
+                      <TypographySmall className="text-muted-foreground">
+                        Quest
+                      </TypographySmall>
+                      <TypographyLarge>
+                        {adventure.name || "Epic Quest"}
+                      </TypographyLarge>
+                    </div>
+                    <div>
+                      <TypographySmall className="text-muted-foreground">
+                        Description
+                      </TypographySmall>
+                      <TypographyLarge className="line-clamp-3">
+                        {adventure.description}
+                      </TypographyLarge>
+                    </div>
                   </div>
-                  <div>
-                    <TypographySmall className="text-muted-foreground">
-                      Description
-                    </TypographySmall>
-                    <TypographyLarge className="line-clamp-3">
-                      {adventure.description}
-                    </TypographyLarge>
+                  <div className="flex mt-2 flex-wrap gap-2">
+                    {adventure.tags.map((tag) => (
+                      <AdventureTag key={tag} tag={tag} />
+                    ))}
                   </div>
                 </div>
               </Link>
