@@ -21,6 +21,7 @@ export type Setting = {
   listof?: "object" | "text";
   default?: string;
   options?: OptionValue[];
+  includeDynamicOptions?: "image-themes";
   required?: boolean;
   unused?: boolean;
   listSchema?: Setting[];
@@ -69,6 +70,25 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+  },
+  {
+    name: "adventure_genre",
+    label: "Genre",
+    description: "What genre is this adventure? E.g.: Fantasy, Sci-Fi, etc.",
+    type: "text",
+    default: "",
+    required: true,
+    unused: true,
+  },
+  {
+    name: "adventure_tone",
+    label: "Tone",
+    description:
+      "What is the tone of this adventure? E.g.: Serious, Silly, etc.",
+    type: "text",
+    default: "",
+    required: true,
+    unused: true,
   },
   {
     name: "adventure_short_description",
@@ -129,14 +149,19 @@ export const CampOptions: Setting[] = [
     label: "Camp Image Theme",
     description: `The theme name for generating camp image.
 
-Use a built-in theme:
-*  \`pixel_art_1\`
-*  \`pixel_art_2\`
-
-Or reference one you have defined in the **Image Settings** tab.`,
-    type: "text",
+Use a pre-selected theme or add more in the **Image Settings** tab.`,
+    type: "select",
+    options: [
+      {
+        value: "pixel_art_1",
+        label: "pixel_art_1",
+      },
+      {
+        value: "pixel_art_2",
+        label: "pixel_art_2",
+      },
+    ],
     default: "pixel_art_1",
-    unused: true,
   },
   {
     name: "camp_image_prompt",
@@ -158,10 +183,9 @@ Example:
   {
     name: "camp_image_negative_prompt",
     label: "Camp Image Negative Prompt",
-    description: "The negative prompt for generating camp images.",
+    description: "Negative prompt for generating camp images.",
     type: "longtext",
     default: "",
-    unused: true,
   },
 ];
 
@@ -223,7 +247,6 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
-    unused: true,
   },
   {
     name: "profile_image_prompt",
@@ -231,7 +254,6 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The theme name for generating profile image.",
     type: "longtext",
     default: "{tone} {genre} profile picture.",
-    unused: true,
   },
   {
     name: "profile_image_negative_prompt",
@@ -239,7 +261,6 @@ Or reference one you have defined in the **Image Settings** tab.`,
     description: "The negative prompt for generating profile images.",
     type: "longtext",
     default: "",
-    unused: true,
   },
 ];
 
@@ -256,7 +277,6 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
-    unused: true,
   },
   {
     name: "camp_image_prompt",
@@ -266,7 +286,6 @@ Or reference one you have defined in the **Image Settings** tab.`,
     default: `16-bit retro-game sprite for an item in a hero's inventory.
 The items's name is: {name}.
 The item's description is: {description}.`,
-    unused: true,
   },
   {
     name: "camp_image_negative_prompt",
@@ -274,7 +293,6 @@ The item's description is: {description}.`,
     description: "The negative prompt for generating item images.",
     type: "longtext",
     default: "",
-    unused: true,
   },
   {
     name: "items",
@@ -308,7 +326,6 @@ Use a built-in theme:
 Or reference one you have defined in the **Image Settings** tab.`,
     type: "text",
     default: "pixel_art_1",
-    unused: true,
   },
   {
     name: "quest_background_prompt",
@@ -318,7 +335,6 @@ Or reference one you have defined in the **Image Settings** tab.`,
     default: `16-bit retro-game sprite for an item in a hero's inventory.
 The items's name is: {name}.
 The item's description is: {description}.`,
-    unused: true,
   },
   {
     name: "quest_background_negative_prompt",
@@ -326,7 +342,6 @@ The item's description is: {description}.`,
     description: "The negative prompt for generating quest background.",
     type: "longtext",
     default: "",
-    unused: true,
   },
 ];
 

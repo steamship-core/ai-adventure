@@ -20,12 +20,14 @@ export default function SettingElement({
   setBgFile,
   valueAtLoad,
   inlined = false,
+  existingDynamicThemes = [],
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
   inlined?: boolean;
+  existingDynamicThemes: { value: string; label: string }[];
 }) {
   let [value, setValue] = useState(valueAtLoad);
 
@@ -148,9 +150,15 @@ export default function SettingElement({
       </div>
     );
   } else if (setting.type == "select") {
+    const options = [
+      ...(setting.options || []),
+      ...(setting.includeDynamicOptions == "image-themes"
+        ? existingDynamicThemes
+        : []),
+    ];
     innerField = (
       <select onChange={onSelectChange} value={value}>
-        {setting.options?.map((option) => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

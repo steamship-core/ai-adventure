@@ -119,6 +119,15 @@ export default function SettingGroupForm({
     yaml = stringify(existing);
   }
 
+  // The editor has special knowledge of the image themes so that it can display a dropdown
+  const existingThemes = (existing as any)?.themes || [];
+  const existingDynamicThemes = existingThemes.map((theme: any) => {
+    return {
+      label: theme.name,
+      value: theme.name,
+    };
+  });
+
   return (
     <div className="space-y-6">
       <div>
