@@ -25,6 +25,7 @@ model Adventure {
   tags              String[]            @default([])
   Agents            Agents[]
   CharacterTemplate CharacterTemplate[]
+  updatedAt         DateTime            @default(now()) @updatedAt
 }
 
 model CharacterTemplate {
