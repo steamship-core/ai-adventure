@@ -14,4 +14,6 @@ export interface IWorkspaceClient {
     handle?: string;
     fetchIfExists?: boolean;
   }): Promise<Workspace>;
+
+  delete(params: { handle?: string; id?: string }): Promise<Workspace>;
 }
