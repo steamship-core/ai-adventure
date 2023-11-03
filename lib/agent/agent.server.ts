@@ -18,6 +18,7 @@ export const getAgents = async (userId: string) => {
           description: true,
           createdAt: true,
           image: true,
+          tags: true,
         },
       },
     },

@@ -1,35 +1,27 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Character } from "@/lib/game/schema/characters";
+import { Adventure } from "@prisma/client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import ErrorBoundary from "../error-boundary";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import CharacterMap from "./character-map";
 
-const CharacterTemplatesSection = ({
-  adventureId,
-  playerSingularNoun = "Player",
-}: {
-  adventureId: string;
-  playerSingularNoun: string;
-}) => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-  useEffect(() => {
-    if (adventureId) {
-      const getCharacters = async () => {
-        const res = await fetch(`/api/adventure/${adventureId}`);
-        if (res.ok) {
-          const json = await res.json();
-          setCharacters(json?.agentConfig?.characters);
-        }
-      };
-      getCharacters();
-    }
-  }, [adventureId]);
+const getAgentConfig = (adventure: Adventure) => {
+  if (!adventure?.agentConfig) return null;
+  return adventure.agentConfig as {
+    characters?: Character[];
+    adventure_player_singular_noun?: string;
+  };
+};
 
-  const hasPremadeCharacters = characters && characters.length > 0;
+const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
+  const characters = getAgentConfig(adventure)?.characters || [];
+  const playerSingularNoun =
+    getAgentConfig(adventure)?.adventure_player_singular_noun || "Player";
+
+  const hasPremadeCharacters = characters.length > 0;
 
   const createDescription = hasPremadeCharacters ? (
     <TypographyMuted className="text-lg">
@@ -42,6 +34,8 @@ const CharacterTemplatesSection = ({
     </TypographyMuted>
   );
 
+  console.log(adventure);
+
   return (
     <>
       {hasPremadeCharacters && (
@@ -51,19 +45,22 @@ const CharacterTemplatesSection = ({
               Choose your {playerSingularNoun}
             </TypographyH2>
             <div className="mt-2  max-w-4xl">
-              <CharacterMap characters={characters} adventureId={adventureId} />
+              <CharacterMap
+                characters={characters}
+                adventureId={adventure.id}
+              />
             </div>
           </div>
         </ErrorBoundary>
       )}
       <div className="mt-6">
         <TypographyH2 className="border-none">
-          Create your own {playerSingularNoun.toLocaleLowerCase()}
+          Choose a {playerSingularNoun.toLocaleLowerCase()}
         </TypographyH2>
         {createDescription}
         <div className="mt-2">
           <Button asChild className="text-xl py-6 px-6 mt-2">
-            <Link href={`/adventures/${adventureId}/create-instance`}>
+            <Link href={`/adventures/${adventure.id}/create-instance`}>
               Create a {playerSingularNoun.toLocaleLowerCase()}
             </Link>
           </Button>

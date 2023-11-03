@@ -1,4 +1,5 @@
 import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
+import AdventureTag from "@/components/adventures/adventure-tag";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
@@ -75,19 +76,26 @@ export default async function AdventuresPage() {
                       </TypographyMuted>
                     </div>
                   </div>
-                  <div className="p-4 flex justify-between items-center">
-                    <div>
-                      <TypographySmall className="text-muted-foreground">
-                        Started at
-                      </TypographySmall>
-                      <TypographyLarge>
-                        {format(agent.createdAt, "MMM d, yyyy")}
-                      </TypographyLarge>
+                  <div className="p-4 flex flex-1 justify-between flex-col">
+                    <div className=" flex justify-between items-center">
+                      <div>
+                        <TypographySmall className="text-muted-foreground">
+                          Started at
+                        </TypographySmall>
+                        <TypographyLarge>
+                          {format(agent.createdAt, "MMM d, yyyy")}
+                        </TypographyLarge>
+                      </div>
+                      <AdventureInstanceDropdown
+                        agentId={agent.id}
+                        deleteAgent={deleteAgent}
+                      />
                     </div>
-                    <AdventureInstanceDropdown
-                      agentId={agent.id}
-                      deleteAgent={deleteAgent}
-                    />
+                    <div className="flex mt-2 flex-wrap gap-2">
+                      {agent.Adventure?.tags.map((tag) => (
+                        <AdventureTag key={tag} tag={tag} />
+                      ))}
+                    </div>
                   </div>
                 </Link>
               );

@@ -172,6 +172,12 @@ export const PremadeCharacterOptions: Setting[] = [
         type: "text",
       },
       {
+        name: "image",
+        label: "Image",
+        description: "Image of the preset character.",
+        type: "image",
+      },
+      {
         name: "tagline",
         label: "Tag Line",
         description: "A short tagline for your character.",

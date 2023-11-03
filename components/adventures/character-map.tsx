@@ -42,7 +42,7 @@ const CharacterMap = ({
               <Image
                 fill
                 src={character.image!}
-                alt="Nox Umbra"
+                alt={character.name}
                 className="object-cover z-10"
               />
               <div className="z-20 absolute bottom-0 left-0 bg-background/80 w-full">

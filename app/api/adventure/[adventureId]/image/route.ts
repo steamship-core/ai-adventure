@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { put } from "@vercel/blob";
 import { log } from "next-axiom";
 import { NextResponse } from "next/server";
-
+import { v4 } from "uuid";
 export async function POST(
   request: Request,
   { params }: { params: { handle: string } }
@@ -26,7 +26,7 @@ export async function POST(
     log.error("No adventure");
     return NextResponse.json({ error: "Adventure not found" }, { status: 404 });
   }
-  const blob = await put(`${adventure.id}-bg-${filename}`, request.body!, {
+  const blob = await put(`${adventure.id}-${v4()}-${filename}`, request.body!, {
     access: "public",
   });
 

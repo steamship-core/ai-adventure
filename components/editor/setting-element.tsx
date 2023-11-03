@@ -7,7 +7,7 @@ import {
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Input, inputClassNames } from "../ui/input";
@@ -18,13 +18,11 @@ import TagListElement from "./tag-list-element";
 export default function SettingElement({
   setting,
   updateFn,
-  setBgFile,
   valueAtLoad,
   inlined = false,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
-  setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
   inlined?: boolean;
 }) {
@@ -33,7 +31,6 @@ export default function SettingElement({
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const newValue = e.target.files[0];
-    setBgFile(newValue);
     updateFn(setting.name, newValue);
   };
 
@@ -227,7 +224,6 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
-                          setBgFile={setBgFile}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -242,7 +238,6 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
-                      setBgFile={setBgFile}
                       setting={{
                         ...setting,
                         type: setting.listof as any,

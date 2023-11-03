@@ -25,7 +25,7 @@ export default async function AdventurePage({
     redirect(`/adventures`);
   }
   const isCreator = adventure.creatorId === userId;
-
+  console.log(adventure);
   return (
     <div>
       <div className="relative h-96 w-full">
@@ -63,12 +63,7 @@ export default async function AdventurePage({
             {adventure.description}
           </TypographyMuted>
         </div>
-        <CharacterTemplatesSection
-          adventureId={params.adventureId}
-          playerSingularNoun={
-            adventure?.agentConfig?.adventure_player_singular_noun
-          }
-        />
+        <CharacterTemplatesSection adventure={adventure} />
       </div>
     </div>
   );
