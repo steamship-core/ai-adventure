@@ -17,6 +17,7 @@ export type Setting = {
     | "options"
     | "boolean"
     | "list"
+    | "tag-list"
     | "image";
   listof?: "object" | "text";
   default?: string;
@@ -106,7 +107,7 @@ export const GeneralOptions: Setting[] = [
     name: "adventure_tags",
     label: "Tags",
     description: "A list of short string tags.",
-    type: "list",
+    type: "tag-list",
     listof: "text",
   },
 ];
