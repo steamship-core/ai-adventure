@@ -36,6 +36,9 @@ export const getAdventuresForUser = async (userId: string) => {
     where: {
       creatorId: userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 };
 

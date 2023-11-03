@@ -1,27 +1,28 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
+import { cn } from "@/lib/utils";
 import {
   AlertTriangleIcon,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Input } from "../ui/input";
+import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { AudioPreview } from "./audio-preview";
+import TagListElement from "./tag-list-element";
 
 export default function SettingElement({
   setting,
   updateFn,
-  setBgFile,
   valueAtLoad,
   inlined = false,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
-  setBgFile: Dispatch<SetStateAction<File | null>>;
   valueAtLoad: any;
   inlined?: boolean;
 }) {
@@ -30,7 +31,6 @@ export default function SettingElement({
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const newValue = e.target.files[0];
-    setBgFile(newValue);
     updateFn(setting.name, newValue);
   };
 
@@ -120,6 +120,18 @@ export default function SettingElement({
         className="hover:cursor-pointer"
       />
     );
+  } else if (setting.type === "textarea") {
+    innerField = (
+      <TextareaAutosize
+        className={cn(
+          inputClassNames,
+          "w-full py-[.6rem] resize-none disabled:cursor-default"
+        )}
+        value={value}
+        onChange={onTextboxChange}
+        maxRows={8}
+      />
+    );
   } else if (setting.type == "boolean") {
     innerField = (
       <div key={setting.name}>
@@ -175,6 +187,17 @@ export default function SettingElement({
     );
   } else if (setting.type == "longtext") {
     innerField = <Textarea onChange={onTextboxChange} value={value} />;
+  } else if (setting.type == "tag-list") {
+    const _value = Array.isArray(value) ? value : [];
+    innerField = (
+      <TagListElement
+        value={_value}
+        setValue={(newArr: string[]) => {
+          setValue(newArr);
+          updateFn(setting.name, newArr);
+        }}
+      />
+    );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
     console.log("value", _value);
@@ -201,7 +224,6 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
-                          setBgFile={setBgFile}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -216,7 +238,6 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
-                      setBgFile={setBgFile}
                       setting={{
                         ...setting,
                         type: setting.listof as any,

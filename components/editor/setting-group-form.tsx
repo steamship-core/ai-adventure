@@ -20,24 +20,41 @@ export default function SettingGroupForm({
   existing: Record<string, any>;
 }) {
   const { groupName, adventureId } = useEditorRouting();
-  const [bgFile, setBgFile] = useState<File | null>(null);
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
       const dataToSave = data;
-      if (bgFile) {
+      if (data.adventure_image) {
         const res = await fetch(
-          `/api/adventure/${adventureId}/image?filename=${bgFile.name}`,
+          `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
           {
             method: "POST",
-            body: bgFile,
+            body: data.adventure_image,
           }
         );
         if (res.ok) {
           const blobJson = (await res.json()) as PutBlobResult;
           setEditorLayoutImage(blobJson.url);
           dataToSave.adventure_image = blobJson.url;
+        }
+      }
+
+      const characters = data.characters || [];
+      for (let i = 0; i < characters.length; i++) {
+        const character = characters[i];
+        if (character.image) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/image?filename=${character.image.name}`,
+            {
+              method: "POST",
+              body: character.image,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            characters[i].image = blobJson.url;
+          }
         }
       }
       console.log("dataToSave", dataToSave);
@@ -170,7 +187,6 @@ export default function SettingGroupForm({
               key={setting.name}
               setting={setting}
               updateFn={setKeyValue}
-              setBgFile={setBgFile}
               valueAtLoad={existing ? existing[setting.name] : null}
             />
           ))}

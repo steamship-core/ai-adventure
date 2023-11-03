@@ -1,3 +1,4 @@
+import AdventureTag from "@/components/adventures/adventure-tag";
 import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
@@ -82,6 +83,11 @@ export default async function AdventuresPage() {
                     <TypographyLarge>
                       {format(adventureTemplate.createdAt, "MMM d, yyyy")}
                     </TypographyLarge>
+                  </div>
+                  <div className="flex mt-2 flex-wrap gap-2">
+                    {adventureTemplate.tags.map((tag) => (
+                      <AdventureTag key={tag} tag={tag} />
+                    ))}
                   </div>
                 </div>
               </Link>

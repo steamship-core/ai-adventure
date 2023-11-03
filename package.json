@@ -54,6 +54,7 @@
     "react-joyride": "^2.6.1",
     "react-scroll-parallax": "^3.4.2",
     "react-scroll-to-bottom": "^4.2.0",
+    "react-select": "^5.7.7",
     "react-textarea-autosize": "^8.5.3",
     "react-type-animation": "^3.2.0",
     "react-use": "^17.4.0",
