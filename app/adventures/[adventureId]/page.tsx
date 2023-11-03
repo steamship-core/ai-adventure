@@ -1,3 +1,4 @@
+import AdventureTag from "@/components/adventures/adventure-tag";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
@@ -24,7 +25,7 @@ export default async function AdventurePage({
     redirect(`/adventures`);
   }
   const isCreator = adventure.creatorId === userId;
-
+  console.log(adventure);
   return (
     <div>
       <div className="relative h-96 w-full">
@@ -45,16 +46,9 @@ export default async function AdventurePage({
               </Button>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {(adventure?.tags || []).map((tag: string) => {
-              return (
-                <div
-                  key={tag}
-                  className="bg-indigo-600 rounded-full text-sm px-2"
-                >
-                  {tag}
-                </div>
-              );
+              return <AdventureTag key={tag} tag={tag} />;
             })}
           </div>
         </div>
@@ -69,12 +63,7 @@ export default async function AdventurePage({
             {adventure.description}
           </TypographyMuted>
         </div>
-        <CharacterTemplatesSection
-          adventureId={params.adventureId}
-          playerSingularNoun={
-            adventure?.agentConfig?.adventure_player_singular_noun
-          }
-        />
+        <CharacterTemplatesSection adventure={adventure} />
       </div>
     </div>
   );

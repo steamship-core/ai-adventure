@@ -1,4 +1,5 @@
 import { createAdventure } from "@/lib/adventure/adventure.server";
+import { sortOptions } from "@/lib/adventure/constants";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
@@ -32,11 +33,12 @@ export async function POST(request: Request) {
   }
   return NextResponse.json({ adventure }, { status: 201 });
 }
-
 export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const cursor = searchParams.get("cursor") || null;
   const search = searchParams.get("search") || null;
+  const sort = searchParams.get("sort") || "newest";
+
   const take = 25;
 
   const results = await prisma.adventure.findMany({
@@ -44,7 +46,12 @@ export async function GET(request: Request) {
     skip: cursor ? 1 : 0,
     ...(cursor && { cursor: { id: cursor } }),
     orderBy: {
-      createdAt: "desc",
+      ...(sort === "updated"
+        ? { updatedAt: "desc" }
+        : {
+            // @ts-ignore
+            createdAt: sortOptions[sort] || "desc",
+          }),
     },
     ...(search && {
       where: {
@@ -65,6 +72,11 @@ export async function GET(request: Request) {
             shortDescription: {
               contains: search,
               mode: "insensitive",
+            },
+          },
+          {
+            tags: {
+              has: search,
             },
           },
         ],
