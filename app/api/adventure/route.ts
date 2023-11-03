@@ -74,6 +74,11 @@ export async function GET(request: Request) {
               mode: "insensitive",
             },
           },
+          {
+            tags: {
+              has: search,
+            },
+          },
         ],
       },
     }),
