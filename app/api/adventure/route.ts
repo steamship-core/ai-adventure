@@ -46,8 +46,12 @@ export async function GET(request: Request) {
     skip: cursor ? 1 : 0,
     ...(cursor && { cursor: { id: cursor } }),
     orderBy: {
-      // @ts-ignore
-      createdAt: sortOptions[sort] || "desc",
+      ...(sort === "updated"
+        ? { updatedAt: "desc" }
+        : {
+            // @ts-ignore
+            createdAt: sortOptions[sort] || "desc",
+          }),
     },
     ...(search && {
       where: {
