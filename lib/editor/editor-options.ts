@@ -12,6 +12,7 @@ export type Setting = {
   type:
     | "select"
     | "text"
+    | "textarea"
     | "longtext"
     | "options"
     | "boolean"
@@ -81,7 +82,7 @@ export const GeneralOptions: Setting[] = [
     name: "adventure_description",
     label: "Description",
     description: "A longer description of this adventure. Go into detail!",
-    type: "text",
+    type: "textarea",
     default: "",
     required: true,
   },

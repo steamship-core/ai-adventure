@@ -32,11 +32,11 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
         <TestButton className="mr-2" />
         <PublishButton className="mr-2" />
       </div>
-      <div className="flex flex-col md:flex-row gap-6">
-        <aside className="lg:w-1/5">
+      <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
+        <aside className="col-span-3 lg:col-span-2">
           <SidebarNav items={SettingGroups} />
         </aside>
-        <div className="flex-1 lg:max-w-2xl">{children}</div>
+        <div className="col-span-9 lg:col-span-10">{children}</div>
       </div>
     </div>
   </RecoilProvider>

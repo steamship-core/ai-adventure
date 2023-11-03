@@ -37,7 +37,7 @@ export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const cursor = searchParams.get("cursor") || null;
   const search = searchParams.get("search") || null;
-  const take = 10;
+  const take = 25;
 
   const results = await prisma.adventure.findMany({
     take,

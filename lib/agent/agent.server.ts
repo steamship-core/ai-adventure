@@ -89,11 +89,11 @@ export const createAgent = async (
     };
 
     log.info(`New agent: ${console.log(agentData)}`);
-    console.log(`New agent: ${console.log(agentData)}`);
-
+    console.log(`New agent: ${agentData}`);
+    console.log("here", agentData, agentUrl);
     const agent = await prisma.agents.create({ data: agentData });
     const adventure = await getAdventure(adventureId);
-
+    console.log("made agent", agent);
     if (!adventure) {
       log.error(`Failed to get adventure: ${adventureId}`);
       throw new Error(`Failed to get adventure: ${adventureId}`);
