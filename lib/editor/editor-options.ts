@@ -45,6 +45,7 @@ export const TopLevelSpecialCases = {
   adventure_short_description: "shortDescription",
   adventure_image: "image",
   adventure_tags: "tags",
+  adventure_public: "public",
 };
 
 /**
@@ -70,6 +71,13 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+  },
+  {
+    name: "adventure_public",
+    label: "Public",
+    description:
+      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
+    type: "boolean",
   },
   {
     name: "adventure_short_description",
