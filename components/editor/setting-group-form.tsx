@@ -11,6 +11,8 @@ import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
 import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
+import { Toaster } from "../ui/toaster";
+import { useToast } from "../ui/use-toast";
 import SettingElement from "./setting-element";
 
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
@@ -32,6 +34,8 @@ export default function SettingGroupForm({
 
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
+  const { toast } = useToast();
+
   const [existingThemes, setExistingThemes] = useState<
     { value: string; label: string }[]
   >(existingThemesFromConfig(existing));
@@ -78,7 +82,7 @@ export default function SettingGroupForm({
         setExistingThemes(existingThemesFromConfig(dataToSave));
       }
 
-      return fetch("/api/editor", {
+      let res = await fetch("/api/editor", {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
@@ -86,6 +90,13 @@ export default function SettingGroupForm({
           data: dataToSave,
         }),
       });
+      const { dismiss } = toast({
+        title: "Saved",
+      });
+      setTimeout(() => {
+        dismiss();
+      }, 2000);
+      return res;
     },
   });
 
@@ -159,8 +170,6 @@ export default function SettingGroupForm({
 
   // The editor has special knowledge of the image themes so that it can display a dropdown
 
-  console.log("ETT", existingThemes);
-
   return (
     <div className="space-y-6">
       <div>
@@ -228,10 +237,7 @@ export default function SettingGroupForm({
         </div>
       )}
 
-      {/* todo 
-      <Separator />
-      <NotificationsForm />
-      */}
+      <Toaster />
     </div>
   );
 }

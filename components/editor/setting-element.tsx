@@ -38,8 +38,6 @@ export default function SettingElement({
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
 
-  console.log("EETT", existingDynamicThemes);
-
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const newValue = e.target.files[0];
