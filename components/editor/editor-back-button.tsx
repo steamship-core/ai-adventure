@@ -9,7 +9,7 @@ export const EditorBackButton = () => {
 
   return (
     <Button variant="outline" asChild>
-      <Link href={`/adventures/${adventureId}`}>
+      <Link href={`/adventures/${adventureId}`} prefetch={false}>
         <ArrowLeftIcon size={16} className="mr-2" /> Back
       </Link>
     </Button>

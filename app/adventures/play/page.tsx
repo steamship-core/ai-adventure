@@ -1,11 +1,13 @@
 import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
 import AdventureTag from "@/components/adventures/adventure-tag";
+import { Button } from "@/components/ui/button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAgents } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
+import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { log } from "next-axiom";
@@ -24,12 +26,28 @@ export default async function AdventuresPage() {
 
   async function deleteAgent(agentId: number) {
     "use server";
-    await prisma.agents.delete({
+    const agent = await prisma.agents.findUnique({
       where: {
         id: agentId,
         ownerId: userId!,
       },
     });
+
+    if (!agent) {
+      return;
+    }
+
+    const deletedAgent = await prisma.agents.delete({
+      where: {
+        id: agentId,
+        ownerId: userId!,
+      },
+    });
+    if (!deletedAgent) {
+      return;
+    }
+    const steamship = await getSteamshipClient();
+    await steamship.workspace.delete({ handle: agent.handle });
   }
 
   return (
@@ -102,6 +120,19 @@ export default async function AdventuresPage() {
             })}
           </div>
         </>
+      )}
+      {agents.length === 0 && (
+        <div className="flex flex-col w-full items-center justify-center gap-6 p-4 px-4 md:px-6 py-8">
+          <TypographyH2 className="border-none">
+            You haven&apos;t started any adventures yet
+          </TypographyH2>
+          <TypographyMuted className="text-lg">
+            Head over to the Discover page to find an adventure to start
+          </TypographyMuted>
+          <Button className="mt-2" asChild>
+            <Link href="/adventures">Discover Adventures</Link>
+          </Button>
+        </div>
       )}
     </div>
   );

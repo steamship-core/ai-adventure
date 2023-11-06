@@ -2,16 +2,26 @@
 
 import { Setting } from "@/lib/editor/editor-options";
 import { cn } from "@/lib/utils";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
+  ChevronsUpDownIcon,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyLead } from "../ui/typography/TypographyLead";
 import { AudioPreview } from "./audio-preview";
 import TagListElement from "./tag-list-element";
 
@@ -20,13 +30,17 @@ export default function SettingElement({
   updateFn,
   valueAtLoad,
   inlined = false,
+  existingDynamicThemes = [],
+  isUserApproved,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
   inlined?: boolean;
+  existingDynamicThemes?: { value: string; label: string }[];
+  isUserApproved: boolean;
 }) {
-  let [value, setValue] = useState(valueAtLoad);
+  let [value, setValue] = useState(valueAtLoad || setting.default);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -48,8 +62,7 @@ export default function SettingElement({
     updateFn(setting.name, newValue);
   };
 
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value;
+  const onSelectChange = (newValue: string) => {
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -108,6 +121,7 @@ export default function SettingElement({
   };
 
   let innerField = <></>;
+  const isDisabled = setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
     innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
@@ -118,6 +132,7 @@ export default function SettingElement({
         id="picture"
         type="file"
         className="hover:cursor-pointer"
+        disabled={isDisabled}
       />
     );
   } else if (setting.type === "textarea") {
@@ -130,6 +145,7 @@ export default function SettingElement({
         value={value}
         onChange={onTextboxChange}
         maxRows={8}
+        disabled={isDisabled}
       />
     );
   } else if (setting.type == "boolean") {
@@ -141,19 +157,43 @@ export default function SettingElement({
           id={setting.name}
           name={setting.name}
           onChange={onCheckboxChange}
+          disabled={isDisabled}
         />
         <label htmlFor={setting.name}>&nbsp;Yes</label>
       </div>
     );
   } else if (setting.type == "select") {
+    const options = [
+      ...(setting.options || []),
+      ...(setting.includeDynamicOptions == "image-themes"
+        ? existingDynamicThemes
+        : []),
+    ];
+
+    console.log(options);
+    console.log(setting.includeDynamicOptions);
+
     innerField = (
-      <select onChange={onSelectChange} value={value}>
-        {setting.options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="ghost" className="my-4 px-4">
+            <div className="mr-2">{value}</div>
+            <ChevronsUpDownIcon size={24} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {options.map((option) => (
+            <DropdownMenuItem
+              className="hover:cursor-pointer"
+              onClick={(e) => {
+                onSelectChange(option.value || "");
+              }}
+            >
+              {option.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   } else if (setting.type == "options") {
     innerField = (
@@ -167,6 +207,7 @@ export default function SettingElement({
               name={setting.name}
               value={option.value}
               onChange={onTextboxChange}
+              disabled={isDisabled}
             />
             <label className="select-none" htmlFor={option.value}>
               <div className="flex flex-row">
@@ -176,9 +217,9 @@ export default function SettingElement({
                 {option.label}
               </div>
               {option.description && (
-                <pre className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   {option.description}
-                </pre>
+                </div>
               )}
             </label>
           </div>
@@ -186,7 +227,13 @@ export default function SettingElement({
       </div>
     );
   } else if (setting.type == "longtext") {
-    innerField = <Textarea onChange={onTextboxChange} value={value} />;
+    innerField = (
+      <Textarea
+        onChange={onTextboxChange}
+        value={value}
+        disabled={isDisabled}
+      />
+    );
   } else if (setting.type == "tag-list") {
     const _value = Array.isArray(value) ? value : [];
     innerField = (
@@ -196,7 +243,12 @@ export default function SettingElement({
           setValue(newArr);
           updateFn(setting.name, newArr);
         }}
+        disabled={isDisabled}
       />
+    );
+  } else if (setting.type == "divider") {
+    innerField = (
+      <div className="text-xl border-b-2 pt-4 space-y-6">{setting.label}</div>
     );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
@@ -224,6 +276,7 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
+                          existingDynamicThemes={existingDynamicThemes}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -231,6 +284,7 @@ export default function SettingElement({
                               value: value,
                             });
                           }}
+                          isUserApproved={isUserApproved}
                         />
                       );
                     })
@@ -238,6 +292,7 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
+                      existingDynamicThemes={existingDynamicThemes}
                       setting={{
                         ...setting,
                         type: setting.listof as any,
@@ -246,6 +301,7 @@ export default function SettingElement({
                       updateFn={(_: any, value: any) => {
                         updateItem({ index: i, value: value });
                       }}
+                      isUserApproved={isUserApproved}
                     />
                   )}
                 </div>
@@ -261,8 +317,35 @@ export default function SettingElement({
   }
 
   return (
-    <div>
-      {!inlined && <div className="space-y-6">{setting.label}</div>}
+    <div
+      className={cn(
+        isDisabled &&
+          "p-4 border border-yellow-600 rounded-md relative overflow-hidden"
+      )}
+    >
+      {isDisabled && (
+        <div className="w-full absolute top-0 left-0 h-full bg-background/90 z-20">
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <TypographyLarge>
+              {setting.requiredText || "This setting requires approval."}
+            </TypographyLarge>
+            <TypographyLead>
+              Please reach out to us on{" "}
+              <a
+                href="steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                Discord
+              </a>
+              .
+            </TypographyLead>
+          </div>
+        </div>
+      )}
+      {!inlined && setting.type != "divider" && (
+        <div className="space-y-6">{setting.label}</div>
+      )}
       {!inlined && setting.unused && (
         <Alert className="my-2 border-red-200">
           <AlertTriangleIcon className="h-4 w-4 mt-2" />
@@ -273,9 +356,9 @@ export default function SettingElement({
         </Alert>
       )}
       {!inlined && setting.description && (
-        <pre className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground mb-2">
           {setting.description}
-        </pre>
+        </div>
       )}{" "}
       <div>{innerField}</div>
     </div>

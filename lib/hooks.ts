@@ -1,7 +1,8 @@
 "use client";
 
 import {
-  recoilBackgroundAudioState,
+  recoilAudioActiveState,
+  recoilBackgroundAudioOfferedState,
   recoilBackgroundAudioUrlState,
   recoilGameState,
 } from "@/components/providers/recoil";
@@ -35,9 +36,19 @@ export const useDebugModeSetting = () => {
 };
 
 export const useBackgroundMusic = () => {
-  const [isAllowed, setAllowed] = useRecoilState(recoilBackgroundAudioState);
+  const [isOffered, setIsOffered] = useRecoilState(
+    recoilBackgroundAudioOfferedState
+  );
+  const [isActive, setIsActive] = useRecoilState(recoilAudioActiveState);
   const [url, setUrl] = useRecoilState(recoilBackgroundAudioUrlState);
-  return { isAllowed, setAllowed, url, setUrl };
+  return {
+    isOffered,
+    isActive,
+    setIsActive,
+    setIsOffered,
+    url,
+    setUrl,
+  };
 };
 
 export const useCurrentQuestArc = () => {
