@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { recoilEnergyState } from "../providers/recoil";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
-export const SummaryStats = async () => {
+export const SummaryStats = () => {
   const energy = useRecoilValue(recoilEnergyState);
 
   return (
