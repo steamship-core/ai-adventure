@@ -136,7 +136,12 @@ export default function SettingGroupForm({
       }),
     }).then(
       (res) => {
-        alert("Imported!");
+        const { dismiss } = toast({
+          title: "Imported",
+        });
+        setTimeout(() => {
+          dismiss();
+        }, 2000);
         location.reload();
       },
       (error) => {

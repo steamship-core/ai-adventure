@@ -5,11 +5,19 @@ import { SparklesIcon } from "lucide-react";
 import { log } from "next-axiom";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
-const PublishButton = ({ className = "" }: { className?: string }) => {
+const PublishButton = ({
+  onPublish,
+  className = "",
+}: {
+  className?: string;
+  onPublish: () => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const { adventureId } = useEditorRouting();
+  const { toast } = useToast();
 
   const onClick = async () => {
     setIsLoading(true);
@@ -36,9 +44,16 @@ const PublishButton = ({ className = "" }: { className?: string }) => {
       log.error(`Failed to start quest: ${res}`);
       return;
     }
-    alert("Success! New games will reflect these settings.");
+    const { dismiss } = toast({
+      title: "Published!",
+      description: "New games will reflect these settings.",
+    });
+    setTimeout(() => {
+      dismiss();
+    }, 2000);
     setIsLoading(false);
-    setIsVisible(false);
+    setIsVisible(true);
+    onPublish();
     log.debug(`Published Adventure: ${adventureId}`);
   };
 
