@@ -46,6 +46,7 @@ export const TopLevelSpecialCases = {
   adventure_short_description: "shortDescription",
   adventure_image: "image",
   adventure_tags: "tags",
+  adventure_public: "public",
 };
 
 /**
@@ -78,8 +79,6 @@ export const GeneralOptions: Setting[] = [
     description: "What genre is this adventure? E.g.: Fantasy, Sci-Fi, etc.",
     type: "text",
     default: "",
-    required: true,
-    unused: true,
   },
   {
     name: "adventure_tone",
@@ -88,8 +87,13 @@ export const GeneralOptions: Setting[] = [
       "What is the tone of this adventure? E.g.: Serious, Silly, etc.",
     type: "text",
     default: "",
-    required: true,
-    unused: true,
+  },
+  {
+    name: "adventure_public",
+    label: "Public",
+    description:
+      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
+    type: "boolean",
   },
   {
     name: "adventure_short_description",
