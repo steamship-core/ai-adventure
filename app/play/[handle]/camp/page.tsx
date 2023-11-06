@@ -1,4 +1,6 @@
+import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-audio";
 import { ActionBar } from "@/components/camp/action-bar";
+import { AudioChecker } from "@/components/camp/audio-checker";
 import { CampImage } from "@/components/camp/camp-image";
 import { CharacterSheet } from "@/components/camp/character-sheet";
 import { QuestProgress } from "@/components/camp/quest-progress";
@@ -91,6 +93,8 @@ export default async function CampPage({
             <ActionBar />
           </div>
         </div>
+        <AudioChecker />
+        <DynamicBackgroundAudio />
       </main>
     </RecoilProvider>
   );

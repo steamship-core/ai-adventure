@@ -63,6 +63,24 @@ export const loadExistingQuestBlocks = async (
   throw new Error("Failed to load quest blocks");
 };
 
+export const loadExistingCampBlocks = async (agentBase: string) => {
+  const steamship = getSteamshipClient();
+  const resp = await steamship.agent.post({
+    url: agentBase,
+    path: "/get_camp_blocks",
+    arguments: {},
+  });
+  if (resp.ok) {
+    let blocks = (await resp.json()) as ExtendedBlock[];
+    return blocks.map((block) => {
+      block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
+      block.historical = true;
+      return block;
+    });
+  }
+  throw new Error("Failed to load camp blocks");
+};
+
 export const generateQuestArc = async (agentBase: string) => {
   const steamship = getSteamshipClient();
   let attempts = 0;
