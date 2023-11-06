@@ -128,7 +128,8 @@ const EndSheet = ({
   const twitterLink = new URL("https://twitter.com/intent/tweet");
   twitterLink.searchParams.set(
     "text",
-    `🎲 Just completed another quest in #aiadventure. Check it out!`
+    quest?.social_media_summary ||
+      `🎲 Just completed another quest in #aiadventure. Check it out!`
   );
   twitterLink.searchParams.set("url", sharePage.toString());
 
