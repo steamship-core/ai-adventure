@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "dev:db-push": "dotenv -e .env.local prisma db push",
-    "prod:db-push": "dotenv -e .env.production.local prisma db push",
+    "prod:db-push": "vercel env pull --environment=production && dotenv -e .env.local prisma db push && vercel env pull ",
     "postinstall": "prisma generate"
   },
   "dependencies": {

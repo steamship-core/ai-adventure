@@ -53,8 +53,9 @@ export async function GET(request: Request) {
             createdAt: sortOptions[sort] || "desc",
           }),
     },
-    ...(search && {
-      where: {
+    where: {
+      public: true,
+      ...(search && {
         OR: [
           {
             name: {
@@ -80,8 +81,8 @@ export async function GET(request: Request) {
             },
           },
         ],
-      },
-    }),
+      }),
+    },
   });
 
   const lastPostInResults = results.length === take ? results[take - 1] : null;
