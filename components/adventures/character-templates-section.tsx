@@ -34,8 +34,6 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
     </TypographyMuted>
   );
 
-  console.log(adventure);
-
   return (
     <>
       {hasPremadeCharacters && (
