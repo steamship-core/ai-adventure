@@ -60,6 +60,10 @@ export default function SettingGroupForm({
           const blobJson = (await res.json()) as PutBlobResult;
           setEditorLayoutImage(blobJson.url);
           dataToSave.adventure_image = blobJson.url;
+        } else {
+          console.log("Failed to upload image");
+          console.log(await res.text());
+          return;
         }
       }
 
