@@ -7,6 +7,7 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAgents } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
+import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { log } from "next-axiom";
@@ -25,12 +26,28 @@ export default async function AdventuresPage() {
 
   async function deleteAgent(agentId: number) {
     "use server";
-    await prisma.agents.delete({
+    const agent = await prisma.agents.findUnique({
       where: {
         id: agentId,
         ownerId: userId!,
       },
     });
+
+    if (!agent) {
+      return;
+    }
+
+    const deletedAgent = await prisma.agents.delete({
+      where: {
+        id: agentId,
+        ownerId: userId!,
+      },
+    });
+    if (!deletedAgent) {
+      return;
+    }
+    const steamship = await getSteamshipClient();
+    await steamship.workspace.delete({ handle: agent.handle });
   }
 
   return (
