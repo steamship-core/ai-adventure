@@ -32,13 +32,21 @@ export const recoilEnergyState = atom({
   default: 0 as number,
 });
 
-export const recoilBackgroundAudioState = atom<boolean | undefined>({
-  key: "BackgroundAudioState",
-  default:
-    typeof window != "undefined" &&
-    window.localStorage &&
-    localStorage?.getItem("BackgroundAudioState") === "true",
-  effects: [localStorageEffect("BackgroundAudioState")],
+const backgroundAudioOfferedBlocked =
+  typeof window != "undefined" &&
+  window.localStorage &&
+  localStorage?.getItem("BackgroundAudioOfferedState") === "false";
+
+const audioActiveDefault = !(
+  typeof window != "undefined" &&
+  window.localStorage &&
+  localStorage?.getItem("AudioActiveState") === "false"
+);
+
+export const recoilBackgroundAudioOfferedState = atom<boolean | undefined>({
+  key: "BackgroundAudioOfferedState",
+  default: !backgroundAudioOfferedBlocked,
+  effects: [localStorageEffect("BackgroundAudioOfferedState")],
 });
 
 export const recoilBackgroundAudioUrlState = atom<string | undefined>({
@@ -48,7 +56,8 @@ export const recoilBackgroundAudioUrlState = atom<string | undefined>({
 
 export const recoilAudioActiveState = atom<boolean>({
   key: "AudioActiveState",
-  default: false,
+  default: audioActiveDefault,
+  effects: [localStorageEffect("AudioActiveState")],
 });
 
 export const recoilBlockHistory = atom({
@@ -76,14 +85,14 @@ function initializeState(
   set: SetRecoilState,
   gameState: GameState,
   energyState: number = 0,
-  backgroundAudioState?: boolean,
+  backgroundAudioOfferedState?: boolean,
   audioActiveState: boolean = false,
   backgroundAudioUrl?: string,
   editorLayoutImage: string = EditorLayoutImage.UNSET
 ) {
   set(recoilGameState, gameState);
   set(recoilEnergyState, energyState);
-  set(recoilBackgroundAudioState, backgroundAudioState);
+  set(recoilBackgroundAudioOfferedState, backgroundAudioOfferedState);
   set(recoilAudioActiveState, audioActiveState);
   set(recoilBackgroundAudioUrlState, backgroundAudioUrl);
   set(recoilBlockHistory, []);
@@ -95,7 +104,7 @@ function RecoilProvider({
   children,
   gameState = {} as GameState,
   energyState = 0,
-  backgroundAudioState,
+  backgroundAudioOfferedState,
   audioActiveState,
   backgroundAudioUrlState,
   editorLayoutImage,
@@ -103,7 +112,7 @@ function RecoilProvider({
   children: ReactNode;
   gameState?: GameState;
   energyState?: number;
-  backgroundAudioState?: boolean;
+  backgroundAudioOfferedState?: boolean;
   audioActiveState?: boolean;
   backgroundAudioUrlState?: string;
   editorLayoutImage?: string;
@@ -115,7 +124,7 @@ function RecoilProvider({
           set,
           gameState,
           energyState,
-          backgroundAudioState,
+          backgroundAudioOfferedState,
           audioActiveState,
           backgroundAudioUrlState,
           editorLayoutImage

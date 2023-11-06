@@ -17,7 +17,7 @@ export default function AudioPlayer({
   });
 
   useEffect(() => {
-    if (active == true && url) {
+    if (active == true && url && url.length) {
       controls.play();
     } else {
       controls.pause();

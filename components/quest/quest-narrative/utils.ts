@@ -13,6 +13,7 @@ export const MessageTypes = {
   ITEM_GENERATION_CONTENT: "ITEM_GENERATION_CONTENT",
   IMAGE: "IMAGE",
   SCENE_AUDIO: "SCENE_AUDIO",
+  CAMP_AUDIO: "CAMP_AUDIO",
   TEXT: "TEXT",
   QUEST_ARC: "QUEST_ARC",
   DICE_ROLL: "DICE_ROLL",
@@ -57,6 +58,9 @@ export const getMessageType = (block: Block) => {
   }
   if (block.tags?.find((tag) => tag.kind === "scene" && tag.name === "audio")) {
     return MessageTypes.SCENE_AUDIO;
+  }
+  if (block.tags?.find((tag) => tag.kind === "camp" && tag.name === "audio")) {
+    return MessageTypes.CAMP_AUDIO;
   }
   if (block?.tags?.find((tag) => tag.kind === "status-message")) {
     return MessageTypes.STATUS_MESSAGE;
