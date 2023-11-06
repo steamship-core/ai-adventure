@@ -25,6 +25,8 @@ export type Setting = {
   required?: boolean;
   unused?: boolean;
   listSchema?: Setting[];
+  requiresApproval?: boolean;
+  requiredText?: string;
 };
 
 export type SettingGroup = {
@@ -65,19 +67,22 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
 
 export const GeneralOptions: Setting[] = [
   {
+    name: "adventure_public",
+    label: "Public",
+    description:
+      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
+    type: "boolean",
+    requiresApproval: true,
+    requiredText:
+      "To make your adventure public, your account must be approved.",
+  },
+  {
     name: "adventure_name",
     label: "Adventure Name",
     description: "What name will others see this adventure by?",
     type: "text",
     default: "",
     required: true,
-  },
-  {
-    name: "adventure_public",
-    label: "Public",
-    description:
-      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
-    type: "boolean",
   },
   {
     name: "adventure_short_description",

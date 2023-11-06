@@ -16,8 +16,10 @@ import SettingElement from "./setting-element";
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
+  isUserApproved,
 }: {
   existing: Record<string, any>;
+  isUserApproved: boolean;
 }) {
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
@@ -188,6 +190,7 @@ export default function SettingGroupForm({
               setting={setting}
               updateFn={setKeyValue}
               valueAtLoad={existing ? existing[setting.name] : null}
+              isUserApproved={isUserApproved}
             />
           ))}
           {submittedAt && isSuccess ? (
