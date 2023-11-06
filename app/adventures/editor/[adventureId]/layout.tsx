@@ -1,6 +1,7 @@
 import { EditorBackButton } from "@/components/editor/editor-back-button";
 import LayoutImage from "@/components/editor/layout-image";
 import PublishButton from "@/components/editor/publish-button";
+import PublishCTA from "@/components/editor/publish-notification";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import TestButton from "@/components/editor/test-button";
 import RecoilProvider from "@/components/providers/recoil";
@@ -31,6 +32,9 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
         <EditorBackButton />
         <TestButton className="mr-2" />
         <PublishButton className="mr-2" />
+      </div>
+      <div className="flex flex-row space-x-2">
+        <PublishCTA />
       </div>
       <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
         <aside className="col-span-3 lg:col-span-2">

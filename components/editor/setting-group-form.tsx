@@ -90,12 +90,9 @@ export default function SettingGroupForm({
           data: dataToSave,
         }),
       });
-      const { dismiss } = toast({
-        title: "Saved",
-      });
-      setTimeout(() => {
-        dismiss();
-      }, 2000);
+
+      window?.scrollTo(0, 0);
+
       return res;
     },
   });
