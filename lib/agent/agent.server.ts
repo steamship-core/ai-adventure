@@ -48,12 +48,34 @@ export const createAgent = async (
   adventureId: string,
   isDevelopment: boolean = false
 ) => {
-  if (!process.env.STEAMSHIP_AGENT_VERSION) {
-    log.error("No steamship agent version");
-    throw Error("Please set the STEAMSHIP_AGENT_VERSION environment variable.");
+  const adventure = await getAdventure(adventureId);
+
+  if (!adventure) {
+    log.error(`Failed to get adventure: ${adventureId}`);
+    throw new Error(`Failed to get adventure: ${adventureId}`);
   }
 
-  var [_package, _version] = process.env.STEAMSHIP_AGENT_VERSION.split("@");
+  let steamshipAgentAndVersion: string | undefined = adventure.agentVersion;
+  log.info(
+    `Adventure ${adventureId} uses Steamship Agent ${steamshipAgentAndVersion}`
+  );
+  if (!steamshipAgentAndVersion) {
+    steamshipAgentAndVersion = process.env.STEAMSHIP_AGENT_VERSION;
+    log.info(
+      `Adventure ${adventureId} doesn't specify a Steamship Agent. Using ENV-provided: ${steamshipAgentAndVersion}`
+    );
+  }
+
+  if (!steamshipAgentAndVersion) {
+    log.error(
+      "No Steamship agent version. Please set the STEAMSHIP_AGENT_VERSION environment variable."
+    );
+    throw Error(
+      "No Steamship agent version. Please set the STEAMSHIP_AGENT_VERSION environment variable."
+    );
+  }
+
+  var [_package, _version] = steamshipAgentAndVersion.split("@");
 
   log.info(
     `Creating instance of Steamship Package ${_package} at version ${_version}`
@@ -68,7 +90,6 @@ export const createAgent = async (
       workspace: workspaceHandle,
     });
 
-    log.info(`Switching to workspace: ${workspaceHandle}`);
     log.info(`Switching to workspace: ${workspaceHandle}`);
 
     const packageInstance = await steamship.package.createInstance({
@@ -91,12 +112,6 @@ export const createAgent = async (
 
     log.info(`New agent: ${console.log(agentData)}`);
     const agent = await prisma.agents.create({ data: agentData });
-    const adventure = await getAdventure(adventureId);
-
-    if (!adventure) {
-      log.error(`Failed to get adventure: ${adventureId}`);
-      throw new Error(`Failed to get adventure: ${adventureId}`);
-    }
 
     // Now we need to await the agent's startup loop. This is critical
     // because if we perform an operation to quickly after initialization it will fail.
