@@ -32,8 +32,10 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
   const { push } = useRouter();
   const params = useParams();
   const rank = gameState?.player?.rank || 0;
-  const { isAllowed: backgroundAllowed, setAllowed: setBackgroundAllowed } =
-    useBackgroundMusic();
+  const {
+    isOffered: backgroundAudioOffered,
+    setIsOffered: setBackgroundAudioOffered,
+  } = useBackgroundMusic();
 
   const setEnergyTo100 = async () => {
     const response = await fetch(`/api/game/debug`, {
@@ -250,10 +252,10 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
             </div>
             <div>
               <TypographyH3>Audio</TypographyH3>
-              <TypographyMuted>Play Background Music</TypographyMuted>
+              <TypographyMuted>Offer Background Music</TypographyMuted>
               <Switch
-                checked={backgroundAllowed === true}
-                onCheckedChange={setBackgroundAllowed as any}
+                checked={backgroundAudioOffered === true}
+                onCheckedChange={setBackgroundAudioOffered as any}
               />
             </div>
             <div>

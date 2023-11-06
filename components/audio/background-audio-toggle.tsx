@@ -3,8 +3,6 @@
 import { useBackgroundMusic } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 import { Volume2Icon } from "lucide-react";
-import { useRecoilState } from "recoil";
-import { recoilAudioActiveState } from "../providers/recoil";
 import { Button } from "../ui/button";
 
 const BackgroundAudioToggle = ({
@@ -12,14 +10,13 @@ const BackgroundAudioToggle = ({
 }: {
   text?: string;
 }) => {
-  const [isActive, setActive] = useRecoilState(recoilAudioActiveState);
-  const { isAllowed } = useBackgroundMusic();
+  const { isActive, setIsActive, isOffered, url } = useBackgroundMusic();
 
   const toggle = () => {
-    setActive((active) => !active);
+    setIsActive((active) => !active);
   };
 
-  if (!isAllowed) {
+  if (!isOffered) {
     return null;
   }
 

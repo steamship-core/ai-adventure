@@ -32,8 +32,8 @@ export default async function QuestPage({
     <RecoilProvider
       gameState={gameState}
       energyState={energyState}
-      backgroundAudioState={false}
-      backgroundAudioUrlState={"/music.wav"}
+      backgroundAudioOfferedState={true}
+      audioActiveState={true}
     >
       <Quest
         gameState={gameState}

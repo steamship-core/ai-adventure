@@ -58,8 +58,9 @@ export default async function CampPage({
     <RecoilProvider
       gameState={gameState}
       energyState={energyState}
-      backgroundAudioState={false}
-      backgroundAudioUrlState={"/music.wav"}
+      backgroundAudioOfferedState={true}
+      audioActiveState={true}
+      backgroundAudioUrlState={undefined}
     >
       <WelcomeModal />
 
