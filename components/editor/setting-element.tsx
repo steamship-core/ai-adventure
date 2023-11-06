@@ -2,14 +2,22 @@
 
 import { Setting } from "@/lib/editor/editor-options";
 import { cn } from "@/lib/utils";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
+  ChevronsUpDownIcon,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
 import { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "../ui/dropdown-menu";
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
@@ -22,15 +30,17 @@ export default function SettingElement({
   updateFn,
   valueAtLoad,
   inlined = false,
+  existingDynamicThemes = [],
   isUserApproved,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
   inlined?: boolean;
+  existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
 }) {
-  let [value, setValue] = useState(valueAtLoad);
+  let [value, setValue] = useState(valueAtLoad || setting.default);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -52,8 +62,7 @@ export default function SettingElement({
     updateFn(setting.name, newValue);
   };
 
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newValue = e.target.value;
+  const onSelectChange = (newValue: string) => {
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -154,14 +163,37 @@ export default function SettingElement({
       </div>
     );
   } else if (setting.type == "select") {
+    const options = [
+      ...(setting.options || []),
+      ...(setting.includeDynamicOptions == "image-themes"
+        ? existingDynamicThemes
+        : []),
+    ];
+
+    console.log(options);
+    console.log(setting.includeDynamicOptions);
+
     innerField = (
-      <select onChange={onSelectChange} value={value} disabled={isDisabled}>
-        {setting.options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="ghost" className="my-4 px-4">
+            <div className="mr-2">{value}</div>
+            <ChevronsUpDownIcon size={24} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          {options.map((option) => (
+            <DropdownMenuItem
+              className="hover:cursor-pointer"
+              onClick={(e) => {
+                onSelectChange(option.value || "");
+              }}
+            >
+              {option.label}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   } else if (setting.type == "options") {
     innerField = (
@@ -240,6 +272,7 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
+                          existingDynamicThemes={existingDynamicThemes}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -255,6 +288,7 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
+                      existingDynamicThemes={existingDynamicThemes}
                       setting={{
                         ...setting,
                         type: setting.listof as any,

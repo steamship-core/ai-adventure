@@ -11,18 +11,39 @@ import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
 import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
+import { Toaster } from "../ui/toaster";
+import { useToast } from "../ui/use-toast";
 import SettingElement from "./setting-element";
 
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
+  onDataChange,
   isUserApproved,
 }: {
   existing: Record<string, any>;
+  onDataChange: (field: string, value: any) => void;
   isUserApproved: boolean;
 }) {
+  const existingThemesFromConfig = (_config: any) => {
+    const _existingThemes = (_config as any)?.themes || [];
+    const _existingDynamicThemes = _existingThemes.map((theme: any) => {
+      return {
+        label: theme.name,
+        value: theme.name,
+      };
+    });
+    return _existingDynamicThemes;
+  };
+
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
+  const { toast } = useToast();
+
+  const [existingThemes, setExistingThemes] = useState<
+    { value: string; label: string }[]
+  >(existingThemesFromConfig(existing));
+
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
@@ -60,7 +81,12 @@ export default function SettingGroupForm({
         }
       }
       console.log("dataToSave", dataToSave);
-      return fetch("/api/editor", {
+
+      if (typeof dataToSave.themes != "undefined") {
+        setExistingThemes(existingThemesFromConfig(dataToSave));
+      }
+
+      let res = await fetch("/api/editor", {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
@@ -68,6 +94,12 @@ export default function SettingGroupForm({
           data: dataToSave,
         }),
       });
+
+      window?.scrollTo(0, 0);
+
+      // Hard-reload to make sure that the proper "publish" etc bits are set.
+      window?.location?.reload();
+      return res;
     },
   });
 
@@ -86,6 +118,8 @@ export default function SettingGroupForm({
    * those fields which were changed.
    */
   const [dataToUpdate, setDataToUpdate] = useState<Record<string, any>>({});
+  const dataToUpdateDirty = !(Object.keys(dataToUpdate).length === 0);
+
   const [importYaml, setImportYaml] = useState("");
 
   const onImport = (e: any) => {
@@ -109,7 +143,12 @@ export default function SettingGroupForm({
       }),
     }).then(
       (res) => {
-        alert("Imported!");
+        const { dismiss } = toast({
+          title: "Imported",
+        });
+        setTimeout(() => {
+          dismiss();
+        }, 2000);
         location.reload();
       },
       (error) => {
@@ -127,6 +166,7 @@ export default function SettingGroupForm({
       console.log(`set(${key}, ${value})`);
       return { ...prior, [key]: value };
     });
+    onDataChange(key, value);
   };
 
   if (!sg) {
@@ -137,6 +177,8 @@ export default function SettingGroupForm({
   if (sg.href == "export") {
     yaml = stringify(existing);
   }
+
+  // The editor has special knowledge of the image themes so that it can display a dropdown
 
   return (
     <div className="space-y-6">
@@ -190,6 +232,7 @@ export default function SettingGroupForm({
               setting={setting}
               updateFn={setKeyValue}
               valueAtLoad={existing ? existing[setting.name] : null}
+              existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
             />
           ))}
@@ -199,16 +242,15 @@ export default function SettingGroupForm({
               Adventure Updated
             </div>
           ) : null}
-          <Button value="Save" onClick={onSave}>
-            {isPending ? "Saving..." : "Save"}
-          </Button>
+          {dataToUpdateDirty && (
+            <Button value="Save" onClick={onSave}>
+              {isPending ? "Saving..." : "Save"}
+            </Button>
+          )}
         </div>
       )}
 
-      {/* todo 
-      <Separator />
-      <NotificationsForm />
-      */}
+      <Toaster />
     </div>
   );
 }
