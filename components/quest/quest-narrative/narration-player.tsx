@@ -16,7 +16,6 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
         body: JSON.stringify({ block_id: blockId }),
       });
       const data = await resp.json();
-      console.log(data);
       return data.url || "";
     },
     refetchOnWindowFocus: false,
