@@ -176,9 +176,9 @@ export default function SettingElement({
                 {option.label}
               </div>
               {option.description && (
-                <pre className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   {option.description}
-                </pre>
+                </div>
               )}
             </label>
           </div>
@@ -273,9 +273,9 @@ export default function SettingElement({
         </Alert>
       )}
       {!inlined && setting.description && (
-        <pre className="text-sm text-muted-foreground">
+        <div className="text-sm text-muted-foreground mb-2">
           {setting.description}
-        </pre>
+        </div>
       )}{" "}
       <div>{innerField}</div>
     </div>

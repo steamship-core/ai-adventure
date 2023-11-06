@@ -190,15 +190,15 @@ export default function SettingGroupForm({
               valueAtLoad={existing ? existing[setting.name] : null}
             />
           ))}
-          <Button value="Save" onClick={onSave}>
-            {isPending ? "Saving..." : "Save"}
-          </Button>
           {submittedAt && isSuccess ? (
             <div className="text-sm text-muted-foreground flex items-center gap-2">
               <CheckIcon size={14} />
               Adventure Updated
             </div>
           ) : null}
+          <Button value="Save" onClick={onSave}>
+            {isPending ? "Saving..." : "Save"}
+          </Button>
         </div>
       )}
 

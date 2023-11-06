@@ -4,17 +4,10 @@ import { SettingGroup } from "@/lib/editor/editor-options";
 import { cn } from "@/lib/utils";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import { Fragment } from "react";
+import { useParams } from "next/navigation";
+import { Fragment, useState } from "react";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
@@ -23,7 +16,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const params = useParams<{ adventureId: string; section: string }>();
   const { section } = params;
 
@@ -68,32 +61,42 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       </nav>
       <div className="flex md:hidden items-center justify-between">
         {sectionName}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+        <Sheet open={isMenuOpen} onOpenChange={(open) => setIsMenuOpen(open)}>
+          <SheetTrigger asChild>
             <Button variant="outline">
               <MenuIcon className="w-4 h-4 mr-2" /> Menu
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {items.map((item: SettingGroup) =>
-              item.spacer === true ? (
-                <Fragment key={item.title}>
-                  <DropdownMenuSeparator key={item.title} />
-                  <DropdownMenuLabel>{item.title}</DropdownMenuLabel>
-                </Fragment>
-              ) : (
-                <DropdownMenuItem key={item.href} asChild>
-                  <Link
-                    href={`/adventures/editor/${params.adventureId}/${item.href}`}
-                    className="hover:cursor-pointer"
-                  >
-                    {item.title}
-                  </Link>
-                </DropdownMenuItem>
-              )
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </SheetTrigger>
+          <SheetContent side="bottom" className="max-h-[70vh] overflow-scroll">
+            <div>
+              {items.map((item: SettingGroup, i: number) =>
+                item.spacer === true ? (
+                  <Fragment key={item.title}>
+                    <TypographyLarge>{item.title}</TypographyLarge>
+                  </Fragment>
+                ) : (
+                  <div key={item.href}>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full text-left justify-start"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Link
+                        href={`/adventures/editor/${params.adventureId}/${item.href}`}
+                        className="hover:cursor-pointe"
+                      >
+                        <TypographyMuted className="hover:text-primary">
+                          {item.title}
+                        </TypographyMuted>
+                      </Link>
+                    </Button>
+                  </div>
+                )
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </>
   );
