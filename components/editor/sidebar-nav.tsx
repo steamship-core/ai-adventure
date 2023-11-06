@@ -13,12 +13,28 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: SettingGroup[];
+  unsavedChangesExist: boolean;
+  displayUnsavedChangesModal: (url: string) => void;
 }
 
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+export function SidebarNav({
+  className,
+  unsavedChangesExist = false,
+  displayUnsavedChangesModal,
+  items,
+  ...props
+}: SidebarNavProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const params = useParams<{ adventureId: string; section: string }>();
   const { section } = params;
+
+  const guardForUnsavedChanges = (e: any, destinationUrl: string) => {
+    if (unsavedChangesExist) {
+      e.preventDefault();
+      console.log(e.target);
+      displayUnsavedChangesModal(destinationUrl);
+    }
+  };
 
   // tranform section-name into Section Name
   const sectionName = section
@@ -40,6 +56,12 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             <Link
               key={item.href}
               href={`/adventures/editor/${params.adventureId}/${item.href}`}
+              onClick={(e: any) => {
+                guardForUnsavedChanges(
+                  e,
+                  `/adventures/editor/${params.adventureId}/${item.href}`
+                );
+              }}
               className={cn(
                 "flex items-start justify-center hover:underline rounded-r-md font-normal",
                 section === item.href &&

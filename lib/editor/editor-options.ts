@@ -5,6 +5,17 @@ export type OptionValue = {
   description?: string;
 };
 
+const DEFAULT_THEMES = [
+  {
+    value: "pixel_art_1",
+    label: "pixel_art_1",
+  },
+  {
+    value: "pixel_art_2",
+    label: "pixel_art_2",
+  },
+];
+
 export type Setting = {
   name: string;
   label: string;
@@ -18,13 +29,17 @@ export type Setting = {
     | "boolean"
     | "list"
     | "tag-list"
-    | "image";
+    | "image"
+    | "divider";
   listof?: "object" | "text";
   default?: string;
   options?: OptionValue[];
+  includeDynamicOptions?: "image-themes";
   required?: boolean;
   unused?: boolean;
   listSchema?: Setting[];
+  requiresApproval?: boolean;
+  requiredText?: string;
 };
 
 export type SettingGroup = {
@@ -65,19 +80,22 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
 
 export const GeneralOptions: Setting[] = [
   {
+    name: "adventure_public",
+    label: "Public",
+    description:
+      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
+    type: "boolean",
+    requiresApproval: true,
+    requiredText:
+      "To make your adventure public, your account must be approved.",
+  },
+  {
     name: "adventure_name",
     label: "Adventure Name",
     description: "What name will others see this adventure by?",
     type: "text",
     default: "",
     required: true,
-  },
-  {
-    name: "adventure_public",
-    label: "Public",
-    description:
-      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
-    type: "boolean",
   },
   {
     name: "adventure_short_description",
@@ -120,56 +138,122 @@ export const GeneralOptions: Setting[] = [
   },
 ];
 
-export const WorldOptions: Setting[] = [
+export const StoryOptions: Setting[] = [
+  // {
+  //   name: "adventure_genre",
+  //   label: "Genre",
+  //   description: "What genre is this adventure? E.g.: Fantasy, Sci-Fi, etc.",
+  //   type: "text",
+  //   default: "",
+  // },
+  // {
+  //   name: "adventure_tone",
+  //   label: "Tone",
+  //   description:
+  //     "What is the tone of this adventure? E.g.: Serious, Silly, etc.",
+  //   type: "text",
+  //   default: "",
+  // },
+  //   {
+  //     name: "TODO",
+  //     label: "Writing Style",
+  //     description: `The general style of story writing.
+
+  // This is used to generate the narrator's general style and will be an instruction to the AI.
+
+  // Fill this in as if it was the instruction in a page of short notes to an actor.`,
+  //     type: "longtext",
+  //     default: "Short and pithy. Writes like a poet. Uses lots of metaphors.",
+  //     unused: true,
+  //   },
+  // {
+  //   name: "items",
+  //   label: "Items Possible to Get",
+  //   description: "The list of items to grant a person.",
+  //   type: "list",
+  //   listof: "text",
+  //   default: "",
+  //   unused: true,
+  // },
+
   {
-    name: "TODO",
-    label: "World Description",
-    description: "What name will others see this adventure by?",
-    type: "longtext",
-    default: "",
-    required: true,
-    unused: true,
+    name: "advanced_divider",
+    label: "Large Language Model Settings",
+    type: "divider",
   },
-];
-
-export const CampOptions: Setting[] = [
   {
-    name: "camp_image_theme",
-    label: "Camp Image Theme",
-    description: `The theme name for generating camp image.
-
-Use a built-in theme:
-*  \`pixel_art_1\`
-*  \`pixel_art_2\`
-
-Or reference one you have defined in the **Image Settings** tab.`,
+    name: "default_story_model",
+    label: "Story LLM Model",
+    description: "Model used to generate story text.",
+    type: "select",
+    default: "gpt-3.5-turbo",
+    options: [
+      {
+        value: "gpt-3.5-turbo",
+        label: "GPT 3.5 Turbo",
+      },
+      {
+        value: "gpt-4",
+        label: "GPT 4",
+      },
+    ],
+  },
+  {
+    name: "default_story_temperature",
+    label: "Story LLM Temperature",
+    description:
+      "Temperature (creativity-factor) for the narrative generation. 0=Robot, 1=Bonkers, 0.4=Default",
     type: "text",
-    default: "pixel_art_1",
-    unused: true,
+    default: "0.4",
   },
   {
-    name: "camp_image_prompt",
-    label: "Camp Image Prompt",
-    description: "The theme name for generating camp image.",
-    type: "longtext",
-    default: "{tone} {genre} camp.",
-    unused: true,
+    name: "default_story_max_tokens",
+    label: "Story LLM Max Tokens",
+    description:
+      "Maximum number of tokens permitted during generation. 256=Default",
+    type: "text",
+    default: "256",
   },
-  {
-    name: "camp_image_negative_prompt",
-    label: "Camp Image Negative Prompt",
-    description: "The negative prompt for generating camp images.",
-    type: "longtext",
-    default: "",
-    unused: true,
-  },
+  // {
+  //   name: "TODO",
+  //   label: "World Description",
+  //   description: "What name will others see this adventure by?",
+  //   type: "longtext",
+  //   default: "",
+  //   required: true,
+  //   unused: true,
+  // },
+  // {
+  //   name: "TODO - Obstacles",
+  //   label: "Number of obstacles in quest",
+  //   description: "The number of obstacles to encounter in a quest.",
+  //   type: "text",
+  //   default: "3",
+  //   unused: true,
+  // },
+  // {
+  //   name: "TODO - Realism",
+  //   label: "Consider realism of player response?",
+  //   description:
+  //     "Whether to consider realism in the player's response to obstacles.",
+  //   type: "boolean",
+  //   default: "true",
+  // },
+  // {
+  //   name: "TODO",
+  //   label: "Number of quests in an adventure.",
+  //   description: "The number of quests to encounter in an adventure.",
+  //   type: "text",
+  //   default: "3",
+  // },
 ];
 
-export const PremadeCharacterOptions: Setting[] = [
+export const CharacterOptions: Setting[] = [
   {
     name: "characters",
-    label: "Characters",
-    description: "Characters",
+    label: "Pre-made Characters",
+    description:
+      "Each character you add here will be available to players staring a new game.",
     type: "list",
     listof: "object",
     listSchema: [
@@ -216,147 +300,7 @@ export const PremadeCharacterOptions: Setting[] = [
   },
 ];
 
-export const PlayerAppearanceOptions: Setting[] = [
-  {
-    name: "profile_image_theme",
-    label: "Profile Image Theme",
-    description: `The theme name for generating profile image.
-
-Use a built-in theme:
-*  \`pixel_art_1\`
-*  \`pixel_art_2\`
-
-Or reference one you have defined in the **Image Settings** tab.`,
-    type: "text",
-    default: "pixel_art_1",
-    unused: true,
-  },
-  {
-    name: "profile_image_prompt",
-    label: "Profile Image Prompt",
-    description: "The theme name for generating profile image.",
-    type: "longtext",
-    default: "{tone} {genre} profile picture.",
-    unused: true,
-  },
-  {
-    name: "profile_image_negative_prompt",
-    label: "Profile Image Negative Prompt",
-    description: "The negative prompt for generating profile images.",
-    type: "longtext",
-    default: "",
-    unused: true,
-  },
-];
-
-export const ItemOptions: Setting[] = [
-  {
-    name: "item_image_theme",
-    label: "Item Image Theme",
-    description: `The theme name for generating item image.
-
-Use a built-in theme:
-*  \`pixel_art_1\`
-*  \`pixel_art_2\`
-
-Or reference one you have defined in the **Image Settings** tab.`,
-    type: "text",
-    default: "pixel_art_1",
-    unused: true,
-  },
-  {
-    name: "camp_image_prompt",
-    label: "Item Image Prompt",
-    description: "The theme name for generating item image.",
-    type: "longtext",
-    default: `16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {name}.
-The item's description is: {description}.`,
-    unused: true,
-  },
-  {
-    name: "camp_image_negative_prompt",
-    label: "Item Image Negative Prompt",
-    description: "The negative prompt for generating item images.",
-    type: "longtext",
-    default: "",
-    unused: true,
-  },
-  {
-    name: "items",
-    label: "Items Possible to Get",
-    description: "The list of items to grant a person.",
-    type: "list",
-    listof: "text",
-    default: "",
-    unused: true,
-  },
-];
-
-export const QuestOptions: Setting[] = [
-  {
-    name: "TODO",
-    label: "Number of quests in an adventure.",
-    description: "The number of quests to encounter in an adventure.",
-    type: "text",
-    default: "3",
-    unused: true,
-  },
-  {
-    name: "quest_background_theme",
-    label: "Quest Background Theme",
-    description: `The theme name for generating a quest background.
-
-Use a built-in theme:
-*  \`pixel_art_1\`
-*  \`pixel_art_2\`
-
-Or reference one you have defined in the **Image Settings** tab.`,
-    type: "text",
-    default: "pixel_art_1",
-    unused: true,
-  },
-  {
-    name: "quest_background_prompt",
-    label: "Quest Background Prompt",
-    description: "The prompt for generating a quest background.",
-    type: "longtext",
-    default: `16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {name}.
-The item's description is: {description}.`,
-    unused: true,
-  },
-  {
-    name: "quest_background_negative_prompt",
-    label: "Quest Background Negative Prompt",
-    description: "The negative prompt for generating quest background.",
-    type: "longtext",
-    default: "",
-    unused: true,
-  },
-];
-
-export const ObstacleOptions: Setting[] = [
-  {
-    name: "TODO - Obstacles",
-    label: "Number of obstacles in quest",
-    description: "The number of obstacles to encounter in a quest.",
-    type: "text",
-    default: "3",
-    unused: true,
-  },
-  {
-    name: "TODO - Realism",
-    label: "Consider realism of player response?",
-    description:
-      "Whether to consider realism in the player's response to obstacles.",
-    type: "boolean",
-    default: "true",
-    unused: true,
-  },
-];
-
-export const VoiceModelOptions: Setting[] = [
+export const VoiceOptions: Setting[] = [
   {
     name: "default_narration_model",
     label: "Narration Voice",
@@ -428,7 +372,153 @@ export const VoiceModelOptions: Setting[] = [
   },
 ];
 
-export const ImageModelOptions: Setting[] = [
+export const MusicOptions: Setting[] = [
+  {
+    name: "music_prompt",
+    label: "Music Prompt",
+    description: `The prompt for generating background music.`,
+    type: "longtext",
+    default: "",
+  },
+];
+
+export const ImageOptions: Setting[] = [
+  {
+    type: "divider",
+    name: "profile-divider",
+    label: "Profile Images",
+    description:
+      "Set the theme and prompt for generating player profile images.",
+  },
+  {
+    name: "profile_image_theme",
+    label: "Profile Image Theme",
+    description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
+    type: "select",
+    options: DEFAULT_THEMES,
+    default: "pixel_art_1",
+    includeDynamicOptions: "image-themes",
+  },
+  {
+    name: "profile_image_prompt",
+    label: "Profile Image Prompt",
+    description: "The theme name for generating profile image.",
+    type: "longtext",
+    default: "{tone} {genre} profile picture.",
+  },
+  {
+    name: "profile_image_negative_prompt",
+    label: "Profile Image Negative Prompt",
+    description: "The negative prompt for generating profile images.",
+    type: "longtext",
+    default: "",
+  },
+  {
+    type: "divider",
+    name: "item-divider",
+    label: "Item Images",
+    description:
+      "Set the theme and prompt for generating images for items found on quests.",
+  },
+  {
+    name: "item_image_theme",
+    label: "Item Image Theme",
+    description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
+    type: "select",
+    options: DEFAULT_THEMES,
+    default: "pixel_art_1",
+    includeDynamicOptions: "image-themes",
+  },
+  {
+    name: "item_image_prompt",
+    label: "Item Image Prompt",
+    description: "The theme name for generating item image.",
+    type: "longtext",
+    default: `16-bit retro-game sprite for an item in a hero's inventory.
+The items's name is: {name}.
+The item's description is: {description}.`,
+  },
+  {
+    name: "item_image_negative_prompt",
+    label: "Item Image Negative Prompt",
+    description: "The negative prompt for generating item images.",
+    type: "longtext",
+    default: "",
+  },
+  {
+    type: "divider",
+    name: "camp-divider",
+    label: "Camp Images",
+    description:
+      "Set the theme and prompt for generating images for the camp background.",
+  },
+  {
+    name: "camp_image_theme",
+    label: "Camp Image Theme",
+    description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
+    type: "select",
+    options: DEFAULT_THEMES,
+    default: "pixel_art_1",
+    includeDynamicOptions: "image-themes",
+  },
+  {
+    name: "camp_image_prompt",
+    label: "Camp Image Prompt",
+    description: `Prompt for generating the camp image.
+    
+You can use the following variables:
+  - {tone} for the tone of the story
+  - {genre} for the genre of the story.
+
+Example: 
+
+  {tone} {genre} camp.
+        
+    `,
+    type: "longtext",
+    default: "{tone} {genre} camp.",
+  },
+  {
+    name: "camp_image_negative_prompt",
+    label: "Camp Image Negative Prompt",
+    description: "Negative prompt for generating camp images.",
+    type: "longtext",
+    default: "",
+  },
+  {
+    type: "divider",
+    name: "quest-divider",
+    label: "Quest Images",
+    description: "Set the theme and prompt for generating in-quest images.",
+  },
+  {
+    name: "quest_background_theme",
+    label: "Quest Background Theme",
+    description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
+    type: "select",
+    options: DEFAULT_THEMES,
+    default: "pixel_art_1",
+    includeDynamicOptions: "image-themes",
+  },
+  {
+    name: "quest_background_prompt",
+    label: "Quest Background Prompt",
+    description: "The prompt for generating a quest background.",
+    type: "longtext",
+    default: `16-bit retro-game sprite for an item in a hero's inventory.
+The items's name is: {name}.
+The item's description is: {description}.`,
+  },
+  {
+    name: "quest_background_negative_prompt",
+    label: "Quest Background Negative Prompt",
+    description: "The negative prompt for generating quest background.",
+    type: "longtext",
+    default: "",
+  },
+];
+
+export const ImageThemeOptions: Setting[] = [
   {
     name: "themes",
     label: "Image Themes",
@@ -555,148 +645,66 @@ export const ImageModelOptions: Setting[] = [
         ],
       },
     ],
-    unused: true,
-  },
-];
-
-export const NarrativeModelOptions: Setting[] = [
-  {
-    name: "TODO",
-    label: "Writing Style",
-    description: `The general style of story writing.
-
-This is used to generate the narrator's general style and will be an instruction to the AI.
-
-Fill this in as if it was the instruction in a page of short notes to an actor.`,
-    type: "longtext",
-    default: "Short and pithy. Writes like a poet. Uses lots of metaphors.",
-    unused: true,
-  },
-  {
-    name: "default_story_model",
-    label: "Story LLM Model",
-    description: "Model used to generate story text.",
-    type: "select",
-    default: "gpt-3.5-turbo",
-    unused: true,
-    options: [
-      {
-        value: "gpt-3.5-turbo",
-        label: "GPT 3.5 Turbo",
-      },
-      {
-        value: "gpt-4",
-        label: "GPT 4",
-      },
-    ],
-  },
-  {
-    name: "default_story_temperature",
-    label: "Story LLM Temperature",
-    description:
-      "Temperature (creativity-factor) for the narrative generation. 0=Robot, 1=Bonkers, 0.4=Default",
-    type: "text",
-    default: "0.4",
-    unused: true,
-  },
-  {
-    name: "default_story_max_tokens",
-    label: "Story LLM Max Tokens",
-    description:
-      "Maximum number of tokens permitted during generation. 256=Default",
-    type: "text",
-    default: "256",
-    unused: true,
   },
 ];
 
 export const SettingGroups: SettingGroup[] = [
   {
     spacer: true,
-    title: "General Settings",
+    title: "General",
   },
   {
-    title: "General",
+    title: "General Settings",
     description: "Settings for your game.",
     href: "general-settings",
     settings: GeneralOptions,
   },
   {
     spacer: true,
-    title: "Player Design",
+    title: "Game",
   },
   {
-    title: "Appearance",
-    description: "How players will appear.",
-    href: "player-appearance-settings",
-    settings: PlayerAppearanceOptions,
+    title: "Story",
+    description: "The quests and challenges for your adventure.",
+    href: "story-options",
+    settings: StoryOptions,
   },
   {
-    title: "Pre-made Characters",
-    description: "Suggested characters.",
-    href: "player-suggestions",
-    settings: PremadeCharacterOptions,
+    title: "Characters",
+    description: "Offer pre-made characters to your game players.",
+    href: "character-options",
+    settings: CharacterOptions,
   },
   {
-    spacer: true,
-    title: "Game Design",
+    title: "Images",
+    description: "Control the generation of your story's images.",
+    href: "image-options",
+    settings: ImageOptions,
   },
   {
-    title: "World",
-    description: "Settings for a quest.",
-    href: "world-settings",
-    settings: WorldOptions,
+    title: "Voices",
+    description: "Settings that control your story's voice narration.",
+    href: "voice-options",
+    settings: VoiceOptions,
   },
   {
-    title: "Camp",
-    description: "Settings for camp.",
-    href: "camp-settings",
-    settings: CampOptions,
+    title: "Music",
+    description: "Settings that control your story's music generation.",
+    href: "music-options",
+    settings: MusicOptions,
   },
-  {
-    title: "Quests",
-    description: "Settings for a quest.",
-    href: "quest-settings",
-    settings: QuestOptions,
-  },
-  {
-    title: "Obstacles",
-    description: "Settings for a quest.",
-    href: "obstacle-settings",
-    settings: ObstacleOptions,
-  },
-  {
-    title: "Items",
-    description: "Settings for item generation.",
-    href: "item-settings",
-    settings: ItemOptions,
-  },
-  {
-    spacer: true,
-    title: "Creative Direction",
-  },
-  {
-    title: "Writing",
-    description: "Settings that control your story.",
-    href: "language-model",
-    settings: NarrativeModelOptions,
-  },
-  {
-    title: "Narration",
-    description: "Settings that control your story's narration.",
-    href: "voice-model",
-    settings: VoiceModelOptions,
-  },
-  {
-    title: "Artwork",
-    description: "Settings that control your story's image generation.",
-    href: "image-model",
-    settings: ImageModelOptions,
-  },
+
   {
     spacer: true,
     title: "Advanced",
   },
+  {
+    title: "Image Themes",
+    description: "Create stable diffusion themes for image generation.",
+    href: "image-themes",
+    settings: ImageThemeOptions,
+  },
+
   {
     title: "Import",
     description:

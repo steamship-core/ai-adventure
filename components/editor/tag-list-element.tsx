@@ -25,9 +25,11 @@ const options = [
 const TagListElement = ({
   value,
   setValue,
+  disabled,
 }: {
   value: string[];
   setValue: (tag: string[]) => void;
+  disabled?: boolean;
 }) => {
   const defaultValue = useMemo(() => {
     return value.map((tag) => {
@@ -55,6 +57,7 @@ const TagListElement = ({
       onChange={(newOptions) => {
         setValue(newOptions.map((option) => option!.value));
       }}
+      isDisabled={disabled}
     />
   );
 };

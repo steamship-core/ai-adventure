@@ -70,8 +70,6 @@ const AdventureList = () => {
     },
   });
 
-  // Get a new searchParams string by merging the current
-  // searchParams with a provided key/value pair
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams);
@@ -95,7 +93,6 @@ const AdventureList = () => {
   useEffect(() => {
     // debounce refetch call
     const timeout = setTimeout(() => {
-      console.log("refetching");
       refetch();
     }, 500);
     return () => clearTimeout(timeout);

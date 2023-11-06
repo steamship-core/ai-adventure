@@ -91,6 +91,7 @@ export default function QuestNarrative({
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
   const router = useRouter();
+
   const {
     messages,
     append,

@@ -1,5 +1,7 @@
-import SettingGroupForm from "@/components/editor/setting-group-form";
+import Editor from "@/components/editor/editor";
 import { getAdventure } from "@/lib/adventure/adventure.server";
+import prisma from "@/lib/db";
+import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { log } from "next-axiom";
@@ -38,7 +40,12 @@ export default async function EditorPage({
     redirect("/adventures");
   }
 
-  let config = {
+  const userApproval = await prisma.userApprovals.findFirst({
+    where: {
+      userId: userId,
+    },
+  });
+  let devConfig = {
     adventure_name: adventure.name,
     adventure_description: adventure.description,
     adventure_short_description: adventure.shortDescription,
@@ -46,5 +53,17 @@ export default async function EditorPage({
     ...((adventure.agentDevConfig as any) || {}),
   };
 
-  return <SettingGroupForm existing={config} />;
+  let unpublishedChanges = !objectEquals(
+    adventure.agentDevConfig,
+    adventure.agentConfig
+  );
+
+  return (
+    <Editor
+      adventureId={adventure.id}
+      devConfig={devConfig}
+      hasUnpublishedChanges={unpublishedChanges}
+      isUserApproved={userApproval?.isApproved || false}
+    />
+  );
 }
