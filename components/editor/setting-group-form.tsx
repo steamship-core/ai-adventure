@@ -18,8 +18,10 @@ import SettingElement from "./setting-element";
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
+  onDataChange,
 }: {
   existing: Record<string, any>;
+  onDataChange: (field: string, value: any) => void;
 }) {
   const existingThemesFromConfig = (_config: any) => {
     const _existingThemes = (_config as any)?.themes || [];
@@ -93,6 +95,8 @@ export default function SettingGroupForm({
 
       window?.scrollTo(0, 0);
 
+      // Hard-reload to make sure that the proper "publish" etc bits are set.
+      window?.location?.reload();
       return res;
     },
   });
@@ -112,6 +116,7 @@ export default function SettingGroupForm({
    * those fields which were changed.
    */
   const [dataToUpdate, setDataToUpdate] = useState<Record<string, any>>({});
+  const dataToUpdateDirty = !(Object.keys(dataToUpdate).length === 0);
 
   const [importYaml, setImportYaml] = useState("");
 
@@ -159,6 +164,7 @@ export default function SettingGroupForm({
       console.log(`set(${key}, ${value})`);
       return { ...prior, [key]: value };
     });
+    onDataChange(key, value);
   };
 
   if (!sg) {
@@ -233,9 +239,11 @@ export default function SettingGroupForm({
               Adventure Updated
             </div>
           ) : null}
-          <Button value="Save" onClick={onSave}>
-            {isPending ? "Saving..." : "Save"}
-          </Button>
+          {dataToUpdateDirty && (
+            <Button value="Save" onClick={onSave}>
+              {isPending ? "Saving..." : "Save"}
+            </Button>
+          )}
         </div>
       )}
 
