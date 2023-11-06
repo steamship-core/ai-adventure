@@ -246,6 +246,10 @@ export default function SettingElement({
         disabled={isDisabled}
       />
     );
+  } else if (setting.type == "divider") {
+    innerField = (
+      <div className="text-xl border-b-2 pt-4 space-y-6">{setting.label}</div>
+    );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
     console.log("value", _value);
@@ -339,7 +343,9 @@ export default function SettingElement({
           </div>
         </div>
       )}
-      {!inlined && <div className="space-y-6">{setting.label}</div>}
+      {!inlined && setting.type != "divider" && (
+        <div className="space-y-6">{setting.label}</div>
+      )}
       {!inlined && setting.unused && (
         <Alert className="my-2 border-red-200">
           <AlertTriangleIcon className="h-4 w-4 mt-2" />
