@@ -3,6 +3,7 @@
 import { Player } from "@lottiefiles/react-lottie-player";
 import { track } from "@vercel/analytics/react";
 import { CompassIcon, MoreHorizontalIcon } from "lucide-react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { recoilGameState } from "../providers/recoil";
@@ -46,6 +47,9 @@ export const AdventureHistorySheet = () => {
         <SheetHeader>
           <div className="flex items-center flex-col justify-center">
             Quest History
+            <TypographyMuted>
+              See all the quests you&apos;ve completed
+            </TypographyMuted>
             <Player
               autoplay
               src="/book-lottie.json"
@@ -57,7 +61,9 @@ export const AdventureHistorySheet = () => {
         <SheetBody>
           <div className="flex flex-col gap-8 h-full">
             {gameState?.quests?.map((quest, i) => {
-              if (!quest.text_summary) return null;
+              if (quest.name === gameState?.current_quest) {
+                return null;
+              }
               const questArc = i < questArcs.length ? questArcs[i] : null;
               return (
                 <a
@@ -65,7 +71,7 @@ export const AdventureHistorySheet = () => {
                   key={quest.name}
                   className="relative"
                 >
-                  <div className="border border-foreground/20 rounded-md p-4">
+                  <div className="border border-foreground/20 rounded-md p-4 hover:border-indigo-400">
                     {questArc && (
                       <div className="flex flex-col">
                         <TypographyLarge>{questArc.location}</TypographyLarge>
@@ -77,6 +83,29 @@ export const AdventureHistorySheet = () => {
                     <TypographyMuted className="mt-2">
                       {quest.text_summary}
                     </TypographyMuted>
+                    <TypographyMuted className="mt-2 text-muted-foreground">
+                      Items Earned
+                    </TypographyMuted>
+                    {quest.new_items?.map((item) => (
+                      <div key={item.id}>
+                        <TypographySmall className="mt-2">
+                          {item.name}
+                        </TypographySmall>
+                        {item.picture_url && (
+                          <div>
+                            <div>
+                              <Image
+                                src={item.picture_url}
+                                width={128}
+                                height={128}
+                                alt={item.name!}
+                                className="overflow-hidden rounded-md"
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                   <div className="absolute -bottom-4 left-0 w-full flex items-center justify-center">
                     <div>
