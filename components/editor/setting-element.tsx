@@ -20,6 +20,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyLead } from "../ui/typography/TypographyLead";
 import { AudioPreview } from "./audio-preview";
 import TagListElement from "./tag-list-element";
 
@@ -29,12 +31,14 @@ export default function SettingElement({
   valueAtLoad,
   inlined = false,
   existingDynamicThemes = [],
+  isUserApproved,
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
+  isUserApproved: boolean;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
 
@@ -117,6 +121,7 @@ export default function SettingElement({
   };
 
   let innerField = <></>;
+  const isDisabled = setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
     innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
@@ -127,6 +132,7 @@ export default function SettingElement({
         id="picture"
         type="file"
         className="hover:cursor-pointer"
+        disabled={isDisabled}
       />
     );
   } else if (setting.type === "textarea") {
@@ -139,6 +145,7 @@ export default function SettingElement({
         value={value}
         onChange={onTextboxChange}
         maxRows={8}
+        disabled={isDisabled}
       />
     );
   } else if (setting.type == "boolean") {
@@ -150,6 +157,7 @@ export default function SettingElement({
           id={setting.name}
           name={setting.name}
           onChange={onCheckboxChange}
+          disabled={isDisabled}
         />
         <label htmlFor={setting.name}>&nbsp;Yes</label>
       </div>
@@ -199,6 +207,7 @@ export default function SettingElement({
               name={setting.name}
               value={option.value}
               onChange={onTextboxChange}
+              disabled={isDisabled}
             />
             <label className="select-none" htmlFor={option.value}>
               <div className="flex flex-row">
@@ -218,7 +227,13 @@ export default function SettingElement({
       </div>
     );
   } else if (setting.type == "longtext") {
-    innerField = <Textarea onChange={onTextboxChange} value={value} />;
+    innerField = (
+      <Textarea
+        onChange={onTextboxChange}
+        value={value}
+        disabled={isDisabled}
+      />
+    );
   } else if (setting.type == "tag-list") {
     const _value = Array.isArray(value) ? value : [];
     innerField = (
@@ -228,6 +243,7 @@ export default function SettingElement({
           setValue(newArr);
           updateFn(setting.name, newArr);
         }}
+        disabled={isDisabled}
       />
     );
   } else if (setting.type == "list") {
@@ -264,6 +280,7 @@ export default function SettingElement({
                               value: value,
                             });
                           }}
+                          isUserApproved={isUserApproved}
                         />
                       );
                     })
@@ -280,6 +297,7 @@ export default function SettingElement({
                       updateFn={(_: any, value: any) => {
                         updateItem({ index: i, value: value });
                       }}
+                      isUserApproved={isUserApproved}
                     />
                   )}
                 </div>
@@ -295,7 +313,32 @@ export default function SettingElement({
   }
 
   return (
-    <div>
+    <div
+      className={cn(
+        isDisabled &&
+          "p-4 border border-yellow-600 rounded-md relative overflow-hidden"
+      )}
+    >
+      {isDisabled && (
+        <div className="w-full absolute top-0 left-0 h-full bg-background/90 z-20">
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <TypographyLarge>
+              {setting.requiredText || "This setting requires approval."}
+            </TypographyLarge>
+            <TypographyLead>
+              Please reach out to us on{" "}
+              <a
+                href="steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                Discord
+              </a>
+              .
+            </TypographyLead>
+          </div>
+        </div>
+      )}
       {!inlined && <div className="space-y-6">{setting.label}</div>}
       {!inlined && setting.unused && (
         <Alert className="my-2 border-red-200">

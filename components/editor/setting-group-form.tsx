@@ -19,9 +19,11 @@ import SettingElement from "./setting-element";
 export default function SettingGroupForm({
   existing,
   onDataChange,
+  isUserApproved,
 }: {
   existing: Record<string, any>;
   onDataChange: (field: string, value: any) => void;
+  isUserApproved: boolean;
 }) {
   const existingThemesFromConfig = (_config: any) => {
     const _existingThemes = (_config as any)?.themes || [];
@@ -231,6 +233,7 @@ export default function SettingGroupForm({
               updateFn={setKeyValue}
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
+              isUserApproved={isUserApproved}
             />
           ))}
           {submittedAt && isSuccess ? (

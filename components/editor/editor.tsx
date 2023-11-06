@@ -23,10 +23,12 @@ const Editor = ({
   adventureId,
   devConfig,
   hasUnpublishedChanges,
+  isUserApproved,
 }: {
   adventureId: string;
   devConfig: any;
   hasUnpublishedChanges: boolean;
+  isUserApproved: boolean;
 }) => {
   const [activeConfig, setDevConfig] = useState(devConfig);
   const [unpublishedChanges, setHasUnpublishedChanges] = useState(
@@ -75,6 +77,7 @@ const Editor = ({
           <SettingGroupForm
             existing={activeConfig}
             onDataChange={onDataChange}
+            isUserApproved={isUserApproved}
           />
         </div>
       </div>

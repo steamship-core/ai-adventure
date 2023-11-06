@@ -1,5 +1,6 @@
 import Editor from "@/components/editor/editor";
 import { getAdventure } from "@/lib/adventure/adventure.server";
+import prisma from "@/lib/db";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
@@ -39,6 +40,11 @@ export default async function EditorPage({
     redirect("/adventures");
   }
 
+  const userApproval = await prisma.userApprovals.findFirst({
+    where: {
+      userId: userId,
+    },
+  });
   let devConfig = {
     adventure_name: adventure.name,
     adventure_description: adventure.description,
@@ -57,6 +63,7 @@ export default async function EditorPage({
       adventureId={adventure.id}
       devConfig={devConfig}
       hasUnpublishedChanges={unpublishedChanges}
+      isUserApproved={userApproval?.isApproved || false}
     />
   );
 }
