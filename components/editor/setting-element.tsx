@@ -20,8 +20,10 @@ import {
 } from "../ui/dropdown-menu";
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyLead } from "../ui/typography/TypographyLead";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 import TagListElement from "./tag-list-element";
 
@@ -52,6 +54,22 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = e.target.value;
+    setValue(newValue);
+    updateFn(setting.name, newValue);
+  };
+
+  const onTextboxIntChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newValue = parseInt(e.target.value);
+    setValue(newValue);
+    updateFn(setting.name, newValue);
+  };
+
+  const onTextboxFloatChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newValue = parseFloat(e.target.value);
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -125,6 +143,19 @@ export default function SettingElement({
 
   if (setting.type == "text") {
     innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
+  } else if (setting.type == "int") {
+    innerField = (
+      <Input
+        type="number"
+        step="1"
+        value={value}
+        onChange={onTextboxIntChange}
+      />
+    );
+  } else if (setting.type == "float") {
+    innerField = (
+      <Input type="number" value={value} onChange={onTextboxFloatChange} />
+    );
   } else if (setting.type == "image") {
     innerField = (
       <Input
@@ -249,7 +280,10 @@ export default function SettingElement({
     );
   } else if (setting.type == "divider") {
     innerField = (
-      <div className="text-xl border-b-2 pt-4 space-y-6">{setting.label}</div>
+      <div className="pt-4 pb-2">
+        <TypographyH3>{setting.label}</TypographyH3>
+        <TypographyMuted>{setting.description}</TypographyMuted>
+      </div>
     );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
@@ -345,7 +379,7 @@ export default function SettingElement({
         </div>
       )}
       {!inlined && setting.type != "divider" && (
-        <div className="space-y-6">{setting.label}</div>
+        <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
       )}
       {!inlined && setting.unused && (
         <Alert className="my-2 border-red-200">
@@ -356,7 +390,7 @@ export default function SettingElement({
           </AlertDescription>
         </Alert>
       )}
-      {!inlined && setting.description && (
+      {!inlined && setting.type != "divider" && setting.description && (
         <div className="text-sm text-muted-foreground mb-2">
           {setting.description}
         </div>

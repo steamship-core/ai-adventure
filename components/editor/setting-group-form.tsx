@@ -12,6 +12,8 @@ import { parse, stringify } from "yaml";
 import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
+import { TypographyH2 } from "../ui/typography/TypographyH2";
+import { TypographyLead } from "../ui/typography/TypographyLead";
 import { useToast } from "../ui/use-toast";
 import SettingElement from "./setting-element";
 
@@ -191,8 +193,8 @@ export default function SettingGroupForm({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{sg.title}</h3>
-        <p className="text-sm text-muted-foreground">{sg.description}</p>
+        <TypographyH2>{sg.title}</TypographyH2>
+        <TypographyLead>{sg.description}</TypographyLead>
       </div>
 
       {sg.href == "import" ? (
