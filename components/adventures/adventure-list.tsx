@@ -107,7 +107,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-  console.log(result.data);
+
   return (
     <>
       <div className="flex gap-2 items-end">
