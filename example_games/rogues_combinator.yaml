@@ -5,7 +5,7 @@ adventure_description: "Found a company, raise capital, grow team, and seek the 
 adventure_player_singular_noun: Founder
 narrative_tone: "Gonzo Adventure"
 narrative_voice: "Written in the style of a TV workplace parody similar to HBO's Silicon Valley series. The writing is punchy, professionally done, dialogue laden, and sprinkled with pop culture & tech references."
-adventure_goal: "Take your company public"
+adventure_goal: "Grow a company from seed stage to IPO."
 min_problems_per_quest: 2
 max_additional_problems_per_quest: 1
 
@@ -35,10 +35,10 @@ characters:
       - The insistence that everything must be free
       - The inability to own anything or plan predictably due to his ethos
       - The inability to compromise on his ideals
+
+      Richard, or RMS as folks call him, is HELL-BENT on taking Emacs public. He's been working on it for 30 years, and it's time to cash out.
     background: |
       A freedom-obsessed hacker who started the GNU project and the Free Software Foundation. He's a brilliant programmer, but his idealism often gets in the way of practicality.
-    motivation: |
-      Hell-bent on taking Emacs public. He's been working on it for 30 years, and it's time to cash out.
   - name: Elizabeth Holmes
     tagline: Mingles with insiders. But can't stop lying.
     image: /examples/elizabeth-holmes.png
@@ -48,10 +48,12 @@ characters:
       - Everyone believes her lies, which cause the impossible stakes to keep getting higher
       - Any time measurement or data is gathered, it contrasts with her lies, forcing her to come up with more lies
       - People start to get suspicious of the growing implausibility of her story
+
+      Elizabeth is obsessed with becoming the world's youngest self-made billionaire... whatever the cost. 
+
+      Her company detects diseases from a single drop of blood, but it's all a lie. She's been faking it for years, and now she's in too deep to stop.
     background: |
       A Silicon-valley insider with powerful parents. She's got former heads of state on speed dial. But manipulating power comes so easily that she always finds herself having made promises impossible to keep.
-    motivation: |
-      Become the world's youngest self-made billionaire... whatever the cost. Her company detects diseases from a single drop of blood, but it's all a lie.
   - name: Bighead
     tagline: Nobody sees him coming. Especially him.
     image: /examples/bighead.png
@@ -63,7 +65,7 @@ characters:
       - Anyone who realizes he's an idiot starts taking advantage of him.
       - His decisions are always based on the last thing he heard.
       - He often does a comically wrong thing, like Amelia Bedelia or Mr. Bean.
-    motivation: |
+
       Bighead is vaguely motivated to be liked. And the people around him want him to take his company -- an AI Vending Machine maker -- public.
   # - name: SBF
   #   tagline: Unlimited funding. But caught in a Ponzi Scheme.
