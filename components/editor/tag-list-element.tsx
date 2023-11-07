@@ -32,7 +32,7 @@ const TagListElement = ({
   disabled?: boolean;
 }) => {
   const defaultValue = useMemo(() => {
-    return value.map((tag) => {
+    return (value || []).map((tag) => {
       return options.find((option) => option.value === tag);
     });
   }, [value]);
