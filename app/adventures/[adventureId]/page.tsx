@@ -144,10 +144,6 @@ export default async function AdventurePage({
   const userReactionMap = userReactions.map((reaction) => reaction.emojiId);
 
   const isCreator = adventure.creatorId === userId;
-<<<<<<< HEAD
-
-=======
->>>>>>> main
   return (
     <div>
       <div className="relative h-96 w-full">
