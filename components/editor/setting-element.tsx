@@ -25,7 +25,12 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
-import TagListElement from "./tag-list-element";
+// import TagListElement from "./tag-list-element";
+import dynamic from "next/dynamic";
+
+const TagListElement = dynamic(() => import("./tag-list-element"), {
+  ssr: false,
+});
 
 export default function SettingElement({
   setting,
