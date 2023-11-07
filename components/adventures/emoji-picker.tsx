@@ -63,14 +63,12 @@ const EmojiPicker = ({
   }[];
   userReactions: number[];
 }) => {
-  console.log(userReactions);
   const [optimisticUserReactions, setOptimisticUserReactions] =
     useState(userReactions);
   const [optimisiticReactions, setOptimisticReactions] = useState(reactions);
   const [open, isOpen] = useState(false);
 
   const optimisticUpdate = (id: number) => {
-    console.log("optimisiticReactions", optimisiticReactions, id);
     if (optimisticUserReactions.includes(id)) {
       setOptimisticReactions((reactions) =>
         reactions.map((r) => {
@@ -94,7 +92,6 @@ const EmojiPicker = ({
         }
         return reactions.map((r) => {
           if (r.id === id) {
-            console.log("modifying count");
             return {
               ...r,
               count: (r.count || 0) + 1,

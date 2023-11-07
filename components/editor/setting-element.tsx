@@ -205,10 +205,6 @@ export default function SettingElement({
         ? existingDynamicThemes
         : []),
     ];
-
-    console.log(options);
-    console.log(setting.includeDynamicOptions);
-
     innerField = (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -292,7 +288,6 @@ export default function SettingElement({
     );
   } else if (setting.type == "list") {
     const _value = Array.isArray(value) ? value : [];
-    console.log("value", _value);
     innerField = (
       <div>
         <ul>
