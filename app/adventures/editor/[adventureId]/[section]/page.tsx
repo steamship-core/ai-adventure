@@ -45,6 +45,7 @@ export default async function EditorPage({
       userId: userId,
     },
   });
+
   let devConfig = {
     adventure_name: adventure.name,
     adventure_description: adventure.description,
@@ -53,9 +54,11 @@ export default async function EditorPage({
     ...((adventure.agentDevConfig as any) || {}),
   };
 
+  console.log(adventure.agentDevConfig, adventure.agentConfig);
+
   let unpublishedChanges = !objectEquals(
-    adventure.agentDevConfig,
-    adventure.agentConfig
+    adventure.agentDevConfig || {},
+    adventure.agentConfig || {}
   );
 
   return (
