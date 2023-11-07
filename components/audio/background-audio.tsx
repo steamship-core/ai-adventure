@@ -1,8 +1,6 @@
 "use client";
 
 import { useBackgroundMusic } from "@/lib/hooks";
-import { useRecoilState } from "recoil";
-import { recoilAudioActiveState } from "../providers/recoil";
 import AudioPlayer from "./audio-player";
 
 export interface AudioProviderProps {
@@ -10,10 +8,16 @@ export interface AudioProviderProps {
 }
 
 export default function BackgroundAudio() {
-  const { isAllowed, url } = useBackgroundMusic();
-  const [isActive] = useRecoilState(recoilAudioActiveState);
-  if (!isAllowed) {
-    return null;
+  const { isActive, isOffered, url } = useBackgroundMusic();
+  if (isOffered) {
+    return (
+      <AudioPlayer
+        active={isActive}
+        url={url as string}
+        loop={true}
+        volume={0.6}
+      />
+    );
   }
-  return <AudioPlayer active={isActive} url={url as string} loop={true} />;
+  return null;
 }

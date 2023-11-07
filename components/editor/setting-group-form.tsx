@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingGroups } from "@/lib/editor/editor-options";
+import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
@@ -20,10 +20,12 @@ export default function SettingGroupForm({
   existing,
   onDataChange,
   isUserApproved,
+  settingGroups,
 }: {
   existing: Record<string, any>;
   onDataChange: (field: string, value: any) => void;
   isUserApproved: boolean;
+  settingGroups: SettingGroup[];
 }) {
   const existingThemesFromConfig = (_config: any) => {
     const _existingThemes = (_config as any)?.themes || [];
@@ -113,7 +115,9 @@ export default function SettingGroupForm({
     }
   }, []);
 
-  const sg = SettingGroups.filter((group) => groupName === group.href)[0];
+  const sg = (settingGroups || []).filter(
+    (group) => groupName === group.href
+  )[0];
 
   /*
    * Change Capture

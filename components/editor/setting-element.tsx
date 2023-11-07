@@ -184,6 +184,7 @@ export default function SettingElement({
         <DropdownMenuContent>
           {options.map((option) => (
             <DropdownMenuItem
+              key={option.value}
               className="hover:cursor-pointer"
               onClick={(e) => {
                 onSelectChange(option.value || "");

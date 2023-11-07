@@ -179,6 +179,7 @@ export const StoryOptions: Setting[] = [
   {
     name: "advanced_divider",
     label: "Large Language Model Settings",
+    description: "",
     type: "divider",
   },
   {
