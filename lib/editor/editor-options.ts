@@ -89,7 +89,7 @@ export const GeneralOptions: Setting[] = [
     type: "boolean",
     requiresApproval: true,
     requiredText:
-      "To make your adventure public, your account must be approved.",
+      "To make your adventure public and visible to the community, your account must be approved.",
   },
   {
     name: "adventure_name",
