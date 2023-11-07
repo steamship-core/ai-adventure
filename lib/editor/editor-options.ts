@@ -139,33 +139,116 @@ export const GeneralOptions: Setting[] = [
 ];
 
 export const StoryOptions: Setting[] = [
-  // {
-  //   name: "adventure_genre",
-  //   label: "Genre",
-  //   description: "What genre is this adventure? E.g.: Fantasy, Sci-Fi, etc.",
-  //   type: "text",
-  //   default: "",
-  // },
-  // {
-  //   name: "adventure_tone",
-  //   label: "Tone",
-  //   description:
-  //     "What is the tone of this adventure? E.g.: Serious, Silly, etc.",
-  //   type: "text",
-  //   default: "",
-  // },
-  //   {
-  //     name: "TODO",
-  //     label: "Writing Style",
-  //     description: `The general style of story writing.
+  {
+    // Validated
+    name: "narrative_tone",
+    label: "Narrative Tone",
+    description:
+      "What is the narrative tone of the storytelling? E.g.: Serious, Silly, Gritty, Heady, etc.",
+    type: "text",
+    default: "silly",
+  },
+  {
+    // Validated
+    name: "narrative_voice",
+    label: "Narrative Voice",
+    description:
+      "What is the narrative voice of the storytelling? E.g.: children’s book, young adult novel, fanfic, high literature.",
+    type: "text",
+    default: "young adult novel",
+  },
+  {
+    // Validated
+    name: "adventure_background",
+    label: "Adventure Background",
+    description: `Description of the background setting in which the adventure will take place.  
 
-  // This is used to generate the narrator's general style and will be an instruction to the AI.
+Can include descriptions of genre, characters, specific items and locations that exist in the world, references to real-world things, etc.`,
+    type: "longtext",
+    default: "A fantasy world .",
+  },
+  {
+    // Validated
+    name: "adventure_goal",
+    label: "Adventure Goal",
+    description: `What is the ultimate goal / motivation of this adventure?`,
+    type: "longtext",
+    default: "To rid the world of evil",
+  },
+  {
+    // VALIDATED
+    name: "fixed_quest_arc",
+    label: "Fixed Quest Arc",
+    description: `Optional. If you wish for your adventure to have a fixed set of quests, define them here.`,
+    type: "list",
+    listof: "object",
+    listSchema: [
+      {
+        name: "goal",
+        label: "Goal",
+        description: "The goal of the quest.",
+        type: "text",
+      },
+      {
+        name: "location",
+        label: "Location",
+        description: "The location of the quest.",
+        type: "text",
+      },
+    ],
+  },
+  {
+    // TODO: Validate int
+    name: "quests_per_arc",
+    label: "Quests per Arc",
+    description: `If you don't have a pre-defined list of quests, this is how many will be generated`,
+    type: "text",
+    default: "10",
+  },
+  {
+    // TODO: Validate int
+    name: "min_problems_per_quest",
+    label: "Minimum Problems per Quest",
+    description: `What is the minimum number of problems a player must solve to complete a quest?`,
+    type: "text",
+    default: "2",
+  },
+  {
+    // TODO: Validate int
+    name: "problems_per_quest_scale",
+    label: "Additional Problems per Quest Factor",
+    description: `A number between 0 and 1. The higher this is, the more additional problems a user will have to solve above the minimum.`,
+    type: "text",
+    default: "0.25",
+  },
+  {
+    // TODO: Validate int
+    name: "max_additional_problems_per_quest",
+    label: "Maximum additional problems per quest",
+    description: `The maximum additional problems per quest that can be randomly added above and beyond the minimum required number.`,
+    type: "text",
+    default: "2",
+  },
+  {
+    // TODO: Validate int
+    name: "problem_solution_difficulty",
+    label: "Problem difficulty scale factor",
+    description: `The difficulty scale factor applied to the LLM’s estimation of how likely a user’s solution is to solve the problem.  User’s random number between (0,1) must exceed the modified value to succeed.
 
-  // Fill this in as if it was the instruction in a page of short notes to an actor.`,
-  //     type: "longtext",
-  //     default: "Short and pithy. Writes like a poet. Uses lots of metaphors.",
-  //     unused: true,
-  //   },
+Base Values:
+- VERY UNLIKELY=0.9
+- UNLIKELY = 0.7
+- LIKELY = 0.3
+- VERY LIKELY = 0.1
+
+Difficulty modified value:
+1 - ((1-BASE_VALUE) / problem_solution_difficulty)
+
+Result - Doubling difficulty makes success 1/2 as likely; halving difficulty makes success twice as likely.`,
+    type: "text",
+    default: "2",
+  },
+
   // {
   //   name: "items",
   //   label: "Items Possible to Get",
@@ -183,6 +266,7 @@ export const StoryOptions: Setting[] = [
     type: "divider",
   },
   {
+    // Validated
     name: "default_story_model",
     label: "Story LLM Model",
     description: "Model used to generate story text.",
@@ -200,6 +284,8 @@ export const StoryOptions: Setting[] = [
     ],
   },
   {
+    // NEEDS WORK:
+    // TODO: Add a post-processing step to coerce this to a float.
     name: "default_story_temperature",
     label: "Story LLM Temperature",
     description:
@@ -208,6 +294,8 @@ export const StoryOptions: Setting[] = [
     default: "0.4",
   },
   {
+    // NEEDS WORK:
+    // TODO: Add a post-processing step to coerce this to an int.
     name: "default_story_max_tokens",
     label: "Story LLM Max Tokens",
     description:
@@ -215,42 +303,11 @@ export const StoryOptions: Setting[] = [
     type: "text",
     default: "256",
   },
-  // {
-  //   name: "TODO",
-  //   label: "World Description",
-  //   description: "What name will others see this adventure by?",
-  //   type: "longtext",
-  //   default: "",
-  //   required: true,
-  //   unused: true,
-  // },
-  // {
-  //   name: "TODO - Obstacles",
-  //   label: "Number of obstacles in quest",
-  //   description: "The number of obstacles to encounter in a quest.",
-  //   type: "text",
-  //   default: "3",
-  //   unused: true,
-  // },
-  // {
-  //   name: "TODO - Realism",
-  //   label: "Consider realism of player response?",
-  //   description:
-  //     "Whether to consider realism in the player's response to obstacles.",
-  //   type: "boolean",
-  //   default: "true",
-  // },
-  // {
-  //   name: "TODO",
-  //   label: "Number of quests in an adventure.",
-  //   description: "The number of quests to encounter in an adventure.",
-  //   type: "text",
-  //   default: "3",
-  // },
 ];
 
 export const CharacterOptions: Setting[] = [
   {
+    // Validated
     name: "characters",
     label: "Pre-made Characters",
     description:
@@ -303,7 +360,8 @@ export const CharacterOptions: Setting[] = [
 
 export const VoiceOptions: Setting[] = [
   {
-    name: "default_narration_model",
+    // VALIDATED
+    name: "narration_voice",
     label: "Narration Voice",
     description: "Voice used to generate narration.",
     type: "options",
@@ -375,11 +433,21 @@ export const VoiceOptions: Setting[] = [
 
 export const MusicOptions: Setting[] = [
   {
-    name: "music_prompt",
-    label: "Music Prompt",
-    description: `The prompt for generating background music.`,
+    // VALIDATED
+    name: "scene_music_generation_prompt",
+    label: "Quest Music Prompt",
+    description: `The prompt used to generate music for a quest.  Game tone and scene description will be filled in as {tone} and {description}.`,
     type: "longtext",
-    default: "",
+    default:
+      "16-bit game score for a quest game scene. {tone}. Scene description: {description}",
+  },
+  {
+    // VALIDATED
+    name: "camp_music_generation_prompt",
+    label: "Camp Music Prompt",
+    description: `The prompt used to generate music for camp.  Game tone will filled in as {tone}.`,
+    type: "longtext",
+    default: "background music for a quest game camp scene. {tone}.",
   },
 ];
 
@@ -392,6 +460,7 @@ export const ImageOptions: Setting[] = [
       "Set the theme and prompt for generating player profile images.",
   },
   {
+    // VALIDATED
     name: "profile_image_theme",
     label: "Profile Image Theme",
     description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
@@ -401,6 +470,7 @@ export const ImageOptions: Setting[] = [
     includeDynamicOptions: "image-themes",
   },
   {
+    // VALIDATED
     name: "profile_image_prompt",
     label: "Profile Image Prompt",
     description: "The theme name for generating profile image.",
@@ -408,6 +478,7 @@ export const ImageOptions: Setting[] = [
     default: "{tone} {genre} profile picture.",
   },
   {
+    // VALIDATED
     name: "profile_image_negative_prompt",
     label: "Profile Image Negative Prompt",
     description: "The negative prompt for generating profile images.",
@@ -422,6 +493,7 @@ export const ImageOptions: Setting[] = [
       "Set the theme and prompt for generating images for items found on quests.",
   },
   {
+    // VALIDATED
     name: "item_image_theme",
     label: "Item Image Theme",
     description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
@@ -431,6 +503,7 @@ export const ImageOptions: Setting[] = [
     includeDynamicOptions: "image-themes",
   },
   {
+    // VALIDATED
     name: "item_image_prompt",
     label: "Item Image Prompt",
     description: "The theme name for generating item image.",
@@ -440,6 +513,7 @@ The items's name is: {name}.
 The item's description is: {description}.`,
   },
   {
+    // VALIDATED
     name: "item_image_negative_prompt",
     label: "Item Image Negative Prompt",
     description: "The negative prompt for generating item images.",
@@ -454,6 +528,7 @@ The item's description is: {description}.`,
       "Set the theme and prompt for generating images for the camp background.",
   },
   {
+    // VALIDATED
     name: "camp_image_theme",
     label: "Camp Image Theme",
     description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
@@ -463,6 +538,7 @@ The item's description is: {description}.`,
     includeDynamicOptions: "image-themes",
   },
   {
+    // VALIDATED
     name: "camp_image_prompt",
     label: "Camp Image Prompt",
     description: `Prompt for generating the camp image.
@@ -480,6 +556,7 @@ Example:
     default: "{tone} {genre} camp.",
   },
   {
+    // VALIDATED
     name: "camp_image_negative_prompt",
     label: "Camp Image Negative Prompt",
     description: "Negative prompt for generating camp images.",
@@ -493,6 +570,7 @@ Example:
     description: "Set the theme and prompt for generating in-quest images.",
   },
   {
+    // VALIDATED
     name: "quest_background_theme",
     label: "Quest Background Theme",
     description: `Use a pre-made theme or add more in the **Image Themes** tab.`,
@@ -502,7 +580,8 @@ Example:
     includeDynamicOptions: "image-themes",
   },
   {
-    name: "quest_background_prompt",
+    // VALIDATED
+    name: "quest_background_image_prompt",
     label: "Quest Background Prompt",
     description: "The prompt for generating a quest background.",
     type: "longtext",
@@ -511,7 +590,8 @@ The items's name is: {name}.
 The item's description is: {description}.`,
   },
   {
-    name: "quest_background_negative_prompt",
+    // VALIDATED
+    name: "quest_background_image_negative_prompt",
     label: "Quest Background Negative Prompt",
     description: "The negative prompt for generating quest background.",
     type: "longtext",
@@ -521,7 +601,8 @@ The item's description is: {description}.`,
 
 export const ImageThemeOptions: Setting[] = [
   {
-    name: "themes",
+    // VALIDATED
+    name: "image_themes",
     label: "Image Themes",
     description: `Themes available to use in image generation. Reference these from the **Camp**, **Quests**, and **Items** settings pages.`,
     type: "list",
