@@ -10,6 +10,7 @@ export default authMiddleware({
     "/share/quest",
     "/_axiom/logs",
     "/api/shared/(.*)",
+    "/adventures/:id",
     "/(.*)/opengraph-image",
   ],
 });
