@@ -319,7 +319,7 @@ export default function SettingElement({
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
                           existingDynamicThemes={existingDynamicThemes}
-                          adventureId={adventureId}
+                          adventureId={adventureId as string}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -335,7 +335,7 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
-                      adventureId={adventureId}
+                      adventureId={adventureId as string}
                       existingDynamicThemes={existingDynamicThemes}
                       setting={{
                         ...setting,

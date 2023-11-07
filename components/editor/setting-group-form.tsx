@@ -241,7 +241,7 @@ export default function SettingGroupForm({
               key={setting.name}
               setting={setting}
               updateFn={setKeyValue}
-              adventureId={adventureId}
+              adventureId={adventureId as string}
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
