@@ -1,8 +1,55 @@
 "use client";
 
+import { cn, emojis } from "@/lib/utils";
 import { SmilePlusIcon } from "lucide-react";
 import millify from "millify";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
+const EmojiForm = ({
+  action,
+  emoji,
+  id,
+  count,
+  isSelected = false,
+  optimisticUpdate,
+}: {
+  action: (formData: FormData) => Promise<void>;
+  emoji: string;
+  id: number;
+  count: number;
+  isSelected?: boolean;
+  optimisticUpdate: (id: number) => void;
+}) => {
+  const ref = useRef<HTMLFormElement>(null);
+
+  return (
+    <form
+      ref={ref}
+      action={action}
+      className={cn(
+        "flex gap-2 items-center justify-center px-2 rounded-full bg-background/90 border border-transparent hover:cursor-pointer hover:border-indigo-600",
+        isSelected && "bg-foreground/80 text-background"
+      )}
+      onClick={(e) => {
+        // submit form
+        ref.current?.requestSubmit();
+        optimisticUpdate(id);
+      }}
+    >
+      <input type="hidden" name="id" value={id} />
+      <button
+        type="submit"
+        onClick={(e) => {
+          e.stopPropagation();
+          optimisticUpdate(id);
+        }}
+      >
+        {emoji}
+      </button>
+      <div className="text-sm">{millify(count)}</div>
+    </form>
+  );
+};
 
 const EmojiPicker = ({
   addEmoji,
@@ -16,37 +63,50 @@ const EmojiPicker = ({
   }[];
   userReactions: number[];
 }) => {
+  console.log(userReactions);
+  const [optimisticUserReactions, setOptimisticUserReactions] =
+    useState(userReactions);
+  const [optimisiticReactions, setOptimisticReactions] = useState(reactions);
   const [open, isOpen] = useState(false);
-  const emojis = [
-    {
-      id: 29,
-      emoji: "🤣",
-    },
-    {
-      id: 30,
-      emoji: "😍",
-    },
-    {
-      id: 31,
-      emoji: "😢",
-    },
-    {
-      id: 32,
-      emoji: "😎",
-    },
-    {
-      id: 33,
-      emoji: "😳",
-    },
-    {
-      id: 34,
-      emoji: "😃",
-    },
-    {
-      id: 35,
-      emoji: "❤️",
-    },
-  ];
+
+  const optimisticUpdate = (id: number) => {
+    console.log("optimisiticReactions", optimisiticReactions, id);
+    if (optimisticUserReactions.includes(id)) {
+      setOptimisticReactions((reactions) =>
+        reactions.map((r) => {
+          if (r.id === id) {
+            return {
+              ...r,
+              count: r.count - 1,
+            };
+          }
+          return r;
+        })
+      );
+      setOptimisticUserReactions((reactions) =>
+        reactions.filter((r) => r !== id)
+      );
+    } else {
+      setOptimisticReactions((reactions) => {
+        const reaction = reactions.find((r) => r.id === id);
+        if (!reaction) {
+          return [...reactions, { id, count: 1 }].sort((a, b) => a.id - b.id);
+        }
+        return reactions.map((r) => {
+          if (r.id === id) {
+            console.log("modifying count");
+            return {
+              ...r,
+              count: (r.count || 0) + 1,
+            };
+          }
+          return r;
+        });
+      });
+      setOptimisticUserReactions((reactions) => [...reactions, id]);
+    }
+  };
+
   return (
     <div className="flex gap-2 flex-wrap">
       <button
@@ -57,34 +117,28 @@ const EmojiPicker = ({
       </button>
       <div className="flex items-center justify-center gap-2">
         {!open &&
-          reactions.map(({ id, count }) => (
-            <form
+          optimisiticReactions.map(({ id, count }) => (
+            <EmojiForm
+              id={id}
+              count={optimisiticReactions.find((r) => r.id === id)?.count || 0}
               action={addEmoji}
               key={id}
-              className="flex gap-2 items-center justify-center px-2 rounded-full bg-background/90 border border-transparent hover:cusor-pointer hover:border-indigo-600"
-            >
-              <input type="hidden" name="id" value={id} />
-              <button type="submit">
-                {emojis.find((emoji) => emoji.id === id)?.emoji}
-              </button>
-              <div className="text-sm">
-                {millify(reactions.find((r) => r.id === id)?.count || 0)}
-              </div>
-            </form>
+              emoji={emojis.find((emoji) => emoji.id === id)?.emoji || ""}
+              isSelected={optimisticUserReactions.includes(id)}
+              optimisticUpdate={optimisticUpdate}
+            />
           ))}
         {open &&
           emojis.map(({ emoji, id }) => (
-            <form
+            <EmojiForm
               action={addEmoji}
               key={emoji}
-              className="flex gap-2 items-center justify-center px-2 rounded-full bg-background/90 border border-transparent hover:cusor-pointer hover:border-indigo-600"
-            >
-              <input type="hidden" name="id" value={id} />
-              <button type="submit">{emoji}</button>{" "}
-              <div className="text-sm">
-                {millify(reactions.find((r) => r.id === id)?.count || 0)}
-              </div>
-            </form>
+              id={id}
+              emoji={emoji}
+              count={optimisiticReactions.find((r) => r.id === id)?.count || 0}
+              isSelected={optimisticUserReactions.includes(id)}
+              optimisticUpdate={optimisticUpdate}
+            />
           ))}
       </div>
     </div>

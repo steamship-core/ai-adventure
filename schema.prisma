@@ -119,4 +119,6 @@ model Reactions {
   updatedAt   DateTime  @updatedAt
   Emojis      Emojis    @relation(fields: [emojiId], references: [id])
   Adventure   Adventure @relation(fields: [adventureId], references: [id])
+
+  @@unique([userId, emojiId, adventureId])
 }

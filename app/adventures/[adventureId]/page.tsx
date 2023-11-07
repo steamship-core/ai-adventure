@@ -9,6 +9,7 @@ import { getAdventure } from "@/lib/adventure/adventure.server";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { PencilIcon } from "lucide-react";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -38,59 +39,73 @@ export default async function AdventurePage({
     if (!emoji) {
       return;
     }
-    await prisma.reactions.create({
-      data: {
-        emojiId: emoji?.id,
+    const existingEmoji = await prisma.reactions.findFirst({
+      where: {
+        emojiId: emoji.id,
         adventureId: adventure.id,
         userId,
       },
+      select: {
+        id: true,
+      },
     });
+
+    if (existingEmoji) {
+      await prisma.reactions.delete({
+        where: {
+          id: existingEmoji.id,
+        },
+      });
+    } else {
+      await prisma.reactions.create({
+        data: {
+          emojiId: emoji?.id,
+          adventureId: adventure.id,
+          userId,
+        },
+      });
+    }
+    revalidatePath(`/adventures/${adventure.id}`);
   };
 
-  const reactions = await prisma.reactions.findMany({
+  const reactions = await prisma.reactions.groupBy({
+    by: ["emojiId"],
     where: {
       adventureId: adventure.id,
     },
-    orderBy: {
-      id: "desc",
+    _count: {
+      emojiId: true,
     },
-    select: {
-      Emojis: {
-        select: {
-          id: true,
-          _count: true,
-        },
-      },
+    orderBy: {
+      emojiId: "asc",
     },
   });
 
-  const userReactions = await prisma.reactions.findMany({
+  const userReactions = await prisma.reactions.groupBy({
+    by: ["emojiId"],
     where: {
       adventureId: adventure.id,
       userId,
     },
-    orderBy: {
-      id: "desc",
+    _count: {
+      emojiId: true,
     },
-    select: {
-      Emojis: {
-        select: {
-          id: true,
-        },
-      },
+    orderBy: {
+      emojiId: "asc",
     },
   });
+  console.log(JSON.stringify(reactions, null, 2));
 
   const reactionMap = reactions
     .map((reaction) => {
       return {
-        id: reaction.Emojis.id,
-        count: reaction.Emojis._count.Reactions,
+        id: reaction.emojiId,
+        count: reaction._count.emojiId,
       };
     })
     .sort((a, b) => a.id - b.id);
 
-  const userReactionMap = userReactions.map((reaction) => reaction.Emojis.id);
+  const userReactionMap = userReactions.map((reaction) => reaction.emojiId);
 
   const isCreator = adventure.creatorId === userId;
   return (

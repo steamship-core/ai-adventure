@@ -83,6 +83,21 @@ export async function GET(request: Request) {
         ],
       }),
     },
+    include: {
+      Reactions: true,
+    },
+  });
+
+  // Prisma stinks - Need to loop over everything :( (or use raw SQL)
+  results.forEach((adventure) => {
+    // @ts-ignore
+    adventure.mappedReactions = adventure.Reactions.reduce(
+      (acc, reaction) => ({
+        ...acc,
+        [reaction.emojiId]: (acc[reaction.emojiId] || 0) + 1,
+      }),
+      {} as Record<string, number>
+    );
   });
 
   const lastPostInResults = results.length === take ? results[take - 1] : null;
