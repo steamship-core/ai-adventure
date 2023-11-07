@@ -39,6 +39,7 @@ export default function SettingElement({
   inlined = false,
   existingDynamicThemes = [],
   isUserApproved,
+  adventureId = "",
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
@@ -46,6 +47,7 @@ export default function SettingElement({
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
+  adventureId?: string;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
 
@@ -317,6 +319,7 @@ export default function SettingElement({
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
                           existingDynamicThemes={existingDynamicThemes}
+                          adventureId={adventureId}
                           updateFn={(subFieldName: string, value: any) => {
                             updateItem({
                               index: i,
@@ -332,6 +335,7 @@ export default function SettingElement({
                     <SettingElement
                       key={`${setting.name}.${i}._`}
                       valueAtLoad={subValue || null}
+                      adventureId={adventureId}
                       existingDynamicThemes={existingDynamicThemes}
                       setting={{
                         ...setting,
@@ -370,15 +374,26 @@ export default function SettingElement({
               {setting.requiredText || "This setting requires approval."}
             </TypographyLarge>
             <TypographyLead>
-              Please reach out to us on{" "}
+              You can still share your published game with your friends using{" "}
+              <a
+                target="_blank"
+                className="text-blue-600 hover:underline"
+                href={`${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${adventureId}`}
+              >
+                this link
+              </a>
+              .
+            </TypographyLead>
+            <TypographyLead>
+              Reach out on{" "}
               <a
                 href="steamship.com/discord"
                 target="_blank"
                 className="text-blue-600 hover:underline"
               >
                 Discord
-              </a>
-              .
+              </a>{" "}
+              to be approved.
             </TypographyLead>
           </div>
         </div>
