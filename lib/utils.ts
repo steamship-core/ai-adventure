@@ -23,6 +23,12 @@ export function objectEquals(obj1: any, obj2: any): boolean {
   if (obj1 === null && obj2 === null) {
     return true;
   }
+  const obj1nil = obj1 === null || typeof obj1 === "undefined";
+  const obj2nil = obj2 === null || typeof obj2 === "undefined";
+  if ((!obj1nil && obj2nil) || (obj1nil && !obj2nil)) {
+    return false;
+  }
+
   // If objects are both primitive types, compare them directly
   if (typeof obj1 !== "object") {
     return obj1 === obj2;
