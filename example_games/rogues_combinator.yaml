@@ -2,41 +2,75 @@ adventure_name: "Rogue's Combinator"
 image: /examples/rogues-combinator.png
 adventure_short_description: "Can you make it to IPO as a flawed founder?"
 adventure_description: "Found a company, raise capital, grow team, and seek the ultimate return. But watch out for the pitfalls of founder life... especially those you create yourself."
-adventure_player_singular_noun: "Founder"
-adventure_tags:
-  - Gonzo
-  - Hard Mode
+adventure_player_singular_noun: Founder
+narrative_tone: "Gonzo Adventure"
+narrative_voice: "Written in the style of a TV workplace parody similar to HBO's Silicon Valley series. The writing is punchy, professionally done, dialogue laden, and sprinkled with pop culture & tech references."
+adventure_goal: "Take your company public"
+min_problems_per_quest: 2
+max_additional_problems_per_quest: 1
+
+fixed_quest_arc:
+  - goal: "Get a Trial Customer"
+    location: "The TechCrunch Disrupt Hackathon"
+  - goal: "Raise a Seed"
+    location: "Y Combinator"
+  - goal: "Stand out at Demo Day"
+    location: "The Computer History Museum"
+  - goal: "Get noticed by the press"
+    location: "The Hacker News Front Page"
+  - goal: "Raise a Series A"
+    location: "Sand Hill Road"
+adventure_background: |
+  Setting: The San Francisco bay area. Sometimes practical problems exist related to transport, or where people live, using SF-specific references.
+  Time: The present day. The investment market makes no sense. Some people get billion dollar valuations based on an idea; others can't raise a dime.
+  Characters: Problems that arise come from the characters themselves, and their interactions with each other. The characters are flawed, with ridiculously exaggerated personalities.
+  Items: The items are all tech-related, often information about a particular deal, future product, or opportunity to abuse or arbitrage some aspect of the market.
 characters:
   - name: Richard Stallman
     tagline: Inspires an army. But makes everything free.
-    genre: Gonzo Adventure
-    tone: Silly
     image: /examples/richard-stallman.png
     description: |
-      TODO
+      Always living from a suitcase. Crowds of groupies wherever he goes. But seems to own nothing. Is always borrowing things or sleeping in odd places. Lacks any predictable form of transit.
+      Richard's challenges always stem from three fundamental flaws:
+      - The insistence that everything must be free
+      - The inability to own anything or plan predictably due to his ethos
+      - The inability to compromise on his ideals
     background: |
-      TODO
+      A freedom-obsessed hacker who started the GNU project and the Free Software Foundation. He's a brilliant programmer, but his idealism often gets in the way of practicality.
     motivation: |
-      TODO
+      Hell-bent on taking Emacs public. He's been working on it for 30 years, and it's time to cash out.
   - name: Elizabeth Holmes
     tagline: Mingles with insiders. But can't stop lying.
-    genre: Gonzo Adventure
-    tone: Silly
     image: /examples/elizabeth-holmes.png
     description: |
-      TODO
+      A visionary who wears only black, fashions herself as the new Steve Jobs, and gets glowing media coverage. Is feared so much people don't tell her the truth until it's too late.
+      Elizabeth's problems always stem from three fundamental flaws:
+      - Everyone believes her lies, which cause the impossible stakes to keep getting higher
+      - Any time measurement or data is gathered, it contrasts with her lies, forcing her to come up with more lies
+      - People start to get suspicious of the growing implausibility of her story
     background: |
-      TODO
+      A Silicon-valley insider with powerful parents. She's got former heads of state on speed dial. But manipulating power comes so easily that she always finds herself having made promises impossible to keep.
     motivation: |
-      TODO
+      Become the world's youngest self-made billionaire... whatever the cost. Her company detects diseases from a single drop of blood, but it's all a lie.
   - name: Bighead
     tagline: Nobody sees him coming. Especially him.
-    genre: Gonzo Comic Tragedy
-    tone: Silly
     image: /examples/bighead.png
     description: |
-      TODO
+      A bumbling idiot who somehow manages to get lucky everytime. Eats only fast food. Drinks only soda. Has no idea what's going on.
     background: |
-      TODO
+      Bighead is a college dropout who somehow manages to always be in the right place at the right time, despite being confused at what's going on around him. People assume that he's a genius, but he's really just a lucky idiot.
+      Bighead's problems always stem from three fundamental flaws:
+      - Anyone who realizes he's an idiot starts taking advantage of him.
+      - His decisions are always based on the last thing he heard.
+      - He often does a comically wrong thing, like Amelia Bedelia or Mr. Bean.
     motivation: |
-      TODO
+      Bighead is vaguely motivated to be liked. And the people around him want him to take his company -- an AI Vending Machine maker -- public.
+  # - name: SBF
+  #   tagline: Unlimited funding. But caught in a Ponzi Scheme.
+  #   image: /examples/sbf.png
+  #   description: |
+  #     TODO
+  #   background: |
+  #     TODO
+  #   motivation: |
+  #     TODO
