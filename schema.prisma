@@ -103,7 +103,7 @@ model DrawDowns {
 
 model Emojis {
   id          Int         @id @default(autoincrement())
-  emoji       String
+  emoji       String      @unique
   description String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -119,4 +119,6 @@ model Reactions {
   updatedAt   DateTime  @updatedAt
   Emojis      Emojis    @relation(fields: [emojiId], references: [id])
   Adventure   Adventure @relation(fields: [adventureId], references: [id])
+
+  @@unique([userId, emojiId, adventureId])
 }

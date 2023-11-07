@@ -1,9 +1,11 @@
 "use client";
 
 import { sortOptions } from "@/lib/adventure/constants";
+import { emojis } from "@/lib/utils";
 import { Adventure } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
+import millify from "millify";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -32,7 +34,9 @@ const fetchPage = async (
   }
   const res = await fetch(`/api/adventure?${searchParams.toString()}`);
   return res.json() as Promise<{
-    results: Adventure[];
+    results: (Adventure & {
+      mappedReactions: Record<string, number>;
+    })[];
     nextCursor?: string;
     prevCursor?: string;
   }>;
@@ -179,6 +183,27 @@ const AdventureList = () => {
                     fill
                     alt="Adventurer"
                   />
+                  {Object.keys(adventure.mappedReactions).length > 0 && (
+                    <div className="bottom-0 left-0 w-full absolute z-20 bg-background/80">
+                      <div className="flex gap-4 px-2 py-1">
+                        {Object.keys(adventure.mappedReactions).map((key) => (
+                          <div
+                            className="text-sm flex gap-1"
+                            key={`${adventure.id}-${key}`}
+                          >
+                            <span>
+                              {emojis.find(
+                                (emoji) => `${emoji.id}` === `${key}`
+                              )?.emoji || ""}
+                            </span>
+                            <span>
+                              {millify(adventure.mappedReactions[key])}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="pb-2 px-4 flex flex-1 flex-col justify-between">
                   <div>
