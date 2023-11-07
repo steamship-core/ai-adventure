@@ -14,9 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { SettingGroups } from "@/lib/editor/editor-options";
+import { SettingGroup } from "@/lib/editor/editor-options";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 const Editor = ({
@@ -38,6 +38,22 @@ const Editor = ({
   const [unsavedDepartureUrl, setUnsavedDepartureUrl] = useState<
     string | undefined
   >(undefined);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [settingGroups, setSettingGroups] = useState<SettingGroup[]>([]);
+
+  useEffect(() => {
+    fetch(`/api/adventure/${adventureId}/schema`).then(
+      async (res) => {
+        const json = await res.json();
+        setIsLoading(false);
+        setSettingGroups(json.settingGroups);
+      },
+      (err) => {
+        console.error(err);
+      }
+    );
+  }, []);
 
   const onPublish = () => {
     setHasUnpublishedChanges(false);
@@ -67,18 +83,23 @@ const Editor = ({
       )}
       <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
         <aside className="col-span-3 lg:col-span-2">
-          <SidebarNav
-            items={SettingGroups}
-            unsavedChangesExist={unsavedChangesExist}
-            displayUnsavedChangesModal={displayUnsavedChangesModal}
-          />
+          {!isLoading && (
+            <SidebarNav
+              items={settingGroups}
+              unsavedChangesExist={unsavedChangesExist}
+              displayUnsavedChangesModal={displayUnsavedChangesModal}
+            />
+          )}
         </aside>
         <div className="col-span-9 lg:col-span-10">
-          <SettingGroupForm
-            existing={activeConfig}
-            onDataChange={onDataChange}
-            isUserApproved={isUserApproved}
-          />
+          {!isLoading && (
+            <SettingGroupForm
+              existing={activeConfig}
+              onDataChange={onDataChange}
+              isUserApproved={isUserApproved}
+              settingGroups={settingGroups}
+            />
+          )}
         </div>
       </div>
       {unsavedDepartureUrl}
