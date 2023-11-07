@@ -10,7 +10,14 @@ export interface AudioProviderProps {
 export default function BackgroundAudio() {
   const { isActive, isOffered, url } = useBackgroundMusic();
   if (isOffered) {
-    return <AudioPlayer active={isActive} url={url as string} loop={true} />;
+    return (
+      <AudioPlayer
+        active={isActive}
+        url={url as string}
+        loop={true}
+        volume={0.6}
+      />
+    );
   }
   return null;
 }

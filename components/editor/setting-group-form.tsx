@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingGroups } from "@/lib/editor/editor-options";
+import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
@@ -12,6 +12,8 @@ import { parse, stringify } from "yaml";
 import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
+import { TypographyH2 } from "../ui/typography/TypographyH2";
+import { TypographyLead } from "../ui/typography/TypographyLead";
 import { useToast } from "../ui/use-toast";
 import SettingElement from "./setting-element";
 
@@ -20,10 +22,12 @@ export default function SettingGroupForm({
   existing,
   onDataChange,
   isUserApproved,
+  settingGroups,
 }: {
   existing: Record<string, any>;
   onDataChange: (field: string, value: any) => void;
   isUserApproved: boolean;
+  settingGroups: SettingGroup[];
 }) {
   const existingThemesFromConfig = (_config: any) => {
     const _existingThemes = (_config as any)?.themes || [];
@@ -113,7 +117,9 @@ export default function SettingGroupForm({
     }
   }, []);
 
-  const sg = SettingGroups.filter((group) => groupName === group.href)[0];
+  const sg = (settingGroups || []).filter(
+    (group) => groupName === group.href
+  )[0];
 
   /*
    * Change Capture
@@ -187,8 +193,8 @@ export default function SettingGroupForm({
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{sg.title}</h3>
-        <p className="text-sm text-muted-foreground">{sg.description}</p>
+        <TypographyH2>{sg.title}</TypographyH2>
+        <TypographyLead>{sg.description}</TypographyLead>
       </div>
 
       {sg.href == "import" ? (
