@@ -14,8 +14,7 @@ const allValuesAreSet = (config: CharacterConfig) => {
   return (
     config.player?.name &&
     config.player?.description &&
-    config.player?.background &&
-    config.genre
+    config.player?.background
   );
 };
 
@@ -75,14 +74,6 @@ const CharacterCreationComplete = ({
       <CreationContent isCurrent={isCurrent}>
         <div className="mt-6 flex flex-col gap-4">
           <div>
-            <TypographyMuted>Theme:</TypographyMuted>
-            <TypographyLarge>{config.genre}</TypographyLarge>
-          </div>
-          <div>
-            <TypographyMuted>Tone:</TypographyMuted>
-            <TypographyLarge>{config.tone}</TypographyLarge>
-          </div>
-          <div>
             <TypographyMuted className="text-muted-foreground">
               Name:
             </TypographyMuted>
@@ -95,10 +86,6 @@ const CharacterCreationComplete = ({
           <div>
             <TypographyMuted>Appearance:</TypographyMuted>
             <TypographyLarge>{config.player.description}</TypographyLarge>
-          </div>
-          <div>
-            <TypographyMuted>Motivation:</TypographyMuted>
-            <TypographyLarge>{config.player.motivation}</TypographyLarge>
           </div>
         </div>
 
