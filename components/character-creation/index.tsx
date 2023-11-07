@@ -11,7 +11,7 @@ import CharacterCreationIntro from "./intro";
 import OnboardingPrompt from "./onboarding-prompt";
 import { CreationContainer } from "./shared/components";
 
-const MAX_STEPS = 7;
+const MAX_STEPS = 4;
 
 const ProgressPoint = ({
   setActiveStep,
@@ -58,9 +58,7 @@ export default function CharacterCreation({
 }) {
   const searchParams = useSearchParams();
   const [isCompleteConfig, setIsCompleteConfig] = useState(
-    searchParams.has("genre") &&
-      searchParams.has("tone") &&
-      searchParams.has("name") &&
+    searchParams.has("name") &&
       searchParams.has("description") &&
       searchParams.has("background") &&
       searchParams.has("motivation")
@@ -81,8 +79,6 @@ export default function CharacterCreation({
       gold: 0,
       inventory: [],
     },
-    genre: searchParams.get("genre") || "",
-    tone: searchParams.get("tone") || "",
     camp: {
       human_players: [],
       npcs: [],
@@ -92,32 +88,6 @@ export default function CharacterCreation({
   });
 
   const steps = [
-    {
-      placeholder: "Fantasy, steampunk, pirate/high-seas, viking, etc..",
-      text: "Set the theme of the adventure. This will determine the setting and genre of the story you will be playing.",
-      buttonText: "Set theme",
-      options: ["Fantasy", "Realistic", "Mystery"],
-      initialValue: configuration.genre,
-      setConfiguration: (genre: string) => {
-        setConfiguration({
-          ...configuration,
-          genre,
-        });
-      },
-    },
-    {
-      placeholder: "Serious, silly, dark, light, etc..",
-      text: "What is the tone of the story? Serious, silly, dark, light, etc..",
-      buttonText: "Set tone",
-      options: ["Serious", "Silly", "Dark"],
-      initialValue: configuration.tone,
-      setConfiguration: (tone: string) => {
-        setConfiguration({
-          ...configuration,
-          tone,
-        });
-      },
-    },
     {
       placeholder: "Thumblemore the Often-Lost",
       text: "Choose a name for your character.",
@@ -153,19 +123,6 @@ export default function CharacterCreation({
         setConfiguration({
           ...configuration,
           player: { ...configuration.player, background },
-        });
-      },
-    },
-    {
-      placeholder:
-        'Thumblemore\'s primary goal is to find the elusive "True North" spell, an ancient ...',
-      text: "What primary motivation does your character have? This will be used to generate quests and storylines for your character.",
-      buttonText: "Set motivation",
-      initialValue: configuration.player.motivation,
-      setConfiguration: (motivation: string) => {
-        setConfiguration({
-          ...configuration,
-          player: { ...configuration.player, motivation },
         });
       },
     },
