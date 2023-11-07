@@ -19,6 +19,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 import AdventureTag from "./adventure-tag";
@@ -106,7 +107,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage]);
-
+  console.log(result.data);
   return (
     <>
       <div className="flex gap-2 items-end">
@@ -238,6 +239,16 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
             className="mx-auto flex max-w-6xl justify-center opacity-0"
             ref={ref}
           />
+        )}
+        {isLoading && !result.data && (
+          <>
+            {new Array(8).fill(0).map((_, i) => (
+              <Skeleton
+                key={i}
+                className="rounded-md overflow-hidden w-full h-[330px] "
+              />
+            ))}
+          </>
         )}
       </div>
     </>

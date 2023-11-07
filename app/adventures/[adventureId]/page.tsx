@@ -153,12 +153,12 @@ export default async function AdventurePage({
   const isCreator = adventure.creatorId === userId;
   return (
     <div>
-      <div className="relative h-96 w-full">
+      <div className="relative h-96 w-full mt-2">
         <Image
           src={adventure?.image || "/adventurer.png"}
           fill
           alt="Adventurer"
-          className="object-cover"
+          className="object-cover rounded-xl"
         />
         <div className="flex justify-between flex-col p-4 gap-2 md:p-6 absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-background to-95%">
           <div className="w-full flex justify-between">
