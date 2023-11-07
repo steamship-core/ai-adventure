@@ -23,7 +23,6 @@ export default async function AdventuresPage() {
   }
 
   const agents = await getAgents(userId);
-
   async function deleteAgent(agentId: number) {
     "use server";
     const agent = await prisma.agents.findUnique({

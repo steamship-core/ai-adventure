@@ -58,3 +58,34 @@ export function objectEquals(obj1: any, obj2: any): boolean {
   }
   return true;
 }
+
+export const emojis = [
+  {
+    id: 29,
+    emoji: "🤣",
+  },
+  {
+    id: 30,
+    emoji: "😍",
+  },
+  {
+    id: 31,
+    emoji: "😢",
+  },
+  {
+    id: 32,
+    emoji: "😎",
+  },
+  {
+    id: 33,
+    emoji: "😳",
+  },
+  {
+    id: 34,
+    emoji: "😃",
+  },
+  {
+    id: 35,
+    emoji: "❤️",
+  },
+];

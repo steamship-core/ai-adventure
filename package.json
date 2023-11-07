@@ -44,6 +44,7 @@
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.284.0",
     "micro-cors": "^0.1.1",
+    "millify": "^6.1.0",
     "next": "^14.0.1",
     "next-axiom": "^1.0.0",
     "next-themes": "^0.2.1",
