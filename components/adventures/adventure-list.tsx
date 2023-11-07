@@ -187,7 +187,10 @@ const AdventureList = () => {
                     <div className="bottom-0 left-0 w-full absolute z-20 bg-background/80">
                       <div className="flex gap-4 px-2 py-1">
                         {Object.keys(adventure.mappedReactions).map((key) => (
-                          <div className="text-sm flex gap-1">
+                          <div
+                            className="text-sm flex gap-1"
+                            key={`${adventure.id}-${key}`}
+                          >
                             <span>
                               {emojis.find(
                                 (emoji) => `${emoji.id}` === `${key}`
