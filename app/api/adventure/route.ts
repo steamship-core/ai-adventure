@@ -14,6 +14,9 @@ export async function POST(request: Request) {
 
   const { isAnonymous, name, description, agentVersion } = await request.json();
 
+  const _agentVersion =
+    (agentVersion as string) || process.env.STEAMSHIP_AGENT_VERSION;
+
   const adventure = await createAdventure({
     creatorId: userId,
     createdBy: isAnonymous
@@ -21,7 +24,7 @@ export async function POST(request: Request) {
       : `${user?.firstName} ${user?.lastName}`,
     name,
     description,
-    agentVersion,
+    agentVersion: _agentVersion!,
   });
 
   if (!adventure) {

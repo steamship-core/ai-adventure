@@ -11,7 +11,6 @@ export const CreateAdventureButton = () => {
       body: JSON.stringify({
         name: "Epic Quest",
         description: "An amazing journey with pixel art",
-        agentVersion: "ai-adventure",
       }),
     });
     if (res.ok && res.status === 201) {
