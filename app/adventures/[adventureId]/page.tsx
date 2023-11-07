@@ -76,16 +76,19 @@ export default async function AdventurePage({
     if (!emoji) {
       return;
     }
-    const existingEmoji = await prisma.reactions.findFirst({
-      where: {
-        emojiId: emoji.id,
-        adventureId: adventure.id,
-        userId,
-      },
-      select: {
-        id: true,
-      },
-    });
+
+    const existingEmoji = userId
+      ? await prisma.reactions.findFirst({
+          where: {
+            emojiId: emoji.id,
+            adventureId: adventure.id,
+            userId,
+          },
+          select: {
+            id: true,
+          },
+        })
+      : null;
 
     if (existingEmoji) {
       await prisma.reactions.delete({
@@ -94,13 +97,15 @@ export default async function AdventurePage({
         },
       });
     } else {
-      await prisma.reactions.create({
-        data: {
-          emojiId: emoji?.id,
-          adventureId: adventure.id,
-          userId,
-        },
-      });
+      if (userId) {
+        await prisma.reactions.create({
+          data: {
+            emojiId: emoji?.id,
+            adventureId: adventure.id,
+            userId,
+          },
+        });
+      }
     }
     revalidatePath(`/adventures/${adventure.id}`);
   };
@@ -118,19 +123,21 @@ export default async function AdventurePage({
     },
   });
 
-  const userReactions = await prisma.reactions.groupBy({
-    by: ["emojiId"],
-    where: {
-      adventureId: adventure.id,
-      userId,
-    },
-    _count: {
-      emojiId: true,
-    },
-    orderBy: {
-      emojiId: "asc",
-    },
-  });
+  const userReactions = userId
+    ? await prisma.reactions.groupBy({
+        by: ["emojiId"],
+        where: {
+          adventureId: adventure.id,
+          userId,
+        },
+        _count: {
+          emojiId: true,
+        },
+        orderBy: {
+          emojiId: "asc",
+        },
+      })
+    : [];
   const emojis = await prisma.emojis.findMany({});
   const reactionMap = reactions
     .map((reaction) => {
