@@ -112,8 +112,8 @@ export default function SettingGroupForm({
   });
 
   useEffect(() => {
-    if (existing?.image) {
-      setEditorLayoutImage(existing.image);
+    if (existing?.adventure_image) {
+      setEditorLayoutImage(existing.adventure_image);
     }
   }, []);
 
