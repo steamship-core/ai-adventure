@@ -32,6 +32,7 @@ model Adventure {
   Agents            Agents[]
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
+  Reactions         Reactions[]
 }
 
 model CharacterTemplate {
@@ -98,4 +99,24 @@ model DrawDowns {
   reference      String // Stripe reference
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Emojis {
+  id          Int         @id @default(autoincrement())
+  emoji       String
+  description String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  Reactions   Reactions[]
+}
+
+model Reactions {
+  id          Int       @id @default(autoincrement())
+  emojiId     Int
+  userId      String
+  adventureId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Emojis      Emojis    @relation(fields: [emojiId], references: [id])
+  Adventure   Adventure @relation(fields: [adventureId], references: [id])
 }
