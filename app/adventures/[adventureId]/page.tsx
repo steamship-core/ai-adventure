@@ -7,9 +7,47 @@ import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
 import { PencilIcon } from "lucide-react";
+import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { adventureId: string };
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const adventure = (await getAdventure(params.adventureId)) as any;
+
+  let ret = { ...(await parent) };
+
+  ret.title = adventure.name;
+  ret.description = adventure.shortDescription;
+  ret.metadataBase = new URL(
+    `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`
+  );
+
+  ret.openGraph = {
+    ...(ret.openGraph || {}),
+    url: ret.metadataBase.toString(),
+    title: adventure.name,
+    description: adventure.shortDescription,
+    images: adventure.image || "/adventurer.png",
+  };
+
+  ret.twitter = {
+    ...(ret.twitter || {}),
+    title: adventure.name,
+    description: adventure.shortDescription,
+    images: adventure.image || "/adventurer.png",
+  } as any;
+
+  return ret as Metadata;
+}
 
 export default async function AdventurePage({
   params,
@@ -17,7 +55,6 @@ export default async function AdventurePage({
   params: { adventureId: string };
 }) {
   const { userId } = auth();
-  if (!userId) throw new Error("no user");
 
   const adventure = (await getAdventure(params.adventureId)) as any;
 
@@ -25,7 +62,7 @@ export default async function AdventurePage({
     redirect(`/adventures`);
   }
   const isCreator = adventure.creatorId === userId;
-  console.log(adventure);
+
   return (
     <div>
       <div className="relative h-96 w-full">
