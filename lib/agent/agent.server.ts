@@ -110,9 +110,13 @@ export const createAgent = async (
       isDevelopment: isDevelopment,
     };
 
-    log.info(`New agent: ${console.log(agentData)}`);
+    log.info(`New agent: ${JSON.stringify(agentData)}`);
     const agent = await prisma.agents.create({ data: agentData });
 
+    if (!agent) {
+      log.error("Agent creation in Prisma failed.");
+      return null;
+    }
     // Now we need to await the agent's startup loop. This is critical
     // because if we perform an operation to quickly after initialization it will fail.
     await steamship.package.waitForInit(packageInstance);
