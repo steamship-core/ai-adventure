@@ -46,7 +46,7 @@ const features = [
   {
     name: "Swappable Models",
     description:
-      "Bring your own LLMs and Stable Diffusion + LORA Generators. Quickly custimize your adventure by swapping out models by editing a single file.",
+      "Bring your own LLMs and Stable Diffusion + LORA Generators. Customize your adventure by swapping out models and prompts.",
     emoji: "🎭",
     icon: VenetianMaskIcon,
   },

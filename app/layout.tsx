@@ -20,16 +20,18 @@ export const viewport = {
   maximumScale: 1,
 };
 
+const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
+
 export const metadata: Metadata = {
   title: "AI Adventure",
   description: "Create your own AI Adventure",
-  metadataBase: new URL("https://ai-adventure.steamship.com"),
+  metadataBase: new URL(url),
   openGraph: {
-    url: "https://ai-adventure.steamship.com/",
+    url: url,
     type: "website",
     title: "AI Adventure",
     description: "Create your own AI Adventure",
-    images: "https://ai-adventure.steamship.com/adventurer.png",
+    images: `${url}/adventurer.png`,
   },
   twitter: {
     creator: "@GetSteamship",
@@ -37,7 +39,7 @@ export const metadata: Metadata = {
     title: "AI Adventure",
     site: "@GetSteamship",
     description: "Create your own AI Adventure",
-    images: "https://ai-adventure.steamship.com/adventurer.png",
+    images: `${url}/adventurer.png`,
   },
 };
 

@@ -15,9 +15,9 @@ export async function generateMetadata(
   // optionally access and extend (rather than replace) parent metadata
   const parentMetadata = (await parent) || {};
 
-  let url = new URL(
-    "https://ai-adventure.steamship.com/share/quest/og-image.png"
-  );
+  const _url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
+
+  let url = new URL(`${_url}/share/quest/og-image.png`);
   url.searchParams.set("title", searchParams.itemName as string);
   url.searchParams.set("description", description as string);
   url.searchParams.set("itemImage", searchParams.itemImage as string);
@@ -29,7 +29,7 @@ export async function generateMetadata(
     description: (description as string) || "A Quest",
     openGraph: {
       ...(parentMetadata.openGraph || {}),
-      url: "https://ai-adventure.steamship.com/",
+      url: _url,
       title: (title as string) || "A Quest",
       description: (description as string) || "A Quest",
       images: imageUrl,
