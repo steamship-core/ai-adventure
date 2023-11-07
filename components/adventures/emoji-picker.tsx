@@ -1,6 +1,7 @@
 "use client";
 
-import { cn, emojis } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { Emojis } from "@prisma/client";
 import { SmilePlusIcon } from "lucide-react";
 import millify from "millify";
 import { useRef, useState } from "react";
@@ -53,6 +54,7 @@ const EmojiForm = ({
 
 const EmojiPicker = ({
   addEmoji,
+  emojis,
   reactions,
   userReactions,
 }: {
@@ -62,6 +64,7 @@ const EmojiPicker = ({
     count: number;
   }[];
   userReactions: number[];
+  emojis: Emojis[];
 }) => {
   const [optimisticUserReactions, setOptimisticUserReactions] =
     useState(userReactions);

@@ -1,8 +1,7 @@
 "use client";
 
 import { sortOptions } from "@/lib/adventure/constants";
-import { emojis } from "@/lib/utils";
-import { Adventure } from "@prisma/client";
+import { Adventure, Emojis } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { LoaderIcon } from "lucide-react";
 import millify from "millify";
@@ -42,7 +41,7 @@ const fetchPage = async (
   }>;
 };
 
-const AdventureList = () => {
+const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
   const { inView, ref } = useInView();
   const searchParams = useSearchParams();
   const router = useRouter();

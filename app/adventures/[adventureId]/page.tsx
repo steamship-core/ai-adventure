@@ -94,8 +94,7 @@ export default async function AdventurePage({
       emojiId: "asc",
     },
   });
-  console.log(JSON.stringify(reactions, null, 2));
-
+  const emojis = await prisma.emojis.findMany({});
   const reactionMap = reactions
     .map((reaction) => {
       return {
@@ -138,6 +137,7 @@ export default async function AdventurePage({
               addEmoji={addEmoji}
               reactions={reactionMap}
               userReactions={userReactionMap}
+              emojis={emojis}
             />
           </div>
         </div>

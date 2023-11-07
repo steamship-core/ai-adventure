@@ -1,6 +1,7 @@
 import AdventureList from "@/components/adventures/adventure-list";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
+import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 
@@ -13,6 +14,8 @@ export default async function AdventuresPage() {
     throw new Error("no user");
   }
 
+  const emojis = await prisma.emojis.findMany({});
+
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
       <div className="flex flex-col justify-between">
@@ -21,7 +24,7 @@ export default async function AdventuresPage() {
           Discover adventures created by the community
         </TypographyMuted>
       </div>
-      <AdventureList />
+      <AdventureList emojis={emojis} />
     </div>
   );
 }
