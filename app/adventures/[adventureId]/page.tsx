@@ -28,15 +28,15 @@ export async function generateMetadata(
 
   let ret = { ...(await parent) };
 
+  const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`;
+
   ret.title = adventure.name;
   ret.description = adventure.shortDescription;
-  ret.metadataBase = new URL(
-    `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`
-  );
+  ret.metadataBase = new URL(url);
 
   ret.openGraph = {
     ...(ret.openGraph || {}),
-    url: ret.metadataBase.toString(),
+    url: url,
     title: adventure.name,
     description: adventure.shortDescription,
     images: adventure.image || "/adventurer.png",
