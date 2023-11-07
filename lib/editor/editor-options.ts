@@ -210,6 +210,13 @@ Can include descriptions of genre, characters, specific items and locations that
         description: "The location of the quest.",
         type: "text",
       },
+      {
+        name: "description",
+        label: "Description",
+        description:
+          "Optional description of the quest's desired characteristics.",
+        type: "longtext",
+      },
     ],
   },
   {
