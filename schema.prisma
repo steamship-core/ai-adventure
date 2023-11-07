@@ -103,7 +103,7 @@ model DrawDowns {
 
 model Emojis {
   id          Int         @id @default(autoincrement())
-  emoji       String
+  emoji       String      @unique
   description String
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
