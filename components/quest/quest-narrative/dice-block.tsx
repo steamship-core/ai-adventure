@@ -49,6 +49,8 @@ const RollingDie = ({
     };
   }, []);
 
+  const isTwenty = num === 20 && rolled === 20;
+
   return (
     <BlockContainer
       className="flex flex-col items-center justify-center py-8"
@@ -61,11 +63,11 @@ const RollingDie = ({
       <div
         className={cn(
           "relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center py-2",
-          num === 20 && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
+          isTwenty && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
         )}
       >
         <TypographyLarge
-          className={cn("text-6xl", num < 20 && "text-background")}
+          className={cn("text-6xl", !isTwenty && "text-background")}
         >
           {num}
         </TypographyLarge>
@@ -75,7 +77,7 @@ const RollingDie = ({
           </div>
         )}
       </div>
-      {!disableAnimation && rolled === 20 && (
+      {!disableAnimation && isTwenty && (
         <div className="static top-0 left-0">
           <Confetti numberOfPieces={3000} recycle={false} />
         </div>
