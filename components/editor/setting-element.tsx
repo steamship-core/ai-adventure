@@ -27,6 +27,7 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
+import ImageInputElement from "./image-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -165,12 +166,11 @@ export default function SettingElement({
     );
   } else if (setting.type == "image") {
     innerField = (
-      <Input
-        onChange={onInputChange}
-        id="picture"
-        type="file"
-        className="hover:cursor-pointer"
-        disabled={isDisabled}
+      <ImageInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+        setting={setting}
       />
     );
   } else if (setting.type === "textarea") {

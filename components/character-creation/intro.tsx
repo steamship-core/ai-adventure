@@ -40,7 +40,7 @@ const CharacterCreationIntro = ({
           }}
         />
       ) : (
-        <TypographyP>text</TypographyP>
+        <TypographyP>{text}</TypographyP>
       )}
       <CreationActions isFinished={isCompletedAnimation}>
         <Button

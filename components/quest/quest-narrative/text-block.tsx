@@ -1,20 +1,27 @@
+import { useRecoilState } from "recoil";
 import { BlockContainer } from "./block-container";
 import { NarrationPlayer } from "./narration-player";
 
+import { recoilContinuationState } from "@/components/providers/recoil";
 import { useEffect, useState } from "react";
 
 const Typewriter = ({ text, delay }: { text: string; delay: number }) => {
   const [currentText, setCurrentText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
     if (currentIndex < text.length) {
+      setContinuationState(false);
       const timeout = setTimeout(() => {
         setCurrentText((prevText) => prevText + text[currentIndex]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
       }, delay);
 
       return () => clearTimeout(timeout);
+    } else {
+      // broadcast completion
+      setContinuationState(true);
     }
   }, [currentIndex, delay, text]);
 
@@ -49,7 +56,7 @@ export const TextBlock = ({
         className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
       >
         {useTypeEffect ? (
-          <>{didComplete && <Typewriter text={text} delay={25} />}</>
+          <>{didComplete && <Typewriter text={text} delay={15} />}</>
         ) : (
           <> {text} </>
         )}

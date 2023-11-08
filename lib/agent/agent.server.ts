@@ -11,6 +11,10 @@ export const getAgents = async (userId: string) => {
       ownerId: userId,
       isDevelopment: false,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+
     include: {
       Adventure: {
         select: {

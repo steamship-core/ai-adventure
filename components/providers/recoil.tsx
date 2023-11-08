@@ -32,6 +32,11 @@ export const recoilEnergyState = atom({
   default: 0 as number,
 });
 
+export const recoilContinuationState = atom({
+  key: "ContinuationState",
+  default: false,
+});
+
 const backgroundAudioOfferedBlocked =
   typeof window != "undefined" &&
   window.localStorage &&

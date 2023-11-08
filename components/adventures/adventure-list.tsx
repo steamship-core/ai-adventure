@@ -209,7 +209,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
                   <div>
                     <div>
                       <TypographySmall className="text-muted-foreground">
-                        Quest
+                        Adventure
                       </TypographySmall>
                       <TypographyLarge>
                         {adventure.name || "Epic Quest"}
@@ -220,7 +220,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
                         Description
                       </TypographySmall>
                       <TypographyLarge className="line-clamp-3">
-                        {adventure.description}
+                        {adventure.shortDescription}
                       </TypographyLarge>
                     </div>
                   </div>

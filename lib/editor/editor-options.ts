@@ -102,7 +102,8 @@ export const GeneralOptions: Setting[] = [
   {
     name: "adventure_short_description",
     label: "Short Description",
-    description: "What one-sentence description describes this adventure",
+    description:
+      "A catchy one-liner to help your adventure stand out in the discover page",
     type: "text",
     default: "",
     required: true,
