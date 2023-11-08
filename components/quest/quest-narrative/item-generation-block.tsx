@@ -38,7 +38,6 @@ export const ItemGenerationBlock = ({
     () => block?.streamState === "complete",
     []
   );
-
   if (wasAlreadyComplete) {
     return (
       <BlockContainer

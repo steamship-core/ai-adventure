@@ -12,6 +12,9 @@ export const useBlockStream = ({
   const { completion, complete } = useCompletion({
     api: `/api/block/${blockId}`,
     onFinish,
+    onError(error) {
+      console.error(error);
+    },
   });
 
   useEffect(() => {

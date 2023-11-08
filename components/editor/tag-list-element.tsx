@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { useMemo } from "react";
-import Select from "react-select";
+import Creatable from "react-select/creatable";
 
 const options = [
   { value: "fantasy", label: "Fantasy" },
@@ -20,6 +21,7 @@ const options = [
   { value: "war", label: "War" },
   { value: "sport", label: "Sport" },
   { value: "modern-day", label: "Modern-day" },
+  { value: "funny", label: "Funny" },
 ];
 
 const TagListElement = ({
@@ -33,12 +35,16 @@ const TagListElement = ({
 }) => {
   const defaultValue = useMemo(() => {
     return (value || []).map((tag) => {
-      return options.find((option) => option.value === tag);
+      const option = options.find((option) => option.value === tag);
+      if (option) {
+        return option;
+      }
+      return { value: tag, label: tag };
     });
   }, [value]);
 
   return (
-    <Select
+    <Creatable
       closeMenuOnSelect={false}
       defaultValue={defaultValue}
       options={options}
@@ -46,8 +52,12 @@ const TagListElement = ({
       classNames={{
         input: () => "text-sm bg-background",
         control: () => "!bg-background !border-muted !py-1",
-        option: () =>
-          "!text-sm hover:!bg-muted focus:!bg-muted selected:!bg-muted !bg-background hover:cursor-pointer",
+        option: ({ isFocused }) => {
+          return cn(
+            "!text-sm hover:!bg-muted focus:!bg-muted hover:cursor-pointer",
+            isFocused && "!bg-muted"
+          );
+        },
         multiValue: () => "!bg-background text-sm border",
         multiValueLabel: () => "text-sm !text-foreground",
         multiValueRemove: () => "text-sm",
