@@ -2,18 +2,9 @@ import AdventureList from "@/components/adventures/adventure-list";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import prisma from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { log } from "next-axiom";
 
 // set Adventure to features in SQL
 export default async function AdventuresPage() {
-  const { userId } = auth();
-
-  if (!userId) {
-    log.error("No user");
-    throw new Error("no user");
-  }
-
   const emojis = await prisma.emojis.findMany({});
 
   return (
