@@ -21,6 +21,7 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
+// @ts-ignore
 const joyrideSteps: StepProps = [
   {
     target: "#stats",
@@ -200,12 +201,14 @@ export const WelcomeModal = () => {
       </Sheet>
       <Joyride
         run={runTour}
+        // @ts-ignore
         steps={joyrideSteps}
         continuous
         showProgress
         hideCloseButton
         tooltipComponent={CustomTooltip}
         styles={{
+          // @ts-ignore
           options: {
             arrowColor: "hsl(var(--foreground))",
           },
