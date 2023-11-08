@@ -1,8 +1,10 @@
+import { recoilContinuationState } from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { Block } from "@/lib/streaming-client/src";
 import { XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { BlockContainer } from "./block-container";
 
 const RollingDie = ({
@@ -20,6 +22,7 @@ const RollingDie = ({
   const [showStatus, setShowStatus] = useState(
     disableAnimation ? success : false
   );
+  const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
     if (disableAnimation) {
@@ -31,6 +34,7 @@ const RollingDie = ({
     const timeout = setTimeout(() => {
       clearInterval(interval);
       setNum(rolled);
+      setContinuationState(true);
     }, 2000);
     const statusTimeout = setTimeout(() => {
       setShowStatus(true);

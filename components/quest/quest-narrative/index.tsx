@@ -2,6 +2,7 @@
 
 import {
   recoilBlockHistory,
+  recoilContinuationState,
   recoilGameState,
 } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
@@ -20,7 +21,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import { NarrativeBlock } from "./narrative-block";
@@ -90,6 +91,7 @@ export default function QuestNarrative({
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
+  const isContinuationEnabled = useRecoilValue(recoilContinuationState);
   const router = useRouter();
 
   const {
@@ -324,6 +326,7 @@ export default function QuestNarrative({
               </form>
             ) : (
               <Button
+                disabled={!isContinuationEnabled}
                 onClick={() => {
                   if (initialBlock?.id) {
                     const containsInitialBlock = chatHistory.includes(
