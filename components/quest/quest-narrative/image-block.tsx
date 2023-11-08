@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
+import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -78,14 +79,8 @@ export const ImageBlock = ({
   );
   return (
     <BlockContainer>
-      {!itemName && (
-        <TypographyP className="mb-4">
-          {gameState?.player?.name} looks around and surveys their surroundings
-          ...{" "}
-        </TypographyP>
-      )}
       {itemName && <TypographyP>{itemName}</TypographyP>}
-      <div className="overflow-hidden rounded-md mt-2 md:px-24">
+      <div className="overflow-hidden rounded-md mt-2">
         {error ? (
           <div
             className={cn(
@@ -108,6 +103,16 @@ export const ImageBlock = ({
               onClick={() => setIsDialogVisible(true)}
             >
               <ImageWithFallback url={url} itemName={itemName} />
+              {!itemName && (
+                <div className="absolute z-20 bottom-0 left-0 bg-background/80 w-full">
+                  <div className="p-2">
+                    <TypographySmall>
+                      {gameState?.player?.name} looks around and surveys their
+                      surroundings.
+                    </TypographySmall>
+                  </div>
+                </div>
+              )}
             </button>
           </>
         )}

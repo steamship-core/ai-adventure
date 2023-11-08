@@ -20,7 +20,7 @@ const RollingDie = ({
 }) => {
   const [num, setNum] = useState(disableAnimation ? rolled : 1);
   const [showStatus, setShowStatus] = useState(
-    disableAnimation ? success : false
+    disableAnimation ? required > rolled : false
   );
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
