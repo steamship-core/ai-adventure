@@ -156,10 +156,28 @@ export default async function Home() {
                 </Dialog>
               ))}
             </div>
+            <Actions>
+              <Button asChild>
+                <Link className="mt-10" href="/adventures">
+                  View all community adventures
+                </Link>
+              </Button>
+            </Actions>
           </Section>
           <Section>
             <Title
-              title="Create your own AI Adventure"
+              title="Create your own Adventure"
+              subtitle="Then share it with your friends"
+            />
+            <Actions>
+              <Button asChild>
+                <Link href="/adventures/build">Adventure Editor</Link>
+              </Button>
+            </Actions>
+          </Section>
+          <Section>
+            <Title
+              title="Host your own Adventure Game"
               subtitle="AI Adventure is open source. Fork the project and make it your
                 own."
             />
