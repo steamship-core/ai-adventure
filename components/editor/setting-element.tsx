@@ -170,6 +170,7 @@ export default function SettingElement({
         onInputChange={onInputChange}
         value={value}
         isDisabled={isDisabled}
+        setting={setting}
       />
     );
   } else if (setting.type === "textarea") {
