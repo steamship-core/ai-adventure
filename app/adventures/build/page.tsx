@@ -70,7 +70,7 @@ export default async function AdventuresPage() {
                       {adventureTemplate.name || "Epic Quest"}
                     </TypographyLarge>
                     <TypographyMuted className="line-clamp-1">
-                      {adventureTemplate.description ||
+                      {adventureTemplate.shortDescription ||
                         "An epic quest filled with danger and adventure"}
                     </TypographyMuted>
                   </div>

@@ -17,7 +17,7 @@ model Adventure {
   name             String   @default("Untitled Adventure")
   description      String   @default("No description provivded.")
   agentVersion     String   @default("ai-adventure")
-  shortDescription String   @default("No short description provided.")
+  shortDescription String   @default("An exciting adventure driven by AI")
   image            String?  @default("")
   agentConfig      Json?
   agentDevConfig   Json?
