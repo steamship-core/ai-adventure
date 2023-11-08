@@ -27,7 +27,7 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import ImageInputElement from "./image-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -165,34 +165,13 @@ export default function SettingElement({
       <Input type="number" value={value} onChange={onTextboxFloatChange} />
     );
   } else if (setting.type == "image") {
-    const isValueString = typeof value === "string";
-    if (isValueString && value) {
-      innerField = (
-        <div className="flex flex-col items-start gap-2">
-          <div className="relative w-44 aspect-[1/1.5] overflow-hidden rounded-md">
-            <Image src={value} fill className="object-cover" alt="Image" />
-          </div>
-          <TypographyMuted>Update Image</TypographyMuted>
-          <Input
-            onChange={onInputChange}
-            id="picture"
-            type="file"
-            className="hover:cursor-pointer"
-            disabled={isDisabled}
-          />
-        </div>
-      );
-    } else {
-      innerField = (
-        <Input
-          onChange={onInputChange}
-          id="picture"
-          type="file"
-          className="hover:cursor-pointer"
-          disabled={isDisabled}
-        />
-      );
-    }
+    innerField = (
+      <ImageInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+      />
+    );
   } else if (setting.type === "textarea") {
     innerField = (
       <TextareaAutosize
