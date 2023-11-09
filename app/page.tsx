@@ -88,7 +88,7 @@ export default async function Home() {
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
-      <div className="relative flex-col w-full bg-gradient-to-b text-center from-transparent via-background/50 to-background flex h-1/2">
+      <div className="relative flex-col w-full bg-gradient-to-b text-center from-transparent via-background/50 to-background flex h-1/3 md:h-1/2">
         <div className="flex w-full justify-end py-2 px-6">
           <div className="flex gap-2 items-center justify-center h-[32px]">
             <UserButton />
@@ -96,10 +96,16 @@ export default async function Home() {
         </div>
         <div className="flex flex-1 flex-col justify-center items-center py-10">
           <div className="pb-12 px-6 md:px-12">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl leading-6 font-bold mb-4">
-              Choose your Adventure..
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-10">
+              Choose your Adventure
             </h1>
+            <p className="text-lg md:text-2xl text-center">
+              Explore community made adventures, or create your own.
+            </p>
           </div>
+          <Button asChild className="shadow-lg shadow-foreground/50 font-bold">
+            <Link href="/adventures">Explore Adventures</Link>
+          </Button>
         </div>
       </div>
       <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12">
@@ -114,13 +120,6 @@ export default async function Home() {
                 />
               ))}
             </div>
-            <Actions>
-              <Button asChild>
-                <Link className="mt-10" href="/adventures">
-                  View all community adventures
-                </Link>
-              </Button>
-            </Actions>
           </Section>
           <Section>
             <Title
