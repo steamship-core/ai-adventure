@@ -8,9 +8,9 @@ const ReturnToCampButton = () => {
   const router = useRouter();
   const params = useParams();
   const onClick = async () => {
-    router.push(`/play/${params.handle}/camp`);
+    router.push(`/adventures`);
     track("Click Button", {
-      buttonName: "Return to Camp",
+      buttonName: "Return to Adventures",
       location: "Account",
     });
   };
@@ -23,7 +23,7 @@ const ReturnToCampButton = () => {
       className="w-full flex justify-start"
     >
       <HomeIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
-      <>Return to Camp</>
+      <>Return to Adventures</>
     </Button>
   );
 };
