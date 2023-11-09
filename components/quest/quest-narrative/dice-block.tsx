@@ -24,6 +24,9 @@ const RollingDie = ({
   const [showStatus, setShowStatus] = useState(
     disableAnimation ? required > rolled : false
   );
+  const [doneRolling, setDoneRolling] = useState(
+    disableAnimation ? true : false
+  );
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
@@ -37,6 +40,7 @@ const RollingDie = ({
       clearInterval(interval);
       setNum(rolled);
       setContinuationState(true);
+      setDoneRolling(true);
     }, 2000);
     const statusTimeout = setTimeout(() => {
       setShowStatus(true);
@@ -63,11 +67,14 @@ const RollingDie = ({
       <div
         className={cn(
           "relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center py-2",
-          isTwenty && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
+          isTwenty && doneRolling && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
         )}
       >
         <TypographyLarge
-          className={cn("text-6xl", !isTwenty && "text-background")}
+          className={cn(
+            "text-6xl",
+            !(isTwenty && doneRolling) && "text-background"
+          )}
         >
           {num}
         </TypographyLarge>

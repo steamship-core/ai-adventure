@@ -85,6 +85,7 @@ export default async function Home() {
       createdAt: "asc",
     },
   });
+
   return (
     <main id="main-container" className={cn("h-full ", font.className)}>
       <MainCTA />
