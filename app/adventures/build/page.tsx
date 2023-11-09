@@ -1,3 +1,4 @@
+import AdventureDropdown from "@/components/adventures/adventure-dropdown";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import { CreateAdventureButton } from "@/components/adventures/create-adventure-button";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
@@ -76,13 +77,14 @@ export default async function AdventuresPage() {
                   </div>
                 </div>
                 <div className=" p-4 flex flex-col">
-                  <div>
+                  <div className=" flex justify-between items-center">
                     <TypographySmall className="text-muted-foreground">
                       Created at
                     </TypographySmall>
                     <TypographyLarge>
                       {format(adventureTemplate.createdAt, "MMM d, yyyy")}
                     </TypographyLarge>
+                    <AdventureDropdown adventureId={adventureTemplate.id} />
                   </div>
                   <div className="flex mt-2 flex-wrap gap-2">
                     {adventureTemplate.tags.map((tag) => (

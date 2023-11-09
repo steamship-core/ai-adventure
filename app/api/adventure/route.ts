@@ -58,6 +58,7 @@ export async function GET(request: Request) {
     },
     where: {
       public: true,
+      deletedAt: null, // Only those that are not deleted
       ...(search && {
         OR: [
           {
