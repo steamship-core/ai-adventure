@@ -36,6 +36,8 @@ export default async function QuestPage({
       audioActiveState={true}
     >
       <Quest
+        workspaceHandle={agent.handle}
+        gameEngineVersion={agent.agentVersion || "Unknown"}
         gameState={gameState}
         agentBaseUrl={agent.agentUrl}
         isDevelopment={agent.isDevelopment || false}

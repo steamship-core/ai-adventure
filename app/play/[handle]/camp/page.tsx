@@ -75,7 +75,10 @@ export default async function CampPage({
             {agent.isDevelopment && <PlayTestBanner />}
             <div className="flex justify-between items-center">
               <div>
-                <CharacterSheet />
+                <CharacterSheet
+                  workspaceHandle={agent.handle}
+                  gameEngineVersion={agent.agentVersion || "unknown"}
+                />
               </div>
               <SummaryStats />
             </div>

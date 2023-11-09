@@ -11,11 +11,15 @@ import QuestNarrative from "./quest-narrative";
 export default function Quest({
   gameState,
   agentBaseUrl,
+  workspaceHandle = "",
+  gameEngineVersion = "",
   isDevelopment = false,
 }: {
   gameState: GameState;
   agentBaseUrl: string;
   isDevelopment: boolean;
+  gameEngineVersion?: string;
+  workspaceHandle?: string;
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
@@ -48,7 +52,11 @@ export default function Quest({
     <QuestContainer>
       {questId && (
         <>
-          <QuestHeader isComplete={isComplete} />
+          <QuestHeader
+            isComplete={isComplete}
+            workspaceHandle={workspaceHandle}
+            gameEngineVersion={gameEngineVersion}
+          />
           {isDevelopment && <PlayTestBanner />}
           <QuestNarrative
             id={questId as string}

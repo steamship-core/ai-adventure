@@ -16,7 +16,15 @@ const BackgroundAudioToggle = dynamic(
   { ssr: false }
 );
 
-export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
+export const QuestHeader = ({
+  isComplete,
+  workspaceHandle = "",
+  gameEngineVersion = "",
+}: {
+  isComplete: boolean;
+  gameEngineVersion?: string;
+  workspaceHandle?: string;
+}) => {
   const gameState = useRecoilValue(recoilGameState);
   const { questId, handle } = useParams();
 
@@ -32,7 +40,11 @@ export const QuestHeader = ({ isComplete }: { isComplete: boolean }) => {
           <HeaderBackButton />
         </div>
         <div className="flex items-center justify-center">
-          <CharacterSheet mini={true} />
+          <CharacterSheet
+            mini={true}
+            workspaceHandle={workspaceHandle}
+            gameEngineVersion={gameEngineVersion || "unknown"}
+          />
           {questArc && (
             <div className="ml-2 mr-2 flex flex-col">
               <TypographySmall className="text-xs">
