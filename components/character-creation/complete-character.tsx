@@ -56,15 +56,26 @@ const CharacterCreationComplete = ({
         }
       );
       if (!res.ok) {
-        setError("Something went wrong. Please try again");
-        setIsVisible(false);
+        let url = new URL(
+          `${window.location.protocol}//${window.location.hostname}/error`
+        );
+        url.searchParams.append("technicalDetails", await res.text());
+        url.searchParams.append(
+          "whatHappened",
+          "We were unable to complete your adventure onboarding."
+        );
+        router.push(url.toString());
       } else {
         router.push(`/play/${params.handle}/camp`);
       }
     } catch (e) {
-      setError("Something went wrong. Please try again");
-      setIsVisible(false);
-      return;
+      let url = new URL("/error");
+      url.searchParams.append("technicalDetails", `Exception: ${e}`);
+      url.searchParams.append(
+        "whatHappened",
+        "We were unable to complete your adventure onboarding: an exception was thrown while trying to complete onboarding."
+      );
+      router.push(url.toString());
     }
   };
 

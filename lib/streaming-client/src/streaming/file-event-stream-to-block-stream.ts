@@ -15,8 +15,38 @@ import { Block, Client } from "../schema";
 function FileEventStreamToBlockStream(
   client: Client
 ): TransformStream<ParsedEvent, Block> {
+  // Helper function to sleep for a given ms
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  // Helper function to retry enqueuing with exponential backoff
+  const retryEnqueue = async (
+    controller: TransformStreamDefaultController<Block>,
+    block: Block,
+    retries = 5
+  ) => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        controller.enqueue(block);
+        return; // Success, so we can return early
+      } catch (e) {
+        if (i < retries - 1) {
+          // Log and wait before retrying
+          console.log(
+            `Retry ${i + 1}: Failed to enqueue block, retrying...`,
+            block
+          );
+          await sleep(2 ** i * 100); // Exponential backoff
+        } else {
+          // If all retries fail, throw the error
+          throw e;
+        }
+      }
+    }
+  };
+
   return new TransformStream<ParsedEvent, Block>({
-    transform(event: ParsedEvent, controller) {
+    async transform(event: ParsedEvent, controller) {
       if (!event.data || !event.event) {
         console.log("no event data or event", event);
         return;
@@ -31,34 +61,21 @@ function FileEventStreamToBlockStream(
           controller.error(new Error("Empty Block ID"));
           return;
         }
-        client.block.get({ id: blockId }).then((block) => {
-          return new Promise<void>((resolve, reject) => {
-            if (!block) {
-              console.log("Block ID did not appear to exist", blockId);
-              controller.error(
-                new Error(`Block ID did not appear to exist ${blockId}`)
-              );
-              reject();
-              return;
-            }
-            try {
-              console.log("enqueueing block", block);
-              controller.enqueue(block);
-              resolve();
-            } catch (e) {
-              log.debug(`Failed to enqueue block ${block}`);
-              console.log("Failed to enqueue block", block);
-              console.log(e);
-              controller.error(e);
-              reject();
-              return;
-            }
-          });
-        });
-      } catch (e) {
-        console.log("FileEventStreamToBlockStream error", e);
+
+        const block = await client.block.get({ id: blockId });
+
+        if (!block) {
+          console.log("Block ID did not appear to exist", blockId);
+          controller.error(
+            new Error(`Block ID did not appear to exist ${blockId}`)
+          );
+          return;
+        }
+        await retryEnqueue(controller, block);
+      } catch (e: any) {
+        log.debug(`Failed to enqueue block: ${e?.message}`);
+        console.log("Error in transform:", e);
         controller.error(e);
-        return;
       }
     },
   });

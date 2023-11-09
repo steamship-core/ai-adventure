@@ -21,15 +21,24 @@ export const POST = withAxiom(
     try {
       // TODO: Filter what the user can send to the agent.
       const res = await completeOnboarding(agent.agentUrl);
-      console.log(res.ok);
-      console.log("res", res);
+      console.log("Complete onboarding done");
+
+      if (!res.ok) {
+        console.log("ERs was not ok");
+        const text = `[${res.status}] ${await res.text()}}`;
+        console.log("ERs was not ok 2");
+        log.error(`Failed to complete onboarding: ${text}`);
+        console.log("ERs was not ok 3");
+        return NextResponse.json({ error: text }, { status: res.status });
+      }
+      console.log("Returning");
       return NextResponse.json({ agent }, { status: 200 });
     } catch (e) {
       log.error(`${e}`);
       console.error(e);
       return NextResponse.json(
-        { error: "Failed to complete onboarding." },
-        { status: 404 }
+        { error: `Failed to complete onboarding. Error was: ${e}` },
+        { status: 500 }
       );
     }
   }
