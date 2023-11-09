@@ -8,11 +8,27 @@ export type OptionValue = {
 const DEFAULT_THEMES = [
   {
     value: "pixel_art_1",
-    label: "pixel_art_1",
+    label: "Pixel Art 1",
   },
   {
     value: "pixel_art_2",
-    label: "pixel_art_2",
+    label: "Pixel Art 2",
+  },
+  {
+    value: "pixel_art_3",
+    label: "Pixel Art 3",
+  },
+  {
+    value: "epic_realism",
+    label: "Epic Realism",
+  },
+  {
+    value: "ff7r",
+    label: "FF7R",
+  },
+  {
+    value: "cinematic_animation",
+    label: "Cinematic Animation",
   },
 ];
 
