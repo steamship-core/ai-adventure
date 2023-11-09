@@ -1,15 +1,6 @@
 import AdventureListElement from "@/components/adventures/adventure-list-element";
 import { MainCTA } from "@/components/landing/header";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
@@ -19,7 +10,6 @@ import { UserButton } from "@clerk/nextjs";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
-  SparklesIcon,
   VenetianMaskIcon,
   WandIcon,
 } from "lucide-react";
@@ -107,53 +97,21 @@ export default async function Home() {
         <div className="flex flex-1 flex-col justify-center items-center py-10">
           <div className="pb-12 px-6 md:px-12">
             <h1 className="text-4xl md:text-6xl lg:text-7xl leading-6 font-bold mb-4">
-              Fantasy Unbounded
+              Choose your Adventure..
             </h1>
-            <TypographyH2 className="border-none font-normal text-2xl md:text-4xl lg:text-5xl">
-              Let AI Be Your Dungeon Master.
-            </TypographyH2>
           </div>
-          <Button
-            asChild
-            className="bg-indigo-600 text-primary hover:bg-indigo-800 font-bold"
-          >
-            <a
-              href={`/adventures/${process.env.NEXT_PUBLIC_DEFAULT_ADVENTURE_ID}/create-instance`}
-            >
-              <SparklesIcon className="mr-2" />
-              Play Now
-            </a>
-          </Button>
         </div>
       </div>
-      <div className="bg-background py-12 md:py-32 flex flex-col px-6 md:px-12">
+      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12">
         <div className="max-w-6xl mx-auto w-full flex flex-col gap-32 z-20">
           <Section>
-            <Title
-              title="Choose Your Adventure"
-              subtitle="Select from a variety of adventures created by the community."
-            />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {featuredAdventures.map((adventure) => (
-                <Dialog key={adventure.id}>
-                  <DialogTrigger>
-                    <AdventureListElement adventure={adventure} link={false} />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Coming soon!</DialogTitle>
-                      <DialogDescription>
-                        We&apos;re working hard to bring fully customizable
-                        quests. Stay tuned! For now, while we are in beta, all
-                        adventures are versions of our demo adventure. Create an
-                        adventure at our{" "}
-                        <Link href="/adventures" className="text-blue-600">
-                          adventures page.
-                        </Link>
-                      </DialogDescription>
-                    </DialogHeader>
-                  </DialogContent>
-                </Dialog>
+                <AdventureListElement
+                  key={adventure.id}
+                  adventure={adventure}
+                  link={true}
+                />
               ))}
             </div>
             <Actions>
