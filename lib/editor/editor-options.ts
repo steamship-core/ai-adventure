@@ -77,6 +77,14 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
   )) {
     topLevelUpdates[topLevelName as string] = agentConfig[agentConfigName];
   }
+
+  if (
+    agentConfig["game_engine_version"] &&
+    agentConfig["game_engine_version"].startsWith("ai-adventure@")
+  ) {
+    topLevelUpdates["agentVersion"] = agentConfig["game_engine_version"];
+  }
+
   return topLevelUpdates;
 }
 
@@ -388,11 +396,17 @@ export const VoiceOptions: Setting[] = [
     default: "adam",
     options: [
       {
+        value: "dorothy",
+        audioSample: "dorothy",
+        label: "Dorothy",
+        description: "British woman with a clear voice for storytelling.",
+      },
+      {
         value: "knightly",
         audioSample: "knightly",
         label: "Knightly",
         description:
-          "Old male british man. A deep and smooth voice for storytelling and podcast.",
+          "Old British man. A deep and smooth voice for storytelling and podcast.",
       },
       {
         value: "oswald",
@@ -618,6 +632,17 @@ The item's description is: {description}.`,
   },
 ];
 
+export const GameEngineOptions: Setting[] = [
+  {
+    name: "game_engine_version",
+    label: "Version",
+    description:
+      "Game engine version this Adventure should use. Only values of the form `ai-adventure@VERSION` will be saved. Replace VERSION with the desired version.",
+    type: "text",
+    default: "",
+  },
+];
+
 export const ImageThemeOptions: Setting[] = [
   {
     // VALIDATED
@@ -809,7 +834,12 @@ export const SettingGroups: SettingGroup[] = [
     href: "image-themes",
     settings: ImageThemeOptions,
   },
-
+  {
+    title: "Game Engine",
+    description: "The AI Agent hosted on Steamship.com powering the game.",
+    href: "game-engine",
+    settings: GameEngineOptions,
+  },
   {
     title: "Import",
     description:
