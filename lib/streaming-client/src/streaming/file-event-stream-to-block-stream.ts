@@ -72,8 +72,8 @@ function FileEventStreamToBlockStream(
           return;
         }
         await retryEnqueue(controller, block);
-      } catch (e) {
-        log.debug(`Failed to enqueue block: ${e.message}`);
+      } catch (e: any) {
+        log.debug(`Failed to enqueue block: ${e?.message}`);
         console.log("Error in transform:", e);
         controller.error(e);
       }
