@@ -47,12 +47,12 @@ export default async function EditorPage({
   });
 
   let devConfig = {
+    ...((adventure.agentDevConfig as any) || {}),
     adventure_name: adventure.name,
     adventure_description: adventure.description,
     adventure_short_description: adventure.shortDescription,
     adventure_image: adventure.image,
     game_engine_version: adventure.agentVersion,
-    ...((adventure.agentDevConfig as any) || {}),
   };
 
   let unpublishedChanges = !objectEquals(
