@@ -9,6 +9,7 @@
  * =========================================================================================*/
 
 import { ParsedEvent } from "eventsource-parser/stream";
+import { log } from "next-axiom";
 import { Block, Client } from "../schema";
 
 function FileEventStreamToBlockStream(
@@ -26,20 +27,32 @@ function FileEventStreamToBlockStream(
         const blockId = data.blockId;
 
         if (!blockId) {
+          console.log("Empty Block ID");
           controller.error(new Error("Empty Block ID"));
           return;
         }
         client.block.get({ id: blockId }).then((block) => {
           return new Promise<void>((resolve, reject) => {
             if (!block) {
+              console.log("Block ID did not appear to exist", blockId);
               controller.error(
                 new Error(`Block ID did not appear to exist ${blockId}`)
               );
               reject();
               return;
             }
-            controller.enqueue(block);
-            resolve();
+            try {
+              console.log("enqueueing block", block);
+              controller.enqueue(block);
+              resolve();
+            } catch (e) {
+              log.debug(`Failed to enqueue block ${block}`);
+              console.log("Failed to enqueue block", block);
+              console.log(e);
+              controller.error(e);
+              reject();
+              return;
+            }
           });
         });
       } catch (e) {

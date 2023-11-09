@@ -11,14 +11,16 @@ import { ReactNode } from "react";
 export const BlockContainer = ({
   className,
   children,
+  noTransform,
 }: {
   className?: string;
   children: ReactNode;
+  noTransform?: boolean;
 }) => (
   <div
     className={cn(className)}
     style={{
-      transform: "translateZ(0)",
+      transform: noTransform ? "none" : "translateZ(0)",
     }}
   >
     {children}

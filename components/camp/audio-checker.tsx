@@ -26,7 +26,6 @@ export function AudioChecker({ questId }: { questId?: string }) {
       let blocks = ((await response.json()) || {}).blocks as ExtendedBlock[];
       if (blocks && blocks.length > 0) {
         for (let block of blocks.reverse()) {
-          console.log(block);
           const mt = getMessageType(block);
           const mtCamp = mt === MessageTypes.CAMP_AUDIO;
           const mtQuest = mt === MessageTypes.SCENE_AUDIO;

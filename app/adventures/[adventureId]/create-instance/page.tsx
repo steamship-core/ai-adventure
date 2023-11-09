@@ -1,5 +1,6 @@
 import { createAgent } from "@/lib/agent/agent.server";
 import { auth } from "@clerk/nextjs";
+import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
 export default async function AdventurePage({
@@ -15,7 +16,9 @@ export default async function AdventurePage({
   const isDevelopment = searchParams["isDevelopment"] === "true";
 
   const agent = await createAgent(userId, params.adventureId, isDevelopment);
+
   if (!agent) {
+    log.error("No agent - redirecting to /adventures");
     redirect("/adventures");
   }
   const search = new URLSearchParams(searchParams);

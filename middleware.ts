@@ -7,10 +7,12 @@ export default authMiddleware({
   publicRoutes: [
     "/",
     "/api/webhooks/stripe",
+    "/api/adventure",
     "/share/quest",
     "/_axiom/logs",
     "/api/shared/(.*)",
-    "/adventures/:id",
+    "/adventures",
+    /^\/adventures\/(?!(build|play|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],
 });

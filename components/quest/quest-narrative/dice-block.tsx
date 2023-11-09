@@ -2,8 +2,10 @@ import { recoilContinuationState } from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 import { XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 import { useRecoilState } from "recoil";
 import { BlockContainer } from "./block-container";
 
@@ -47,14 +49,26 @@ const RollingDie = ({
     };
   }, []);
 
+  const isTwenty = num === 20 && rolled === 20;
+
   return (
-    <BlockContainer className="flex flex-col items-center justify-center">
+    <BlockContainer
+      className="flex flex-col items-center justify-center py-8"
+      noTransform={num === 20}
+    >
       <TypographyLarge>Dice Roll</TypographyLarge>
       <TypographyMuted className="font-bold">
         Required: {required}
       </TypographyMuted>
-      <div className="relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center">
-        <TypographyLarge className="text-6xl text-background">
+      <div
+        className={cn(
+          "relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center py-2",
+          isTwenty && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
+        )}
+      >
+        <TypographyLarge
+          className={cn("text-6xl", !isTwenty && "text-background")}
+        >
           {num}
         </TypographyLarge>
         {showStatus && !success && (
@@ -63,6 +77,11 @@ const RollingDie = ({
           </div>
         )}
       </div>
+      {!disableAnimation && isTwenty && (
+        <div className="static top-0 left-0">
+          <Confetti numberOfPieces={3000} recycle={false} />
+        </div>
+      )}
     </BlockContainer>
   );
 };

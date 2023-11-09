@@ -12,7 +12,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.26.1",
+    "@clerk/nextjs": "^4.26.2",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@monaco-editor/react": "^4.6.0",
     "@prisma/client": "5.5.2",
@@ -35,7 +35,7 @@
     "@vercel/blob": "^0.14.1",
     "@vercel/postgres": "^0.5.0",
     "@xstate/react": "^3.2.2",
-    "ai": "^2.2.15",
+    "ai": "^2.2.21",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cors": "^2.8.5",
@@ -51,10 +51,10 @@
     "package": "^1.0.1",
     "prisma": "5.5.2",
     "react": "^18.2.0",
+    "react-confetti": "^6.1.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.2",
-    "react-joyride": "^2.6.1",
-    "react-scroll-parallax": "^3.4.2",
+    "react-joyride": "^2.6.2",
     "react-scroll-to-bottom": "^4.2.0",
     "react-select": "^5.7.7",
     "react-textarea-autosize": "^8.5.3",
@@ -66,7 +66,6 @@
     "tailwindcss-animate": "^1.0.7",
     "typewriter-effect": "^2.21.0",
     "uuid": "^9.0.1",
-    "xstate": "^4.38.2",
     "yaml": "^2.3.3"
   },
   "devDependencies": {
