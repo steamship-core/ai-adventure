@@ -56,15 +56,24 @@ const CharacterCreationComplete = ({
         }
       );
       if (!res.ok) {
-        setError("Something went wrong. Please try again");
-        setIsVisible(false);
+        let url = new URL("/error");
+        url.searchParams.append("technicalDetails", await res.text());
+        url.searchParams.append(
+          "whatHappened",
+          "We were unable to generate your adventure. Sometimes this happens when OpenAI is having an outage."
+        );
+        router.push(url.toString());
       } else {
         router.push(`/play/${params.handle}/camp`);
       }
     } catch (e) {
-      setError("Something went wrong. Please try again");
-      setIsVisible(false);
-      return;
+      let url = new URL("/error");
+      url.searchParams.append("technicalDetails", `Exception: ${e}`);
+      url.searchParams.append(
+        "whatHappened",
+        "We were unable to generate your adventure: an exception was thrown while trying to complete onboarding."
+      );
+      router.push(url.toString());
     }
   };
 
