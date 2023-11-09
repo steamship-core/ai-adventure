@@ -44,9 +44,7 @@ export default async function CampPage({
     throw new Error("no user");
   }
 
-  console.log("Got user", userId);
   const agent = await getAgent(userId, params.handle);
-  console.log("Got agent", agent);
 
   if (!agent) {
     redirect(`/adventures`);
@@ -70,10 +68,13 @@ export default async function CampPage({
     redirect(`/play/${params.handle}/character-creation`);
   }
 
+  // NOTE: This used to async wait on this generation, but that resulted in huge errors
+  // when OpenAI went down. Now we're not waiting and will repeatedly check from the
+  // rendered page.
   if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
     try {
-      await generateQuestArc(agent?.agentUrl);
-      refreshGameState = true;
+      generateQuestArc(agent?.agentUrl);
+      // refreshGameState = true;
     } catch {
       errorRedirect(
         "There was an error attempting to generate the quest arc for your game. This usually means that OpenAI is having service issues.",
