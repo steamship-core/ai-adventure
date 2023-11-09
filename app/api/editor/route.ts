@@ -1,4 +1,5 @@
 import {
+  deleteAdventure,
   importAdventure,
   publishAdventure,
   updateAdventure,
@@ -19,6 +20,9 @@ export const POST = withAxiom(async (request: Request) => {
 
     if (operation === "update") {
       const adventure = await updateAdventure(userId, id, data);
+      return NextResponse.json(adventure, { status: 200 });
+    } else if (operation === "delete") {
+      const adventure = await deleteAdventure(userId, id);
       return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "import") {
       data = {
