@@ -10,15 +10,16 @@ datasource db {
 }
 
 model Adventure {
-  id               String   @id @default(uuid())
+  id               String    @id @default(uuid())
   creatorId        String
   createdBy        String
-  createdAt        DateTime @default(now())
-  name             String   @default("Untitled Adventure")
-  description      String   @default("No description provivded.")
-  agentVersion     String   @default("ai-adventure")
-  shortDescription String   @default("An exciting adventure driven by AI")
-  image            String?  @default("")
+  createdAt        DateTime  @default(now())
+  deletedAt        DateTime?
+  name             String    @default("Untitled Adventure")
+  description      String    @default("No description provivded.")
+  agentVersion     String    @default("ai-adventure")
+  shortDescription String    @default("An exciting adventure driven by AI")
+  image            String?   @default("")
   agentConfig      Json?
   agentDevConfig   Json?
 

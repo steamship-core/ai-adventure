@@ -19,6 +19,8 @@ export const getAdventure = async (adventureId: string) => {
   return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
+      // Only if it isn't null
+      deletedAt: null,
     },
   });
 };
@@ -39,6 +41,7 @@ export const getAdventuresForUser = async (userId: string) => {
   return await prisma.adventure.findMany({
     where: {
       creatorId: userId,
+      deletedAt: null,
     },
     orderBy: {
       createdAt: "desc",
@@ -118,7 +121,34 @@ export const updateAdventure = async (
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
-    throw Error("Failed to create agent.");
+    throw Error("Failed to update adventure.");
+  }
+};
+
+export const deleteAdventure = async (userId: string, adventureId: string) => {
+  console.log(`User ${userId} attempting to delete adventure ${adventureId}`);
+  const adventure = await getAdventure(adventureId);
+
+  if (!adventure) {
+    throw Error(`Failed to get adventure: ${adventureId} for user ${userId}`);
+  }
+
+  if (adventure.creatorId !== userId) {
+    throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
+  }
+
+  try {
+    await prisma.adventure.update({
+      where: { id: adventure.id },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    return adventure;
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw Error("Failed to delete adventure.");
   }
 };
 
