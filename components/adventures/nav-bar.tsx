@@ -37,7 +37,7 @@ const AdventureNavBar = () => {
       <div className="w-full flex justify-between items-center">
         <div className="flex gap-6">
           <NavBarLink href="/adventures">Discover</NavBarLink>
-          <NavBarLink href="/adventures/build">Build</NavBarLink>
+          <NavBarLink href="/adventures/create">Create</NavBarLink>
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <UserButton />

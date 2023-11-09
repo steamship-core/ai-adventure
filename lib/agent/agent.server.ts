@@ -112,6 +112,7 @@ export const createAgent = async (
       handle: workspaceHandle,
       adventureId: adventureId,
       isDevelopment: isDevelopment,
+      agentVersion: adventure.agentVersion,
     };
 
     log.info(`New agent: ${JSON.stringify(agentData)}`);

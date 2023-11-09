@@ -129,7 +129,7 @@ export default async function Home() {
             />
             <Actions>
               <Button asChild>
-                <Link href="/adventures/build">Adventure Editor</Link>
+                <Link href="/adventures/create">Adventure Editor</Link>
               </Button>
             </Actions>
           </Section>

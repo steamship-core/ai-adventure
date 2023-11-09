@@ -52,6 +52,7 @@ model Agents {
   ownerId       String
   agentUrl      String
   handle        String     @default("agent")
+  agentVersion  String?    @default("")
   createdAt     DateTime   @default(now())
   Adventure     Adventure? @relation(fields: [adventureId], references: [id])
   adventureId   String?
