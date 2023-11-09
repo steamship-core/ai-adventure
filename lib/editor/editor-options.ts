@@ -2,6 +2,7 @@ export type OptionValue = {
   value: string;
   label: string;
   audioSample?: string;
+  imageSample?: string;
   description?: string;
 };
 
@@ -9,26 +10,32 @@ const DEFAULT_THEMES = [
   {
     value: "pixel_art_1",
     label: "Pixel Art 1",
+    imageSample: "/image_samples/pixel_art_1.png",
   },
   {
     value: "pixel_art_2",
     label: "Pixel Art 2",
+    imageSample: "/image_samples/pixel_art_2.png",
   },
   {
     value: "pixel_art_3",
     label: "Pixel Art 3",
+    imageSample: "/image_samples/pixel_art_3.png",
   },
   {
     value: "epic_realism",
     label: "Epic Realism",
+    imageSample: "/image_samples/epic_realism.jpeg",
   },
   {
     value: "ff7r",
     label: "FF7R",
+    imageSample: "/image_samples/ff7r.jpeg",
   },
   {
     value: "cinematic_animation",
     label: "Cinematic Animation",
+    imageSample: "/image_samples/cinematic_animation.jpeg",
   },
 ];
 
