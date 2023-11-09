@@ -388,11 +388,17 @@ export const VoiceOptions: Setting[] = [
     default: "adam",
     options: [
       {
+        value: "dorothy",
+        audioSample: "dorothy",
+        label: "Dorothy",
+        description: "British woman with a clear voice for storytelling.",
+      },
+      {
         value: "knightly",
         audioSample: "knightly",
         label: "Knightly",
         description:
-          "Old male british man. A deep and smooth voice for storytelling and podcast.",
+          "Old British man. A deep and smooth voice for storytelling and podcast.",
       },
       {
         value: "oswald",
