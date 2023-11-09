@@ -56,11 +56,13 @@ const CharacterCreationComplete = ({
         }
       );
       if (!res.ok) {
-        let url = new URL("/error");
+        let url = new URL(
+          `${window.location.protocol}//${window.location.hostname}/error`
+        );
         url.searchParams.append("technicalDetails", await res.text());
         url.searchParams.append(
           "whatHappened",
-          "We were unable to generate your adventure. Sometimes this happens when OpenAI is having an outage."
+          "We were unable to complete your adventure onboarding."
         );
         router.push(url.toString());
       } else {
@@ -71,7 +73,7 @@ const CharacterCreationComplete = ({
       url.searchParams.append("technicalDetails", `Exception: ${e}`);
       url.searchParams.append(
         "whatHappened",
-        "We were unable to generate your adventure: an exception was thrown while trying to complete onboarding."
+        "We were unable to complete your adventure onboarding: an exception was thrown while trying to complete onboarding."
       );
       router.push(url.toString());
     }

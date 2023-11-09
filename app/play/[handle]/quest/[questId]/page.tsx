@@ -26,6 +26,22 @@ export default async function QuestPage({
   }
 
   const gameState = await getGameState(agent?.agentUrl);
+
+  if (gameState?.active_mode == "error") {
+    const whatHappened = encodeURIComponent(
+      "Your game has transitioned to an irrecoverable error state."
+    );
+    const whatYouCanDo = encodeURIComponent(
+      "Try creating a new game. We're sorry this happened!"
+    );
+    const technicalDetails = encodeURIComponent(
+      gameState?.unrecoverable_error || "Unknown"
+    );
+    redirect(
+      `/error?whatHappened=${whatHappened}&whatYouCanDo=${whatYouCanDo}&technicalDetails=${technicalDetails}`
+    );
+  }
+
   let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
 
   return (

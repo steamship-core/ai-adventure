@@ -18,6 +18,15 @@ import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
+function errorRedirect(what: string, cando: string, deets: string) {
+  const whatHappened = encodeURIComponent(what);
+  const whatYouCanDo = encodeURIComponent(cando);
+  const technicalDetails = encodeURIComponent(deets);
+  redirect(
+    `/error?whatHappened=${whatHappened}&whatYouCanDo=${whatYouCanDo}&technicalDetails=${technicalDetails}`
+  );
+}
+
 export default async function CampPage({
   params,
 }: {
@@ -27,33 +36,63 @@ export default async function CampPage({
 
   if (!userId) {
     log.error("No user");
+    errorRedirect(
+      "Login required.",
+      "Try logging in first.",
+      "No user id found."
+    );
     throw new Error("no user");
   }
+
+  console.log("Got user", userId);
   const agent = await getAgent(userId, params.handle);
+  console.log("Got agent", agent);
 
   if (!agent) {
-    console.log("no agent- redirecting to character creation");
     redirect(`/adventures`);
   }
 
   let gameState = await getGameState(agent?.agentUrl);
+
   let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
 
   let refreshGameState = false;
 
+  if (gameState?.active_mode == "error") {
+    errorRedirect(
+      "Your game has transitioned to an irrecoverable error state.",
+      "Try creating a new game. We're sorry this happened!",
+      gameState?.unrecoverable_error || "Unknown"
+    );
+  }
+
   if (gameState?.active_mode == "onboarding") {
-    console.log(JSON.stringify(gameState));
-    console.log("onboarding- redirecting to character creation");
     redirect(`/play/${params.handle}/character-creation`);
   }
 
   if (!gameState?.quest_arc || gameState?.quest_arc?.length === 0) {
-    await generateQuestArc(agent?.agentUrl);
-    refreshGameState = true;
+    try {
+      await generateQuestArc(agent?.agentUrl);
+      refreshGameState = true;
+    } catch {
+      errorRedirect(
+        "There was an error attempting to generate the quest arc for your game. This usually means that OpenAI is having service issues.",
+        "Try creating a new game. We're sorry this happened!",
+        gameState?.unrecoverable_error || "Unknown"
+      );
+    }
   }
 
   if (refreshGameState) {
-    gameState = await getGameState(agent?.agentUrl);
+    try {
+      gameState = await getGameState(agent?.agentUrl);
+    } catch {
+      errorRedirect(
+        "There was an error fetching your game state.",
+        "Try creating a new game. We're sorry this happened!",
+        gameState?.unrecoverable_error || "Unknown"
+      );
+    }
   }
 
   return (

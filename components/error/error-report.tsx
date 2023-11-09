@@ -16,17 +16,23 @@ const ErrorReport = () => {
     technicalDetails = "No technical details were available.";
   }
 
+  try {
+    let j = JSON.parse(technicalDetails);
+    technicalDetails = JSON.stringify(j, null, 2);
+  } catch {}
+
   return (
     <>
       {whatHappened && (
         <>
           <TypographyH2>What happened</TypographyH2>
-          <TypographyP>Something</TypographyP>
+          <TypographyP>{whatHappened}</TypographyP>
           <br />
         </>
       )}
       <>
         <TypographyH2>What you can do</TypographyH2>
+        {whatYouCanDo && <TypographyP>{whatYouCanDo}</TypographyP>}
         <TypographyP>
           It is always helpful to report it to us in our{" "}
           <Link href="https://steamship.com/discord">Discord</Link>
@@ -36,9 +42,7 @@ const ErrorReport = () => {
       {technicalDetails && (
         <>
           <TypographyH2>Technical Details</TypographyH2>
-          <code className="mt-2">
-            <pre>{technicalDetails}</pre>
-          </code>
+          <p className="mt-2">{technicalDetails}</p>
           <br />
         </>
       )}
