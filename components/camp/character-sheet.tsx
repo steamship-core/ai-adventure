@@ -24,7 +24,15 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { TypographyP } from "../ui/typography/TypographyP";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
-export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
+export const CharacterSheet = ({
+  mini,
+  workspaceHandle = "",
+  gameEngineVersion = "",
+}: {
+  mini?: boolean;
+  gameEngineVersion?: string;
+  workspaceHandle?: string;
+}) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const energy = useRecoilValue(recoilEnergyState);
 
@@ -326,6 +334,14 @@ export const CharacterSheet = ({ mini }: { mini?: boolean }) => {
           </div>
           <div>
             <TypographyH3>Diagnostics</TypographyH3>
+            <TypographyMuted>Game Engine</TypographyMuted>
+            <TypographyMuted>{gameEngineVersion || "None"}</TypographyMuted>
+            <TypographyMuted>Workspace</TypographyMuted>
+            <TypographyMuted>{workspaceHandle || "None"}</TypographyMuted>
+            <TypographyMuted>Agent State</TypographyMuted>
+            <TypographyMuted>
+              {gameState?.active_mode || "None"}
+            </TypographyMuted>
             <TypographyMuted>Current Quest</TypographyMuted>
             <TypographyMuted>
               {gameState?.current_quest || "None"}
