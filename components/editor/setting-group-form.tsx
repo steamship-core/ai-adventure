@@ -74,7 +74,8 @@ export default function SettingGroupForm({
       const characters = data.characters || [];
       for (let i = 0; i < characters.length; i++) {
         const character = characters[i];
-        if (character.image) {
+        // if the image is a file, then we need to upload it
+        if (character.image instanceof File) {
           const res = await fetch(
             `/api/adventure/${adventureId}/image?filename=${character.image.name}`,
             {
@@ -173,7 +174,6 @@ export default function SettingGroupForm({
 
   const setKeyValue = (key: string, value: any) => {
     setDataToUpdate((prior) => {
-      console.log(`set(${key}, ${value})`);
       return { ...prior, [key]: value };
     });
     onDataChange(key, value);
