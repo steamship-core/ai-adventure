@@ -9,7 +9,7 @@ import {
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
@@ -51,6 +51,25 @@ export default function SettingElement({
   adventureId?: string;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
+  let [imagePreview, setImagePreview] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (value) {
+      const optionList = [
+        ...(setting.options || []),
+        ...(setting.includeDynamicOptions == "image-themes"
+          ? existingDynamicThemes
+          : []),
+      ];
+      for (let o of optionList) {
+        if (o.value == value && (o as any).imageSample) {
+          setImagePreview((o as any).imageSample);
+          return;
+        }
+      }
+      setImagePreview(undefined);
+    }
+  }, [value]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -410,6 +429,9 @@ export default function SettingElement({
           {setting.description}
         </div>
       )}{" "}
+      {imagePreview && (
+        <img src={imagePreview} className="w-24 h-24 mt-1 mb-1" />
+      )}
       <div>{innerField}</div>
     </div>
   );
