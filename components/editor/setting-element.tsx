@@ -69,7 +69,12 @@ export default function SettingElement({
       }
       setImagePreview(undefined);
     }
-  }, [value]);
+  }, [
+    value,
+    setting.options,
+    setting.includeDynamicOptions,
+    existingDynamicThemes,
+  ]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;

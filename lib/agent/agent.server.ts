@@ -35,6 +35,13 @@ export const getAgent = async (userId: string, handle: string) => {
       ownerId: userId,
       handle,
     },
+    include: {
+      Adventure: {
+        select: {
+          agentConfig: true,
+        },
+      },
+    },
   });
 };
 

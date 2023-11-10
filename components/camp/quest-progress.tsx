@@ -92,7 +92,11 @@ const QuestProgressElement = ({
   );
 };
 
-export const QuestProgress = () => {
+export const QuestProgress = ({
+  adventureGoal,
+}: {
+  adventureGoal?: string;
+}) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
@@ -123,13 +127,13 @@ export const QuestProgress = () => {
   return (
     <>
       <TypographyLarge className="">Quest Progress</TypographyLarge>
-      {gameState.player.motivation && (
+      {adventureGoal && (
         <button
           onClick={() => setIsClamped((clamped) => !clamped)}
           className="text-left"
         >
           <TypographyMuted className={cn(isClamped && "line-clamp-2")}>
-            {gameState?.player?.motivation}
+            {adventureGoal}
           </TypographyMuted>
         </button>
       )}
