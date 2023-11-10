@@ -41,6 +41,7 @@ const StartAdventureButton = () => {
       setLowEnergyModalOpen(true);
       return;
     }
+
     setIsVisible(true);
     setIsLoading(true);
     track("Click Button", {
@@ -67,6 +68,7 @@ const StartAdventureButton = () => {
       try {
         res = await resp.text();
       } catch {
+        alert(`Failed to start quest: ${res}`);
         log.error(`Failed to start quest: ${res}`);
         return;
       }
@@ -80,15 +82,22 @@ const StartAdventureButton = () => {
     if (json?.quest?.status?.state === "failed") {
       setIsLoading(false);
       setIsVisible(false);
+      alert(`Failed to start quest: ${JSON.stringify(json)}`);
+      log.error(`Failed to start quest: ${JSON.stringify(json)}`);
       return;
     }
 
     const questId = json.quest.name;
+    if (!questId) {
+      setIsLoading(false);
+      setIsVisible(false);
+      alert(`Failed to get questId: ${JSON.stringify(json)}`);
+      log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
+      return;
+    }
 
     log.debug(`Activating new quest: ${questId}`);
-    if (questId) {
-      router.push(`/play/${params.handle}/quest/${questId}`);
-    }
+    router.push(`/play/${params.handle}/quest/${questId}`);
     setIsLoading(false);
   };
 
