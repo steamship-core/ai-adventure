@@ -47,6 +47,10 @@ export default async function CampPage({
     redirect(`/adventures`);
   }
 
+  console.log(agent?.Adventure?.agentConfig);
+  const adventureGoal = (agent?.Adventure?.agentConfig as unknown as any)
+    ?.adventure_goal;
+
   let gameState = await getGameState(agent?.agentUrl);
 
   let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
@@ -114,7 +118,7 @@ export default async function CampPage({
             />
             <div className="overflow-auto">
               <div id="quest-progress">
-                <QuestProgress />
+                <QuestProgress adventureGoal={adventureGoal} />
               </div>
               <div id="camp">
                 <TypographyLarge className="mt-4 mb-2">Camp</TypographyLarge>

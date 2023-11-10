@@ -405,13 +405,6 @@ export const CharacterOptions: Setting[] = [
           "Background of the preset character. This influences gameplay.",
         type: "longtext",
       },
-      {
-        name: "motivation",
-        label: "Motivation",
-        description:
-          "Motivation of the preset character. This influences gameplay.",
-        type: "longtext",
-      },
     ],
   },
 ];
