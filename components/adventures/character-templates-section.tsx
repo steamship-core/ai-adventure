@@ -53,7 +53,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
       )}
       <div className="mt-6">
         <TypographyH2 className="border-none">
-          Choose a {playerSingularNoun.toLocaleLowerCase()}
+          Create a {playerSingularNoun.toLocaleLowerCase()}
         </TypographyH2>
         {createDescription}
         <div className="mt-2">
