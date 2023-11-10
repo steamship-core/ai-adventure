@@ -648,9 +648,7 @@ Example:
     label: "Quest Background Prompt",
     description: "The prompt for generating a quest background.",
     type: "longtext",
-    default: `16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {name}.
-The item's description is: {description}.`,
+    default: `16-bit background scene for a quest. The scene being depicted is: {description}`,
   },
   {
     // VALIDATED
