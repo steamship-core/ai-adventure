@@ -349,7 +349,7 @@ Result - Doubling difficulty makes success 1/2 as likely; halving difficulty mak
     description:
       "Temperature (creativity-factor) for the narrative generation. 0=Robot, 1=Bonkers, 0.4=Default",
     type: "float",
-    default: 0.4,
+    default: 0.7,
   },
   {
     // NEEDS WORK:
@@ -359,7 +359,7 @@ Result - Doubling difficulty makes success 1/2 as likely; halving difficulty mak
     description:
       "Maximum number of tokens permitted during generation. 256=Default",
     type: "int",
-    default: 256,
+    default: 512,
   },
 ];
 
@@ -544,9 +544,10 @@ export const ImageOptions: Setting[] = [
     // VALIDATED
     name: "profile_image_prompt",
     label: "Profile Image Prompt",
-    description: "The theme name for generating profile image.",
+    description:
+      "The prompt that will be used to generate the player's profile image. The variables {name} and {description} can be used.",
     type: "longtext",
-    default: "{tone} {genre} profile picture.",
+    default: "close-up profile picture, focus on head, {name}, {description}",
   },
   {
     // VALIDATED
@@ -577,11 +578,9 @@ export const ImageOptions: Setting[] = [
     // VALIDATED
     name: "item_image_prompt",
     label: "Item Image Prompt",
-    description: "The theme name for generating item image.",
+    description: "The prompt used to generate item images.",
     type: "longtext",
-    default: `16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {name}.
-The item's description is: {description}.`,
+    default: `16-bit retro-game sprite for an {name}, {description}`,
   },
   {
     // VALIDATED
