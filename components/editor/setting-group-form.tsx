@@ -30,7 +30,7 @@ export default function SettingGroupForm({
   settingGroups: SettingGroup[];
 }) {
   const existingThemesFromConfig = (_config: any) => {
-    const _existingThemes = (_config as any)?.themes || [];
+    const _existingThemes = (_config as any)?.image_themes || [];
     const _existingDynamicThemes = _existingThemes.map((theme: any) => {
       return {
         label: theme.name,
