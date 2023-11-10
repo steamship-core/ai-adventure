@@ -57,12 +57,8 @@ export default function Quest({
       {questId && (
         <>
           <InGameNavigation
-            title={
-              questArc
-                ? "slkdfjdlskjf lkdsfj sdlkj flsj flsdjf lsdkj fsdlk fj"
-                : "Unknown Location"
-            }
-            subtitle={questArc ? questArc.goal : "Unknown Goal"}
+            title={questArc?.location ? questArc.location : "Unknown Location"}
+            subtitle={questArc?.goal ? questArc.goal : "Unknown Goal"}
             isDevelopment={false}
             showEnergy={false}
             workspaceHandle={workspaceHandle}
