@@ -163,15 +163,15 @@ export const CharacterSheet = ({
                 />
               </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
               {title ? (
                 <TypographySmall className="text-xs whitespace-nowrap overflow-ellipsis">
                   {title}
                 </TypographySmall>
               ) : (
-                <TypographyLarge className="text-sm md:text-lg whitespace-nowrap overflow-ellipsis">
-                  {gameState?.player?.name}{" "}
-                  <span className="ml-2 text-xs md:text-sm text-muted-foreground">
+                <TypographyLarge className="text-sm md:text-lg flex flex-col whitespace-nowrap overflow-ellipsis w-full">
+                  <span>{gameState?.player?.name}</span>
+                  <span className="text-xs md:text-sm text-muted-foreground">
                     {getLevel(rank)}
                   </span>
                 </TypographyLarge>
@@ -183,7 +183,7 @@ export const CharacterSheet = ({
               ) : (
                 <Progress
                   value={getRankProgress(rank)}
-                  className="h-2 border border-foreground/20"
+                  className="h-2 border border-foreground/20 w-full"
                 />
               )}
             </div>
