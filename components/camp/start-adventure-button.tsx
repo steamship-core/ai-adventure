@@ -1,17 +1,26 @@
 "use client";
 import { Quest } from "@/lib/game/schema/quest";
 import { track } from "@vercel/analytics/react";
-import { SparklesIcon } from "lucide-react";
+import { SparklesIcon, ZapIcon, ZapOffIcon } from "lucide-react";
 import { log } from "next-axiom";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 const StartAdventureButton = () => {
   const router = useRouter();
+  const [lowEnergyModalOpen, setLowEnergyModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
   const gameState = useRecoilValue(recoilGameState);
@@ -27,6 +36,11 @@ const StartAdventureButton = () => {
     questCount > questArc.length ? null : questArc[questCount];
 
   const onClick = async () => {
+    const lowEnergy = (energy || 0) < 10;
+    if (lowEnergy) {
+      setLowEnergyModalOpen(true);
+      return;
+    }
     setIsVisible(true);
     setIsLoading(true);
     track("Click Button", {
@@ -78,18 +92,13 @@ const StartAdventureButton = () => {
     setIsLoading(false);
   };
 
-  const lowEnergy = (energy || 0) < 10;
-
   return (
     <>
       <Button
         onClick={onClick}
         isLoading={isLoading}
         disabled={
-          isLoading ||
-          lowEnergy ||
-          !gameState.quest_arc ||
-          gameState.quest_arc.length === 0
+          isLoading || !gameState.quest_arc || gameState.quest_arc.length === 0
         }
         className="w-full flex justify-start"
       >
@@ -108,6 +117,30 @@ const StartAdventureButton = () => {
           </p>
         )}
       </Button>
+      <Dialog
+        open={lowEnergyModalOpen}
+        onOpenChange={(o) => setLowEnergyModalOpen(o)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex gap-2 items-center">
+              <ZapOffIcon /> Out of Energy!
+            </DialogTitle>
+            <DialogDescription>
+              You&apos;ve ran out of energy. You can either wait for your energy
+              to recharge, or you can purchase more energy.
+            </DialogDescription>
+          </DialogHeader>
+          <Button
+            asChild
+            className="bg-indigo-600 text-white hover:bg-indigo-800"
+          >
+            <Link href="/account/plan">
+              Purchase Energy <ZapIcon className="ml-2" />
+            </Link>
+          </Button>
+        </DialogContent>
+      </Dialog>
       {loadingScreen}
     </>
   );

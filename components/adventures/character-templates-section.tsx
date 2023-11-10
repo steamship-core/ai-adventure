@@ -33,7 +33,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
       The profile you choose will influence gameplay and outcomes.
     </TypographyMuted>
   );
-
+  console.log(adventure);
   return (
     <>
       {hasPremadeCharacters && (

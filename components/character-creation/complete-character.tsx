@@ -88,15 +88,21 @@ const CharacterCreationComplete = ({
             <TypographyMuted className="text-muted-foreground">
               Name:
             </TypographyMuted>
-            <TypographyLarge>{config.player?.name}</TypographyLarge>
+            <TypographyLarge className="whitespace-break-spaces">
+              {config.player?.name}
+            </TypographyLarge>
           </div>
           <div>
             <TypographyMuted>Background:</TypographyMuted>
-            <TypographyLarge>{config.player.background}</TypographyLarge>
+            <TypographyLarge className="whitespace-break-spaces">
+              {config.player.background}
+            </TypographyLarge>
           </div>
           <div>
             <TypographyMuted>Appearance:</TypographyMuted>
-            <TypographyLarge>{config.player.description}</TypographyLarge>
+            <TypographyLarge className="whitespace-break-spaces">
+              {config.player.description}
+            </TypographyLarge>
           </div>
         </div>
 

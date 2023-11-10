@@ -1,3 +1,4 @@
+import AdventureDetails from "@/components/adventures/adventure-details";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import EmojiPicker from "@/components/adventures/emoji-picker";
@@ -197,6 +198,7 @@ export default async function AdventurePage({
           </TypographyMuted>
         </div>
         <CharacterTemplatesSection adventure={adventure} />
+        <AdventureDetails adventure={adventure} />
       </div>
     </div>
   );
