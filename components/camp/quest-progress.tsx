@@ -123,14 +123,16 @@ export const QuestProgress = () => {
   return (
     <>
       <TypographyLarge className="">Quest Progress</TypographyLarge>
-      <button
-        onClick={() => setIsClamped((clamped) => !clamped)}
-        className="text-left"
-      >
-        <TypographyMuted className={cn(isClamped && "line-clamp-2")}>
-          {gameState?.player?.motivation}
-        </TypographyMuted>
-      </button>
+      {gameState.player.motivation && (
+        <button
+          onClick={() => setIsClamped((clamped) => !clamped)}
+          className="text-left"
+        >
+          <TypographyMuted className={cn(isClamped && "line-clamp-2")}>
+            {gameState?.player?.motivation}
+          </TypographyMuted>
+        </button>
+      )}
       <div className="flex items-center justify-center">
         {questArc.length === 0 && (
           <Skeleton className="w-full h-24 mt-2 flex items-center justify-center text-sm">

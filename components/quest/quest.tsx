@@ -4,8 +4,7 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PlayTestBanner } from "../status-banners/play-test";
-import { QuestHeader } from "./quest-header";
+import { InGameNavigation } from "../navigation/in-game-navigation";
 import QuestNarrative from "./quest-narrative";
 
 export default function Quest({
@@ -24,6 +23,11 @@ export default function Quest({
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
   const quest = gameState?.quests?.find((q) => q.name === questId);
+
+  const questArcs = gameState?.quest_arc || [];
+  const questIndex = gameState?.quests?.findIndex((q) => q.name === questId);
+  const questArc = questIndex > questArcs.length ? null : questArcs[questIndex];
+
   const [isComplete, setIsComplete] = useState(
     quest?.text_summary ? true : false
   );
@@ -52,12 +56,15 @@ export default function Quest({
     <QuestContainer>
       {questId && (
         <>
-          <QuestHeader
-            isComplete={isComplete}
+          <InGameNavigation
+            title={questArc?.location ? questArc.location : "Unknown Location"}
+            subtitle={questArc?.goal ? questArc.goal : "Unknown Goal"}
+            isDevelopment={false}
+            showEnergy={false}
             workspaceHandle={workspaceHandle}
-            gameEngineVersion={gameEngineVersion}
+            gameEngineVersion={gameEngineVersion || "unknown"}
+            className="mb-2"
           />
-          {isDevelopment && <PlayTestBanner />}
           <QuestNarrative
             id={questId as string}
             onSummary={onSummary}

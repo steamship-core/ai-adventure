@@ -23,14 +23,13 @@ export default async function AdventuresPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
-      <div className="flex justify-between">
-        <div>
+      <div className="flex justify-between flex-col md:flex-row">
+        <div className="mb-4 md:mb-0">
           <TypographyH2 className="border-none">
             Build your own adventure
           </TypographyH2>
           <TypographyMuted className="text-lg">
-            Build a new adventure, or edit an adventure template you have
-            already created
+            Build & edit adventures to share with friends.
           </TypographyMuted>
         </div>
         {adventureTemplates.length !== 0 && <CreateAdventureButton />}
@@ -49,14 +48,14 @@ export default async function AdventuresPage() {
       )}
       {adventureTemplates.length > 0 && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
             {adventureTemplates.map((adventureTemplate) => (
               <Link
                 key={adventureTemplate.id}
                 href={`/adventures/${adventureTemplate.id}`}
                 className="rounded-md border-foreground/20 border overflow-hidden hover:border-indigo-600"
               >
-                <div className="p-4 flex flex-col gap-4 bg-muted">
+                <div className="p-2 md:p-4 flex flex-col gap-4 bg-muted">
                   <div>
                     <div className="relative w-full aspect-video rounded-md overflow-hidden">
                       <Image
@@ -76,14 +75,20 @@ export default async function AdventuresPage() {
                     </TypographyMuted>
                   </div>
                 </div>
-                <div className=" p-4 flex flex-col">
+                <div className="p-2 md:p-4 flex flex-col">
                   <div className=" flex justify-between items-center">
-                    <TypographySmall className="text-muted-foreground">
-                      Created at
-                    </TypographySmall>
-                    <TypographyLarge>
-                      {format(adventureTemplate.createdAt, "MMM d, yyyy")}
-                    </TypographyLarge>
+                    <div className="flex flex-col md:flex-row md:items-center">
+                      <TypographySmall className="text-muted-foreground">
+                        Created&nbsp;
+                      </TypographySmall>
+                      <TypographyLarge className="hidden md:block">
+                        &nbsp;
+                        {format(adventureTemplate.createdAt, "MMM d, yyyy")}
+                      </TypographyLarge>
+                      <TypographySmall className="block md:hidden">
+                        {format(adventureTemplate.createdAt, "MMM d, yyyy")}
+                      </TypographySmall>
+                    </div>
                     <AdventureDropdown adventureId={adventureTemplate.id} />
                   </div>
                   <div className="flex mt-2 flex-wrap gap-2">

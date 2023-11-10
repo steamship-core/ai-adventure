@@ -18,7 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographySmall } from "../ui/typography/TypographySmall";
@@ -112,7 +111,6 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
     <>
       <div className="flex gap-2 items-end">
         <div className="w-full">
-          <Label htmlFor="search">Search</Label>
           <div className="relative">
             <Input
               placeholder="Search"
