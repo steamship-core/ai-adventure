@@ -12,7 +12,7 @@ export default async function AdventuresPage() {
       <div className="flex flex-col justify-between">
         <TypographyH2 className="border-none">Discover Adventures</TypographyH2>
         <TypographyMuted className="text-lg">
-          Discover adventures created by the community
+          Adventures created by the community
         </TypographyMuted>
       </div>
       <AdventureList emojis={emojis} />

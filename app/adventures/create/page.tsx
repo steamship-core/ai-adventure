@@ -29,8 +29,7 @@ export default async function AdventuresPage() {
             Build your own adventure
           </TypographyH2>
           <TypographyMuted className="text-lg">
-            Build a new adventure, or edit an adventure template you have
-            already created
+            Build & edit adventures to share with friends.
           </TypographyMuted>
         </div>
         {adventureTemplates.length !== 0 && <CreateAdventureButton />}
