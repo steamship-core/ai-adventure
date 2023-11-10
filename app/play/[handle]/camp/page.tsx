@@ -2,13 +2,10 @@ import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-au
 import { ActionBar } from "@/components/camp/action-bar";
 import { AudioChecker } from "@/components/camp/audio-checker";
 import { CampImage } from "@/components/camp/camp-image";
-import { CharacterSheet } from "@/components/camp/character-sheet";
 import { QuestProgress } from "@/components/camp/quest-progress";
-import { SummaryStats } from "@/components/camp/summary-stats";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
-import HeaderBackButton from "@/components/header-back-button";
+import { InGameNavigation } from "@/components/navigation/in-game-navigation";
 import RecoilProvider from "@/components/providers/recoil";
-import { PlayTestBanner } from "@/components/status-banners/play-test";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
@@ -109,19 +106,12 @@ export default async function CampPage({
       <main className="w-full h-full">
         <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-2 overflow-auto">
           <div className="flex flex-col gap-2 h-[80%] overflow-hidden">
-            <div>
-              <HeaderBackButton />
-            </div>
-            {agent.isDevelopment && <PlayTestBanner />}
-            <div className="flex justify-between items-center">
-              <div>
-                <CharacterSheet
-                  workspaceHandle={agent.handle}
-                  gameEngineVersion={agent.agentVersion || "unknown"}
-                />
-              </div>
-              <SummaryStats />
-            </div>
+            <InGameNavigation
+              isDevelopment={agent.isDevelopment === true}
+              workspaceHandle={agent.handle}
+              gameEngineVersion={agent.agentVersion || "unknown"}
+              showInventory={false}
+            />
             <div className="overflow-auto">
               <div id="quest-progress">
                 <QuestProgress />
