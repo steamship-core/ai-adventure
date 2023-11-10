@@ -136,7 +136,7 @@ const StartAdventureButton = () => {
             className="bg-indigo-600 text-white hover:bg-indigo-800"
           >
             <Link href="/account/plan">
-              Purchase Energy <ZapIcon />
+              Purchase Energy <ZapIcon className="ml-2" />
             </Link>
           </Button>
         </DialogContent>
