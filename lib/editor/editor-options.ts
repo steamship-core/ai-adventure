@@ -505,6 +505,14 @@ export const MusicOptions: Setting[] = [
     type: "longtext",
     default: "background music for a quest game camp scene. {tone}.",
   },
+  {
+    // VALIDATED
+    name: "music_duration",
+    label: "Music Duration",
+    description: `Duration of music to generate. Default=10. Max=30. IMPORTANT: Values less than 15 are safest because generation takes so long.`,
+    type: "int",
+    default: 10,
+  },
 ];
 
 export const ImageOptions: Setting[] = [

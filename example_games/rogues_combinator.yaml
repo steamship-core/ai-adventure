@@ -1,78 +1,119 @@
-adventure_name: "Rogue's Combinator"
 image: /examples/rogues-combinator.png
-adventure_short_description: "Can you make it to IPO as a flawed founder?"
-adventure_description: "Found a company, raise capital, grow team, and seek the ultimate return. But watch out for the pitfalls of founder life... especially those you create yourself."
-adventure_player_singular_noun: Founder
-narrative_tone: "Gonzo Adventure"
-narrative_voice: "Written in the style of a TV workplace parody similar to HBO's Silicon Valley series. The writing is punchy, professionally done, dialogue laden, and sprinkled with pop culture & tech references."
-adventure_goal: "Grow a company from seed stage to IPO."
-min_problems_per_quest: 2
-max_additional_problems_per_quest: 1
-
-fixed_quest_arc:
-  - goal: "Get a Trial Customer"
-    location: "The TechCrunch Disrupt Hackathon"
-  - goal: "Raise a Seed"
-    location: "Y Combinator"
-  - goal: "Stand out at Demo Day"
-    location: "The Computer History Museum"
-  - goal: "Get noticed by the press"
-    location: "The Hacker News Front Page"
-  - goal: "Raise a Series A"
-    location: "Sand Hill Road"
-adventure_background: |
-  Setting: The San Francisco bay area. Sometimes practical problems exist related to transport, or where people live, using SF-specific references.
-  Time: The present day. The investment market makes no sense. Some people get billion dollar valuations based on an idea; others can't raise a dime.
-  Characters: Problems that arise come from the characters themselves, and their interactions with each other. The characters are flawed, with ridiculously exaggerated personalities.
-  Items: The items are all tech-related, often information about a particular deal, future product, or opportunity to abuse or arbitrage some aspect of the market.
 characters:
   - name: Richard Stallman
-    tagline: Inspires an army. But makes everything free.
     image: /examples/richard-stallman.png
-    description: |
-      Always living from a suitcase. Crowds of groupies wherever he goes. But seems to own nothing. Is always borrowing things or sleeping in odd places. Lacks any predictable form of transit.
+    tagline: Inspires an army. But makes everything free.
+    background: >
+      A freedom-obsessed hacker who started the GNU project and the Free
+      Software Foundation. He's a brilliant programmer, but his idealism often
+      gets in the way of practicality.
+    description: >
+      Always living from a suitcase. Crowds of groupies wherever he goes. But
+      seems to own nothing. Is always borrowing things or sleeping in odd
+      places. Lacks any predictable form of transit.
+
       Richard's challenges always stem from three fundamental flaws:
+
       - The insistence that everything must be free
+
       - The inability to own anything or plan predictably due to his ethos
+
       - The inability to compromise on his ideals
 
+
       Richard, or RMS as folks call him, is HELL-BENT on taking Emacs public. He's been working on it for 30 years, and it's time to cash out.
-    background: |
-      A freedom-obsessed hacker who started the GNU project and the Free Software Foundation. He's a brilliant programmer, but his idealism often gets in the way of practicality.
   - name: Elizabeth Holmes
-    tagline: Mingles with insiders. But can't stop lying.
     image: /examples/elizabeth-holmes.png
-    description: |
-      A visionary who wears only black, fashions herself as the new Steve Jobs, and gets glowing media coverage. Is feared so much people don't tell her the truth until it's too late.
+    tagline: Mingles with insiders. But can't stop lying.
+    background: >
+      A Silicon-valley insider with powerful parents. She's got former heads of
+      state on speed dial. But manipulating power comes so easily that she
+      always finds herself having made promises impossible to keep.
+    description: >
+      A visionary who wears only black, fashions herself as the new Steve Jobs,
+      and gets glowing media coverage. Is feared so much people don't tell her
+      the truth until it's too late.
+
       Elizabeth's problems always stem from three fundamental flaws:
+
       - Everyone believes her lies, which cause the impossible stakes to keep getting higher
+
       - Any time measurement or data is gathered, it contrasts with her lies, forcing her to come up with more lies
+
       - People start to get suspicious of the growing implausibility of her story
+
 
       Elizabeth is obsessed with becoming the world's youngest self-made billionaire... whatever the cost. 
 
+
       Her company detects diseases from a single drop of blood, but it's all a lie. She's been faking it for years, and now she's in too deep to stop.
-    background: |
-      A Silicon-valley insider with powerful parents. She's got former heads of state on speed dial. But manipulating power comes so easily that she always finds herself having made promises impossible to keep.
   - name: Bighead
-    tagline: Nobody sees him coming. Especially him.
     image: /examples/bighead.png
-    description: |
-      A bumbling idiot who somehow manages to get lucky everytime. Eats only fast food. Drinks only soda. Has no idea what's going on.
-    background: |
-      Bighead is a college dropout who somehow manages to always be in the right place at the right time, despite being confused at what's going on around him. People assume that he's a genius, but he's really just a lucky idiot.
+    tagline: Nobody sees him coming. Especially him.
+    background: >
+      Bighead is a college dropout who somehow manages to always be in the right
+      place at the right time, despite being confused at what's going on around
+      him. People assume that he's a genius, but he's really just a lucky idiot.
+
       Bighead's problems always stem from three fundamental flaws:
+
       - Anyone who realizes he's an idiot starts taking advantage of him.
+
       - His decisions are always based on the last thing he heard.
+
       - He often does a comically wrong thing, like Amelia Bedelia or Mr. Bean.
 
+
       Bighead is vaguely motivated to be liked. And the people around him want him to take his company -- an AI Vending Machine maker -- public.
-  # - name: SBF
-  #   tagline: Unlimited funding. But caught in a Ponzi Scheme.
-  #   image: /examples/sbf.png
-  #   description: |
-  #     TODO
-  #   background: |
-  #     TODO
-  #   motivation: |
-  #     TODO
+    description: >
+      A bumbling idiot who somehow manages to get lucky everytime. Eats only
+      fast food. Drinks only soda. Has no idea what's going on.
+adventure_goal: Grow a company from seed stage to IPO.
+adventure_name: Rogue's Combinator
+adventure_tags:
+  - comedy
+narrative_tone: Gonzo Adventure
+adventure_image: https://oieuhigellqlbr79.public.blob.vercel-storage.com/041d371d-32dc-412f-8515-a3f4b19f0dcb-eacb394c-f9ad-419e-95ca-403721f686b3-rogues-combinator-Ij8ItxpabQnb4gRPMJUiX9LX902tSV.png
+fixed_quest_arc:
+  - goal: Get a Trial Customer
+    location: The TechCrunch Disrupt Hackathon
+  - goal: Raise a Seed
+    location: Y Combinator
+  - goal: Stand out at Demo Day
+    location: The Computer History Museum
+  - goal: Get noticed by the press
+    location: The Hacker News Front Page
+  - goal: Raise a Series A
+    location: Sand Hill Road
+narration_voice: knightly
+narrative_voice: Written in the style of a TV workplace parody similar to HBO's
+  Silicon Valley series. The writing is punchy, professionally done, dialogue
+  laden, and sprinkled with pop culture & tech references.
+adventure_public: true
+camp_image_theme: pixel_art_2
+item_image_theme: pixel_art_2
+camp_image_prompt: silicon valley office, computers everywhere, high tech
+item_image_prompt: 16-bit retro-game sprite, {name}, {description}
+game_engine_version: ai-adventure@1.0.4-rc.22
+profile_image_theme: cinematic_animation
+adventure_background: >
+  Setting: The San Francisco bay area. Sometimes practical problems exist
+  related to transport, or where people live, using SF-specific references.
+
+  Time: The present day. The investment market makes no sense. Some people get billion dollar valuations based on an idea; others can't raise a dime.
+
+  Characters: Problems that arise come from the characters themselves, and their interactions with each other. The characters are flawed, with ridiculously exaggerated personalities.
+
+  Items: The items are all tech-related, often information about a particular deal, future product, or opportunity to abuse or arbitrage some aspect of the market.
+profile_image_prompt: profile picture, high tech, great hair, cinematic poster quality
+adventure_description: Found a company, raise capital, grow team, and seek the
+  ultimate return. But watch out for the pitfalls of founder life... especially
+  those you create yourself.
+min_problems_per_quest: 2
+quest_background_theme: cinematic_animation
+adventure_short_description: Can you make it to IPO as a flawed founder?
+camp_music_generation_prompt: electronic background music, ambient, driving
+quest_background_image_prompt: movie poster, cinematic, exciting, high-tech,{description}
+scene_music_generation_prompt: "16-bit game score for an exciting adventure. Scene description: {description}"
+adventure_player_singular_noun: Founder
+max_additional_problems_per_quest: 1
