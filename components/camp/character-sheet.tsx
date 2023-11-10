@@ -28,10 +28,16 @@ export const CharacterSheet = ({
   mini,
   workspaceHandle = "",
   gameEngineVersion = "",
+  title, // Default: character name and rank
+  subtitle, // Default: character energy level
+  className = "",
 }: {
+  title?: string;
+  subtitle?: string;
   mini?: boolean;
   gameEngineVersion?: string;
   workspaceHandle?: string;
+  className?: string;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const energy = useRecoilValue(recoilEnergyState);
@@ -144,7 +150,9 @@ export const CharacterSheet = ({
             </div>
           </button>
         ) : (
-          <button className="flex gap-4 items-start text-left h-full">
+          <button
+            className={`flex gap-4 text-left h-full items-center ${className}`}
+          >
             <div className="flex items-center justify-center h-full">
               <div className="rounded-lg overflow-hidden h-10 w-10 md:h-18 md:w-18 border border-foregound">
                 <Image
@@ -155,17 +163,29 @@ export const CharacterSheet = ({
                 />
               </div>
             </div>
-            <div className="w-44 lg:w-56">
-              <TypographyLarge className="text-sm md:text-lg">
-                {gameState?.player?.name}
-              </TypographyLarge>
-              <Progress
-                value={getRankProgress(rank)}
-                className="h-2 border border-foreground/20"
-              />
-              <TypographyMuted className="text-xs md:text-sm ">
-                Rank: {getLevel(rank)}
-              </TypographyMuted>
+            <div className="flex flex-col">
+              {title ? (
+                <TypographySmall className="text-xs whitespace-nowrap overflow-ellipsis">
+                  {title}
+                </TypographySmall>
+              ) : (
+                <TypographyLarge className="text-sm md:text-lg whitespace-nowrap overflow-ellipsis">
+                  {gameState?.player?.name}{" "}
+                  <span className="ml-2 text-xs md:text-sm text-muted-foreground">
+                    {getLevel(rank)}
+                  </span>
+                </TypographyLarge>
+              )}
+              {subtitle ? (
+                <TypographyMuted className="text-xs whitespace-nowrap overflow-ellipsis">
+                  {subtitle}
+                </TypographyMuted>
+              ) : (
+                <Progress
+                  value={getRankProgress(rank)}
+                  className="h-2 border border-foreground/20"
+                />
+              )}
             </div>
           </button>
         )}
@@ -220,24 +240,6 @@ export const CharacterSheet = ({
               <TypographyH3>Description</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">
                 {gameState?.player?.description}
-              </TypographyMuted>
-            </div>
-            <div>
-              <TypographyH3>Motivation</TypographyH3>
-              <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState?.player?.motivation}
-              </TypographyMuted>
-            </div>
-            <div>
-              <TypographyH3>Game Tone</TypographyH3>
-              <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState?.tone}
-              </TypographyMuted>
-            </div>
-            <div>
-              <TypographyH3>Game Theme</TypographyH3>
-              <TypographyMuted className=" whitespace-pre-wrap">
-                {gameState?.genre}
               </TypographyMuted>
             </div>
             <div>
