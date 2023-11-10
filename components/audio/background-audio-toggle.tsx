@@ -21,8 +21,12 @@ const BackgroundAudioToggle = ({
   }
 
   return (
-    <Button variant={isActive ? undefined : "outline"} onClick={toggle}>
-      <Volume2Icon size={16} className={cn(text && "mr-2")} />
+    <Button
+      variant={isActive ? undefined : "outline"}
+      onClick={toggle}
+      className="px-2 py-1 md:px-3 md:py-3 h-8 md:h-10"
+    >
+      <Volume2Icon size={16} className={(cn(text && "mr-"), "")} />
       {text}
     </Button>
   );
