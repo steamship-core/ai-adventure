@@ -2,9 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { Button } from "../ui/button";
 
 const NavBarLink = ({
   href,
@@ -40,7 +42,19 @@ const AdventureNavBar = () => {
           <NavBarLink href="/adventures/create">Create</NavBarLink>
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
-        <UserButton />
+        <div className="flex gap-4 items-center">
+          <Button variant="ghost">
+            <Link href="https://steamship.com/discord">
+              <Image
+                src="/discord-mark-blue.png"
+                width={619 / 22}
+                height={470 / 22}
+                alt="Discord"
+              />
+            </Link>
+          </Button>
+          <UserButton />
+        </div>
       </div>
     </nav>
   );
