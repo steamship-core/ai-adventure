@@ -25,7 +25,7 @@ export const GET = withAxiom(
     } catch (e) {
       console.error(e);
       return NextResponse.json(
-        { error: "Failed to create agent." },
+        { error: `Unable to get game: ${e}` },
         { status: 404 }
       );
     }
