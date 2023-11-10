@@ -25,7 +25,7 @@ export async function POST(
   } catch (e) {
     console.error(e);
     return NextResponse.json(
-      { error: "Failed to create agent." },
+      { error: `Unable to get narration: ${e}` },
       { status: 404 }
     );
   }

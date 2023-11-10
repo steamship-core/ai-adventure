@@ -57,9 +57,6 @@ export async function POST(
     }
   } catch (e) {
     console.error(e);
-    return NextResponse.json(
-      { error: "Failed to create agent." },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: `Exception: ${e}` }, { status: 404 });
   }
 }
