@@ -695,14 +695,14 @@ export const ImageThemeOptions: Setting[] = [
       },
       {
         name: "prompt_suffix",
-        label: "Prompt",
+        label: "Prompt Suffix",
         description:
           "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
         type: "longtext",
       },
       {
         name: "negative_prompt_prefix",
-        label: "Negative Prompt Suffix",
+        label: "Negative Prompt Prefix",
         description:
           "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
         type: "longtext",
