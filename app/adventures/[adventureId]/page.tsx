@@ -193,7 +193,7 @@ export default async function AdventurePage({
           <TypographyLarge className="mt-2 text-2xl">
             {adventure.shortDescription}
           </TypographyLarge>
-          <TypographyMuted className="mt-2 text-2xl">
+          <TypographyMuted className="mt-2 text-2xl whitespace-break-spaces">
             {adventure.description}
           </TypographyMuted>
         </div>
