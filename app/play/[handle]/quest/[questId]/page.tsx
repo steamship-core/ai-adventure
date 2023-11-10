@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-audio";
 import RecoilProvider from "@/components/providers/recoil";
 import Quest from "@/components/quest/quest";
