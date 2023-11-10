@@ -23,8 +23,8 @@ export default async function AdventuresPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
-      <div className="flex justify-between">
-        <div>
+      <div className="flex justify-between flex-col md:flex-row">
+        <div className="mb-4 md:mb-0">
           <TypographyH2 className="border-none">
             Build your own adventure
           </TypographyH2>
@@ -78,12 +78,18 @@ export default async function AdventuresPage() {
                 </div>
                 <div className=" p-4 flex flex-col">
                   <div className=" flex justify-between items-center">
-                    <TypographySmall className="text-muted-foreground">
-                      Created at
-                    </TypographySmall>
-                    <TypographyLarge>
-                      {format(adventureTemplate.createdAt, "MMM d, yyyy")}
-                    </TypographyLarge>
+                    <div className="flex flex-col md:flex-row md:items-center">
+                      <TypographySmall className="text-muted-foreground">
+                        Created&nbsp;
+                      </TypographySmall>
+                      <TypographyLarge className="hidden md:block">
+                        &nbsp;
+                        {format(adventureTemplate.createdAt, "MMM d, yyyy")}
+                      </TypographyLarge>
+                      <TypographySmall className="block md:hidden">
+                        {format(adventureTemplate.createdAt, "MMM d, yyyy")}
+                      </TypographySmall>
+                    </div>
                     <AdventureDropdown adventureId={adventureTemplate.id} />
                   </div>
                   <div className="flex mt-2 flex-wrap gap-2">
