@@ -40,7 +40,8 @@ const ImageInputElement = ({
             {image === value ? (
               <Image src={image} fill className="object-cover" alt="Image" />
             ) : (
-              <img src={image} className="object-cover w-full" alt="Image" />
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={image} className="object-cover h-full" alt="Image" />
             )}
           </div>
           <TypographyMuted>Update Image</TypographyMuted>

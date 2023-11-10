@@ -76,13 +76,12 @@ export default async function AdventuresPage() {
                   </div>
                 </div>
                 <div className="p-2 md:p-4 flex flex-col">
-                  <div className=" flex justify-between items-center">
-                    <div className="flex flex-col md:flex-row md:items-center">
+                  <div className="flex justify-between items-center">
+                    <div className="flex flex-col items-start">
                       <TypographySmall className="text-muted-foreground">
-                        Created&nbsp;
+                        Created
                       </TypographySmall>
                       <TypographyLarge className="hidden md:block">
-                        &nbsp;
                         {format(adventureTemplate.createdAt, "MMM d, yyyy")}
                       </TypographyLarge>
                       <TypographySmall className="block md:hidden">
