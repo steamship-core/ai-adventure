@@ -172,6 +172,13 @@ export const GeneralOptions: Setting[] = [
   },
 ];
 
+export const storyOptionsToDisplay = [
+  "narrative_tone",
+  "narrative_voice",
+  "adventure_background",
+  "adventure_goal",
+];
+
 export const StoryOptions: Setting[] = [
   {
     name: "story_general_divider",
