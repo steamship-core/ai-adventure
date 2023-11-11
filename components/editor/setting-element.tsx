@@ -21,12 +21,12 @@ import {
 import { Input, inputClassNames } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
-import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
+import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import ImageInputElement from "./image-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
@@ -69,7 +69,12 @@ export default function SettingElement({
       }
       setImagePreview(undefined);
     }
-  }, [value]);
+  }, [
+    value,
+    setting.options,
+    setting.includeDynamicOptions,
+    existingDynamicThemes,
+  ]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -375,15 +380,33 @@ export default function SettingElement({
   }
 
   return (
-    <div
-      className={cn(
-        isDisabled &&
-          "p-4 border border-yellow-600 rounded-md relative overflow-hidden"
+    <div>
+      {!inlined && setting.type != "divider" && (
+        <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
       )}
-    >
-      {isDisabled && (
-        <div className="w-full absolute top-0 left-0 h-full bg-background/90 z-20">
-          <div className="w-full h-full flex flex-col items-center justify-center">
+      {!inlined && setting.unused && (
+        <Alert className="my-2 border-red-200">
+          <AlertTriangleIcon className="h-4 w-4 mt-2" />
+          <AlertTitle className="text-lg">Coming Soon</AlertTitle>
+          <AlertDescription>
+            This setting isn&apos;t yet wired in to gameplay.
+          </AlertDescription>
+        </Alert>
+      )}
+      {!inlined &&
+        !isDisabled &&
+        setting.type != "divider" &&
+        setting.description && (
+          <div className="text-sm text-muted-foreground mb-2">
+            {setting.description}
+          </div>
+        )}{" "}
+      {imagePreview && (
+        <img src={imagePreview} className="w-24 h-24 mt-1 mb-1" />
+      )}
+      {isDisabled ? (
+        <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
+          <div className="w-full flex flex-col items-center justify-center">
             <TypographyLarge>
               {setting.requiredText || "This setting requires approval."}
             </TypographyLarge>
@@ -411,28 +434,9 @@ export default function SettingElement({
             </TypographyLead>
           </div>
         </div>
+      ) : (
+        <div>{innerField}</div>
       )}
-      {!inlined && setting.type != "divider" && (
-        <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
-      )}
-      {!inlined && setting.unused && (
-        <Alert className="my-2 border-red-200">
-          <AlertTriangleIcon className="h-4 w-4 mt-2" />
-          <AlertTitle className="text-lg">Coming Soon</AlertTitle>
-          <AlertDescription>
-            This setting isn&apos;t yet wired in to gameplay.
-          </AlertDescription>
-        </Alert>
-      )}
-      {!inlined && setting.type != "divider" && setting.description && (
-        <div className="text-sm text-muted-foreground mb-2">
-          {setting.description}
-        </div>
-      )}{" "}
-      {imagePreview && (
-        <img src={imagePreview} className="w-24 h-24 mt-1 mb-1" />
-      )}
-      <div>{innerField}</div>
     </div>
   );
 }

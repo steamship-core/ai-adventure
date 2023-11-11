@@ -648,9 +648,7 @@ Example:
     label: "Quest Background Prompt",
     description: "The prompt for generating a quest background.",
     type: "longtext",
-    default: `16-bit retro-game sprite for an item in a hero's inventory.
-The items's name is: {name}.
-The item's description is: {description}.`,
+    default: `16-bit background scene for a quest. The scene being depicted is: {description}`,
   },
   {
     // VALIDATED
@@ -697,14 +695,14 @@ export const ImageThemeOptions: Setting[] = [
       },
       {
         name: "prompt_suffix",
-        label: "Prompt",
+        label: "Prompt Suffix",
         description:
           "Any extra words, including trigger words for LoRAs in this theme. Include a command and spacing if you require it.",
         type: "longtext",
       },
       {
         name: "negative_prompt_prefix",
-        label: "Negative Prompt Suffix",
+        label: "Negative Prompt Prefix",
         description:
           "Any extra words, including trigger words for LoRAs in this theme. Include a comma and spacing if you require it.",
         type: "longtext",
