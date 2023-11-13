@@ -116,7 +116,7 @@ export const GeneralOptions: Setting[] = [
     name: "adventure_public",
     label: "Public",
     description:
-      "NOTE: Only approved users can set an adventure to public. Ask in steamship.com/discord.",
+      "NOTE: Only approved users can set an adventure to public. Ask in https://steamship.com/discord.",
     type: "boolean",
     requiresApproval: true,
     requiredText:
