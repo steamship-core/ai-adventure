@@ -12,6 +12,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.3.3",
     "@clerk/nextjs": "^4.26.2",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@monaco-editor/react": "^4.6.0",
