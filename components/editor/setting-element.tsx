@@ -424,7 +424,7 @@ export default function SettingElement({
             <TypographyLead>
               Reach out on{" "}
               <a
-                href="steamship.com/discord"
+                href="https://steamship.com/discord"
                 target="_blank"
                 className="text-blue-600 hover:underline"
               >
