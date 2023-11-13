@@ -1,6 +1,7 @@
 import QueryProvider from "@/components/providers/react-query";
 import { OpenAIBanner } from "@/components/status-banners/open-ai";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AmplitudeAnalytics } from "@/lib/amplitude";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
@@ -81,6 +82,7 @@ export default function RootLayout({
               <OpenAIBanner />
               {children}
               <Analytics />
+              <AmplitudeAnalytics />
             </ThemeProvider>
           </QueryProvider>
         </body>
