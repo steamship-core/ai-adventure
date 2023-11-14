@@ -1,10 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 export default function EditorSection() {
   return (
     <div className="bg-background py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 overflow-hidden">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start">
           <div className="lg:pr-4 lg:pt-4">
             <div className="lg:max-w-lg">
@@ -29,7 +30,7 @@ export default function EditorSection() {
               </div>
             </div>
           </div>
-          <img
+          <Image
             src="/editor-screenshot.png"
             alt="Product screenshot"
             className="w-[44rem] max-w-none rounded-xl shadow-xl shadow-muted ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0"
