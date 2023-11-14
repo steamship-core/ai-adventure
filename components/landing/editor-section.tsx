@@ -27,35 +27,12 @@ export default function EditorSection() {
                   Get started
                 </Link>
               </div>
-              <figure className="mt-16 border-l border-gray-200 pl-8 text-gray-600">
-                <blockquote className="text-base leading-7">
-                  <p>
-                    “Vel ultricies morbi odio facilisi ultrices accumsan donec
-                    lacus purus. Lectus nibh ullamcorper ac dictum justo in
-                    euismod. Risus aenean ut elit massa. In amet aliquet eget
-                    cras. Sem volutpat enim tristique.”
-                  </p>
-                </blockquote>
-                <figcaption className="mt-6 flex gap-x-4 text-sm leading-6">
-                  <img
-                    src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"
-                    alt=""
-                    className="h-6 w-6 flex-none rounded-full"
-                  />
-                  <div>
-                    <span className="font-semibold text-gray-900">
-                      Maria Hill
-                    </span>{" "}
-                    – Marketing Manager
-                  </div>
-                </figcaption>
-              </figure>
             </div>
           </div>
           <img
             src="/editor-screenshot.png"
             alt="Product screenshot"
-            className="max-w-none rounded-xl shadow-xl shadow-muted ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0"
+            className="w-[44rem] max-w-none rounded-xl shadow-xl shadow-muted ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0"
             width={2432}
             height={1442}
           />
