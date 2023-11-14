@@ -89,7 +89,7 @@ export default async function Home() {
       className={cn("h-full flex flex-col", font.className)}
     >
       <LandingHero />
-      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12 my-32">
+      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12 md:mt-36">
         <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
           <Section>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
