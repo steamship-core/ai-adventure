@@ -22,7 +22,7 @@ model Adventure {
   image            String?   @default("")
   agentConfig      Json?
   agentDevConfig   Json?
-  devAgentId       Int?
+  devAgentId       Int?      @unique
   devAgent         Agents?   @relation("devAgentRelation", fields: [devAgentId], references: [id])
 
   // Whether to feature
@@ -50,16 +50,16 @@ model CharacterTemplate {
 }
 
 model Agents {
-  id            Int         @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   ownerId       String
   agentUrl      String
-  handle        String      @default("agent")
-  agentVersion  String?     @default("")
-  createdAt     DateTime    @default(now())
-  Adventure     Adventure?  @relation("agents", fields: [adventureId], references: [id])
+  handle        String     @default("agent")
+  agentVersion  String?    @default("")
+  createdAt     DateTime   @default(now())
+  Adventure     Adventure? @relation("agents", fields: [adventureId], references: [id])
   adventureId   String?
-  isDevelopment Boolean?    @default(false)
-  DevAdventures Adventure[] @relation("devAgentRelation")
+  isDevelopment Boolean?   @default(false)
+  DevAdventure  Adventure? @relation("devAgentRelation")
 }
 
 model UserEnergy {
