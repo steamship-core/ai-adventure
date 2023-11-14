@@ -1,4 +1,5 @@
 import { log } from "next-axiom";
+import { createAgent } from "../agent/agent.server";
 import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
@@ -27,14 +28,24 @@ export const getAdventure = async (adventureId: string) => {
 
 export const getAdventureForUser = async (
   userId: string,
-  adventureId: string
+  adventureId: string,
+  includeDevAgent: boolean = false
 ) => {
+  const includeBit = includeDevAgent
+    ? {
+        include: {
+          devAgent: true,
+        },
+      }
+    : {};
+
   return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       creatorId: userId,
     },
-  });
+    ...includeBit,
+  } as any);
 };
 
 export const getAdventuresForUser = async (userId: string) => {
@@ -63,13 +74,22 @@ export const createAdventure = async ({
   agentVersion: string;
 }) => {
   try {
-    return await prisma.adventure.create({
+    let adventure = await prisma.adventure.create({
       data: {
         creatorId,
         createdBy,
         name,
         description,
         agentVersion,
+      },
+    });
+
+    const devAgent = await createAgent(creatorId, adventure.id, true);
+
+    return await prisma.adventure.update({
+      where: { id: adventure.id },
+      data: {
+        devAgentId: devAgent!.id!,
       },
     });
   } catch (e) {
