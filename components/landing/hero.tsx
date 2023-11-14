@@ -45,7 +45,7 @@ export default function LandingHero() {
           <TypographyLarge>AI Adventure</TypographyLarge>
         </div>
         <Button variant="link">
-          <Link href="/adventures" className="flex">
+          <Link href={user ? "/adventures" : "/sign-in"} className="flex">
             {user ? (
               "View Adventures"
             ) : (
