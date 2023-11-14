@@ -89,44 +89,42 @@ export default async function Home() {
       className={cn("h-full flex flex-col", font.className)}
     >
       <LandingHero />
-      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12 md:mt-36">
-        <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
-          <Section>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Embark on Epic Journeys
-            </h2>
-            <TypographyMuted className="mt-6 text-lg leading-8">
-              Dive into a treasure trove of player-crafted quests and sagas,
-              where every story unfolds a new adventure. Experience the
-              boundless creativity of a community that breathes life into
-              diverse, enchanting worlds. From mystical lands to futuristic
-              odysseys, discover adventures that spark your imagination and
-              challenge your wits.
-            </TypographyMuted>
-            <ul className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-              {featuredAdventures.map((adventure) => (
-                <li key={adventure.name} className="group rounded-2xl">
-                  <Link href={`/adventures/${adventure.id}`}>
-                    <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden relative group-hover:scale-105 transition-all">
-                      <Image
-                        className="object-cover"
-                        src={adventure.image || "/adventurer.png"}
-                        alt="Adventure Image"
-                        fill
-                      />
-                    </div>
-                    <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight">
-                      {adventure.name}
-                    </h3>
-                    <TypographyMuted className="text-base leading-7">
-                      {adventure.shortDescription}
-                    </TypographyMuted>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Section>
-        </div>
+      <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
+        <Section>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Embark on Epic Journeys
+          </h2>
+          <TypographyMuted className="mt-6 text-lg leading-8">
+            Dive into a treasure trove of player-crafted quests and sagas, where
+            every story unfolds a new adventure. Experience the boundless
+            creativity of a community that breathes life into diverse,
+            enchanting worlds. From mystical lands to futuristic odysseys,
+            discover adventures that spark your imagination and challenge your
+            wits.
+          </TypographyMuted>
+          <ul className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            {featuredAdventures.map((adventure) => (
+              <li key={adventure.name} className="group rounded-2xl">
+                <Link href={`/adventures/${adventure.id}`}>
+                  <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden relative group-hover:scale-105 transition-all">
+                    <Image
+                      className="object-cover"
+                      src={adventure.image || "/adventurer.png"}
+                      alt="Adventure Image"
+                      fill
+                    />
+                  </div>
+                  <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight">
+                    {adventure.name}
+                  </h3>
+                  <TypographyMuted className="text-base leading-7">
+                    {adventure.shortDescription}
+                  </TypographyMuted>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Section>
       </div>
       <EditorSection />
       <OpenSource />
