@@ -22,7 +22,7 @@ const CardDescription = ({
   <div className="absolute bottom-0 left-0 w-full">
     <div className="backdrop-blur-sm p-2 bg-background/40 text-xs">
       <div className="font-bold">{title}</div>
-      <div className="h-0 mt-2 group-hover:h-[13rem] transition-all invisible group-hover:visible">
+      <div className="h-0 group-hover:mt-2 group-hover:h-[13rem] transition-all invisible group-hover:visible">
         {description}
       </div>
     </div>
