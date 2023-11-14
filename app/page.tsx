@@ -1,27 +1,25 @@
-import AdventureListElement from "@/components/adventures/adventure-list-element";
-import { MainCTA } from "@/components/landing/header";
-import { Button } from "@/components/ui/button";
+import EditorSection from "@/components/landing/editor-section";
+import LandingFooter from "@/components/landing/footer";
+import LandingHero from "@/components/landing/hero";
+import OpenSource from "@/components/landing/open-source-section";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
-import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import prisma from "@/lib/db";
 import { cn } from "@/lib/utils";
-import { UserButton } from "@clerk/nextjs";
 import {
   CircleDollarSignIcon,
   FingerprintIcon,
   VenetianMaskIcon,
   WandIcon,
 } from "lucide-react";
-import { Cinzel } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
 import "./globals.css";
 
-const font = Cinzel({
+const font = Open_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
@@ -86,95 +84,53 @@ export default async function Home() {
   });
 
   return (
-    <main
+    <div
       id="main-container"
       className={cn("h-full flex flex-col", font.className)}
     >
-      <MainCTA />
-      <div className="relative flex-col w-full bg-gradient-to-b text-center from-transparent via-background/50 to-background flex">
-        <div className="flex w-full justify-end py-2 px-6">
-          <div className="flex gap-2 items-center justify-center h-[32px]">
-            <UserButton />
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col justify-center items-center py-24 lg:py-36">
-          <div className="pb-12 px-6 md:px-12">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-10">
-              Choose your Adventure
-            </h1>
-            <p className="text-lg md:text-2xl text-center">
-              Explore community made adventures, or create your own.
-            </p>
-          </div>
-          <Button asChild className="shadow-lg shadow-foreground/50 font-bold">
-            <Link href="/adventures">Explore Adventures</Link>
-          </Button>
-        </div>
-      </div>
-      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12">
-        <div className="max-w-6xl mx-auto w-full flex flex-col gap-32 z-20">
+      <LandingHero />
+      <div className="bg-background pb-12 md:pb-32 flex flex-col px-6 md:px-12 my-32">
+        <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
           <Section>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Embark on Epic Journeys
+            </h2>
+            <TypographyMuted className="mt-6 text-lg leading-8">
+              Dive into a treasure trove of player-crafted quests and sagas,
+              where every story unfolds a new adventure. Experience the
+              boundless creativity of a community that breathes life into
+              diverse, enchanting worlds. From mystical lands to futuristic
+              odysseys, discover adventures that spark your imagination and
+              challenge your wits.
+            </TypographyMuted>
+            <ul className="mx-auto mt-20 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3">
               {featuredAdventures.map((adventure) => (
-                <AdventureListElement
-                  key={adventure.id}
-                  adventure={adventure}
-                  link={true}
-                />
-              ))}
-            </div>
-          </Section>
-          <Section>
-            <Title
-              title="Create your own Adventure"
-              subtitle="Then share it with your friends"
-            />
-            <Actions>
-              <Button asChild>
-                <Link href="/adventures/create">Adventure Editor</Link>
-              </Button>
-            </Actions>
-          </Section>
-          <Section>
-            <Title
-              title="Host your own Server"
-              subtitle="AI Adventure is open source."
-            />
-            <Actions>
-              <Button asChild>
-                <a
-                  href="https://github.com/steamship-core/ai-adventure"
-                  target="_blank"
-                  className="flex items-center justify-center gap-2"
-                >
-                  <Image
-                    src="/github.png"
-                    width={24}
-                    height={24}
-                    alt="Github"
-                  />
-                  View on Github
-                </a>
-              </Button>
-            </Actions>
-            <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
-              {features.map((feature) => (
-                <div key={feature.name} className="relative pl-16">
-                  <div>
-                    <div className="absolute mt-3 left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg text-2xl bg-indigo-600 text-center">
-                      <feature.icon />
+                <li key={adventure.name} className="group rounded-2xl">
+                  <Link href={`/adventures/${adventure.id}`}>
+                    <div className="aspect-[3/2] w-full rounded-2xl overflow-hidden relative group-hover:scale-105 transition-all">
+                      <Image
+                        className="object-cover"
+                        src={adventure.image || "/adventurer.png"}
+                        alt="Adventure Image"
+                        fill
+                      />
                     </div>
-                    <TypographySmall>{feature.name}</TypographySmall>
-                  </div>
-                  <TypographyMuted className="mt-2">
-                    {feature.description}
-                  </TypographyMuted>
-                </div>
+                    <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight">
+                      {adventure.name}
+                    </h3>
+                    <TypographyMuted className="text-base leading-7">
+                      {adventure.shortDescription}
+                    </TypographyMuted>
+                  </Link>
+                </li>
               ))}
-            </dl>
+            </ul>
           </Section>
         </div>
       </div>
-    </main>
+      <EditorSection />
+      <OpenSource />
+      <LandingFooter />
+    </div>
   );
 }
