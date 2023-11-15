@@ -1,6 +1,6 @@
 "use client";
+import { amplitude } from "@/lib/amplitude";
 import { useEditorRouting } from "@/lib/editor/use-editor";
-import { track } from "@vercel/analytics/react";
 import { SparklesIcon } from "lucide-react";
 import { log } from "next-axiom";
 import { useState } from "react";
@@ -21,9 +21,10 @@ const PublishButton = ({
 
   const onClick = async () => {
     setIsLoading(true);
-    track("Click Button", {
+    amplitude.track("Button Click", {
       buttonName: "Publish Adventure",
       location: "Editor",
+      action: "publish-adventure",
     });
 
     const resp = await fetch("/api/editor", {

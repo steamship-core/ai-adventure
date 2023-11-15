@@ -219,7 +219,7 @@ export const StoryOptions: Setting[] = [
 
 Can include descriptions of genre, characters, specific items and locations that exist in the world, references to real-world things, etc.`,
     type: "longtext",
-    default: "A fantasy world .",
+    default: "A fantasy world",
     suggestOutputType: "adventure_background",
   },
   {
