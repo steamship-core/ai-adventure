@@ -1,7 +1,7 @@
 import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
 
-export function PrivacyPolicy() {
+function PrivacyPolicy() {
   return (
     <div className={"space-y-6"}>
       <p>
