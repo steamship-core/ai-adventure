@@ -1,6 +1,6 @@
 "use client";
-
 import { Setting } from "@/lib/editor/editor-options";
+import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
@@ -17,15 +17,18 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
-import { AutoResizeTextarea, Textarea } from "../ui/textarea";
+import { AutoResizeTextarea } from "../ui/textarea";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
+import { useRecoilState } from "recoil";
+import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import ImageInputElement from "./image-input-element";
+import { ImagePreview } from "./image-preview";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -35,6 +38,8 @@ export default function SettingElement({
   setting,
   updateFn,
   valueAtLoad,
+  suggestField,
+  previewField,
   inlined = false,
   existingDynamicThemes = [],
   isUserApproved,
@@ -43,6 +48,17 @@ export default function SettingElement({
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
+  suggestField: (
+    fieldName: string,
+    setSuggesting: (val: boolean) => void,
+    setValue: (val: string) => void
+  ) => void;
+  previewField: (
+    fieldName: string,
+    setImagePreviewLoading: (val: boolean) => void,
+    setImagePreview: (val: string | undefined) => void,
+    setImagePreviewBlock: (val: Block | undefined) => void
+  ) => void;
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
@@ -50,6 +66,10 @@ export default function SettingElement({
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
   let [imagePreview, setImagePreview] = useState<string | undefined>();
+  let [imagePreviewBlock, setImagePreviewBlock] = useState<Block>();
+  let [imagePreviewLoading, setImagePreviewLoading] = useState<boolean>(false);
+  let [suggesting, setSuggesting] = useState<boolean>(false);
+  const [_, setError] = useRecoilState(recoilErrorModalState);
 
   useEffect(() => {
     if (value) {
@@ -115,6 +135,25 @@ export default function SettingElement({
     updateFn(setting.name, newValue);
   };
 
+  const preview = async () => {
+    if (!setting.previewOutputType) {
+      return;
+    }
+    previewField(
+      setting.previewOutputType,
+      setImagePreviewLoading,
+      setImagePreview,
+      setImagePreviewBlock
+    );
+  };
+
+  const suggest = async () => {
+    if (!setting.suggestOutputType) {
+      return;
+    }
+    suggestField(setting.suggestOutputType, setSuggesting, setValue);
+  };
+
   const addToList = (e: any) => {
     const newVal =
       setting.listof == "object" ? {} : setting.listof == "text" ? "" : null;
@@ -172,7 +211,15 @@ export default function SettingElement({
   const isDisabled = setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
-    innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
+    innerField = (
+      <Input
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
+        type="text"
+        value={value}
+        onChange={onTextboxChange}
+      />
+    );
   } else if (setting.type == "int") {
     innerField = (
       <Input
@@ -180,11 +227,19 @@ export default function SettingElement({
         step="1"
         value={value}
         onChange={onTextboxIntChange}
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
       />
     );
   } else if (setting.type == "float") {
     innerField = (
-      <Input type="number" value={value} onChange={onTextboxFloatChange} />
+      <Input
+        type="number"
+        value={value}
+        onChange={onTextboxFloatChange}
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
+      />
     );
   } else if (setting.type == "image") {
     innerField = (
@@ -200,7 +255,8 @@ export default function SettingElement({
       <AutoResizeTextarea
         value={value}
         onChange={onTextboxChange}
-        disabled={isDisabled}
+        disabled={isDisabled || suggesting}
+        isLoadingMagic={suggesting}
       />
     );
   } else if (setting.type == "boolean") {
@@ -280,10 +336,11 @@ export default function SettingElement({
     );
   } else if (setting.type == "longtext") {
     innerField = (
-      <Textarea
+      <AutoResizeTextarea
         onChange={onTextboxChange}
         value={value}
-        disabled={isDisabled}
+        disabled={isDisabled || suggesting}
+        isLoadingMagic={suggesting}
       />
     );
   } else if (setting.type == "tag-list") {
@@ -330,6 +387,8 @@ export default function SettingElement({
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
+                          suggestField={suggestField}
+                          previewField={previewField}
                           existingDynamicThemes={existingDynamicThemes}
                           adventureId={adventureId as string}
                           updateFn={(subFieldName: string, value: any) => {
@@ -353,6 +412,8 @@ export default function SettingElement({
                         ...setting,
                         type: setting.listof as any,
                       }}
+                      suggestField={suggestField}
+                      previewField={previewField}
                       inlined={true}
                       updateFn={(_: any, value: any) => {
                         updateItem({ index: i, value: value });
@@ -373,7 +434,7 @@ export default function SettingElement({
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {!inlined && setting.type != "divider" && (
         <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
       )}
@@ -394,8 +455,8 @@ export default function SettingElement({
             {setting.description}
           </div>
         )}{" "}
-      {imagePreview && (
-        <img src={imagePreview} className="w-24 h-24 mt-1 mb-1" />
+      {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
+        <ImagePreview url={imagePreview} block={imagePreviewBlock} />
       )}
       {isDisabled ? (
         <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
@@ -429,6 +490,24 @@ export default function SettingElement({
         </div>
       ) : (
         <div>{innerField}</div>
+      )}
+      {setting.previewOutputType && (
+        <div>
+          <Button
+            variant="default"
+            onClick={preview}
+            isLoading={imagePreviewLoading}
+          >
+            Preview
+          </Button>
+        </div>
+      )}
+      {setting.suggestOutputType && (
+        <div>
+          <Button variant="default" onClick={suggest}>
+            Suggest
+          </Button>
+        </div>
       )}
     </div>
   );

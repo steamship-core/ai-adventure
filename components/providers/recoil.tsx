@@ -3,6 +3,12 @@ import { GameState } from "@/lib/game/schema/game_state";
 import { ReactNode } from "react";
 import { RecoilRoot, SetRecoilState, atom } from "recoil";
 
+export type ErrorDetails = {
+  message?: string;
+  title?: string;
+  details?: string;
+};
+
 const localStorageEffect =
   (key: string) =>
   ({ setSelf, onSet }: { setSelf: any; onSet: any }) => {
@@ -35,6 +41,11 @@ export const recoilEnergyState = atom({
 export const recoilContinuationState = atom({
   key: "ContinuationState",
   default: false,
+});
+
+export const recoilErrorModalState = atom<ErrorDetails | undefined>({
+  key: "ErrorModalState",
+  default: undefined,
 });
 
 const backgroundAudioOfferedBlocked =
@@ -93,7 +104,8 @@ function initializeState(
   backgroundAudioOfferedState?: boolean,
   audioActiveState: boolean = false,
   backgroundAudioUrl?: string,
-  editorLayoutImage: string = EditorLayoutImage.UNSET
+  editorLayoutImage: string = EditorLayoutImage.UNSET,
+  errorModalState?: ErrorDetails
 ) {
   set(recoilGameState, gameState);
   set(recoilEnergyState, energyState);
@@ -103,6 +115,7 @@ function initializeState(
   set(recoilBlockHistory, []);
   set(recoilInitialBlock, undefined);
   set(recoilEditorLayoutImage, editorLayoutImage);
+  set(recoilErrorModalState, errorModalState);
 }
 
 function RecoilProvider({
@@ -113,6 +126,7 @@ function RecoilProvider({
   audioActiveState,
   backgroundAudioUrlState,
   editorLayoutImage,
+  errorModalState,
 }: {
   children: ReactNode;
   gameState?: GameState;
@@ -121,6 +135,7 @@ function RecoilProvider({
   audioActiveState?: boolean;
   backgroundAudioUrlState?: string;
   editorLayoutImage?: string;
+  errorModalState?: ErrorDetails;
 }) {
   return (
     <RecoilRoot
@@ -132,7 +147,8 @@ function RecoilProvider({
           backgroundAudioOfferedState,
           audioActiveState,
           backgroundAudioUrlState,
-          editorLayoutImage
+          editorLayoutImage,
+          errorModalState
         )
       }
     >

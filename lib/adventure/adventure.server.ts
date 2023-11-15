@@ -1,4 +1,6 @@
+import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
+import { createAgent } from "../agent/agent.server";
 import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
@@ -27,14 +29,24 @@ export const getAdventure = async (adventureId: string) => {
 
 export const getAdventureForUser = async (
   userId: string,
-  adventureId: string
+  adventureId: string,
+  includeDevAgent: boolean = false
 ) => {
+  const includeBit = includeDevAgent
+    ? {
+        include: {
+          devAgent: true,
+        },
+      }
+    : {};
+
   return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       creatorId: userId,
     },
-  });
+    ...includeBit,
+  } as any);
 };
 
 export const getAdventuresForUser = async (userId: string) => {
@@ -63,7 +75,7 @@ export const createAdventure = async ({
   agentVersion: string;
 }) => {
   try {
-    return await prisma.adventure.create({
+    let adventure = await prisma.adventure.create({
       data: {
         creatorId,
         createdBy,
@@ -72,11 +84,25 @@ export const createAdventure = async ({
         agentVersion,
       },
     });
+
+    return createDevAgentForAdventureAndReturnAdventure(adventure);
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
     throw Error("Failed to create adventure.");
   }
+};
+
+export const createDevAgentForAdventureAndReturnAdventure = async (
+  adventure: Adventure
+) => {
+  const devAgent = await createAgent(adventure.creatorId, adventure.id, true);
+  return await prisma.adventure.update({
+    where: { id: adventure.id },
+    data: {
+      devAgentId: devAgent!.id!,
+    },
+  });
 };
 
 export const updateAdventure = async (
@@ -107,16 +133,31 @@ export const updateAdventure = async (
   }
 
   try {
-    await prisma.adventure.update({
+    const topLevelUpdates = getTopLevelUpdatesFromAdventureConfig(updateObj);
+    const priorAgentVesion = adventure.agentVersion;
+    const createNewDevAgent =
+      topLevelUpdates.agentVersion &&
+      topLevelUpdates.agentVersion != priorAgentVesion;
+
+    let newAdventure = await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
-        ...getTopLevelUpdatesFromAdventureConfig(updateObj),
+        ...topLevelUpdates,
         agentDevConfig: {
           ...(adventure.agentDevConfig as object),
           ...updateObj,
         },
       },
     });
+
+    // If the updated data contained
+    if (createNewDevAgent) {
+      log.info(`Creating new dev agent for adventure ${adventure.id}.`);
+      newAdventure = await createDevAgentForAdventureAndReturnAdventure(
+        newAdventure
+      );
+    }
+
     return adventure;
   } catch (e) {
     log.error(`${e}`);

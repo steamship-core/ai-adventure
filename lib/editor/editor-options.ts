@@ -65,6 +65,8 @@ export type Setting = {
   listSchema?: Setting[];
   requiresApproval?: boolean;
   requiredText?: string;
+  previewOutputType?: string;
+  suggestOutputType?: string;
 };
 
 export type SettingGroup = {
@@ -191,21 +193,23 @@ export const StoryOptions: Setting[] = [
   },
   {
     // Validated
-    name: "narrative_tone",
-    label: "Narrative Tone",
+    name: "narrative_voice",
+    label: "Genre",
     description:
-      "What is the narrative tone of the storytelling? E.g.: Serious, Silly, Gritty, Heady, etc.",
+      "What is the genre of your story? E.g.: children’s book, young adult novel, fanfic, high literature.",
     type: "text",
-    default: "silly",
+    default: "young adult novel",
+    suggestOutputType: "narrative_voice",
   },
   {
     // Validated
-    name: "narrative_voice",
-    label: "Narrative Voice",
+    name: "narrative_tone",
+    label: "Writing Style",
     description:
-      "What is the narrative voice of the storytelling? E.g.: children’s book, young adult novel, fanfic, high literature.",
+      "What is the writing style of your story? E.g.: Serious, Silly, Gritty, Film Noir, Heady, etc.",
     type: "text",
-    default: "young adult novel",
+    default: "silly",
+    suggestOutputType: "narrative_tone",
   },
   {
     // Validated
@@ -215,7 +219,8 @@ export const StoryOptions: Setting[] = [
 
 Can include descriptions of genre, characters, specific items and locations that exist in the world, references to real-world things, etc.`,
     type: "longtext",
-    default: "A fantasy world .",
+    default: "A fantasy world",
+    suggestOutputType: "adventure_background",
   },
   {
     // Validated
@@ -224,6 +229,7 @@ Can include descriptions of genre, characters, specific items and locations that
     description: `What is the ultimate goal / motivation of this adventure?`,
     type: "longtext",
     default: "To rid the world of evil",
+    suggestOutputType: "adventure_goal",
   },
   {
     name: "quest_divider",
@@ -525,6 +531,7 @@ export const ImageOptions: Setting[] = [
     label: "Profile Images",
     description:
       "Set the theme and prompt for generating player profile images.",
+    previewOutputType: "profile_image",
   },
   {
     // VALIDATED
@@ -559,6 +566,7 @@ export const ImageOptions: Setting[] = [
     label: "Item Images",
     description:
       "Set the theme and prompt for generating images for items found on quests.",
+    previewOutputType: "item_image",
   },
   {
     // VALIDATED
@@ -592,6 +600,7 @@ export const ImageOptions: Setting[] = [
     label: "Camp Images",
     description:
       "Set the theme and prompt for generating images for the camp background.",
+    previewOutputType: "camp_image",
   },
   {
     // VALIDATED
@@ -634,6 +643,7 @@ Example:
     name: "quest-divider",
     label: "Quest Images",
     description: "Set the theme and prompt for generating in-quest images.",
+    previewOutputType: "scene_image",
   },
   {
     // VALIDATED

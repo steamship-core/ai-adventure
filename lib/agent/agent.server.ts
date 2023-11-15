@@ -109,7 +109,9 @@ export const createAgent = async (
       handle: workspaceHandle,
     });
 
-    log.info(`New agent package instance: ${packageInstance}`);
+    log.info(
+      `New agent package instance: ${packageInstance} in workspace ${packageInstance.workspaceId}`
+    );
 
     const agentUrl = packageInstance.invocationURL;
 
@@ -120,6 +122,8 @@ export const createAgent = async (
       adventureId: adventureId,
       isDevelopment: isDevelopment,
       agentVersion: adventure.agentVersion,
+      workspaceHandle: workspaceHandle,
+      workspaceId: packageInstance.workspaceId,
     };
 
     log.info(`New agent: ${JSON.stringify(agentData)}`);
