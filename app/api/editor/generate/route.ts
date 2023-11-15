@@ -1,4 +1,5 @@
 import { getAdventureForUser } from "@/lib/adventure/adventure.server";
+import { Block } from "@/lib/streaming-client/src";
 import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
@@ -57,7 +58,21 @@ export const POST = withAxiom(async (request: Request) => {
       );
     }
 
-    const block = await response.json();
+    const block = (await response.json()) as Block;
+
+    if (typeof block == "undefined" || !block) {
+      return NextResponse.json(
+        {
+          error: `Got back undefined block.`,
+        },
+        { status: 500 }
+      );
+    }
+
+    if (!block.workspaceId) {
+      block.workspaceId = devAgent.workspaceId;
+    }
+
     return NextResponse.json(block, { status: 200 });
   } catch (e) {
     log.error(`${e}`);

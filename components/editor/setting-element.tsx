@@ -132,6 +132,8 @@ export default function SettingElement({
 
   const preview = async () => {
     setImagePreviewLoading(true);
+    setImagePreview(undefined);
+
     const response = await fetch(`/api/editor/generate`, {
       method: "POST",
       body: JSON.stringify({
@@ -496,7 +498,11 @@ export default function SettingElement({
         <div>{innerField}</div>
       )}
       {setting.previewOutputType && (
-        <Button variant="default" onClick={preview}>
+        <Button
+          variant="default"
+          onClick={preview}
+          isLoading={imagePreviewLoading}
+        >
           Preview
         </Button>
       )}
