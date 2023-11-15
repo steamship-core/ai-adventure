@@ -60,7 +60,6 @@ export default function SettingGroupForm({
     setValue: (val: string) => void
   ) => {
     setSuggesting(true);
-    setError({ title: "TEST", message: "TEST" });
     const response = await fetch(`/api/editor/generate`, {
       method: "POST",
       body: JSON.stringify({
