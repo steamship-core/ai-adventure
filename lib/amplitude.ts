@@ -22,6 +22,15 @@ const useAmplitudeInit = () => {
       }
       if (user && amplitude) {
         amplitude.setUserId(user.id);
+        const emailAddress =
+          user.emailAddresses.length > 0
+            ? user.emailAddresses[0].emailAddress
+            : null;
+        if (emailAddress) {
+          const identifyEvent = new amplitude.Identify();
+          identifyEvent.set("email", emailAddress);
+          amplitude.identify(identifyEvent);
+        }
       }
     };
     initAmplitude();
