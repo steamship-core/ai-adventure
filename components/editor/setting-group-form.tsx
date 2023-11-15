@@ -53,6 +53,44 @@ export default function SettingGroupForm({
     { value: string; label: string }[]
   >(existingThemesFromConfig(existing));
 
+  const previewField = async (
+    fieldName: string,
+    setImagePreviewLoading: (val: boolean) => void,
+    setImagePreview: (val: string | undefined) => void,
+    setImagePreviewBlock: (val: Block | undefined) => void
+  ) => {
+    setImagePreviewLoading(true);
+    setImagePreview(undefined);
+
+    const response = await fetch(`/api/editor/generate`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "preview",
+        id: adventureId,
+        data: {
+          field_name: fieldName,
+          unsaved_server_settings: dataToUpdate,
+        },
+      }),
+    });
+    setImagePreviewLoading(false);
+
+    if (!response.ok) {
+      const e = {
+        title: "Failed to generate preview.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
+    } else {
+      let block = (await response.json()) as Block;
+      setImagePreviewBlock(block);
+    }
+  };
+
   // TODO: Send up changes in progress
   const suggestField = async (
     fieldName: string,
@@ -67,6 +105,7 @@ export default function SettingGroupForm({
         id: adventureId,
         data: {
           field_name: fieldName,
+          unsaved_server_settings: dataToUpdate,
         },
       }),
     });
@@ -337,6 +376,7 @@ export default function SettingGroupForm({
               existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
               suggestField={suggestField}
+              previewField={previewField}
             />
           ))}
           {submittedAt && isSuccess ? (

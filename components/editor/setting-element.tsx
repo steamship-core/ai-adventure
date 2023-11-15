@@ -40,6 +40,7 @@ export default function SettingElement({
   updateFn,
   valueAtLoad,
   suggestField,
+  previewField,
   inlined = false,
   existingDynamicThemes = [],
   isUserApproved,
@@ -52,6 +53,12 @@ export default function SettingElement({
     fieldName: string,
     setSuggesting: (val: boolean) => void,
     setValue: (val: string) => void
+  ) => void;
+  previewField: (
+    fieldName: string,
+    setImagePreviewLoading: (val: boolean) => void,
+    setImagePreview: (val: string | undefined) => void,
+    setImagePreviewBlock: (val: Block | undefined) => void
   ) => void;
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
@@ -130,35 +137,15 @@ export default function SettingElement({
   };
 
   const preview = async () => {
-    setImagePreviewLoading(true);
-    setImagePreview(undefined);
-
-    const response = await fetch(`/api/editor/generate`, {
-      method: "POST",
-      body: JSON.stringify({
-        operation: "preview",
-        id: adventureId,
-        data: {
-          field_name: setting.previewOutputType,
-        },
-      }),
-    });
-    setImagePreviewLoading(false);
-
-    if (!response.ok) {
-      const e = {
-        title: "Failed to generate preview.",
-        message: "The server responded with an error response",
-        details: `Status: ${response.status}, StatusText: ${
-          response.statusText
-        }, Body: ${await response.text()}`,
-      };
-      setError(e);
-      console.error(e);
-    } else {
-      let block = (await response.json()) as Block;
-      setImagePreviewBlock(block);
+    if (!setting.previewOutputType) {
+      return;
     }
+    previewField(
+      setting.previewOutputType,
+      setImagePreviewLoading,
+      setImagePreview,
+      setImagePreviewBlock
+    );
   };
 
   const suggest = async () => {
@@ -389,6 +376,7 @@ export default function SettingElement({
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
                           suggestField={suggestField}
+                          previewField={previewField}
                           existingDynamicThemes={existingDynamicThemes}
                           adventureId={adventureId as string}
                           updateFn={(subFieldName: string, value: any) => {
@@ -413,6 +401,7 @@ export default function SettingElement({
                         type: setting.listof as any,
                       }}
                       suggestField={suggestField}
+                      previewField={previewField}
                       inlined={true}
                       updateFn={(_: any, value: any) => {
                         updateItem({ index: i, value: value });
