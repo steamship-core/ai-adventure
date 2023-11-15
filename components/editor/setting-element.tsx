@@ -1,7 +1,6 @@
 "use client";
 
 import { Setting } from "@/lib/editor/editor-options";
-import { cn } from "@/lib/utils";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
@@ -10,7 +9,6 @@ import {
   PlusCircleIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import {
@@ -18,8 +16,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { Input, inputClassNames } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
+import { AutoResizeTextarea, Textarea } from "../ui/textarea";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
@@ -199,14 +197,9 @@ export default function SettingElement({
     );
   } else if (setting.type === "textarea") {
     innerField = (
-      <TextareaAutosize
-        className={cn(
-          inputClassNames,
-          "w-full py-[.6rem] resize-none disabled:cursor-default"
-        )}
+      <AutoResizeTextarea
         value={value}
         onChange={onTextboxChange}
-        maxRows={8}
         disabled={isDisabled}
       />
     );
