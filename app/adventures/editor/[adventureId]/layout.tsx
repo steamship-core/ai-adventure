@@ -1,4 +1,5 @@
 import LayoutImage from "@/components/editor/layout-image";
+import { ErrorSheet } from "@/components/error-sheet";
 import RecoilProvider from "@/components/providers/recoil";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
@@ -24,6 +25,7 @@ const AdventuresLayout = ({ children }: { children: ReactNode }) => (
       </div>
       <>{children}</>
     </div>
+    <ErrorSheet />
   </RecoilProvider>
 );
 

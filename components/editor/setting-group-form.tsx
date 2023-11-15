@@ -2,6 +2,7 @@
 
 import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import { Block } from "@/lib/streaming-client/src";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
@@ -9,7 +10,10 @@ import { CheckIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import { recoilEditorLayoutImage } from "../providers/recoil";
+import {
+  recoilEditorLayoutImage,
+  recoilErrorModalState,
+} from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -43,10 +47,55 @@ export default function SettingGroupForm({
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
+  const [_, setError] = useRecoilState(recoilErrorModalState);
 
   const [existingThemes, setExistingThemes] = useState<
     { value: string; label: string }[]
   >(existingThemesFromConfig(existing));
+
+  // TODO: Send up changes in progress
+  const suggestField = async (
+    fieldName: string,
+    setSuggesting: (val: boolean) => void,
+    setValue: (val: string) => void
+  ) => {
+    setSuggesting(true);
+    const response = await fetch(`/api/editor/generate`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "suggest",
+        id: adventureId,
+        data: {
+          field_name: fieldName,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const e = {
+        title: "Failed suggestion request.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
+    } else {
+      let block = (await response.json()) as Block;
+      if (block.text) {
+        setValue(block.text);
+        setSuggesting(false);
+      } else if (block.id) {
+        const blockContent = await fetch(
+          `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
+        );
+        const streamedText = await blockContent.text();
+        setValue(streamedText);
+        setSuggesting(false);
+      }
+    }
+  };
 
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
@@ -65,8 +114,15 @@ export default function SettingGroupForm({
           setEditorLayoutImage(blobJson.url);
           dataToSave.adventure_image = blobJson.url;
         } else {
-          console.log("Failed to upload image");
-          console.log(await res.text());
+          const e = {
+            title: "Upload failures",
+            message: "Unable to upload your image.",
+            details: `Status: ${res.status}, StatusText: ${
+              res.statusText
+            }, Body: ${await res.text()}`,
+          };
+          setError(e);
+          console.error(e);
           return;
         }
       }
@@ -89,7 +145,6 @@ export default function SettingGroupForm({
           }
         }
       }
-      console.log("dataToSave", dataToSave);
 
       if (typeof dataToSave.themes != "undefined") {
         setExistingThemes(existingThemesFromConfig(dataToSave));
@@ -103,6 +158,18 @@ export default function SettingGroupForm({
           data: dataToSave,
         }),
       });
+
+      if (!res.ok) {
+        const e = {
+          title: "Failed to save data.",
+          message: "The server responded with an error response",
+          details: `Status: ${res.status}, StatusText: ${
+            res.statusText
+          }, Body: ${await res.text()}`,
+        };
+        setError(e);
+        console.error(e);
+      }
 
       window?.scrollTo(0, 0);
 
@@ -139,9 +206,14 @@ export default function SettingGroupForm({
     let data = {};
     try {
       data = parse(importYaml);
-    } catch (e) {
-      console.log(e);
-      alert(e);
+    } catch (ex) {
+      const e = {
+        title: "Failed to import.",
+        message: "Unable to parse the YAML.",
+        details: `Exception: ${ex}`,
+      };
+      setError(e);
+      console.error(e);
       return;
     }
 
@@ -153,7 +225,20 @@ export default function SettingGroupForm({
         data,
       }),
     }).then(
-      (res) => {
+      async (res) => {
+        if (!res.ok) {
+          const e = {
+            title: "Failed to save data.",
+            message: "The server responded with an error response",
+            details: `Status: ${res.status}, StatusText: ${
+              res.statusText
+            }, Body: ${await res.text()}`,
+          };
+          setError(e);
+          console.error(e);
+          return;
+        }
+
         const { dismiss } = toast({
           title: "Imported",
         });
@@ -163,7 +248,13 @@ export default function SettingGroupForm({
         location.reload();
       },
       (error) => {
-        console.log(error);
+        const e = {
+          title: "Failed to import.",
+          message: "The server responded with an error response",
+          details: `Exception: ${error}`,
+        };
+        setError(e);
+        console.error(e);
       }
     );
   };
@@ -245,6 +336,7 @@ export default function SettingGroupForm({
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
+              suggestField={suggestField}
             />
           ))}
           {submittedAt && isSuccess ? (
