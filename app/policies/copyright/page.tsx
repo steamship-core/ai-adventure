@@ -2,7 +2,7 @@ import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
 import Link from "next/link";
 
-export function Copyright() {
+function Copyright() {
   return (
     <div className="space-y-6">
       <p className="italic">Last Updated: April 2, 2023</p>

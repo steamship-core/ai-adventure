@@ -64,6 +64,18 @@ model Agents {
   workspaceHandle String?
 }
 
+model UserExperience {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  type       String
+  expId      String
+  experience Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, type, expId])
+}
+
 model UserEnergy {
   id        Int      @id @default(autoincrement())
   userId    String   @unique
