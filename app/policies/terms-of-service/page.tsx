@@ -11,7 +11,8 @@ export function PolicyContent() {
         applications, software packages, APIs and other services operated by
         Steamship, Inc. and/or its affiliates (“Steamship”, “we” or “us”),
         including the content, tools, features and functionality offered on or
-        through our website www.steamship.com (collectively, “Services”).
+        through our website ai-adventure.steamship.com (collectively,
+        “Services”).
       </p>
 
       <p>
