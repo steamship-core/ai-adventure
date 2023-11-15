@@ -2,7 +2,6 @@
 
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { TrophyIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -44,11 +43,11 @@ const AdventureNavBar = () => {
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <div className="flex gap-2 items-center">
-          <Button variant="ghost">
+          {/* <Button variant="ghost">
             <Link href="/adventures/rank">
               <TrophyIcon className="h-5 w-5" />
             </Link>
-          </Button>
+          </Button> */}
           <Button variant="ghost">
             <Link href="https://steamship.com/discord">
               <svg
@@ -66,11 +65,9 @@ const AdventureNavBar = () => {
           {isLoaded && (
             <>
               {user ? (
-                <Button asChild variant="ghost">
-                  <div>
-                    <UserButton />
-                  </div>
-                </Button>
+                <div className="ml-2">
+                  <UserButton />
+                </div>
               ) : (
                 <Button variant="ghost">
                   <Link href="/sign-in">Login</Link>
