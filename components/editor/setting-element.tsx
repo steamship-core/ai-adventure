@@ -1,10 +1,7 @@
 "use client";
 import { Setting } from "@/lib/editor/editor-options";
-<<<<<<< HEAD
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
-=======
->>>>>>> main
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
