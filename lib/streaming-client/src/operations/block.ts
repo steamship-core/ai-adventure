@@ -33,6 +33,7 @@ export class BlockClient implements IBlockClient {
         await delay(5000);
         let response = await this.client.post(`block/get`, { id: params.id });
         let json = await response.json();
+        console.log("JJJ", json);
         return (json?.block || json?.data?.block) as Block;
       }
       return block;
@@ -44,7 +45,7 @@ export class BlockClient implements IBlockClient {
       let json = await response.json();
       return (json?.block || json?.data?.block) as Block;
 
-      // console.log(ex)
+      console.log(ex);
       // throw ex
     }
   }

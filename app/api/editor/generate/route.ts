@@ -1,6 +1,5 @@
-import {
-  getAdventureForUser
-} from "@/lib/adventure/adventure.server";
+import { getAdventureForUser } from "@/lib/adventure/adventure.server";
+import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
@@ -16,54 +15,55 @@ export const POST = withAxiom(async (request: Request) => {
     let { operation, id, data } = await request.json();
 
     // Get/create the development agent for this adve   nture
+    const adventure = await getAdventureForUser(userId, id, true);
+    if (adventure == null) {
+      throw new Error("No adventure found");
+    }
 
-    if (operation === "generate-image") {
-      const adventure = await getAdventureForUser(userId, id, true);
-      if (adventure == null) {
-        throw new Error("No adventure found");
-      }
+    if ((adventure as any).devAgent == null) {
+      throw new Error("No dev agent found for adventure");
+    }
 
-      if (adventure.devAgent == null) {
-        throw new Error("No dev agent found for adventure");
-      }
+    const devAgent = (adventure as any).devAgent;
 
-      const steamship = getSteamshipClient();
-      // See https://docs.steamship.com/javascript_client for information about:
-      // - The BASE_URL where your running Agent lives
-      // - The context_id which mediates your Agent's server-side chat history
+    const steamship = getSteamshipClient();
+    // See https://docs.steamship.com/javascript_client for information about:
+    // - The BASE_URL where your running Agent lives
+    // - The context_id which mediates your Agent's server-side chat history
 
-      const task = await steamship.agent.post({
-        url: adventure.devAgentId.baseUrl,
-        path: "/generate_preview_item_image",
-        arguments: {},
-      });
+    let path: string | null = null;
 
-      const block = task?.output?.blocks?[0]
+    if (operation === "preview") {
+      path = "/generate_preview";
+    } else if (operation === "suggest") {
+      path = "/generate_suggestion";
+    }
 
-      if (!block) {
-        throw new Error("No block on response.");
-      }
+    if (!path) {
+      throw new Error(`Unknown operation: ${operation}.`);
+    }
 
-      const blockId = block?.id;
+    console.log("Sending data", data);
 
-      if (!blockId) {
-        throw new Error("No block id.");
-      }
+    const response = await steamship.agent.post({
+      url: devAgent.agentUrl,
+      path,
+      arguments: data,
+    });
 
-      const url = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${blockId}/raw`
-
-      return NextResponse.json({url}, { status: 200 });
-    } else {
-      return NextResponse.json(
-        { error: `Unknown operation: ${operation}.` },
-        { status: 500 }
+    if (!response.ok) {
+      throw new Error(
+        `Failed to generate: ${response.status}. ${await response.text()}}`
       );
     }
+
+    const block = await response.json();
+    return NextResponse.json(block, { status: 200 });
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
     return NextResponse.json(
-      { error: "Failed to adventure." },
+      { error: `Failed to generate preview. ${e}` },
       { status: 404 }
     );
   }

@@ -2,6 +2,7 @@
 
 import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import { Block } from "@/lib/streaming-client/src";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
@@ -47,6 +48,44 @@ export default function SettingGroupForm({
   const [existingThemes, setExistingThemes] = useState<
     { value: string; label: string }[]
   >(existingThemesFromConfig(existing));
+
+  // TODO: Send up changes in progress
+  const suggestField = async (
+    fieldName: string,
+    setSuggesting: (val: boolean) => void,
+    setValue: (val: string) => void
+  ) => {
+    setSuggesting(true);
+    const response = await fetch(`/api/editor/generate`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "suggest",
+        id: adventureId,
+        data: {
+          field_name: fieldName,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(response);
+    } else {
+      let block = (await response.json()) as Block;
+      if (block.text) {
+        setValue(block.text);
+        setSuggesting(false);
+      } else if (block.id) {
+        console.log("Raw");
+        const blockContent = await fetch(
+          `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
+        );
+        const streamedText = await blockContent.text();
+        console.log(streamedText);
+        setValue(streamedText);
+        setSuggesting(false);
+      }
+    }
+  };
 
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
@@ -245,6 +284,7 @@ export default function SettingGroupForm({
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
+              suggestField={suggestField}
             />
           ))}
           {submittedAt && isSuccess ? (

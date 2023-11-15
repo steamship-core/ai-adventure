@@ -127,16 +127,28 @@ export const updateAdventure = async (
   }
 
   try {
+    const topLevelUpdates = getTopLevelUpdatesFromAdventureConfig(updateObj);
+    const priorAgentVesion = adventure.agentVersion;
+    const createNewDevAgent =
+      topLevelUpdates.agentVersion &&
+      topLevelUpdates.agentVersion != priorAgentVesion;
+
     await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
-        ...getTopLevelUpdatesFromAdventureConfig(updateObj),
+        ...topLevelUpdates,
         agentDevConfig: {
           ...(adventure.agentDevConfig as object),
           ...updateObj,
         },
       },
     });
+
+    // If the updated data contained
+    if (createNewDevAgent) {
+      // TODO: Create a new development agent.
+    }
+
     return adventure;
   } catch (e) {
     log.error(`${e}`);
