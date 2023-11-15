@@ -10,7 +10,10 @@ import { CheckIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import { recoilEditorLayoutImage } from "../providers/recoil";
+import {
+  recoilEditorLayoutImage,
+  recoilErrorModalState,
+} from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -44,6 +47,7 @@ export default function SettingGroupForm({
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
+  const [_, setError] = useRecoilState(recoilErrorModalState);
 
   const [existingThemes, setExistingThemes] = useState<
     { value: string; label: string }[]
@@ -56,6 +60,7 @@ export default function SettingGroupForm({
     setValue: (val: string) => void
   ) => {
     setSuggesting(true);
+    setError({ title: "TEST", message: "TEST" });
     const response = await fetch(`/api/editor/generate`, {
       method: "POST",
       body: JSON.stringify({
