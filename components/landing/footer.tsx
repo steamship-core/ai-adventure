@@ -4,13 +4,13 @@ const navigation = {
   main: [
     {
       name: "Privacy Policy",
-      href: `https://steamship.com/policies/privacy-policy`,
+      href: `/policies/privacy-policy`,
     },
     {
       name: "Terms of Service",
-      href: `https://steamship.com/policies/terms-of-service`,
+      href: `/policies/terms-of-service`,
     },
-    { name: "Copyright", href: `https://steamship.com/policies/copyright` },
+    { name: "Copyright", href: `/policies/copyright` },
   ],
   social: [
     {

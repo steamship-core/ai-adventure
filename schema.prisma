@@ -22,6 +22,8 @@ model Adventure {
   image            String?   @default("")
   agentConfig      Json?
   agentDevConfig   Json?
+  devAgentId       Int?      @unique
+  devAgent         Agents?   @relation("devAgentRelation", fields: [devAgentId], references: [id])
 
   // Whether to feature
   featured Boolean @default(false)
@@ -30,7 +32,7 @@ model Adventure {
   public Boolean @default(false)
 
   tags              String[]            @default([])
-  Agents            Agents[]
+  Agents            Agents[]            @relation("agents")
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
   Reactions         Reactions[]
@@ -54,11 +56,12 @@ model Agents {
   handle          String     @default("agent")
   agentVersion    String?    @default("")
   createdAt       DateTime   @default(now())
-  Adventure       Adventure? @relation(fields: [adventureId], references: [id])
+  Adventure       Adventure? @relation("agents", fields: [adventureId], references: [id])
   adventureId     String?
   isDevelopment   Boolean?   @default(false)
-  updatedAt       DateTime?  @default(now()) @updatedAt
-  completedQuests Int        @default(0)
+  DevAdventure    Adventure? @relation("devAgentRelation")
+  workspaceId     String?
+  workspaceHandle String?
 }
 
 model UserExperience {

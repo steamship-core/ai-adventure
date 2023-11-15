@@ -92,6 +92,10 @@ export class Steamship extends ClientBase implements Client {
       workspaceId: opts.workspaceId || this.config.workspaceId,
       baseUrl: opts.baseUrl,
     });
+
+    // Never cache
+    opts.cache = "no-store";
+
     try {
       return await fetch(_url, opts);
     } catch (ex) {
@@ -121,6 +125,9 @@ export class Steamship extends ClientBase implements Client {
     if (opts.method && opts.method.toUpperCase() != "POST") {
       delete opts["body"];
     }
+
+    // Never cache
+    opts.cache = "no-store";
 
     const resp = await fetch(_url, opts);
     return resp;

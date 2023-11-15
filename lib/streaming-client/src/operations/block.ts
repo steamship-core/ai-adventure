@@ -27,12 +27,19 @@ export class BlockClient implements IBlockClient {
     try {
       let response = await this.client.post(`block/get`, { id: params.id });
       let json = await response.json();
+
       const block = (json?.block || json?.data?.block) as Block;
       if (!block) {
         const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
         await delay(5000);
         let response = await this.client.post(`block/get`, { id: params.id });
         let json = await response.json();
+
+        if (json?.status?.state == "failed") {
+          throw new Error(
+            `Error while getting block. ${json?.status?.statuCode}: ${json?.status?.statusMessage}. Block ID was ${params.id}. Client workspace was ${this.client.config.workspace} / ${this.client.config.workspaceId}}`
+          );
+        }
         return (json?.block || json?.data?.block) as Block;
       }
       return block;
@@ -44,7 +51,7 @@ export class BlockClient implements IBlockClient {
       let json = await response.json();
       return (json?.block || json?.data?.block) as Block;
 
-      // console.log(ex)
+      console.log(ex);
       // throw ex
     }
   }

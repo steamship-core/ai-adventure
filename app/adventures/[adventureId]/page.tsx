@@ -30,6 +30,7 @@ export async function generateMetadata(
   let ret = { ...(await parent) };
 
   const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`;
+  const imageUrl = `/og-image.png?image=${adventure.image}`;
 
   ret.title = adventure.name;
   ret.description = adventure.shortDescription;
@@ -40,14 +41,18 @@ export async function generateMetadata(
     url: url,
     title: adventure.name,
     description: adventure.shortDescription,
-    images: adventure.image || "/adventurer.png",
+    images: adventure.image
+      ? [{ url: imageUrl }]
+      : [{ url: "/adventurer.png" }],
   };
 
   ret.twitter = {
     ...(ret.twitter || {}),
     title: adventure.name,
     description: adventure.shortDescription,
-    images: adventure.image || "/adventurer.png",
+    images: adventure.image
+      ? [{ url: imageUrl }]
+      : [{ url: "/adventurer.png" }],
   } as any;
 
   return ret as Metadata;
