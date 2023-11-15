@@ -34,6 +34,11 @@ export const POST = withAxiom(async (request: Request) => {
 
     let path: string | null = null;
 
+    data.unsaved_server_settings = {
+      ...((adventure.agentDevConfig as any) || {}),
+      ...(data.unsaved_server_settings || {}),
+    };
+
     if (operation === "preview") {
       path = "/generate_preview";
     } else if (operation === "suggest") {
