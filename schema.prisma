@@ -65,10 +65,12 @@ model UserExperience {
   id         Int      @id @default(autoincrement())
   userId     String
   type       String
-  expId      String   @unique
+  expId      String
   experience Int      @default(0)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@unique([userId, type, expId])
 }
 
 model UserEnergy {
