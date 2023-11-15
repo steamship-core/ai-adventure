@@ -50,16 +50,18 @@ model CharacterTemplate {
 }
 
 model Agents {
-  id            Int        @id @default(autoincrement())
-  ownerId       String
-  agentUrl      String
-  handle        String     @default("agent")
-  agentVersion  String?    @default("")
-  createdAt     DateTime   @default(now())
-  Adventure     Adventure? @relation("agents", fields: [adventureId], references: [id])
-  adventureId   String?
-  isDevelopment Boolean?   @default(false)
-  DevAdventure  Adventure? @relation("devAgentRelation")
+  id              Int        @id @default(autoincrement())
+  ownerId         String
+  agentUrl        String
+  handle          String     @default("agent")
+  agentVersion    String?    @default("")
+  createdAt       DateTime   @default(now())
+  Adventure       Adventure? @relation("agents", fields: [adventureId], references: [id])
+  adventureId     String?
+  isDevelopment   Boolean?   @default(false)
+  DevAdventure    Adventure? @relation("devAgentRelation")
+  workspaceId     String?
+  workspaceHandle String?
 }
 
 model UserEnergy {

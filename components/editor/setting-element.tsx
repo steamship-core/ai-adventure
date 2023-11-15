@@ -26,6 +26,8 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
+import { useRecoilState } from "recoil";
+import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
@@ -62,6 +64,7 @@ export default function SettingElement({
   let [imagePreviewBlock, setImagePreviewBlock] = useState<Block>();
   let [imagePreviewLoading, setImagePreviewLoading] = useState<boolean>(false);
   let [suggesting, setSuggesting] = useState<boolean>(false);
+  const [_, setError] = useRecoilState(recoilErrorModalState);
 
   useEffect(() => {
     if (value) {
@@ -142,7 +145,15 @@ export default function SettingElement({
     setImagePreviewLoading(false);
 
     if (!response.ok) {
-      console.error(response);
+      const e = {
+        title: "Failed to generate preview.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
     } else {
       let block = (await response.json()) as Block;
       setImagePreviewBlock(block);

@@ -73,19 +73,25 @@ export default function SettingGroupForm({
     });
 
     if (!response.ok) {
-      console.error(response);
+      const e = {
+        title: "Failed suggestion request.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
     } else {
       let block = (await response.json()) as Block;
       if (block.text) {
         setValue(block.text);
         setSuggesting(false);
       } else if (block.id) {
-        console.log("Raw");
         const blockContent = await fetch(
           `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
         );
         const streamedText = await blockContent.text();
-        console.log(streamedText);
         setValue(streamedText);
         setSuggesting(false);
       }
@@ -109,8 +115,15 @@ export default function SettingGroupForm({
           setEditorLayoutImage(blobJson.url);
           dataToSave.adventure_image = blobJson.url;
         } else {
-          console.log("Failed to upload image");
-          console.log(await res.text());
+          const e = {
+            title: "Upload failures",
+            message: "Unable to upload your image.",
+            details: `Status: ${res.status}, StatusText: ${
+              res.statusText
+            }, Body: ${await res.text()}`,
+          };
+          setError(e);
+          console.error(e);
           return;
         }
       }
@@ -133,7 +146,6 @@ export default function SettingGroupForm({
           }
         }
       }
-      console.log("dataToSave", dataToSave);
 
       if (typeof dataToSave.themes != "undefined") {
         setExistingThemes(existingThemesFromConfig(dataToSave));
@@ -147,6 +159,18 @@ export default function SettingGroupForm({
           data: dataToSave,
         }),
       });
+
+      if (!res.ok) {
+        const e = {
+          title: "Failed to save data.",
+          message: "The server responded with an error response",
+          details: `Status: ${res.status}, StatusText: ${
+            res.statusText
+          }, Body: ${await res.text()}`,
+        };
+        setError(e);
+        console.error(e);
+      }
 
       window?.scrollTo(0, 0);
 
@@ -183,9 +207,14 @@ export default function SettingGroupForm({
     let data = {};
     try {
       data = parse(importYaml);
-    } catch (e) {
-      console.log(e);
-      alert(e);
+    } catch (ex) {
+      const e = {
+        title: "Failed to import.",
+        message: "Unable to parse the YAML.",
+        details: `Exception: ${ex}`,
+      };
+      setError(e);
+      console.error(e);
       return;
     }
 
@@ -197,7 +226,20 @@ export default function SettingGroupForm({
         data,
       }),
     }).then(
-      (res) => {
+      async (res) => {
+        if (!res.ok) {
+          const e = {
+            title: "Failed to save data.",
+            message: "The server responded with an error response",
+            details: `Status: ${res.status}, StatusText: ${
+              res.statusText
+            }, Body: ${await res.text()}`,
+          };
+          setError(e);
+          console.error(e);
+          return;
+        }
+
         const { dismiss } = toast({
           title: "Imported",
         });
@@ -207,7 +249,13 @@ export default function SettingGroupForm({
         location.reload();
       },
       (error) => {
-        console.log(error);
+        const e = {
+          title: "Failed to import.",
+          message: "The server responded with an error response",
+          details: `Exception: ${error}`,
+        };
+        setError(e);
+        console.error(e);
       }
     );
   };
