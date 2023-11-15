@@ -151,7 +151,10 @@ export default function SettingElement({
     if (!setting.suggestOutputType) {
       return;
     }
-    suggestField(setting.suggestOutputType, setSuggesting, setValue);
+    suggestField(setting.suggestOutputType, setSuggesting, (val: string) => {
+      setValue(val);
+      updateFn(setting.name, val);
+    });
   };
 
   const addToList = (e: any) => {
