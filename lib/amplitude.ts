@@ -19,9 +19,9 @@ const useAmplitudeInit = () => {
         amplitude.init(AMPLITUDE_API_KEY, undefined, {
           logLevel: amplitude.Types.LogLevel.Warn,
         });
-        if (user) {
-          amplitude.setUserId(user.id);
-        }
+      }
+      if (user && amplitude) {
+        amplitude.setUserId(user.id);
       }
     };
     initAmplitude();
