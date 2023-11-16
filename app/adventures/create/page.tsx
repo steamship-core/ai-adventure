@@ -48,7 +48,7 @@ export default async function AdventuresPage() {
       )}
       {adventureTemplates.length > 0 && (
         <>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {adventureTemplates.map((adventureTemplate) => (
               <Link
                 key={adventureTemplate.id}

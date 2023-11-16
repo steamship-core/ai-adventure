@@ -5,6 +5,7 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
   ChevronsUpDownIcon,
+  Loader2,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
@@ -151,7 +152,10 @@ export default function SettingElement({
     if (!setting.suggestOutputType) {
       return;
     }
-    suggestField(setting.suggestOutputType, setSuggesting, setValue);
+    suggestField(setting.suggestOutputType, setSuggesting, (val: string) => {
+      setValue(val);
+      updateFn(setting.name, val);
+    });
   };
 
   const addToList = (e: any) => {
@@ -504,8 +508,8 @@ export default function SettingElement({
       )}
       {setting.suggestOutputType && (
         <div>
-          <Button variant="default" onClick={suggest}>
-            Suggest
+          <Button variant="default" onClick={suggest} disabled={suggesting}>
+            {suggesting ? <Loader2 className="animate-spin" /> : "Suggest"}
           </Button>
         </div>
       )}
