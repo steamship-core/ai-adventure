@@ -30,6 +30,7 @@ import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
+import ProgramInputElement from "./program-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -45,6 +46,7 @@ export default function SettingElement({
   existingDynamicThemes = [],
   isUserApproved,
   adventureId = "",
+  latestAgentVersion = "",
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
@@ -64,6 +66,7 @@ export default function SettingElement({
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
   adventureId?: string;
+  latestAgentVersion: string;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
   let [imagePreview, setImagePreview] = useState<string | undefined>();
@@ -254,6 +257,15 @@ export default function SettingElement({
         setting={setting}
       />
     );
+  } else if (setting.type == "program") {
+    innerField = (
+      <ProgramInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+        setting={setting}
+      />
+    );
   } else if (setting.type === "textarea") {
     innerField = (
       <AutoResizeTextarea
@@ -347,6 +359,32 @@ export default function SettingElement({
         isLoadingMagic={suggesting}
       />
     );
+  } else if (setting.type == "upgrade-offer") {
+    const updateButton =
+      latestAgentVersion == value ? (
+        <TypographyMuted>This is the latest version! </TypographyMuted>
+      ) : (
+        <Button
+          onClick={(e) => {
+            setValue(latestAgentVersion);
+            updateFn(setting.name, latestAgentVersion);
+          }}
+        >
+          Upgrade to {latestAgentVersion}
+        </Button>
+      );
+    innerField = (
+      <div>
+        <Input
+          isLoadingMagic={suggesting}
+          disabled={suggesting}
+          type="text"
+          value={value}
+          onChange={onTextboxChange}
+        />
+        <div className="mt-2">{updateButton}</div>
+      </div>
+    );
   } else if (setting.type == "tag-list") {
     const _value = Array.isArray(value) ? value : [];
     innerField = (
@@ -403,6 +441,7 @@ export default function SettingElement({
                             });
                           }}
                           isUserApproved={isUserApproved}
+                          latestAgentVersion={latestAgentVersion}
                         />
                       );
                     })
@@ -423,6 +462,7 @@ export default function SettingElement({
                         updateItem({ index: i, value: value });
                       }}
                       isUserApproved={isUserApproved}
+                      latestAgentVersion={latestAgentVersion}
                     />
                   )}
                 </div>

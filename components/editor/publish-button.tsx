@@ -27,7 +27,7 @@ const PublishButton = ({
       action: "publish-adventure",
     });
 
-    const resp = await fetch("/api/editor", {
+    const resp = await fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
         operation: "publish",

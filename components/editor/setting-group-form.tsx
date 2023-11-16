@@ -62,7 +62,7 @@ export default function SettingGroupForm({
     setImagePreviewLoading(true);
     setImagePreview(undefined);
 
-    const response = await fetch(`/api/editor/generate`, {
+    const response = await fetch(`/api/adventure/generate`, {
       method: "POST",
       body: JSON.stringify({
         operation: "preview",
@@ -98,7 +98,7 @@ export default function SettingGroupForm({
     setValue: (val: string) => void
   ) => {
     setSuggesting(true);
-    const response = await fetch(`/api/editor/generate`, {
+    const response = await fetch(`/api/adventure/generate`, {
       method: "POST",
       body: JSON.stringify({
         operation: "suggest",
@@ -166,6 +166,26 @@ export default function SettingGroupForm({
         }
       }
 
+      console.log("DATA", data);
+
+      if (data.game_program) {
+        if (data.game_program instanceof File) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/file?filename=${data.game_program.name}`,
+            {
+              method: "POST",
+              body: data.game_program,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            data.game_program = blobJson.url;
+          } else {
+            data.game_program = null;
+          }
+        }
+      }
+
       const characters = data.characters || [];
       for (let i = 0; i < characters.length; i++) {
         const character = characters[i];
@@ -189,7 +209,7 @@ export default function SettingGroupForm({
         setExistingThemes(existingThemesFromConfig(dataToSave));
       }
 
-      let res = await fetch("/api/editor", {
+      let res = await fetch(`/api/adventure/${adventureId}`, {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
@@ -256,7 +276,7 @@ export default function SettingGroupForm({
       return;
     }
 
-    fetch("/api/editor", {
+    fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
         operation: "import",
@@ -377,6 +397,7 @@ export default function SettingGroupForm({
               isUserApproved={isUserApproved}
               suggestField={suggestField}
               previewField={previewField}
+              latestAgentVersion={existing.gameEngineVersionAvailable}
             />
           ))}
           {submittedAt && isSuccess ? (
