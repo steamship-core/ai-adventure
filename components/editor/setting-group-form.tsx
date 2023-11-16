@@ -3,10 +3,12 @@
 import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
@@ -43,7 +45,7 @@ export default function SettingGroupForm({
     });
     return _existingDynamicThemes;
   };
-
+  const router = useRouter();
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
@@ -409,11 +411,33 @@ export default function SettingGroupForm({
               Adventure Updated
             </div>
           ) : null}
-          {dataToUpdateDirty && (
-            <Button value="Save" onClick={onSave}>
-              {isPending ? "Saving..." : "Save"}
-            </Button>
-          )}
+          <div
+            className={cn(
+              "fixed bottom-0 left-0 w-full transition-all",
+              dataToUpdateDirty ? "translate-y-0" : "translate-y-full"
+            )}
+          >
+            <div className="w-full flex items-center justify-end py-2 px-4 gap-4 bg-black">
+              <Button
+                value="Save"
+                onClick={() => {
+                  window.location.reload();
+                }}
+                disabled={!dataToUpdateDirty}
+                variant="outline"
+              >
+                Undo All
+              </Button>
+              <Button
+                value="Save"
+                onClick={onSave}
+                disabled={!dataToUpdateDirty}
+                className="bg-indigo-500 hover:bg-indigo-600 text-white"
+              >
+                {isPending ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 
