@@ -226,12 +226,12 @@ export default function SettingGroupForm({
         };
         setError(e);
         console.error(e);
+      } else {
+        window?.scrollTo(0, 0);
+        // Hard-reload to make sure that the proper "publish" etc bits are set.
+        window?.location?.reload();
       }
 
-      window?.scrollTo(0, 0);
-
-      // Hard-reload to make sure that the proper "publish" etc bits are set.
-      window?.location?.reload();
       return res;
     },
   });

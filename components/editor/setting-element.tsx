@@ -37,6 +37,16 @@ const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
 });
 
+function findPromptVariables(input: string): string[] {
+  const regex = /\{([^}]+)\}/g;
+  const matches = input.match(regex);
+
+  if (matches) {
+    return matches.map((match) => match.slice(1, -1));
+  }
+  return [];
+}
+
 export default function SettingElement({
   setting,
   updateFn,
@@ -78,6 +88,8 @@ export default function SettingElement({
   let [suggesting, setSuggesting] = useState<boolean>(false);
   const [_, setError] = useRecoilState(recoilErrorModalState);
 
+  let [validationErrors, setValidationErrors] = useState<string[]>([]);
+
   useEffect(() => {
     if (value) {
       const optionList = [
@@ -100,6 +112,28 @@ export default function SettingElement({
     setting.includeDynamicOptions,
     existingDynamicThemes,
   ]);
+
+  // Validations
+  useEffect(() => {
+    if (value && setting.variablesPermitted) {
+      if (typeof value == "string") {
+        const variablesUsed = findPromptVariables(value);
+        let errors = [];
+        for (let variableUsed of variablesUsed) {
+          if (typeof setting.variablesPermitted[variableUsed] == "undefined") {
+            errors.push(
+              `- The prompt variable {${variableUsed}} is not supported for this setting.`
+            );
+          }
+        }
+        setValidationErrors(errors);
+      } else {
+        setValidationErrors([]);
+      }
+    } else {
+      setValidationErrors([]);
+    }
+  }, [value, setting.variablesPermitted]);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -482,6 +516,14 @@ export default function SettingElement({
     );
   }
 
+  const hasValidationErrors = validationErrors && validationErrors.length > 0;
+  let variablesPermitted = Object.entries(setting?.variablesPermitted || {});
+  variablesPermitted = variablesPermitted.sort(
+    (a: [string, string], b: [string, string]) => {
+      return a[0].localeCompare(b[0], undefined, { numeric: true });
+    }
+  );
+
   return (
     <div className="flex flex-col gap-2">
       {!inlined && setting.type != "divider" && (
@@ -506,6 +548,22 @@ export default function SettingElement({
         )}{" "}
       {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
         <ImagePreview url={imagePreview} block={imagePreviewBlock} />
+      )}
+      {variablesPermitted.length > 0 && (
+        <div className="">
+          <TypographyMuted>Prompt Variables Supported:</TypographyMuted>
+          <ul className="ml-2">
+            {variablesPermitted.map(([key, value]) => {
+              return (
+                <li>
+                  <TypographyMuted>
+                    <b>&#123;{key}&#125;</b>: {value}
+                  </TypographyMuted>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
       {setting.requiresApproval && !isUserApproved && isApprovalRequested && (
         <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
@@ -578,6 +636,15 @@ export default function SettingElement({
           <Button variant="default" onClick={suggest} disabled={suggesting}>
             {suggesting ? <Loader2 className="animate-spin" /> : "Suggest"}
           </Button>
+        </div>
+      )}
+      {hasValidationErrors && (
+        <div className="text-sm bg-red-300 border-2 border-red-700 text-black p-2">
+          <ul>
+            {validationErrors.map((validationError: string) => {
+              return <li>{validationError}</li>;
+            })}
+          </ul>
         </div>
       )}
     </div>
