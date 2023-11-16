@@ -166,8 +166,6 @@ export default function SettingGroupForm({
         }
       }
 
-      console.log("DATA", data);
-
       if (data.game_program) {
         if (data.game_program instanceof File) {
           const res = await fetch(
@@ -395,6 +393,11 @@ export default function SettingGroupForm({
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
               isUserApproved={isUserApproved}
+              isApprovalRequested={
+                setting.approvalRequestedField
+                  ? existing[setting.approvalRequestedField] === true
+                  : false
+              }
               suggestField={suggestField}
               previewField={previewField}
               latestAgentVersion={existing.gameEngineVersionAvailable}

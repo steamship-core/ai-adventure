@@ -29,6 +29,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-spring/web": "^9.7.3",
+    "@slack/web-api": "^6.10.0",
     "@stripe/stripe-js": "^2.1.9",
     "@tanstack/react-query": "^5.0.5",
     "@types/micro-cors": "^0.1.3",
