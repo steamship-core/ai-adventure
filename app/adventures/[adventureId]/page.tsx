@@ -1,3 +1,4 @@
+import { AdventureDescription } from "@/components/adventures/adventure-description";
 import AdventureDetails from "@/components/adventures/adventure-details";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
@@ -5,7 +6,6 @@ import EmojiPicker from "@/components/adventures/emoji-picker";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
-import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs";
@@ -195,12 +195,10 @@ export default async function AdventurePage({
       <div className="p-4 md:p-6 flex gap-6 flex-col">
         <div>
           <TypographyH1>{adventure.name}</TypographyH1>
-          <TypographyLarge className="mt-2 text-2xl">
+          <TypographyLarge className="mt-2 text-xl">
             {adventure.shortDescription}
           </TypographyLarge>
-          <TypographyMuted className="mt-2 text-2xl whitespace-break-spaces">
-            {adventure.description}
-          </TypographyMuted>
+          <AdventureDescription description={adventure.description} />
         </div>
         <CharacterTemplatesSection adventure={adventure} />
         <AdventureDetails adventure={adventure} />
