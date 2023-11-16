@@ -5,6 +5,7 @@ import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
 import { sendSlackMessage } from "../slack/slack.server";
+import { pushServerSettingsToAgent } from "./adventure-agent.server";
 
 export const getAdventures = async (limit?: number, onlyPublic?: boolean) => {
   return prisma.adventure.findMany({
@@ -18,14 +19,26 @@ export const getAdventures = async (limit?: number, onlyPublic?: boolean) => {
   });
 };
 
-export const getAdventure = async (adventureId: string) => {
+export const getAdventure = async (
+  adventureId: string,
+  includeDevAgent: boolean = false
+) => {
+  const includeBit = includeDevAgent
+    ? {
+        include: {
+          devAgent: true,
+        },
+      }
+    : {};
+
   return await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       // Only if it isn't null
       deletedAt: null,
     },
-  });
+    ...includeBit,
+  } as any);
 };
 
 export const getAdventureForUser = async (
@@ -114,7 +127,7 @@ export const updateAdventure = async (
   updateObj: any
 ) => {
   console.log(`User ${userId} attempting to update adventure ${adventureId}`);
-  const adventure = await getAdventure(adventureId);
+  const adventure = await getAdventure(adventureId, true);
 
   if (!adventure) {
     throw Error(`Failed to get adventure: ${adventureId}`);
@@ -163,15 +176,29 @@ export const updateAdventure = async (
       topLevelUpdates.agentVersion &&
       topLevelUpdates.agentVersion != priorAgentVersion;
 
+    // Before we save it, we need to try to load it into the development
+    // agent. This will trigger any sanity checks on the new configuration that -- if they throw an error --
+    // should block the saving!
+    const updatedServerSettings = {
+      ...(adventure.agentDevConfig as object),
+      ...updateObj,
+    };
+    const devAgent = (adventure as any).devAgent;
+    const resp = await pushServerSettingsToAgent(
+      devAgent.agentUrl,
+      updatedServerSettings
+    );
+
+    if (!resp.ok) {
+      throw new Error(await resp.text());
+    }
+
     let newAdventure = await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
         ...topLevelUpdates,
         ...publicModifiers,
-        agentDevConfig: {
-          ...(adventure.agentDevConfig as object),
-          ...updateObj,
-        },
+        agentDevConfig: updatedServerSettings,
       },
     });
 
@@ -187,7 +214,7 @@ export const updateAdventure = async (
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
-    throw Error("Failed to update adventure.");
+    throw e;
   }
 };
 
