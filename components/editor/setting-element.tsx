@@ -338,7 +338,7 @@ export default function SettingElement({
     innerField = (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="ghost" className="my-4 px-4">
+          <Button size="sm" className="my-4 px-4">
             <div className="mr-2">{value}</div>
             <ChevronsUpDownIcon size={24} />
           </Button>
