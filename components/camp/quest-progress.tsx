@@ -9,6 +9,7 @@ import {
   CheckIcon,
   FlameIcon,
   LockIcon,
+  MapPinIcon,
   PackageIcon,
   SparklesIcon,
 } from "lucide-react";
@@ -52,7 +53,7 @@ const QuestProgressElement = ({
   totalQuests,
 }: {
   totalQuests: number;
-  questArc: { location: string; goal: string };
+  questArc: { location: string; goal: string; description?: string };
   isIncompleteQuest: boolean;
   isCompleteQuest: boolean;
   isCurrentquest: boolean;
@@ -202,19 +203,27 @@ const QuestProgressElement = ({
             Completed
           </Badge>
         )}
-        <CardHeader className="gap-6">
+        <CardHeader>
           <div>
-            <TypographyMuted className="text-xs font-bold mb-2">
-              Location
-            </TypographyMuted>
-            <CardTitle>{questArc.location}</CardTitle>
+            <CardTitle className="flex gap-2">
+              <MapPinIcon />
+              {questArc.location}
+            </CardTitle>
           </div>
-          <div>
-            <TypographyMuted className="text-xs font-bold mb-2">
-              Goal
+          {questArc.description && (
+            <div className="flex gap-2">
+              <CardDescription>
+                <b className="mr-2">Description:</b>
+                {questArc.description}
+              </CardDescription>
+            </div>
+          )}
+          {questArc.goal && (
+            <TypographyMuted className="flex mt-4">
+              <b className="mr-2">Goal:</b>
+              {questArc.goal}
             </TypographyMuted>
-            <CardDescription>{questArc.goal}</CardDescription>
-          </div>
+          )}
         </CardHeader>
         <CardFooter>
           {isCurrentquest && (
