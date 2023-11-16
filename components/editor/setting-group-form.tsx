@@ -62,7 +62,7 @@ export default function SettingGroupForm({
     setImagePreviewLoading(true);
     setImagePreview(undefined);
 
-    const response = await fetch(`/api/editor/generate`, {
+    const response = await fetch(`/api/adventure/generate`, {
       method: "POST",
       body: JSON.stringify({
         operation: "preview",
@@ -98,7 +98,7 @@ export default function SettingGroupForm({
     setValue: (val: string) => void
   ) => {
     setSuggesting(true);
-    const response = await fetch(`/api/editor/generate`, {
+    const response = await fetch(`/api/adventure/generate`, {
       method: "POST",
       body: JSON.stringify({
         operation: "suggest",
