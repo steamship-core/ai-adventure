@@ -55,7 +55,8 @@ export type Setting = {
     | "image"
     | "int"
     | "float"
-    | "divider";
+    | "divider"
+    | "upgrade-offer";
   listof?: "object" | "text";
   default?: string | number | boolean;
   options?: OptionValue[];
@@ -679,7 +680,7 @@ export const GameEngineOptions: Setting[] = [
     label: "Version",
     description:
       "Game engine version this Adventure should use. Only values of the form `ai-adventure@VERSION` will be saved. Replace VERSION with the desired version.",
-    type: "text",
+    type: "upgrade-offer",
     default: "",
   },
 ];

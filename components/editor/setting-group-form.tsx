@@ -377,6 +377,7 @@ export default function SettingGroupForm({
               isUserApproved={isUserApproved}
               suggestField={suggestField}
               previewField={previewField}
+              latestAgentVersion={existing.gameEngineVersionAvailable}
             />
           ))}
           {submittedAt && isSuccess ? (

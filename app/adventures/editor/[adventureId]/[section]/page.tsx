@@ -46,6 +46,8 @@ export default async function EditorPage({
     },
   });
 
+  console.log(adventure);
+
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),
     adventure_name: adventure.name,
@@ -53,6 +55,7 @@ export default async function EditorPage({
     adventure_short_description: adventure.shortDescription,
     adventure_image: adventure.image,
     game_engine_version: adventure.agentVersion,
+    gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
   let unpublishedChanges = !objectEquals(

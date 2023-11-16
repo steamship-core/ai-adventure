@@ -31,6 +31,7 @@ export const GET = async (req: Request, context: { params: any }) => {
     agentConfig: {
       characters: agentConfig?.characters || [],
     },
+    gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
   return NextResponse.json(ret, { status: 201 });
@@ -51,6 +52,12 @@ export const POST = withAxiom(async (request: Request) => {
       return NextResponse.json(adventure, { status: 200 });
     } else if (operation === "delete") {
       const adventure = await deleteAdventure(userId, id);
+      return NextResponse.json(adventure, { status: 200 });
+    } else if (operation === "upgrade") {
+      let hardCodedData = {
+        game_engine_version: process.env.STEAMSHIP_AGENT_VERSION,
+      };
+      const adventure = await updateAdventure(userId, id, hardCodedData);
       return NextResponse.json(adventure, { status: 200 });
     } else if (operation == "import") {
       data = {
