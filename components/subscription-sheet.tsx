@@ -1,6 +1,6 @@
 "use client";
 
-import { ActivityIcon } from "lucide-react";
+import { FlameIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { TypographyH1 } from "./ui/typography/TypographyH1";
@@ -145,8 +145,8 @@ const SubscriptionSheet = () => {
   return (
     <div className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6">
       <div className="flex flex-col space-y-2 text-center sm:text-left">
-        <TypographyH1 className="flex flex-row items-center text-indigo-400">
-          <ActivityIcon size={64} className="mr-2 text-indigo-400" />
+        <TypographyH1 className="flex flex-row items-center text-orange-400">
+          <FlameIcon size={64} className="mr-2 text-orange-400" />
           Energy Depot
         </TypographyH1>
         <TypographyP>

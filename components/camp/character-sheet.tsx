@@ -3,7 +3,7 @@
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { SignOutButton } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
-import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
+import { BadgeDollarSignIcon, FlameIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -192,7 +192,7 @@ export const CharacterSheet = ({
             </div>
             <div className="flex flex-col items-center justify-center gap-2 w-full">
               <TypographyP className="flex items-center">
-                <ActivityIcon size={20} className="mr-2 text-indigo-400" />
+                <FlameIcon size={20} className="mr-2 text-orange-400" />
                 {energy || 0}
               </TypographyP>
               <TypographyP className="flex !mt-0 items-center">
