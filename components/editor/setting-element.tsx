@@ -555,7 +555,7 @@ export default function SettingElement({
           <ul className="ml-2">
             {variablesPermitted.map(([key, value]) => {
               return (
-                <li>
+                <li key={key}>
                   <TypographyMuted>
                     <b>&#123;{key}&#125;</b>: {value}
                   </TypographyMuted>
@@ -642,7 +642,7 @@ export default function SettingElement({
         <div className="text-sm bg-red-300 border-2 border-red-700 text-black p-2">
           <ul>
             {validationErrors.map((validationError: string) => {
-              return <li>{validationError}</li>;
+              return <li key={validationError}>{validationError}</li>;
             })}
           </ul>
         </div>
