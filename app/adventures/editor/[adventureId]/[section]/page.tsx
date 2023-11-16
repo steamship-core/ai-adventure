@@ -46,8 +46,6 @@ export default async function EditorPage({
     },
   });
 
-  console.log(adventure);
-
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),
     adventure_name: adventure.name,
