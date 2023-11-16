@@ -4,6 +4,7 @@ import { createAgent } from "../agent/agent.server";
 import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
+import { sendSlackMessage } from "../slack/slack.server";
 
 export const getAdventures = async (limit?: number, onlyPublic?: boolean) => {
   return prisma.adventure.findMany({
@@ -85,6 +86,8 @@ export const createAdventure = async ({
       },
     });
 
+    await sendSlackMessage(`🚢 User ${creatorId} created a new Adventure!`);
+
     return createDevAgentForAdventureAndReturnAdventure(adventure);
   } catch (e) {
     log.error(`${e}`);
@@ -121,6 +124,8 @@ export const updateAdventure = async (
     throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
   }
 
+  let publicModifiers = {};
+
   if (updateObj.adventure_public === true) {
     const userApproval = await getOrCreateUserApprovals(userId);
     if (!userApproval.isApproved) {
@@ -129,20 +134,40 @@ export const updateAdventure = async (
       );
       log.warn(`Warning: User ${userId} is not approved for public adventures`);
       updateObj.adventure_public = false;
+      updateObj.adventure_public_requested = true;
+      publicModifiers = {
+        public: false,
+        publicRequested: true,
+      };
+      await sendSlackMessage(
+        `👋 User ${userId} requested ${adventure.id} to be approved to be PUBLIC`
+      );
+    } else {
+      publicModifiers = {
+        public: true,
+        publicRequested: false,
+      };
+      await sendSlackMessage(`User ${userId} set ${adventure.id} to PUBLIC`);
     }
+  } else if (updateObj.adventure_public === false) {
+    publicModifiers = {
+      public: false,
+    };
+    await sendSlackMessage(`User ${userId} set ${adventure.id} to PRIVATE`);
   }
 
   try {
     const topLevelUpdates = getTopLevelUpdatesFromAdventureConfig(updateObj);
-    const priorAgentVesion = adventure.agentVersion;
+    const priorAgentVersion = adventure.agentVersion;
     const createNewDevAgent =
       topLevelUpdates.agentVersion &&
-      topLevelUpdates.agentVersion != priorAgentVesion;
+      topLevelUpdates.agentVersion != priorAgentVersion;
 
     let newAdventure = await prisma.adventure.update({
       where: { id: adventure.id },
       data: {
         ...topLevelUpdates,
+        ...publicModifiers,
         agentDevConfig: {
           ...(adventure.agentDevConfig as object),
           ...updateObj,

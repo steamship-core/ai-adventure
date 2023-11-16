@@ -28,6 +28,7 @@ import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyP } from "../ui/typography/TypographyP";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
 import ProgramInputElement from "./program-input-element";
@@ -45,6 +46,7 @@ export default function SettingElement({
   inlined = false,
   existingDynamicThemes = [],
   isUserApproved,
+  isApprovalRequested,
   adventureId = "",
   latestAgentVersion = "",
 }: {
@@ -65,6 +67,7 @@ export default function SettingElement({
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
+  isApprovalRequested: boolean;
   adventureId?: string;
   latestAgentVersion: string;
 }) {
@@ -215,7 +218,7 @@ export default function SettingElement({
   };
 
   let innerField = <></>;
-  const isDisabled = setting.requiresApproval && !isUserApproved;
+  const isDisabled = false; // setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
     innerField = (
@@ -441,6 +444,7 @@ export default function SettingElement({
                             });
                           }}
                           isUserApproved={isUserApproved}
+                          isApprovalRequested={isApprovalRequested}
                           latestAgentVersion={latestAgentVersion}
                         />
                       );
@@ -462,6 +466,7 @@ export default function SettingElement({
                         updateItem({ index: i, value: value });
                       }}
                       isUserApproved={isUserApproved}
+                      isApprovalRequested={isApprovalRequested}
                       latestAgentVersion={latestAgentVersion}
                     />
                   )}
@@ -501,6 +506,28 @@ export default function SettingElement({
         )}{" "}
       {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
         <ImagePreview url={imagePreview} block={imagePreviewBlock} />
+      )}
+      {setting.requiresApproval && !isUserApproved && isApprovalRequested && (
+        <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
+          <div className="w-full flex flex-col items-center justify-center">
+            <TypographyLarge>Status: In Review</TypographyLarge>
+            <TypographyP>
+              Our team will review your game and then release it to the public
+              directory.
+            </TypographyP>
+            <TypographyP>
+              Reach out on{" "}
+              <a
+                href="https://steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                Discord
+              </a>{" "}
+              if you have questions!
+            </TypographyP>
+          </div>
+        </div>
       )}
       {isDisabled ? (
         <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
