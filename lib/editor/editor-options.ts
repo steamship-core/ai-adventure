@@ -69,6 +69,7 @@ export type Setting = {
   requiredText?: string;
   previewOutputType?: string;
   suggestOutputType?: string;
+  approvalRequestedField?: string;
 };
 
 export type SettingGroup = {
@@ -115,20 +116,18 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
   return topLevelUpdates;
 }
 
-export const VisibilityOptions: Setting[] = [
+export const GeneralOptions: Setting[] = [
   {
     name: "adventure_public",
-    label: "Make public on main page",
+    label: "List in public directory",
     description:
-      "NOTE: Only approved users can set an adventure to public. Ask in https://steamship.com/discord.",
+      "Check this box to list your adventure in the public directory.",
     type: "boolean",
     requiresApproval: true,
+    approvalRequestedField: "adventure_public_requested",
     requiredText:
       "To make your adventure public and visible to the community, your account must be approved.",
   },
-];
-
-export const GeneralOptions: Setting[] = [
   {
     name: "adventure_name",
     label: "Adventure Name",
@@ -838,12 +837,6 @@ export const SettingGroups: SettingGroup[] = [
     description: "Settings for your game.",
     href: "general-settings",
     settings: GeneralOptions,
-  },
-  {
-    title: "Visibility",
-    description: "How do distribute your game.",
-    href: "visibility-settings",
-    settings: VisibilityOptions,
   },
   {
     spacer: true,
