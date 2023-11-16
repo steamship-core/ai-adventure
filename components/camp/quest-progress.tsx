@@ -79,7 +79,7 @@ const QuestProgressElement = ({
 
   const onClick = async () => {
     const lowEnergy = (energy || 0) < 10;
-    if (!lowEnergy) {
+    if (lowEnergy) {
       setLowEnergyModalOpen(true);
       return;
     }
