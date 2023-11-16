@@ -147,7 +147,7 @@ const QuestProgressElement = ({
   const disabledQuest = isIncompleteQuest && !isCurrentquest;
   return (
     <div className="relative w-full pl-12 py-2">
-      <div className="absolute left-0 w-12 h-full px-[1.35rem]">
+      <div className="absolute left-0 w-12 h-full pr-[1.65rem] pl-[1.05rem]">
         <div
           className={cn(
             "w-full h-full relative",
@@ -277,7 +277,7 @@ export const QuestProgress = ({
   return (
     <>
       <div className="flex gap-4 justify-between">
-        <div>
+        <div className="">
           <TypographyLarge className="">
             {adventure?.name || "Quest Progress"}{" "}
           </TypographyLarge>
