@@ -27,6 +27,8 @@ import { AudioPreview } from "./audio-preview";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { recoilErrorModalState } from "../providers/recoil";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyP } from "../ui/typography/TypographyP";
 import ImageInputElement from "./image-input-element";
@@ -165,10 +167,9 @@ export default function SettingElement({
     updateFn(setting.name, newValue);
   };
 
-  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked === true;
-    setValue(newValue);
-    updateFn(setting.name, newValue);
+  const onCheckboxChange = (checked: boolean) => {
+    setValue(checked);
+    updateFn(setting.name, checked);
   };
 
   const onSelectChange = (newValue: string) => {
@@ -314,16 +315,17 @@ export default function SettingElement({
     );
   } else if (setting.type == "boolean") {
     innerField = (
-      <div key={setting.name}>
-        <Input
-          type="checkbox"
-          checked={value ? true : undefined}
+      <div key={setting.name} className="flex items-center space-x-2">
+        <Switch
+          checked={!!value}
           id={setting.name}
           name={setting.name}
-          onChange={onCheckboxChange}
+          onCheckedChange={onCheckboxChange}
           disabled={isDisabled}
         />
-        <label htmlFor={setting.name}>&nbsp;Yes</label>
+        <Label htmlFor={setting.name}>
+          {value ? "Publically Visible" : "Hidden"}
+        </Label>
       </div>
     );
   } else if (setting.type == "select") {
