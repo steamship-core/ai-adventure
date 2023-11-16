@@ -166,6 +166,26 @@ export default function SettingGroupForm({
         }
       }
 
+      console.log("DATA", data);
+
+      if (data.game_program) {
+        if (data.game_program instanceof File) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/file?filename=${data.game_program.name}`,
+            {
+              method: "POST",
+              body: data.game_program,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            data.game_program = blobJson.url;
+          } else {
+            data.game_program = null;
+          }
+        }
+      }
+
       const characters = data.characters || [];
       for (let i = 0; i < characters.length; i++) {
         const character = characters[i];
