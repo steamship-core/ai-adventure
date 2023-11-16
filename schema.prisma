@@ -29,7 +29,8 @@ model Adventure {
   featured Boolean @default(false)
 
   // Whether it's visible by others
-  public Boolean @default(false)
+  public          Boolean @default(false)
+  publicRequested Boolean @default(false)
 
   tags              String[]            @default([])
   Agents            Agents[]            @relation("agents")
