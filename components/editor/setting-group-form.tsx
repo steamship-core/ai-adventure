@@ -189,7 +189,7 @@ export default function SettingGroupForm({
         setExistingThemes(existingThemesFromConfig(dataToSave));
       }
 
-      let res = await fetch("/api/editor", {
+      let res = await fetch(`/api/adventure/${adventureId}`, {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
@@ -256,7 +256,7 @@ export default function SettingGroupForm({
       return;
     }
 
-    fetch("/api/editor", {
+    fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
         operation: "import",
