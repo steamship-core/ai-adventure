@@ -49,7 +49,6 @@ const ImageInputElement = ({
       )}
       <Input
         onChange={onChange}
-        id="picture"
         type="file"
         className="hover:cursor-pointer"
         disabled={isDisabled}

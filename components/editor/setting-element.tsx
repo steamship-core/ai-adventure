@@ -30,6 +30,7 @@ import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
+import ProgramInputElement from "./program-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -250,6 +251,15 @@ export default function SettingElement({
   } else if (setting.type == "image") {
     innerField = (
       <ImageInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+        setting={setting}
+      />
+    );
+  } else if (setting.type == "program") {
+    innerField = (
+      <ProgramInputElement
         onInputChange={onInputChange}
         value={value}
         isDisabled={isDisabled}

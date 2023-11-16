@@ -56,6 +56,7 @@ export type Setting = {
     | "int"
     | "float"
     | "divider"
+    | "program"
     | "upgrade-offer";
   listof?: "object" | "text";
   default?: string | number | boolean;
@@ -683,6 +684,13 @@ export const GameEngineOptions: Setting[] = [
     type: "upgrade-offer",
     default: "",
   },
+  // {
+  //   name: "game_program",
+  //   label: "Custom Script",
+  //   description: "A custom script for your story.",
+  //   type: "program",
+  //   default: "",
+  // },
 ];
 
 export const ImageThemeOptions: Setting[] = [
