@@ -80,12 +80,9 @@ export const POST = withAxiom(async (request: Request) => {
         { status: 500 }
       );
     }
-  } catch (e) {
+  } catch (e: any) {
     log.error(`${e}`);
     console.error(e);
-    return NextResponse.json(
-      { error: "Failed to adventure." },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: `${e}` }, { status: 404 });
   }
 });

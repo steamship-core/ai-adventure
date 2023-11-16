@@ -70,6 +70,7 @@ export type Setting = {
   previewOutputType?: string;
   suggestOutputType?: string;
   approvalRequestedField?: string;
+  variablesPermitted?: Record<string, string>;
 };
 
 export type SettingGroup = {
@@ -549,9 +550,13 @@ export const ImageOptions: Setting[] = [
     name: "profile_image_prompt",
     label: "Profile Image Prompt",
     description:
-      "The prompt that will be used to generate the player's profile image. The variables {name} and {description} can be used.",
+      "The prompt that will be used to generate the player's profile image.",
     type: "longtext",
     default: "close-up profile picture, focus on head, {name}, {description}",
+    variablesPermitted: {
+      name: "The name of the character.",
+      description: "Description of the character.",
+    },
   },
   {
     // VALIDATED
@@ -560,6 +565,10 @@ export const ImageOptions: Setting[] = [
     description: "The negative prompt for generating profile images.",
     type: "longtext",
     default: "",
+    variablesPermitted: {
+      name: "The name of the character.",
+      description: "Description of the character.",
+    },
   },
   {
     type: "divider",
@@ -586,6 +595,10 @@ export const ImageOptions: Setting[] = [
     description: "The prompt used to generate item images.",
     type: "longtext",
     default: `16-bit retro-game sprite for an {name}, {description}`,
+    variablesPermitted: {
+      name: "The name of the item.",
+      description: "Description of the item.",
+    },
   },
   {
     // VALIDATED
@@ -594,6 +607,10 @@ export const ImageOptions: Setting[] = [
     description: "The negative prompt for generating item images.",
     type: "longtext",
     default: "",
+    variablesPermitted: {
+      name: "The name of the item.",
+      description: "Description of the item.",
+    },
   },
   {
     type: "divider",
@@ -617,19 +634,13 @@ export const ImageOptions: Setting[] = [
     // VALIDATED
     name: "camp_image_prompt",
     label: "Camp Image Prompt",
-    description: `Prompt for generating the camp image.
-    
-You can use the following variables:
-  - {tone} for the tone of the story
-  - {genre} for the genre of the story.
-
-Example: 
-
-  {tone} {genre} camp.
-        
-    `,
+    description: `Prompt for generating the camp image.`,
     type: "longtext",
     default: "{tone} {genre} camp.",
+    variablesPermitted: {
+      tone: "Description of the tone of the adventure.",
+      genre: "Description of the genre of the adventure.",
+    },
   },
   {
     // VALIDATED
@@ -638,6 +649,10 @@ Example:
     description: "Negative prompt for generating camp images.",
     type: "longtext",
     default: "",
+    variablesPermitted: {
+      tone: "Description of the tone of the adventure.",
+      genre: "Description of the genre of the adventure.",
+    },
   },
   {
     type: "divider",
@@ -663,6 +678,9 @@ Example:
     description: "The prompt for generating a quest background.",
     type: "longtext",
     default: `16-bit background scene for a quest. The scene being depicted is: {description}`,
+    variablesPermitted: {
+      description: "Description of the quest the player is on.",
+    },
   },
   {
     // VALIDATED
@@ -671,6 +689,9 @@ Example:
     description: "The negative prompt for generating quest background.",
     type: "longtext",
     default: "",
+    variablesPermitted: {
+      description: "Description of the quest the player is on.",
+    },
   },
 ];
 
