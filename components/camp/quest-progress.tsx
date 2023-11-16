@@ -39,6 +39,7 @@ import {
 import { Skeleton } from "../ui/skeleton";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { CampImage } from "./camp-image";
 
 const QuestProgressElement = ({
   questArc,
@@ -47,6 +48,8 @@ const QuestProgressElement = ({
   isCurrentquest,
   setLowEnergyModalOpen,
   setIsVisible,
+  index,
+  totalQuests,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string };
@@ -154,14 +157,16 @@ const QuestProgressElement = ({
             disabledQuest && "bg-muted",
             isCompleteQuest && "bg-indigo-200",
             isCurrentquest &&
-              "bg-gradient-to-b from-indigo-200 via-orange-200 to-muted"
+              "bg-gradient-to-b from-indigo-200 via-orange-200 to-muted",
+            index === 0 && "rounded-t-lg",
+            index === totalQuests - 1 && "rounded-b-lg"
           )}
         >
           <div className="absolute h-full w-full top-0 left-0">
             <div className="w-full h-full flex items-center justify-center">
               <div
                 className={cn(
-                  "rounded-full w-8 h-8 absolute",
+                  "rounded-full w-6 h-6 absolute",
                   disabledQuest && "bg-muted",
                   isCompleteQuest && "bg-indigo-200",
                   isCurrentquest && "bg-white"
@@ -169,12 +174,12 @@ const QuestProgressElement = ({
               >
                 <div className="w-full h-full flex items-center justify-center">
                   {isCompleteQuest && (
-                    <CheckIcon size={16} className="text-black" />
+                    <CheckIcon className="text-black h-4 w-4" />
                   )}
                   {isCurrentquest && (
-                    <SparklesIcon size={16} className="text-black" />
+                    <SparklesIcon className="text-black h-4 w-4" />
                   )}
-                  {disabledQuest && <LockIcon size={16} />}
+                  {disabledQuest && <LockIcon size={16} className="h-3 w-3" />}
                 </div>
               </div>
             </div>
@@ -307,6 +312,7 @@ export const QuestProgress = ({
           </Button>
         </InventorySheet>
       </div>
+      <CampImage />
       <div className="flex items-center justify-center">
         {questArc.length === 0 && (
           <Skeleton className="w-full h-24 mt-2 flex items-center justify-center text-sm">
