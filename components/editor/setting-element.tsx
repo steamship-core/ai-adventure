@@ -28,8 +28,10 @@ import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { recoilErrorModalState } from "../providers/recoil";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyP } from "../ui/typography/TypographyP";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
+import ProgramInputElement from "./program-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
@@ -44,7 +46,9 @@ export default function SettingElement({
   inlined = false,
   existingDynamicThemes = [],
   isUserApproved,
+  isApprovalRequested,
   adventureId = "",
+  latestAgentVersion = "",
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
@@ -63,7 +67,9 @@ export default function SettingElement({
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
+  isApprovalRequested: boolean;
   adventureId?: string;
+  latestAgentVersion: string;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
   let [imagePreview, setImagePreview] = useState<string | undefined>();
@@ -212,7 +218,7 @@ export default function SettingElement({
   };
 
   let innerField = <></>;
-  const isDisabled = setting.requiresApproval && !isUserApproved;
+  const isDisabled = false; // setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
     innerField = (
@@ -248,6 +254,15 @@ export default function SettingElement({
   } else if (setting.type == "image") {
     innerField = (
       <ImageInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+        setting={setting}
+      />
+    );
+  } else if (setting.type == "program") {
+    innerField = (
+      <ProgramInputElement
         onInputChange={onInputChange}
         value={value}
         isDisabled={isDisabled}
@@ -347,6 +362,32 @@ export default function SettingElement({
         isLoadingMagic={suggesting}
       />
     );
+  } else if (setting.type == "upgrade-offer") {
+    const updateButton =
+      latestAgentVersion == value ? (
+        <TypographyMuted>This is the latest version! </TypographyMuted>
+      ) : (
+        <Button
+          onClick={(e) => {
+            setValue(latestAgentVersion);
+            updateFn(setting.name, latestAgentVersion);
+          }}
+        >
+          Upgrade to {latestAgentVersion}
+        </Button>
+      );
+    innerField = (
+      <div>
+        <Input
+          isLoadingMagic={suggesting}
+          disabled={suggesting}
+          type="text"
+          value={value}
+          onChange={onTextboxChange}
+        />
+        <div className="mt-2">{updateButton}</div>
+      </div>
+    );
   } else if (setting.type == "tag-list") {
     const _value = Array.isArray(value) ? value : [];
     innerField = (
@@ -403,6 +444,8 @@ export default function SettingElement({
                             });
                           }}
                           isUserApproved={isUserApproved}
+                          isApprovalRequested={isApprovalRequested}
+                          latestAgentVersion={latestAgentVersion}
                         />
                       );
                     })
@@ -423,6 +466,8 @@ export default function SettingElement({
                         updateItem({ index: i, value: value });
                       }}
                       isUserApproved={isUserApproved}
+                      isApprovalRequested={isApprovalRequested}
+                      latestAgentVersion={latestAgentVersion}
                     />
                   )}
                 </div>
@@ -461,6 +506,28 @@ export default function SettingElement({
         )}{" "}
       {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
         <ImagePreview url={imagePreview} block={imagePreviewBlock} />
+      )}
+      {setting.requiresApproval && !isUserApproved && isApprovalRequested && (
+        <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
+          <div className="w-full flex flex-col items-center justify-center">
+            <TypographyLarge>Status: In Review</TypographyLarge>
+            <TypographyP>
+              Our team will review your game and then release it to the public
+              directory.
+            </TypographyP>
+            <TypographyP>
+              Reach out on{" "}
+              <a
+                href="https://steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                Discord
+              </a>{" "}
+              if you have questions!
+            </TypographyP>
+          </div>
+        </div>
       )}
       {isDisabled ? (
         <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">

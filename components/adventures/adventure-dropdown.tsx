@@ -16,7 +16,7 @@ const AdventureDropdown = ({ adventureId }: { adventureId: string }) => {
   const router = useRouter();
 
   async function deleteAdventure(adventureId: string) {
-    const resp = await fetch("/api/editor", {
+    const resp = await fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
         operation: "delete",

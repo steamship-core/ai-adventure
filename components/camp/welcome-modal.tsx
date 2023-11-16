@@ -26,48 +26,25 @@ const joyrideSteps: StepProps = [
   {
     target: "#stats",
     placement: "bottom",
-    title: "Energy & Coins",
+    title: "Energy",
     content: (
       <>
         <TypographyMuted className="text-base text-muted-foreground">
-          Quests cost energy to embark on. Earn gold by completing quests or
-          selling items.
+          Quests cost energy to embark on. You can get more energy by
+          subscribing, or by buying energy in the shop.
         </TypographyMuted>
       </>
     ),
     disableBeacon: true,
   },
   {
-    target: "#quest-progress",
+    target: "#quest-list",
     placement: "bottom",
-    title: "Quest Progress",
+    title: "Quests",
     content: (
       <TypographyMuted className="text-base text-muted-foreground">
-        This a list of the quests you have to go on to achieve your characters
-        goals. Click on a quest to expand its description
-      </TypographyMuted>
-    ),
-    disableBeacon: true,
-  },
-  {
-    target: "#camp",
-    placement: "center",
-    title: "Camp",
-    content: (
-      <TypographyMuted className="text-base text-muted-foreground">
-        Every adventurer needs a place to rest. This is an image of your camp.
-      </TypographyMuted>
-    ),
-    disableBeacon: true,
-  },
-  {
-    target: "#actions",
-    placement: "top",
-    title: "Actions",
-    content: (
-      <TypographyMuted className="text-base text-muted-foreground">
-        This is where you decide what to do next. You can embark on a quest,
-        view your inventory, or browse past quests.
+        This a list of all the quests in this adventure. Click on a quest to get
+        started!
       </TypographyMuted>
     ),
     disableBeacon: true,

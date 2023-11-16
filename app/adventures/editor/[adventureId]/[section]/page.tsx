@@ -46,13 +46,18 @@ export default async function EditorPage({
     },
   });
 
+  let innerConfig = (adventure.agentDevConfig as any) || {};
+
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),
     adventure_name: adventure.name,
     adventure_description: adventure.description,
     adventure_short_description: adventure.shortDescription,
     adventure_image: adventure.image,
+    adventure_public: adventure.public,
+    adventure_public_requested: adventure.publicRequested,
     game_engine_version: adventure.agentVersion,
+    gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
   let unpublishedChanges = !objectEquals(

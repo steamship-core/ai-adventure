@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { pushAdventureToAgent } from "../adventure/adventure-agent.server";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
+import { sendSlackMessage } from "../slack/slack.server";
 import { getSteamshipClient } from "../utils";
 
 export const getAgents = async (userId: string) => {
@@ -38,6 +39,7 @@ export const getAgent = async (userId: string, handle: string) => {
     include: {
       Adventure: {
         select: {
+          name: true,
           agentConfig: true,
         },
       },
@@ -139,6 +141,10 @@ export const createAgent = async (
 
     // Now we need to set the server settings.
     await pushAdventureToAgent(agent.agentUrl, adventure, isDevelopment);
+
+    await sendSlackMessage(
+      `🎲 User ${userId} just started a new game: ${adventure.name}!`
+    );
 
     return agent;
   } catch (e) {

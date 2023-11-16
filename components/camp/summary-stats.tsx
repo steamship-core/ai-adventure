@@ -1,6 +1,6 @@
 "use client";
 
-import { ActivityIcon, PackageIcon } from "lucide-react";
+import { FlameIcon, PackageIcon } from "lucide-react";
 import { useRecoilValue } from "recoil";
 import BackgroundAudioToggle from "../audio/background-audio-toggle";
 import InventorySheet from "../inventory-sheet";
@@ -35,7 +35,7 @@ export const SummaryStats = ({
       )}
       {showEnergy && (
         <TypographySmall className="flex items-center">
-          <ActivityIcon size={16} className="mr-2 text-indigo-400" />
+          <FlameIcon size={16} className="mr-2 text-orange-400" />
           {energy || 0}
         </TypographySmall>
       )}
