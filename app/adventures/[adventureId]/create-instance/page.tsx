@@ -48,13 +48,13 @@ export default async function AdventurePage({
 
   if (adventure.creatorId !== userId) {
     const resend = new Resend(process.env.RESEND_KEY);
+
+    // Count the agents for this adventure and not the creator
     const count = await prisma.agents.count({
       where: {
-        adventureId: params.adventureId,
-        Adventure: {
-          creatorId: {
-            not: userId,
-          },
+        AND: {
+          adventureId: params.adventureId,
+          ownerId: { not: adventure.creatorId },
         },
       },
     });
@@ -71,7 +71,7 @@ export default async function AdventurePage({
       const emailSubject = countMap[count as keyof typeof countMap];
       if (emailSubject) {
         await resend.emails.send({
-          from: "updates.ai-adventure.steamship.com",
+          from: "AI Adventure <updates@updates.ai-adventure.steamship.com>",
           to: email,
           subject: emailSubject,
           react: (

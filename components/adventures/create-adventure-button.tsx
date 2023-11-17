@@ -1,11 +1,15 @@
 "use client";
 import { Adventure } from "@prisma/client";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "../ui/button";
 
 export const CreateAdventureButton = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const onClick = async () => {
+    setIsLoading(true);
     const res = await fetch("/api/adventure", {
       method: "POST",
       body: JSON.stringify({
@@ -16,8 +20,18 @@ export const CreateAdventureButton = () => {
     if (res.ok && res.status === 201) {
       const { adventure } = (await res.json()) as { adventure: Adventure };
       router.push(`/adventures/editor/${adventure.id}`);
+    } else {
+      setIsLoading(false);
     }
   };
 
-  return <Button onClick={onClick}>Create a new adventure template</Button>;
+  return (
+    <Button onClick={onClick} disabled={isLoading}>
+      {isLoading ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        "Create a new adventure template"
+      )}
+    </Button>
+  );
 };
