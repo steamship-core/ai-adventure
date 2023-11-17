@@ -155,6 +155,15 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseInt(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -163,6 +172,15 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseFloat(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -274,6 +292,7 @@ export default function SettingElement({
         onChange={onTextboxIntChange}
         isLoadingMagic={suggesting}
         disabled={suggesting}
+        min={setting.min || 0}
       />
     );
   } else if (setting.type == "float") {
@@ -284,6 +303,7 @@ export default function SettingElement({
         onChange={onTextboxFloatChange}
         isLoadingMagic={suggesting}
         disabled={suggesting}
+        min={setting.min || 0}
       />
     );
   } else if (setting.type == "image") {
