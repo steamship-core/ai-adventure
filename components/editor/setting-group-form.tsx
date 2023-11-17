@@ -8,11 +8,11 @@ import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
 import {
+  EditorLayoutImage,
   recoilEditorLayoutImage,
   recoilErrorModalState,
 } from "../providers/recoil";
@@ -45,7 +45,6 @@ export default function SettingGroupForm({
     });
     return _existingDynamicThemes;
   };
-  const router = useRouter();
   const { groupName, adventureId } = useEditorRouting();
   const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
@@ -241,6 +240,8 @@ export default function SettingGroupForm({
   useEffect(() => {
     if (existing?.adventure_image) {
       setEditorLayoutImage(existing.adventure_image);
+    } else {
+      setEditorLayoutImage(EditorLayoutImage.UNSET);
     }
   }, []);
 

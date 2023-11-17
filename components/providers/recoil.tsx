@@ -87,6 +87,7 @@ export const recoilInitialBlock = atom<string | undefined>({
 
 export const EditorLayoutImage = {
   UNSET: "UNSET",
+  LOADING: "LOADING",
   DEFAULT: "DEFAULT",
 } as const;
 
