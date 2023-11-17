@@ -71,6 +71,7 @@ export type Setting = {
   suggestOutputType?: string;
   approvalRequestedField?: string;
   variablesPermitted?: Record<string, string>;
+  min?: number;
 };
 
 export type SettingGroup = {
@@ -291,6 +292,7 @@ Can include descriptions of genre, characters, specific items and locations that
     description: `What is the minimum number of problems a player must solve to complete a quest?`,
     type: "int",
     default: 2,
+    min: 1,
   },
   {
     // TODO: Validate int
@@ -299,6 +301,7 @@ Can include descriptions of genre, characters, specific items and locations that
     description: `A number between 0 and 1. The higher this is, the more additional problems a user will have to solve above the minimum.`,
     type: "float",
     default: 0.25,
+    min: 0,
   },
   {
     // TODO: Validate int
@@ -307,6 +310,7 @@ Can include descriptions of genre, characters, specific items and locations that
     description: `The maximum additional problems per quest that can be randomly added above and beyond the minimum required number.`,
     type: "int",
     default: 2,
+    min: 1,
   },
   {
     // TODO: Validate float
@@ -326,6 +330,7 @@ Difficulty modified value:
 Result - Doubling difficulty makes success 1/2 as likely; halving difficulty makes success twice as likely.`,
     type: "float",
     default: 2,
+    min: 1,
   },
   {
     name: "advanced_divider",
