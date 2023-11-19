@@ -394,18 +394,21 @@ export const CharacterOptions: Setting[] = [
         label: "Name",
         description: "Name of the preset character.",
         type: "text",
+        suggestOutputType: "name",
       },
       {
         name: "image",
         label: "Image",
         description: "Image of the preset character.",
         type: "image",
+        suggestOutputType: "image",
       },
       {
         name: "tagline",
         label: "Tag Line",
         description: "A short tagline for your character.",
         type: "text",
+        suggestOutputType: "tagline",
       },
       {
         name: "description",
@@ -413,6 +416,7 @@ export const CharacterOptions: Setting[] = [
         description:
           "Description of the preset character. This influences gameplay.",
         type: "longtext",
+        suggestOutputType: "description",
       },
       {
         name: "background",
@@ -420,6 +424,7 @@ export const CharacterOptions: Setting[] = [
         description:
           "Background of the preset character. This influences gameplay.",
         type: "longtext",
+        suggestOutputType: "background",
       },
     ],
   },

@@ -56,6 +56,7 @@ export default function SettingGroupForm({
 
   const previewField = async (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setImagePreviewLoading: (val: boolean) => void,
     setImagePreview: (val: string | undefined) => void,
     setImagePreviewBlock: (val: Block | undefined) => void
@@ -70,6 +71,7 @@ export default function SettingGroupForm({
         id: adventureId,
         data: {
           field_name: fieldName,
+          field_key_path: fieldKeyPath,
           unsaved_server_settings: dataToUpdate,
         },
       }),
@@ -95,6 +97,7 @@ export default function SettingGroupForm({
   // TODO: Send up changes in progress
   const suggestField = async (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setSuggesting: (val: boolean) => void,
     setValue: (val: string) => void
   ) => {
@@ -106,6 +109,7 @@ export default function SettingGroupForm({
         id: adventureId,
         data: {
           field_name: fieldName,
+          field_key_path: fieldKeyPath,
           unsaved_server_settings: dataToUpdate,
         },
       }),
@@ -395,6 +399,7 @@ export default function SettingGroupForm({
               adventureId={adventureId as string}
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
+              keypath={[setting.name]}
               isUserApproved={isUserApproved}
               isApprovalRequested={
                 setting.approvalRequestedField
