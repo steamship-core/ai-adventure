@@ -35,7 +35,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
     </TypographyMuted>
   );
   console.log(adventure);
-  const onClick = async () => {
+  const onClick = () => {
     amplitude.track("Button Click", {
       buttonName: "Start Adventure",
       location: "Adventure",
