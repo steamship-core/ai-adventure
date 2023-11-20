@@ -71,7 +71,7 @@ export default async function AdventurePage({
       const emailSubject = countMap[count as keyof typeof countMap];
       if (emailSubject) {
         await resend.emails.send({
-          from: "AI Adventure <updates@updates.ai-adventure.steamship.com>",
+          from: "AI Adventure <updates@ai-adventure.steamship.com>",
           to: email,
           subject: emailSubject,
           react: (
