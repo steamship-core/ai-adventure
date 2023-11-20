@@ -14,6 +14,10 @@ module.exports = withAxiom({
         hostname: "*.public.blob.vercel-storage.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "img.clerk.com",
+      },
     ],
   },
 });

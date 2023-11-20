@@ -2,7 +2,6 @@ import EditorSection from "@/components/landing/editor-section";
 import LandingFooter from "@/components/landing/footer";
 import LandingHero from "@/components/landing/hero";
 import OpenSource from "@/components/landing/open-source-section";
-import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import prisma from "@/lib/db";
 import { cn } from "@/lib/utils";
@@ -55,21 +54,6 @@ const features = [
 
 const Section = ({ children }: { children: ReactNode }) => (
   <div className="">{children}</div>
-);
-
-const Title = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <div className="flex flex-col items-center justify-center w-full text-center mb-16">
-    <TypographyH3 className="text-xl md:text-3xl">{title}</TypographyH3>
-    <TypographyMuted className="text-lg md:text-xl mt-4 max-w-lg">
-      {subtitle}
-    </TypographyMuted>
-  </div>
-);
-
-const Actions = ({ children }: { children: ReactNode }) => (
-  <div className="w-full flex items-center justify-center mb-24 gap-2">
-    {children}
-  </div>
 );
 
 export default async function Home() {
