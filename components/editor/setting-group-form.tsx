@@ -56,6 +56,7 @@ export default function SettingGroupForm({
 
   const previewField = async (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setImagePreviewLoading: (val: boolean) => void,
     setImagePreview: (val: string | undefined) => void,
     setImagePreviewBlock: (val: Block | undefined) => void
@@ -70,6 +71,7 @@ export default function SettingGroupForm({
         id: adventureId,
         data: {
           field_name: fieldName,
+          field_key_path: fieldKeyPath,
           unsaved_server_settings: dataToUpdate,
         },
       }),
@@ -95,6 +97,7 @@ export default function SettingGroupForm({
   // TODO: Send up changes in progress
   const suggestField = async (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setSuggesting: (val: boolean) => void,
     setValue: (val: string) => void
   ) => {
@@ -106,6 +109,7 @@ export default function SettingGroupForm({
         id: adventureId,
         data: {
           field_name: fieldName,
+          field_key_path: fieldKeyPath,
           unsaved_server_settings: dataToUpdate,
         },
       }),
@@ -124,14 +128,31 @@ export default function SettingGroupForm({
     } else {
       let block = (await response.json()) as Block;
       if (block.text) {
-        setValue(block.text);
+        let cleanText = block.text.trim();
+        if (cleanText.startsWith('"')) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith('"')) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+        if (cleanText.startsWith("'")) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith("'")) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+
+        setValue(cleanText);
         setSuggesting(false);
       } else if (block.id) {
-        const blockContent = await fetch(
-          `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
-        );
-        const streamedText = await blockContent.text();
-        setValue(streamedText);
+        const blockUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
+        if (block.mimeType?.startsWith("image")) {
+          setValue(blockUrl);
+        } else {
+          const blockContent = await fetch(blockUrl);
+          const streamedText = await blockContent.text();
+          setValue(streamedText);
+        }
         setSuggesting(false);
       }
     }
@@ -142,28 +163,30 @@ export default function SettingGroupForm({
     mutationFn: async (data: any) => {
       const dataToSave = data;
       if (data.adventure_image) {
-        const res = await fetch(
-          `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
-          {
-            method: "POST",
-            body: data.adventure_image,
+        if (!(typeof data.adventure_image == "string")) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
+            {
+              method: "POST",
+              body: data.adventure_image,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            setEditorLayoutImage(blobJson.url);
+            dataToSave.adventure_image = blobJson.url;
+          } else {
+            const e = {
+              title: "Upload failures",
+              message: "Unable to upload your image.",
+              details: `Status: ${res.status}, StatusText: ${
+                res.statusText
+              }, Body: ${await res.text()}`,
+            };
+            setError(e);
+            console.error(e);
+            return;
           }
-        );
-        if (res.ok) {
-          const blobJson = (await res.json()) as PutBlobResult;
-          setEditorLayoutImage(blobJson.url);
-          dataToSave.adventure_image = blobJson.url;
-        } else {
-          const e = {
-            title: "Upload failures",
-            message: "Unable to upload your image.",
-            details: `Status: ${res.status}, StatusText: ${
-              res.statusText
-            }, Body: ${await res.text()}`,
-          };
-          setError(e);
-          console.error(e);
-          return;
         }
       }
 
@@ -395,6 +418,7 @@ export default function SettingGroupForm({
               adventureId={adventureId as string}
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
+              keypath={[setting.name]}
               isUserApproved={isUserApproved}
               isApprovalRequested={
                 setting.approvalRequestedField

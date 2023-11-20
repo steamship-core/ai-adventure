@@ -24,7 +24,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(
-          "p-0.5 w-full",
+          "p-0.5",
+          type == "checkbox" || type == "radio" ? "" : "w-full",
           isLoadingMagic &&
             "animate-border inline-block rounded-lg from-pink-500 via-red-500 to-yellow-500 bg-[length:_400%_400%] [animation-duration:_1s] bg-gradient-to-r "
         )}
