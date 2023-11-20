@@ -1,11 +1,20 @@
 "use client";
 
 import { FlameIcon, PackageIcon } from "lucide-react";
+import Link from "next/link";
 import { useRecoilValue } from "recoil";
 import BackgroundAudioToggle from "../audio/background-audio-toggle";
 import InventorySheet from "../inventory-sheet";
 import { recoilEnergyState } from "../providers/recoil";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { TypographySmall } from "../ui/typography/TypographySmall";
 
 export const SummaryStats = ({
@@ -34,10 +43,33 @@ export const SummaryStats = ({
         </InventorySheet>
       )}
       {showEnergy && (
-        <TypographySmall className="flex items-center">
-          <FlameIcon size={16} className="mr-2 text-orange-400" />
-          {energy || 0}
-        </TypographySmall>
+        <Dialog>
+          <DialogTrigger>
+            <TypographySmall className="flex items-center">
+              <FlameIcon size={16} className="mr-2 text-orange-400" />
+              {energy || 0}
+            </TypographySmall>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex gap-2 items-center">
+                Energy
+              </DialogTitle>
+              <DialogDescription>
+                Looking to purchase more energy? Click below to visit the energy
+                store.
+              </DialogDescription>
+            </DialogHeader>
+            <Button
+              asChild
+              className="bg-orange-600 text-white hover:bg-orange-700"
+            >
+              <Link href="/account/plan">
+                Purchase Energy <FlameIcon className="ml-2" />
+              </Link>
+            </Button>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );
