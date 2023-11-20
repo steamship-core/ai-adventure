@@ -137,6 +137,7 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+    suggestOutputType: "name",
   },
   {
     name: "adventure_short_description",
@@ -146,6 +147,7 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+    suggestOutputType: "short_description",
   },
   {
     name: "adventure_description",
@@ -154,6 +156,7 @@ export const GeneralOptions: Setting[] = [
     type: "textarea",
     default: "",
     required: true,
+    suggestOutputType: "description",
   },
   {
     name: "adventure_tags",
@@ -169,6 +172,7 @@ export const GeneralOptions: Setting[] = [
     type: "image",
     default: "",
     required: true,
+    suggestOutputType: "image",
   },
   {
     name: "adventure_player_singular_noun",
@@ -394,18 +398,21 @@ export const CharacterOptions: Setting[] = [
         label: "Name",
         description: "Name of the preset character.",
         type: "text",
+        suggestOutputType: "name",
       },
       {
         name: "image",
         label: "Image",
         description: "Image of the preset character.",
         type: "image",
+        suggestOutputType: "image",
       },
       {
         name: "tagline",
         label: "Tag Line",
         description: "A short tagline for your character.",
         type: "text",
+        suggestOutputType: "tagline",
       },
       {
         name: "description",
@@ -413,6 +420,7 @@ export const CharacterOptions: Setting[] = [
         description:
           "Description of the preset character. This influences gameplay.",
         type: "longtext",
+        suggestOutputType: "description",
       },
       {
         name: "background",
@@ -420,6 +428,7 @@ export const CharacterOptions: Setting[] = [
         description:
           "Background of the preset character. This influences gameplay.",
         type: "longtext",
+        suggestOutputType: "background",
       },
     ],
   },
