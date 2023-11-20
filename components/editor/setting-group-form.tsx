@@ -1,5 +1,6 @@
 "use client";
 
+import { amplitude } from "@/lib/amplitude";
 import { SettingGroup } from "@/lib/editor/editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { Block } from "@/lib/streaming-client/src";
@@ -319,6 +320,12 @@ export default function SettingGroupForm({
   };
 
   const onSave = (e: any) => {
+    amplitude.track("Button Click", {
+      buttonName: "Save Adventure",
+      location: "Editor",
+      action: "save-adventure",
+      adventureId: adventureId,
+    });
     mutate(dataToUpdate);
   };
 
