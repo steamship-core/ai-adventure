@@ -37,6 +37,15 @@ export const POST = withAxiom(async (request: Request) => {
     data.unsaved_server_settings = {
       ...((adventure.agentDevConfig as any) || {}),
       ...(data.unsaved_server_settings || {}),
+      short_description:
+        data.unsaved_server_settings.adventure_short_description ||
+        (adventure.agentDevConfig as any).shortDescription,
+      description:
+        data.unsaved_server_settings.adventure_description ||
+        (adventure.agentDevConfig as any).description,
+      name:
+        data.unsaved_server_settings.adventure_name ||
+        (adventure.agentDevConfig as any).name,
     };
 
     if (operation === "preview") {

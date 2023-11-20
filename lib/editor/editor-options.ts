@@ -137,6 +137,7 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+    suggestOutputType: "adventure_name",
   },
   {
     name: "adventure_short_description",
@@ -146,6 +147,7 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
+    suggestOutputType: "short_description",
   },
   {
     name: "adventure_description",
@@ -154,6 +156,7 @@ export const GeneralOptions: Setting[] = [
     type: "textarea",
     default: "",
     required: true,
+    suggestOutputType: "description",
   },
   {
     name: "adventure_tags",
@@ -169,6 +172,7 @@ export const GeneralOptions: Setting[] = [
     type: "image",
     default: "",
     required: true,
+    suggestOutputType: "adventure_image",
   },
   {
     name: "adventure_player_singular_noun",
