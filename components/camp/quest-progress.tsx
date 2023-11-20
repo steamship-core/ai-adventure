@@ -90,11 +90,6 @@ const QuestProgressElement = ({
 
     setIsVisible(true);
     setIsLoading(true);
-    amplitude.track("Button Click", {
-      buttonName: "Go on an Adventure",
-      location: "Camp",
-      action: "start-quest",
-    });
 
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
@@ -126,6 +121,7 @@ const QuestProgressElement = ({
     const json = (await resp.json()) as {
       quest: Quest & { status: { state: string; statusMessage: string } };
     };
+
     if (json?.quest?.status?.state === "failed") {
       setIsLoading(false);
       setIsVisible(false);
@@ -142,7 +138,14 @@ const QuestProgressElement = ({
       log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
       return;
     }
-
+    amplitude.track("Button Click", {
+      buttonName: "Go on an Adventure",
+      location: "Camp",
+      action: "start-quest",
+      adventureId: "TODO",
+      workspaceHandle: params.handle,
+      questId: questId,
+    });
     log.debug(`Activating new quest: ${questId}`);
     router.push(`/play/${params.handle}/quest/${questId}`);
     setIsLoading(false);

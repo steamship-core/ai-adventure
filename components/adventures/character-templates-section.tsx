@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { amplitude } from "@/lib/amplitude";
 import { Character } from "@/lib/game/schema/characters";
 import { Adventure } from "@prisma/client";
 import Link from "next/link";
@@ -34,6 +35,15 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
     </TypographyMuted>
   );
   console.log(adventure);
+  const onClick = async () => {
+    amplitude.track("Button Click", {
+      buttonName: "Start Adventure",
+      location: "Adventure",
+      action: "start-adventure",
+      adventureId: adventure.id,
+      templateCharacter: false,
+    });
+  };
   return (
     <>
       {hasPremadeCharacters && (
@@ -57,7 +67,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
         </TypographyH2>
         {createDescription}
         <div className="mt-2">
-          <Button asChild className="text-xl py-6 px-6 mt-2">
+          <Button asChild className="text-xl py-6 px-6 mt-2" onClick={onClick}>
             <Link href={`/adventures/${adventure.id}/create-instance`}>
               Create a {playerSingularNoun.toLocaleLowerCase()}
             </Link>

@@ -1,4 +1,5 @@
 "use client";
+import { amplitude } from "@/lib/amplitude";
 import { Character } from "@/lib/game/schema/characters";
 import { track } from "@vercel/analytics/react";
 import Image from "next/image";
@@ -34,6 +35,13 @@ const CharacterMap = ({
               }
               className="flex h-full text-center w-full relative rounded-md aspect-[1/1] md:aspect-[1/1.5]  overflow-hidden border border-foreground/20 hover:border-indigo-500"
               onClick={() => {
+                amplitude.track("Button Click", {
+                  buttonName: "Start Adventure",
+                  location: "Adventure",
+                  action: "start-adventure",
+                  adventureId: adventureId,
+                  templateCharacter: true,
+                });
                 track("Character Selected", {
                   character: character.name,
                 });
