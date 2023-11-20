@@ -51,6 +51,7 @@ const QuestProgressElement = ({
   setIsVisible,
   index,
   totalQuests,
+  adventure,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string; description?: string };
@@ -62,6 +63,7 @@ const QuestProgressElement = ({
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
+  adventure?: Adventure | null;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
@@ -142,7 +144,7 @@ const QuestProgressElement = ({
       buttonName: "Go on an Adventure",
       location: "Camp",
       action: "start-quest",
-      adventureId: "TODO",
+      adventureId: adventure?.id,
       workspaceHandle: params.handle,
       questId: questId,
     });
@@ -260,7 +262,7 @@ export const QuestProgress = ({
   adventure,
 }: {
   adventureGoal?: string;
-  adventure?: Pick<Adventure, "name" | "agentConfig"> | null;
+  adventure?: Adventure | null;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
@@ -353,6 +355,7 @@ export const QuestProgress = ({
               isClamped={isArcClamped}
               setLowEnergyModalOpen={setLowEnergyModalOpen}
               setIsVisible={setIsVisible}
+              adventure={adventure}
             />
           );
         })}
