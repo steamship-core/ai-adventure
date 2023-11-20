@@ -6,24 +6,21 @@ import {
   recoilGameState,
 } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import { inputClassNames } from "@/components/ui/input";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
-import { cn } from "@/lib/utils";
-import { track } from "@vercel/analytics/react";
 import { Message } from "ai";
 import { useChat } from "ai/react";
-import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
+import { ArrowDown, ArrowRightIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import TextareaAutosize from "react-textarea-autosize";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
+import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import { UserInputBlock } from "./user-input-block";
 import {
@@ -287,43 +284,16 @@ export default function QuestNarrative({
         ) : (
           <>
             {!nextBlock ? (
-              <form
-                ref={formRef}
-                className="flex gap-2 w-full"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  inputRef?.current?.focus();
-                  track("Send Message", {
-                    location: "Quest",
-                  });
-                  handleSubmit(e);
-                  scrollToBottom();
-                }}
-              >
-                <TextareaAutosize
-                  className={cn(
-                    inputClassNames,
-                    "w-full py-[.6rem] resize-none"
-                  )}
-                  value={input}
-                  onChange={handleInputChange}
-                  ref={inputRef}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      formRef?.current?.requestSubmit();
-                    }
-                  }}
-                  disabled={isLoading || isComplete}
-                />
-                <Button type="submit" disabled={isLoading || isComplete}>
-                  {isLoading ? (
-                    <LoaderIcon size={16} className="animate-spin" />
-                  ) : (
-                    <SendIcon size={16} />
-                  )}
-                </Button>
-              </form>
+              <InteractionBox
+                formRef={formRef}
+                inputRef={inputRef}
+                handleSubmit={handleSubmit}
+                scrollToBottom={scrollToBottom}
+                input={input}
+                handleInputChange={handleInputChange}
+                isLoading={isLoading}
+                isComplete={isComplete}
+              />
             ) : (
               <Button
                 disabled={!isContinuationEnabled}
