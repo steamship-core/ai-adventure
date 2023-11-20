@@ -34,18 +34,18 @@ export const POST = withAxiom(async (request: Request) => {
 
     let path: string | null = null;
 
+    const devConfig = (adventure.agentDevConfig as any) || {};
+
     data.unsaved_server_settings = {
-      ...((adventure.agentDevConfig as any) || {}),
+      ...devConfig,
       ...(data.unsaved_server_settings || {}),
       short_description:
         data.unsaved_server_settings.adventure_short_description ||
-        (adventure.agentDevConfig as any).shortDescription,
+        devConfig.shortDescription,
       description:
         data.unsaved_server_settings.adventure_description ||
-        (adventure.agentDevConfig as any).description,
-      name:
-        data.unsaved_server_settings.adventure_name ||
-        (adventure.agentDevConfig as any).name,
+        devConfig.description,
+      name: data.unsaved_server_settings.adventure_name || devConfig.name,
     };
 
     if (operation === "preview") {

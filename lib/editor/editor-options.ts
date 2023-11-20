@@ -137,7 +137,7 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "",
     required: true,
-    suggestOutputType: "adventure_name",
+    suggestOutputType: "name",
   },
   {
     name: "adventure_short_description",
@@ -172,7 +172,7 @@ export const GeneralOptions: Setting[] = [
     type: "image",
     default: "",
     required: true,
-    suggestOutputType: "adventure_image",
+    suggestOutputType: "image",
   },
   {
     name: "adventure_player_singular_noun",
