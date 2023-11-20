@@ -1,7 +1,6 @@
 import SubscriptionSheet from "@/components/subscription-sheet";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
-
 export default async function AccountPlanPage() {
   const { userId } = auth();
 
@@ -11,7 +10,7 @@ export default async function AccountPlanPage() {
   }
 
   return (
-    <main className="w-full">
+    <main className="w-full relative h-full flex-1">
       <SubscriptionSheet />
     </main>
   );
