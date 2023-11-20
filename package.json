@@ -28,6 +28,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-email/components": "0.0.6",
     "@react-spring/web": "^9.7.3",
     "@slack/web-api": "^6.10.0",
     "@stripe/stripe-js": "^2.1.9",
