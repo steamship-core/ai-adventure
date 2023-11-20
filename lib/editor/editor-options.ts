@@ -23,14 +23,29 @@ const DEFAULT_THEMES = [
     imageSample: "/image_samples/pixel_art_3.png",
   },
   {
+    value: "dall_e_3_vivid_standard",
+    label: "Vivid (DALL_E 3)",
+    imageSample: "/image_samples/vivid_standard.png",
+  },
+  {
+    value: "dall_e_3_vivid_hd",
+    label: "Vivid HD (DALL_E 3)",
+    imageSample: "/image_samples/vivid_hd.png",
+  },
+  {
+    value: "dall_e_3_natural_standard",
+    label: "Natural (DALL_E 3)",
+    imageSample: "/image_samples/natural_standard.png",
+  },
+  {
+    value: "dall_e_3_natural_hd",
+    label: "Natural HD (DALL_E 3)",
+    imageSample: "/image_samples/natural_hd.png",
+  },
+  {
     value: "epic_realism",
     label: "Epic Realism",
     imageSample: "/image_samples/epic_realism.jpeg",
-  },
-  {
-    value: "ff7r",
-    label: "FF7R",
-    imageSample: "/image_samples/ff7r.jpeg",
   },
   {
     value: "cinematic_animation",
