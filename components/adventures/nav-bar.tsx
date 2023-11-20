@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
+import { FlameIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -35,7 +36,7 @@ const NavBarLink = ({
 const AdventureNavBar = () => {
   const { user, isLoaded } = useUser();
   return (
-    <nav className="w-full flex flex-col px-4 md:px-6 items-center border-b border-muted">
+    <nav className="w-full flex flex-col px-4 md:px-6 items-center border-b border-muted bg-background">
       <div className="w-full flex justify-between items-center">
         <div className="flex gap-6">
           <NavBarLink href="/adventures">Discover</NavBarLink>
@@ -48,6 +49,11 @@ const AdventureNavBar = () => {
               <TrophyIcon className="h-5 w-5" />
             </Link>
           </Button> */}
+          <Button variant="ghost" asChild>
+            <Link href="/account/plan">
+              <FlameIcon className="h-5 w-5 text-orange-500" />
+            </Link>
+          </Button>
           <Button variant="ghost">
             <Link href="https://steamship.com/discord">
               <svg
@@ -62,10 +68,10 @@ const AdventureNavBar = () => {
               </svg>
             </Link>
           </Button>
-          {isLoaded && (
+          {isLoaded ? (
             <>
               {user ? (
-                <div className="ml-2">
+                <div className="ml-4 min-w-[32px]">
                   <UserButton />
                 </div>
               ) : (
@@ -74,6 +80,8 @@ const AdventureNavBar = () => {
                 </Button>
               )}
             </>
+          ) : (
+            <div className="ml-4 w-[32px]" />
           )}
         </div>
       </div>
