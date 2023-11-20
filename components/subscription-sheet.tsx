@@ -1,12 +1,12 @@
 "use client";
 
 import { FlameIcon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { TypographyH1 } from "./ui/typography/TypographyH1";
 import { TypographyH3 } from "./ui/typography/TypographyH3";
 import { TypographyLead } from "./ui/typography/TypographyLead";
-import { TypographyP } from "./ui/typography/TypographyP";
 
 const ProductDisplay = () => {
   const [subscriptionState, setSubscriptionState] = useState<
@@ -41,6 +41,19 @@ const ProductDisplay = () => {
   return (
     <>
       <section className="pt-4">
+        <div className="flex flex-col items-start justify-start">
+          <div className="flex flex-col border border-muted rounded-md max-w-sm">
+            <div className="aspect-square relative w-full">
+              <Image src="/payments/chest.png" fill alt="Adventurer's cache" />
+            </div>
+            <TypographyH3>Adventurer&apos;s Cache</TypographyH3>
+            <TypographyLead>
+              Energy Cache is a subscription service that provides you with a
+              monthly allotment of energy to use in your adventures. You can
+              also top-up your energy cache with a one-time purchase.
+            </TypographyLead>
+          </div>
+        </div>
         <TypographyH3>Subscribe and Save</TypographyH3>
         <TypographyLead>$5.00 / month for 150 Energy / month</TypographyLead>
         {subscriptionState == "loading" && (
@@ -143,18 +156,12 @@ const SubscriptionSheet = () => {
   }
 
   return (
-    <div className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6">
+    <div className="w-full flex flex-col max-w-4xl mx-auto p-6">
       <div className="flex flex-col space-y-2 text-center sm:text-left">
         <TypographyH1 className="flex flex-row items-center text-orange-400">
           <FlameIcon size={64} className="mr-2 text-orange-400" />
-          Energy Depot
+          Energy Cache
         </TypographyH1>
-        <TypographyP>
-          Your player gets XXX Free Energy a month to use on quests.
-        </TypographyP>
-        <TypographyP>
-          Support the <b>open source development</b> of this game by filling up!
-        </TypographyP>
         {notification}
         {result}
       </div>
