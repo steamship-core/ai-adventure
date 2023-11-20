@@ -1,7 +1,7 @@
 import { createAgent } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
 import AdventureMilestoneEmail from "@/lib/emails/adventure-creation";
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 import { Resend } from "resend";
@@ -25,7 +25,7 @@ export default async function AdventurePage({
   params: { adventureId: string };
   searchParams: { [key: string]: string };
 }) {
-  const { userId } = auth();
+  const { userId, ...rest } = auth();
   if (!userId) throw new Error("no user");
   const user = await currentUser();
 
@@ -67,22 +67,25 @@ export default async function AdventurePage({
       } else {
         userName = email.split("@")[0];
       }
-      // if count exists in countMap, send email
       const emailSubject = countMap[count as keyof typeof countMap];
       if (emailSubject) {
-        await resend.emails.send({
-          from: "AI Adventure <updates@ai-adventure.steamship.com>",
-          to: email,
-          subject: emailSubject,
-          react: (
-            <AdventureMilestoneEmail
-              username={userName}
-              title={countMap[1]}
-              adventureId={adventure.id}
-              adventureName={adventure.name}
-            />
-          ),
-        });
+        const owner = await clerkClient.users.getUser(adventure.creatorId);
+        const ownerEmail = owner.emailAddresses[0].emailAddress;
+        if (ownerEmail) {
+          await resend.emails.send({
+            from: "AI Adventure <updates@ai-adventure.steamship.com>",
+            to: ownerEmail,
+            subject: emailSubject,
+            react: (
+              <AdventureMilestoneEmail
+                username={userName}
+                title={countMap[1]}
+                adventureId={adventure.id}
+                adventureName={adventure.name}
+              />
+            ),
+          });
+        }
       }
     }
   }

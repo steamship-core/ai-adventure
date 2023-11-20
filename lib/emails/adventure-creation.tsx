@@ -20,13 +20,13 @@ interface AdventureMilestoneEmailProps {
   adventureName?: string;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+const baseUrl = process.env.NEXT_PUBLIC_WEB_BASE_URL
+  ? process.env.NEXT_PUBLIC_WEB_BASE_URL
   : "";
 
 export const AdventureMilestoneEmail = ({
   title = `Your Adventure is being played!`,
-  username = "zenorocha",
+  username = "Adventurer",
   adventureId = "123",
   adventureName = "My Adventure",
 }: AdventureMilestoneEmailProps) => {
