@@ -3,7 +3,7 @@
 import {
   StoryOptions,
   storyOptionsToDisplay,
-} from "@/lib/editor/editor-options";
+} from "@/lib/editor/DEPRECATED-editor-options";
 import { Adventure } from "@prisma/client";
 import { AlertCircleIcon } from "lucide-react";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -15,6 +15,7 @@ const AdventureDetails = ({ adventure }: { adventure: Adventure }) => {
     <div className="flex flex-col gap-6">
       <TypographyH2 className="border-none">Adventure Details</TypographyH2>
       {storyOptionsToDisplay.map((name) => {
+        ``;
         const option = StoryOptions.find((option) => option.name === name);
         if (!option) return null;
         const value = (adventure.agentConfig as unknown as any)?.[name];

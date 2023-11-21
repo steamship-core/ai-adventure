@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/editor-options";
+import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
 import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
