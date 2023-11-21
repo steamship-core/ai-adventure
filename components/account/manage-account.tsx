@@ -9,6 +9,7 @@ import { TypographyH2 } from "../ui/typography/TypographyH2";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyH4 } from "../ui/typography/TypographyH4";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { TypographyP } from "../ui/typography/TypographyP";
 
 const ManageAccount = () => {
   const clerk = useClerk();
@@ -37,7 +38,25 @@ const ManageAccount = () => {
           </Button>
         </div>
       </div>
-      <div className="p-6 rounded-md border-muted border flex flex-col gap-8">
+      <div className="p-6 rounded-md border-muted border flex flex-col gap-8 relative">
+        <div className="absolute top-0 left-0 w-full h-full bg-background/50 z-10 backdrop-blur-md">
+          <div className="w-full h-full flex items-center justify-center flex-col">
+            <TypographyH3>Get ready for an epic upgrade! 🏆 </TypographyH3>
+            <TypographyP className="max-w-md text-center">
+              User experience enhancements, permanent power-ups, and exclusive
+              badges are on the horizon. Stay ahead of the game - join our{" "}
+              <a
+                href="https://steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                {" "}
+                Discord
+              </a>{" "}
+              now for the latest updates and sneak peeks!
+            </TypographyP>
+          </div>
+        </div>
         <div className="gap-2 flex flex-col">
           <TypographyMuted>Rank</TypographyMuted>
           <TypographyH3>Wanderer</TypographyH3>
