@@ -16,7 +16,6 @@ export async function GET(
   }
 
   const adventure = await getAdventureForUser(userId, params.adventureId, true);
-
   if (!adventure) {
     log.error("No adventure");
     return NextResponse.json({ error: "Adventure not found" }, { status: 404 });
