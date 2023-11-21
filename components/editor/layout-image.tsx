@@ -20,6 +20,7 @@ const LayoutImage = () => {
         adventureImage === EditorLayoutImage.DEFAULT
       )
         return null;
+      if (!adventureImage) return null;
       const res = await fetch(adventureImage);
       const blob = await res.blob();
       return URL.createObjectURL(blob);
@@ -33,6 +34,7 @@ const LayoutImage = () => {
   )
     return <div className="h-44 aspect-video my-2 md:my-0"></div>;
 
+  console.log(data);
   return (
     <div className="h-44 aspect-video my-2 md:my-0">
       {isLoading ? (
