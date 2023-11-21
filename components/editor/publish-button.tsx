@@ -25,6 +25,7 @@ const PublishButton = ({
       buttonName: "Publish Adventure",
       location: "Editor",
       action: "publish-adventure",
+      adventureId: adventureId,
     });
 
     const resp = await fetch(`/api/adventure/${adventureId}`, {
