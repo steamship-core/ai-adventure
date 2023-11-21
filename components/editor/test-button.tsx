@@ -1,4 +1,5 @@
 "use client";
+import { amplitude } from "@/lib/amplitude";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { RocketIcon } from "lucide-react";
 import Link from "next/link";
@@ -9,9 +10,19 @@ const TestButton = ({ className = "" }: { className?: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { adventureId } = useEditorRouting();
 
+  const onClick = async () => {
+    amplitude.track("Button Click", {
+      buttonName: "Test Adventure",
+      location: "Editor",
+      action: "test-adventure",
+      adventureId: adventureId,
+    });
+  };
+
   return (
     <Button
       isLoading={isLoading}
+      onClick={onClick}
       disabled={isLoading}
       className={`${className}`}
     >

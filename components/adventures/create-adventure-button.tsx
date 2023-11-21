@@ -1,4 +1,5 @@
 "use client";
+import { amplitude } from "@/lib/amplitude";
 import { Adventure } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,12 @@ export const CreateAdventureButton = () => {
     });
     if (res.ok && res.status === 201) {
       const { adventure } = (await res.json()) as { adventure: Adventure };
+      amplitude.track("Button Click", {
+        buttonName: "Create Adventure",
+        location: "Editor",
+        action: "create-adventure",
+        adventureId: adventure.id,
+      });
       router.push(`/adventures/editor/${adventure.id}`);
     } else {
       setIsLoading(false);
