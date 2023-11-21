@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { handle: string } }
+  { params }: { params: { adventureId: string } }
 ): Promise<NextResponse> {
   const { userId } = auth();
   if (!userId) {
@@ -14,7 +14,7 @@ export async function GET(
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const adventure = await getAdventureForUser(userId, params.handle);
+  const adventure = await getAdventureForUser(userId, params.adventureId);
   if (!adventure) {
     log.error("No adventure");
     return NextResponse.json({ error: "Adventure not found" }, { status: 404 });
