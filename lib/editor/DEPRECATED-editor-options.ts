@@ -867,7 +867,7 @@ export const ImageThemeOptions: Setting[] = [
   },
 ];
 
-export const SettingGroups: SettingGroup[] = [
+export const DEPRECATEDSettingGroups: SettingGroup[] = [
   {
     spacer: true,
     title: "General",
