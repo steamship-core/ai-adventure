@@ -1,8 +1,9 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { FlameIcon } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { FlameIcon, User2Icon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -44,11 +45,6 @@ const AdventureNavBar = () => {
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <div className="flex gap-2 items-center">
-          {/* <Button variant="ghost">
-            <Link href="/adventures/rank">
-              <TrophyIcon className="h-5 w-5" />
-            </Link>
-          </Button> */}
           <Button variant="ghost" asChild>
             <Link href="/account/plan">
               <FlameIcon className="h-5 w-5 text-orange-500" />
@@ -71,9 +67,25 @@ const AdventureNavBar = () => {
           {isLoaded ? (
             <>
               {user ? (
-                <div className="ml-4 min-w-[32px]">
-                  <UserButton />
-                </div>
+                <Button
+                  variant="ghost"
+                  className="flex items-center justify-center"
+                  asChild
+                >
+                  <Link href="/account">
+                    {user.imageUrl ? (
+                      <Image
+                        src={user.imageUrl}
+                        width={64}
+                        height={64}
+                        alt="Profile"
+                        className="rounded-full h-8 w-8"
+                      />
+                    ) : (
+                      <User2Icon className="h-5 w-5" />
+                    )}
+                  </Link>
+                </Button>
               ) : (
                 <Button variant="ghost">
                   <Link href="/sign-in">Login</Link>
