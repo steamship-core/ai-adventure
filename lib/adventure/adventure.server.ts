@@ -2,7 +2,7 @@ import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import { createAgent } from "../agent/agent.server";
 import prisma from "../db";
-import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-options";
+import { getTopLevelUpdatesFromAdventureConfig } from "../editor/DEPRECATED-editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
 import { sendSlackMessage } from "../slack/slack.server";
 import { pushServerSettingsToAgent } from "./adventure-agent.server";
@@ -31,7 +31,7 @@ export const getAdventure = async (
       }
     : {};
 
-  return await prisma.adventure.findFirst({
+  const ret = await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       // Only if it isn't null
@@ -39,6 +39,11 @@ export const getAdventure = async (
     },
     ...includeBit,
   } as any);
+
+  if (ret?.id != adventureId) {
+    throw new Error(`Asked for adventureId ${adventureId} but got ${ret?.id}`);
+  }
+  return ret;
 };
 
 export const getAdventureForUser = async (
@@ -54,13 +59,18 @@ export const getAdventureForUser = async (
       }
     : {};
 
-  return await prisma.adventure.findFirst({
+  const ret = await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       creatorId: userId,
     },
     ...includeBit,
   } as any);
+
+  if (ret?.id != adventureId) {
+    throw new Error(`Asked for adventureId ${adventureId} but got ${ret?.id}`);
+  }
+  return ret;
 };
 
 export const getAdventuresForUser = async (userId: string) => {
@@ -88,6 +98,13 @@ export const createAdventure = async ({
   description: string;
   agentVersion: string;
 }) => {
+  console.log(
+    `createAdventure -  User ${creatorId}; Agent Version ${agentVersion}`
+  );
+  log.info(
+    `createAdventure -  User ${creatorId}; Agent Version ${agentVersion}`
+  );
+
   try {
     let adventure = await prisma.adventure.create({
       data: {
@@ -112,7 +129,23 @@ export const createAdventure = async ({
 export const createDevAgentForAdventureAndReturnAdventure = async (
   adventure: Adventure
 ) => {
+  console.log(
+    `createDevAgentForAdventureAndReturnAdventure -  Adventure ${adventure.id}; Agent Version ${adventure.agentVersion}`
+  );
+  log.info(
+    `createDevAgentForAdventureAndReturnAdventure -  Adventure ${adventure.id}; Agent Version ${adventure.agentVersion}`
+  );
+
   const devAgent = await createAgent(adventure.creatorId, adventure.id, true);
+
+  if (!devAgent) {
+    throw Error(`Failed to create dev agent for adventure ${adventure.id}`);
+  }
+
+  console.log(
+    `Setting Adventure ${adventure.id} to use dev agent ${devAgent.id}`
+  );
+
   return await prisma.adventure.update({
     where: { id: adventure.id },
     data: {
@@ -126,6 +159,9 @@ export const updateAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
+  console.log(`updateAdventure -  UserId ${userId} AdventureId ${adventureId}`);
+  log.info(`updateAdventure -  UserId ${userId} AdventureId ${adventureId}`);
+
   console.log(`User ${userId} attempting to update adventure ${adventureId}`);
   const adventure = await getAdventure(adventureId, true);
 

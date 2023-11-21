@@ -34,9 +34,18 @@ export const POST = withAxiom(async (request: Request) => {
 
     let path: string | null = null;
 
+    const devConfig = (adventure.agentDevConfig as any) || {};
+
     data.unsaved_server_settings = {
-      ...((adventure.agentDevConfig as any) || {}),
+      ...devConfig,
       ...(data.unsaved_server_settings || {}),
+      short_description:
+        data.unsaved_server_settings.adventure_short_description ||
+        devConfig.shortDescription,
+      description:
+        data.unsaved_server_settings.adventure_description ||
+        devConfig.description,
+      name: data.unsaved_server_settings.adventure_name || devConfig.name,
     };
 
     if (operation === "preview") {
@@ -49,7 +58,7 @@ export const POST = withAxiom(async (request: Request) => {
       throw new Error(`Unknown operation: ${operation}.`);
     }
 
-    console.log("Sending data", data);
+    console.log(path, data);
 
     const response = await steamship.agent.post({
       url: devAgent.agentUrl,

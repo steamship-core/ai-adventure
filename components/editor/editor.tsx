@@ -14,7 +14,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { SettingGroup } from "@/lib/editor/editor-options";
+import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";

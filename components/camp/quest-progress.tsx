@@ -51,6 +51,7 @@ const QuestProgressElement = ({
   setIsVisible,
   index,
   totalQuests,
+  adventure,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string; description?: string };
@@ -62,6 +63,7 @@ const QuestProgressElement = ({
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
+  adventure?: Adventure | null;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
@@ -90,11 +92,6 @@ const QuestProgressElement = ({
 
     setIsVisible(true);
     setIsLoading(true);
-    amplitude.track("Button Click", {
-      buttonName: "Go on an Adventure",
-      location: "Camp",
-      action: "start-quest",
-    });
 
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
@@ -126,6 +123,7 @@ const QuestProgressElement = ({
     const json = (await resp.json()) as {
       quest: Quest & { status: { state: string; statusMessage: string } };
     };
+
     if (json?.quest?.status?.state === "failed") {
       setIsLoading(false);
       setIsVisible(false);
@@ -142,7 +140,14 @@ const QuestProgressElement = ({
       log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
       return;
     }
-
+    amplitude.track("Button Click", {
+      buttonName: "Go on an Adventure",
+      location: "Camp",
+      action: "start-quest",
+      adventureId: adventure?.id,
+      workspaceHandle: params.handle,
+      questId: questId,
+    });
     log.debug(`Activating new quest: ${questId}`);
     router.push(`/play/${params.handle}/quest/${questId}`);
     setIsLoading(false);
@@ -257,7 +262,7 @@ export const QuestProgress = ({
   adventure,
 }: {
   adventureGoal?: string;
-  adventure?: Pick<Adventure, "name" | "agentConfig"> | null;
+  adventure?: Adventure | null;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
@@ -350,6 +355,7 @@ export const QuestProgress = ({
               isClamped={isArcClamped}
               setLowEnergyModalOpen={setLowEnergyModalOpen}
               setIsVisible={setIsVisible}
+              adventure={adventure}
             />
           );
         })}

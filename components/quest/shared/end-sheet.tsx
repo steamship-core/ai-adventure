@@ -14,6 +14,7 @@ import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
+import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { Quest } from "@/lib/game/schema/quest";
@@ -133,10 +134,29 @@ const EndSheet = ({
   );
   twitterLink.searchParams.set("url", sharePage.toString());
 
+  const onCompleteButtonClick = async () => {
+    // This is a dubious way to determine if this is the first
+    // time this quest has been completed, but I could not find
+    // anything else appropriate in the state to key from
+    if (completeButtonText === "Complete Quest") {
+      amplitude.track("Button Click", {
+        buttonName: "Complete Quest",
+        location: "Quest",
+        action: "complete-quest",
+        questId: params.questId,
+        workspaceHandle: params.handle,
+      });
+    }
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant={isEnd ? "default" : "ghost"} className="w-full">
+        <Button
+          variant={isEnd ? "default" : "ghost"}
+          className="w-full"
+          onClick={onCompleteButtonClick}
+        >
           {completeButtonText}
         </Button>
       </SheetTrigger>

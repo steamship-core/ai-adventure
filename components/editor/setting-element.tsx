@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/editor-options";
+import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
 import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
@@ -57,6 +57,7 @@ export default function SettingElement({
   previewField,
   inlined = false,
   existingDynamicThemes = [],
+  keypath = [],
   isUserApproved,
   isApprovalRequested,
   adventureId = "",
@@ -65,13 +66,16 @@ export default function SettingElement({
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
+  keypath: (string | number)[];
   suggestField: (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setSuggesting: (val: boolean) => void,
     setValue: (val: string) => void
   ) => void;
   previewField: (
     fieldName: string,
+    fieldKeyPath: (string | number)[],
     setImagePreviewLoading: (val: boolean) => void,
     setImagePreview: (val: string | undefined) => void,
     setImagePreviewBlock: (val: Block | undefined) => void
@@ -155,6 +159,15 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseInt(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -163,6 +176,15 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseFloat(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -183,6 +205,7 @@ export default function SettingElement({
     }
     previewField(
       setting.previewOutputType,
+      keypath,
       setImagePreviewLoading,
       setImagePreview,
       setImagePreviewBlock
@@ -193,10 +216,15 @@ export default function SettingElement({
     if (!setting.suggestOutputType) {
       return;
     }
-    suggestField(setting.suggestOutputType, setSuggesting, (val: string) => {
-      setValue(val);
-      updateFn(setting.name, val);
-    });
+    suggestField(
+      setting.suggestOutputType,
+      keypath,
+      setSuggesting,
+      (val: string) => {
+        setValue(val);
+        updateFn(setting.name, val);
+      }
+    );
   };
 
   const addToList = (e: any) => {
@@ -274,6 +302,7 @@ export default function SettingElement({
         onChange={onTextboxIntChange}
         isLoadingMagic={suggesting}
         disabled={suggesting}
+        min={setting.min || 0}
       />
     );
   } else if (setting.type == "float") {
@@ -284,6 +313,7 @@ export default function SettingElement({
         onChange={onTextboxFloatChange}
         isLoadingMagic={suggesting}
         disabled={suggesting}
+        min={setting.min || 0}
       />
     );
   } else if (setting.type == "image") {
@@ -362,7 +392,7 @@ export default function SettingElement({
     innerField = (
       <div className="space-y-2">
         {setting.options?.map((option) => (
-          <div key={option.value} className="flex flex-row items-start">
+          <div key={option.value} className="flex flex-row">
             <Input
               type="radio"
               checked={value === option.value ? true : undefined}
@@ -372,8 +402,8 @@ export default function SettingElement({
               onChange={onTextboxChange}
               disabled={isDisabled}
             />
-            <label className="select-none" htmlFor={option.value}>
-              <div className="flex flex-row">
+            <label className="select-none flex-grow" htmlFor={option.value}>
+              <div className="flex flex-row items-start">
                 {option?.audioSample && (
                   <AudioPreview voiceId={option.audioSample} />
                 )}
@@ -462,13 +492,14 @@ export default function SettingElement({
                 </button>
                 <div className="border-l-4 pl-4 py-4">
                   {setting.listof == "object" ? (
-                    (setting.listSchema || []).map((subField) => {
+                    (setting.listSchema || []).map((subField, idx) => {
                       return (
                         <SettingElement
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
                           suggestField={suggestField}
+                          keypath={[...keypath, i, subField.name]}
                           previewField={previewField}
                           existingDynamicThemes={existingDynamicThemes}
                           adventureId={adventureId as string}
@@ -496,6 +527,7 @@ export default function SettingElement({
                         type: setting.listof as any,
                       }}
                       suggestField={suggestField}
+                      keypath={[...keypath, i]}
                       previewField={previewField}
                       inlined={true}
                       updateFn={(_: any, value: any) => {

@@ -63,7 +63,7 @@ export default async function AdventurePage({
 }: {
   params: { adventureId: string };
 }) {
-  const { userId } = auth();
+  const { userId, ...rest } = auth();
 
   const adventure = (await getAdventure(params.adventureId)) as any;
 

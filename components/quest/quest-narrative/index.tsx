@@ -9,6 +9,7 @@ import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { inputClassNames } from "@/components/ui/input";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
+import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
@@ -328,6 +329,13 @@ export default function QuestNarrative({
               <Button
                 disabled={!isContinuationEnabled}
                 onClick={() => {
+                  amplitude.track("Button Click", {
+                    buttonName: "Continue",
+                    location: "Quest",
+                    action: "continue-quest",
+                    questId: id,
+                    workspaceHandle: params.handle,
+                  });
                   if (initialBlock?.id) {
                     const containsInitialBlock = chatHistory.includes(
                       initialBlock?.id
