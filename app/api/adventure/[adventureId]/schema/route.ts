@@ -52,7 +52,6 @@ export async function GET(
     );
   }
   const devAgent = (adventure as any).devAgent;
-  console.log("Got dev agent.");
 
   // Get the schema from it.
   const responseJson = await getSchema(devAgent.agentUrl);

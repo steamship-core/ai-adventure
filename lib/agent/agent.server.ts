@@ -153,7 +153,6 @@ export const createAgent = async (
       `🎲 User ${userId} just started a new game: ${adventure.name}!`
     );
 
-    console.log(`Returning agent: ${agent.agentUrl}`);
     return agent;
   } catch (e) {
     log.error(`${e}`);
@@ -173,7 +172,6 @@ export const getSchema = async (agentBase: string) => {
       path: "/server_settings_schema",
       arguments: {},
     });
-    console.log("HI");
     if (!schemaResponse.ok) {
       const errorStr = `Failed to get schema: ${
         schemaResponse.status
@@ -183,7 +181,6 @@ export const getSchema = async (agentBase: string) => {
 
     // TODO: The server returns a list of SettingGroup objects.
     const schemaResponseJson = await schemaResponse.json();
-    console.log("Got ", schemaResponseJson);
     return { settingGroups: schemaResponseJson };
   } catch (e) {
     log.error(`${e}`);

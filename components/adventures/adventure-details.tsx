@@ -15,7 +15,6 @@ const AdventureDetails = ({ adventure }: { adventure: Adventure }) => {
     <div className="flex flex-col gap-6">
       <TypographyH2 className="border-none">Adventure Details</TypographyH2>
       {storyOptionsToDisplay.map((name) => {
-        ``;
         const option = StoryOptions.find((option) => option.name === name);
         if (!option) return null;
         const value = (adventure.agentConfig as unknown as any)?.[name];
