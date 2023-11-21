@@ -17,8 +17,6 @@ import {
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
 
 const Editor = ({
@@ -43,7 +41,6 @@ const Editor = ({
 
   const [isLoading, setIsLoading] = useState(true);
   const [settingGroups, setSettingGroups] = useState<SettingGroup[]>([]);
-  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
 
   useEffect(() => {
     fetch(`/api/adventure/${adventureId}/schema`).then(
@@ -69,8 +66,6 @@ const Editor = ({
   const displayUnsavedChangesModal = (destination: string) => {
     setUnsavedDepartureUrl(destination);
   };
-
-  setEditorLayoutImage(devConfig.adventure_image);
 
   return (
     <>
