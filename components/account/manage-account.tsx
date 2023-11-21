@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -14,6 +15,7 @@ import { TypographyP } from "../ui/typography/TypographyP";
 const ManageAccount = () => {
   const clerk = useClerk();
   const { user } = useUser();
+  const router = useRouter();
 
   if (!user) {
     return null;
@@ -38,7 +40,7 @@ const ManageAccount = () => {
           </Button>
         </div>
       </div>
-      <div className="p-6 rounded-md border-muted border flex flex-col gap-8 relative">
+      <div className="p-6 rounded-md border-muted border flex flex-col gap-8 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-background/50 z-10 backdrop-blur-md">
           <div className="w-full h-full flex items-center justify-center flex-col">
             <TypographyH3>Get ready for an epic upgrade! 🏆 </TypographyH3>
@@ -96,7 +98,13 @@ const ManageAccount = () => {
         </div>
       </div>
       <div>
-        <Button variant="outline" onClick={() => clerk.signOut()}>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            await clerk.signOut();
+            router.push("/");
+          }}
+        >
           Log out
         </Button>
       </div>
