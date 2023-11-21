@@ -10,7 +10,7 @@
     "dev:db-push": "dotenv -e .env.local prisma db push",
     "prod:db-push": "vercel env pull --environment=production && dotenv -e .env.local prisma db push && vercel env pull ",
     "postinstall": "prisma generate",
-    "example": "dotenv -e .env.local tsx ./lib/scripts/example.ts"
+    "costs": "dotenv -e .env.local tsx ./lib/scripts/costs.ts"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.3.5",
