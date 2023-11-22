@@ -38,24 +38,23 @@ export const NarrativeBlock = ({
 }) => {
   const [chatHistory] = useRecoilState(recoilBlockHistory);
 
-  const sortedBlocks = useMemo(
-    () =>
-      blocks
-        .toSorted((a, b) => {
-          if (typeof a.index == "undefined") {
-            return -1;
-          }
-          if (typeof b.index == "undefined") {
-            return 1;
-          }
-          if (a.index == b.index) {
-            return 0;
-          }
-          return a.index > b.index ? -1 : 1;
-        })
-        .toReversed(),
-    [blocks]
-  );
+  const sortedBlocks = useMemo(() => {
+    if (!blocks.toSorted) return blocks;
+    return blocks
+      .toSorted((a, b) => {
+        if (typeof a.index == "undefined") {
+          return -1;
+        }
+        if (typeof b.index == "undefined") {
+          return 1;
+        }
+        if (a.index == b.index) {
+          return 0;
+        }
+        return a.index > b.index ? -1 : 1;
+      })
+      .toReversed();
+  }, [blocks]);
 
   // Begin Debug Information State Management
   try {
