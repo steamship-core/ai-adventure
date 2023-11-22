@@ -28,7 +28,10 @@ export async function GET(
     `GET /api/adventure/${adventure.id}/schema which uses Steamship package ${adventure.agentVersion}`
   );
 
-  if (adventure.agentVersion?.startsWith("1.")) {
+  const agentVersionParts = adventure.agentVersion.split("@");
+  const agentVersion = agentVersionParts.length > 1 ? agentVersionParts[1] : "";
+
+  if (agentVersion?.startsWith("1.")) {
     // These are the versions that use the old schema, hard-coded in the agent.
     return NextResponse.json({
       settingGroups: DEPRECATEDSettingGroups,
