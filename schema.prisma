@@ -22,15 +22,18 @@ model Adventure {
   image            String?   @default("")
   agentConfig      Json?
   agentDevConfig   Json?
+  devAgentId       Int?      @unique
+  devAgent         Agents?   @relation("devAgentRelation", fields: [devAgentId], references: [id])
 
   // Whether to feature
   featured Boolean @default(false)
 
   // Whether it's visible by others
-  public Boolean @default(false)
+  public          Boolean @default(false)
+  publicRequested Boolean @default(false)
 
   tags              String[]            @default([])
-  Agents            Agents[]
+  Agents            Agents[]            @relation("agents")
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
   Reactions         Reactions[]
@@ -48,15 +51,30 @@ model CharacterTemplate {
 }
 
 model Agents {
-  id            Int        @id @default(autoincrement())
-  ownerId       String
-  agentUrl      String
-  handle        String     @default("agent")
-  agentVersion  String?    @default("")
-  createdAt     DateTime   @default(now())
-  Adventure     Adventure? @relation(fields: [adventureId], references: [id])
-  adventureId   String?
-  isDevelopment Boolean?   @default(false)
+  id              Int        @id @default(autoincrement())
+  ownerId         String
+  agentUrl        String
+  handle          String     @default("agent")
+  agentVersion    String?    @default("")
+  createdAt       DateTime   @default(now())
+  Adventure       Adventure? @relation("agents", fields: [adventureId], references: [id])
+  adventureId     String?
+  isDevelopment   Boolean?   @default(false)
+  DevAdventure    Adventure? @relation("devAgentRelation")
+  workspaceId     String?
+  workspaceHandle String?
+}
+
+model UserExperience {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  type       String
+  expId      String
+  experience Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, type, expId])
 }
 
 model UserEnergy {

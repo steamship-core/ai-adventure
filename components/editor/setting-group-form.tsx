@@ -1,15 +1,18 @@
 "use client";
 
-import { SettingGroup } from "@/lib/editor/editor-options";
+import { amplitude } from "@/lib/amplitude";
+import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import { Block } from "@/lib/streaming-client/src";
+import { cn } from "@/lib/utils";
 import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import { recoilEditorLayoutImage } from "../providers/recoil";
+import { recoilErrorModalState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -39,35 +42,164 @@ export default function SettingGroupForm({
     });
     return _existingDynamicThemes;
   };
-
   const { groupName, adventureId } = useEditorRouting();
-  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
+  const [_, setError] = useRecoilState(recoilErrorModalState);
 
   const [existingThemes, setExistingThemes] = useState<
     { value: string; label: string }[]
   >(existingThemesFromConfig(existing));
+
+  const previewField = async (
+    fieldName: string,
+    fieldKeyPath: (string | number)[],
+    setImagePreviewLoading: (val: boolean) => void,
+    setImagePreview: (val: string | undefined) => void,
+    setImagePreviewBlock: (val: Block | undefined) => void
+  ) => {
+    setImagePreviewLoading(true);
+    setImagePreview(undefined);
+
+    const response = await fetch(`/api/adventure/generate`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "preview",
+        id: adventureId,
+        data: {
+          field_name: fieldName,
+          field_key_path: fieldKeyPath,
+          unsaved_server_settings: dataToUpdate,
+        },
+      }),
+    });
+    setImagePreviewLoading(false);
+
+    if (!response.ok) {
+      const e = {
+        title: "Failed to generate preview.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
+    } else {
+      let block = (await response.json()) as Block;
+      setImagePreviewBlock(block);
+    }
+  };
+
+  // TODO: Send up changes in progress
+  const suggestField = async (
+    fieldName: string,
+    fieldKeyPath: (string | number)[],
+    setSuggesting: (val: boolean) => void,
+    setValue: (val: string) => void
+  ) => {
+    setSuggesting(true);
+    const response = await fetch(`/api/adventure/generate`, {
+      method: "POST",
+      body: JSON.stringify({
+        operation: "suggest",
+        id: adventureId,
+        data: {
+          field_name: fieldName,
+          field_key_path: fieldKeyPath,
+          unsaved_server_settings: dataToUpdate,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const e = {
+        title: "Failed suggestion request.",
+        message: "The server responded with an error response",
+        details: `Status: ${response.status}, StatusText: ${
+          response.statusText
+        }, Body: ${await response.text()}`,
+      };
+      setError(e);
+      console.error(e);
+    } else {
+      let block = (await response.json()) as Block;
+      if (block.text) {
+        let cleanText = block.text.trim();
+        if (cleanText.startsWith('"')) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith('"')) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+        if (cleanText.startsWith("'")) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith("'")) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+
+        setValue(cleanText);
+        setSuggesting(false);
+      } else if (block.id) {
+        const blockUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
+        if (block.mimeType?.startsWith("image")) {
+          setValue(blockUrl);
+        } else {
+          const blockContent = await fetch(blockUrl);
+          const streamedText = await blockContent.text();
+          setValue(streamedText);
+        }
+        setSuggesting(false);
+      }
+    }
+  };
 
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
       const dataToSave = data;
       if (data.adventure_image) {
-        const res = await fetch(
-          `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
-          {
-            method: "POST",
-            body: data.adventure_image,
+        if (!(typeof data.adventure_image == "string")) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
+            {
+              method: "POST",
+              body: data.adventure_image,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            dataToSave.adventure_image = blobJson.url;
+          } else {
+            const e = {
+              title: "Upload failures",
+              message: "Unable to upload your image.",
+              details: `Status: ${res.status}, StatusText: ${
+                res.statusText
+              }, Body: ${await res.text()}`,
+            };
+            setError(e);
+            console.error(e);
+            return;
           }
-        );
-        if (res.ok) {
-          const blobJson = (await res.json()) as PutBlobResult;
-          setEditorLayoutImage(blobJson.url);
-          dataToSave.adventure_image = blobJson.url;
-        } else {
-          console.log("Failed to upload image");
-          console.log(await res.text());
-          return;
+        }
+      }
+
+      if (data.game_program) {
+        if (data.game_program instanceof File) {
+          const res = await fetch(
+            `/api/adventure/${adventureId}/file?filename=${data.game_program.name}`,
+            {
+              method: "POST",
+              body: data.game_program,
+            }
+          );
+          if (res.ok) {
+            const blobJson = (await res.json()) as PutBlobResult;
+            data.game_program = blobJson.url;
+          } else {
+            data.game_program = null;
+          }
         }
       }
 
@@ -89,13 +221,12 @@ export default function SettingGroupForm({
           }
         }
       }
-      console.log("dataToSave", dataToSave);
 
       if (typeof dataToSave.themes != "undefined") {
         setExistingThemes(existingThemesFromConfig(dataToSave));
       }
 
-      let res = await fetch("/api/editor", {
+      let res = await fetch(`/api/adventure/${adventureId}`, {
         method: "POST",
         body: JSON.stringify({
           operation: "update",
@@ -104,19 +235,25 @@ export default function SettingGroupForm({
         }),
       });
 
-      window?.scrollTo(0, 0);
+      if (!res.ok) {
+        const e = {
+          title: "Failed to save data.",
+          message: "The server responded with an error response",
+          details: `Status: ${res.status}, StatusText: ${
+            res.statusText
+          }, Body: ${await res.text()}`,
+        };
+        setError(e);
+        console.error(e);
+      } else {
+        window?.scrollTo(0, 0);
+        // Hard-reload to make sure that the proper "publish" etc bits are set.
+        window?.location?.reload();
+      }
 
-      // Hard-reload to make sure that the proper "publish" etc bits are set.
-      window?.location?.reload();
       return res;
     },
   });
-
-  useEffect(() => {
-    if (existing?.adventure_image) {
-      setEditorLayoutImage(existing.adventure_image);
-    }
-  }, []);
 
   const sg = (settingGroups || []).filter(
     (group) => groupName === group.href
@@ -139,13 +276,18 @@ export default function SettingGroupForm({
     let data = {};
     try {
       data = parse(importYaml);
-    } catch (e) {
-      console.log(e);
-      alert(e);
+    } catch (ex) {
+      const e = {
+        title: "Failed to import.",
+        message: "Unable to parse the YAML.",
+        details: `Exception: ${ex}`,
+      };
+      setError(e);
+      console.error(e);
       return;
     }
 
-    fetch("/api/editor", {
+    fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
         operation: "import",
@@ -153,7 +295,20 @@ export default function SettingGroupForm({
         data,
       }),
     }).then(
-      (res) => {
+      async (res) => {
+        if (!res.ok) {
+          const e = {
+            title: "Failed to save data.",
+            message: "The server responded with an error response",
+            details: `Status: ${res.status}, StatusText: ${
+              res.statusText
+            }, Body: ${await res.text()}`,
+          };
+          setError(e);
+          console.error(e);
+          return;
+        }
+
         const { dismiss } = toast({
           title: "Imported",
         });
@@ -163,12 +318,24 @@ export default function SettingGroupForm({
         location.reload();
       },
       (error) => {
-        console.log(error);
+        const e = {
+          title: "Failed to import.",
+          message: "The server responded with an error response",
+          details: `Exception: ${error}`,
+        };
+        setError(e);
+        console.error(e);
       }
     );
   };
 
   const onSave = (e: any) => {
+    amplitude.track("Button Click", {
+      buttonName: "Save Adventure",
+      location: "Editor",
+      action: "save-adventure",
+      adventureId: adventureId,
+    });
     mutate(dataToUpdate);
   };
 
@@ -244,7 +411,16 @@ export default function SettingGroupForm({
               adventureId={adventureId as string}
               valueAtLoad={existing ? existing[setting.name] : null}
               existingDynamicThemes={existingThemes}
+              keypath={[setting.name]}
               isUserApproved={isUserApproved}
+              isApprovalRequested={
+                setting.approvalRequestedField
+                  ? existing[setting.approvalRequestedField] === true
+                  : false
+              }
+              suggestField={suggestField}
+              previewField={previewField}
+              latestAgentVersion={existing.gameEngineVersionAvailable}
             />
           ))}
           {submittedAt && isSuccess ? (
@@ -253,11 +429,33 @@ export default function SettingGroupForm({
               Adventure Updated
             </div>
           ) : null}
-          {dataToUpdateDirty && (
-            <Button value="Save" onClick={onSave}>
-              {isPending ? "Saving..." : "Save"}
-            </Button>
-          )}
+          <div
+            className={cn(
+              "fixed bottom-0 left-0 w-full transition-all",
+              dataToUpdateDirty ? "translate-y-0" : "translate-y-full"
+            )}
+          >
+            <div className="w-full flex items-center justify-end py-2 px-4 gap-4 bg-black">
+              <Button
+                value="Save"
+                onClick={() => {
+                  window.location.reload();
+                }}
+                disabled={!dataToUpdateDirty}
+                variant="outline"
+              >
+                Undo All
+              </Button>
+              <Button
+                value="Save"
+                onClick={onSave}
+                disabled={!dataToUpdateDirty}
+                className="bg-indigo-500 hover:bg-indigo-600 text-white"
+              >
+                {isPending ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 

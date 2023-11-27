@@ -1,13 +1,14 @@
 "use client";
 
-import { ActivityIcon } from "lucide-react";
+import { CheckCircle2Icon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { TypographyH1 } from "./ui/typography/TypographyH1";
 import { TypographyH3 } from "./ui/typography/TypographyH3";
 import { TypographyLead } from "./ui/typography/TypographyLead";
-import { TypographyP } from "./ui/typography/TypographyP";
-
+import { TypographyMuted } from "./ui/typography/TypographyMuted";
 const ProductDisplay = () => {
   const [subscriptionState, setSubscriptionState] = useState<
     "loading" | "error" | "true" | "false"
@@ -40,46 +41,127 @@ const ProductDisplay = () => {
 
   return (
     <>
-      <section className="pt-4">
-        <TypographyH3>Subscribe and Save</TypographyH3>
-        <TypographyLead>$5.00 / month for 150 Energy / month</TypographyLead>
-        {subscriptionState == "loading" && (
-          <div>Loading subscription details...</div>
-        )}
-        {subscriptionState == "error" && (
-          <div>
-            There was an error loading your subscription details. Please contact
-            support@steamship.com.
-          </div>
-        )}
-        {subscriptionState == "true" && (
-          <form action="/api/stripe/visit-billing-portal" method="POST">
-            <Button id="checkout-button" type="submit" className="mt-2">
-              Manage Subscription
-            </Button>
-          </form>
-        )}
-        {subscriptionState == "false" && (
-          <form action="/api/stripe/visit-checkout-portal" method="POST">
-            <Button id="checkout-button" type="submit" className="mt-2">
-              Subscribe
-            </Button>
-          </form>
-        )}
-      </section>
-      <section className="pt-4">
-        <TypographyH3>One-time Top Up</TypographyH3>
-        <TypographyLead>$5.00 for 100 Energy</TypographyLead>
-        <form
-          action="/api/stripe/visit-checkout-portal?topUp=true"
-          method="POST"
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 w-full max-w-5xl mx-auto">
+        <section
+          className={"bg-background rounded-md text-left flex flex-col gap-4"}
         >
-          {" "}
-          <Button id="checkout-button" type="submit" className="mt-2">
-            Top-Up
-          </Button>
-        </form>
-      </section>
+          <div className="relative rounded-t-md w-full aspect-video overflow-hidden">
+            <Image
+              src="/payments/big-chest.png"
+              className="object-cover"
+              fill
+              alt="Chest"
+            />
+          </div>
+          <div className="bg-background p-4 relative rounded-md flex flex-col gap-4">
+            {subscriptionState == "true" && (
+              <div className="absolute -top-3 right-4">
+                <Badge>Active Plan</Badge>
+              </div>
+            )}
+            <div className="flex items-center justify-between">
+              <TypographyH3>Adventurer&apos;s Cache</TypographyH3>
+              <TypographyMuted>
+                <b className="text-white">$5</b> /m
+              </TypographyMuted>
+            </div>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              Image Generation
+            </TypographyLead>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              Audio Generation
+            </TypographyLead>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              150 Monthly Energy
+            </TypographyLead>
+            {subscriptionState == "loading" && (
+              <div>Loading subscription details...</div>
+            )}
+            {subscriptionState == "error" && (
+              <div>
+                There was an error loading your subscription details. Please
+                contact support@steamship.com.
+              </div>
+            )}
+            {subscriptionState == "true" && (
+              <form
+                action="/api/stripe/visit-billing-portal"
+                className="w-full"
+                method="POST"
+              >
+                <Button
+                  id="checkout-button"
+                  type="submit"
+                  className="mt-2 w-full"
+                >
+                  Manage Subscription
+                </Button>
+              </form>
+            )}
+            {subscriptionState == "false" && (
+              <form
+                action="/api/stripe/visit-checkout-portal"
+                className="w-full"
+                method="POST"
+              >
+                <Button
+                  id="checkout-button"
+                  type="submit"
+                  className="mt-2 w-full bg-orange-600 hover:bg-orange-700 text-white"
+                >
+                  Subscribe
+                </Button>
+              </form>
+            )}
+          </div>
+        </section>
+        <section className="bg-background rounded-md text-left flex flex-col gap-4">
+          <div className="relative rounded-t-md w-full aspect-video overflow-hidden">
+            <Image
+              src="/payments/potion.png"
+              className="object-cover"
+              fill
+              alt="Potion"
+            />
+          </div>
+          <div className="bg-background rounded-md p-4 flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <TypographyH3>Wanderer&apos;s Boost</TypographyH3>
+              <TypographyMuted>
+                <b className="text-white">$5</b>
+              </TypographyMuted>
+            </div>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              Image Generation
+            </TypographyLead>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              Audio Generation
+            </TypographyLead>
+            <TypographyLead className="flex gap-2 items-center">
+              <CheckCircle2Icon />
+              100 One-Time Energy
+            </TypographyLead>
+            <form
+              action="/api/stripe/visit-checkout-portal?topUp=true"
+              method="POST"
+              className="w-full"
+            >
+              <Button
+                id="checkout-button"
+                type="submit"
+                className="mt-2 w-full"
+              >
+                Purchase Energy
+              </Button>
+            </form>
+          </div>
+        </section>
+      </div>
     </>
   );
 };
@@ -143,18 +225,15 @@ const SubscriptionSheet = () => {
   }
 
   return (
-    <div className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto p-6">
-      <div className="flex flex-col space-y-2 text-center sm:text-left">
-        <TypographyH1 className="flex flex-row items-center text-indigo-400">
-          <ActivityIcon size={64} className="mr-2 text-indigo-400" />
-          Energy Depot
-        </TypographyH1>
-        <TypographyP>
-          Your player gets XXX Free Energy a month to use on quests.
-        </TypographyP>
-        <TypographyP>
-          Support the <b>open source development</b> of this game by filling up!
-        </TypographyP>
+    <div className="w-full flex flex-col p-6 pt-20">
+      <div className="flex flex-col gap-28 text-center">
+        <div className="max-w-xl flex mx-auto flex-col gap-16">
+          <TypographyH1>Power Up Your Adventure</TypographyH1>
+          <TypographyMuted className="text-2xl">
+            Unlock extended playtime and enhanced experiences. Choose an option
+            that best fits your journey and keeps your adventure going.
+          </TypographyMuted>
+        </div>
         {notification}
         {result}
       </div>

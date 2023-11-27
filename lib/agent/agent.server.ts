@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { pushAdventureToAgent } from "../adventure/adventure-agent.server";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
+import { sendSlackMessage } from "../slack/slack.server";
 import { getSteamshipClient } from "../utils";
 
 export const getAgents = async (userId: string) => {
@@ -36,11 +37,7 @@ export const getAgent = async (userId: string, handle: string) => {
       handle,
     },
     include: {
-      Adventure: {
-        select: {
-          agentConfig: true,
-        },
-      },
+      Adventure: true,
     },
   });
 };
@@ -59,10 +56,18 @@ export const createAgent = async (
   adventureId: string,
   isDevelopment: boolean = false
 ) => {
+  console.log(
+    `createAgent -  UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}`
+  );
+  log.info(
+    `createAgent -  UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}`
+  );
+
   const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
     log.error(`Failed to get adventure: ${adventureId}`);
+    console.log(`Failed to get adventure: ${adventureId}`);
     throw new Error(`Failed to get adventure: ${adventureId}`);
   }
 
@@ -79,6 +84,9 @@ export const createAgent = async (
 
   if (!steamshipAgentAndVersion) {
     log.error(
+      "No Steamship agent version. Please set the STEAMSHIP_AGENT_VERSION environment variable."
+    );
+    console.log(
       "No Steamship agent version. Please set the STEAMSHIP_AGENT_VERSION environment variable."
     );
     throw Error(
@@ -109,7 +117,9 @@ export const createAgent = async (
       handle: workspaceHandle,
     });
 
-    log.info(`New agent package instance: ${packageInstance}`);
+    log.info(
+      `New agent package instance: ${packageInstance} in workspace ${packageInstance.workspaceId}`
+    );
 
     const agentUrl = packageInstance.invocationURL;
 
@@ -120,6 +130,8 @@ export const createAgent = async (
       adventureId: adventureId,
       isDevelopment: isDevelopment,
       agentVersion: adventure.agentVersion,
+      workspaceHandle: workspaceHandle,
+      workspaceId: packageInstance.workspaceId,
     };
 
     log.info(`New agent: ${JSON.stringify(agentData)}`);
@@ -127,6 +139,7 @@ export const createAgent = async (
 
     if (!agent) {
       log.error("Agent creation in Prisma failed.");
+      console.log("Agent creation in Prisma failed.");
       return null;
     }
     // Now we need to await the agent's startup loop. This is critical
@@ -136,7 +149,39 @@ export const createAgent = async (
     // Now we need to set the server settings.
     await pushAdventureToAgent(agent.agentUrl, adventure, isDevelopment);
 
+    await sendSlackMessage(
+      `🎲 User ${userId} just started a new game: ${adventure.name}!`
+    );
+
     return agent;
+  } catch (e) {
+    log.error(`${e}`);
+    console.log(`Error: ${e}`);
+    throw Error("Failed to create agent.");
+  }
+};
+
+export const getSchema = async (agentBase: string) => {
+  console.log(`getSchema -  AgentBase ${agentBase}`);
+  log.info(`getSchema -  AgentBase ${agentBase}`);
+
+  const steamship = getSteamshipClient();
+  try {
+    const schemaResponse = await steamship.agent.get({
+      url: agentBase,
+      path: "/server_settings_schema",
+      arguments: {},
+    });
+    if (!schemaResponse.ok) {
+      const errorStr = `Failed to get schema: ${
+        schemaResponse.status
+      }. ${await schemaResponse.text()}}`;
+      throw new Error(errorStr);
+    }
+
+    // TODO: The server returns a list of SettingGroup objects.
+    const schemaResponseJson = await schemaResponse.json();
+    return { settingGroups: schemaResponseJson };
   } catch (e) {
     log.error(`${e}`);
     console.error(e);

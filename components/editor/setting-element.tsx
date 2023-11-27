@@ -1,16 +1,15 @@
 "use client";
-
-import { Setting } from "@/lib/editor/editor-options";
-import { cn } from "@/lib/utils";
+import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import {
   AlertTriangleIcon,
   ChevronsUpDownIcon,
+  Loader2,
   MinusCircleIcon,
   PlusCircleIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import {
@@ -18,40 +17,84 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { Input, inputClassNames } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
+import { AutoResizeTextarea } from "../ui/textarea";
 import { TypographyH3 } from "../ui/typography/TypographyH3";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
 import dynamic from "next/dynamic";
+import { useRecoilState } from "recoil";
+import { recoilErrorModalState } from "../providers/recoil";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
+import { TypographyP } from "../ui/typography/TypographyP";
 import ImageInputElement from "./image-input-element";
+import { ImagePreview } from "./image-preview";
+import ProgramInputElement from "./program-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
   ssr: false,
 });
 
+function findPromptVariables(input: string): string[] {
+  const regex = /\{([^}]+)\}/g;
+  const matches = input.match(regex);
+
+  if (matches) {
+    return matches.map((match) => match.slice(1, -1));
+  }
+  return [];
+}
+
 export default function SettingElement({
   setting,
   updateFn,
   valueAtLoad,
+  suggestField,
+  previewField,
   inlined = false,
   existingDynamicThemes = [],
+  keypath = [],
   isUserApproved,
+  isApprovalRequested,
   adventureId = "",
+  latestAgentVersion = "",
 }: {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
+  keypath: (string | number)[];
+  suggestField: (
+    fieldName: string,
+    fieldKeyPath: (string | number)[],
+    setSuggesting: (val: boolean) => void,
+    setValue: (val: string) => void
+  ) => void;
+  previewField: (
+    fieldName: string,
+    fieldKeyPath: (string | number)[],
+    setImagePreviewLoading: (val: boolean) => void,
+    setImagePreview: (val: string | undefined) => void,
+    setImagePreviewBlock: (val: Block | undefined) => void
+  ) => void;
   inlined?: boolean;
   existingDynamicThemes?: { value: string; label: string }[];
   isUserApproved: boolean;
+  isApprovalRequested: boolean;
   adventureId?: string;
+  latestAgentVersion: string;
 }) {
   let [value, setValue] = useState(valueAtLoad || setting.default);
   let [imagePreview, setImagePreview] = useState<string | undefined>();
+  let [imagePreviewBlock, setImagePreviewBlock] = useState<Block>();
+  let [imagePreviewLoading, setImagePreviewLoading] = useState<boolean>(false);
+  let [suggesting, setSuggesting] = useState<boolean>(false);
+  const [_, setError] = useRecoilState(recoilErrorModalState);
+
+  let [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (value) {
@@ -76,6 +119,28 @@ export default function SettingElement({
     existingDynamicThemes,
   ]);
 
+  // Validations
+  useEffect(() => {
+    if (value && setting.variablesPermitted) {
+      if (typeof value == "string") {
+        const variablesUsed = findPromptVariables(value);
+        let errors = [];
+        for (let variableUsed of variablesUsed) {
+          if (typeof setting.variablesPermitted[variableUsed] == "undefined") {
+            errors.push(
+              `- The prompt variable {${variableUsed}} is not supported for this setting.`
+            );
+          }
+        }
+        setValidationErrors(errors);
+      } else {
+        setValidationErrors([]);
+      }
+    } else {
+      setValidationErrors([]);
+    }
+  }, [value, setting.variablesPermitted]);
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const newValue = e.target.files[0];
@@ -94,6 +159,15 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseInt(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
@@ -102,19 +176,55 @@ export default function SettingElement({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = parseFloat(e.target.value);
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
     setValue(newValue);
     updateFn(setting.name, newValue);
   };
 
-  const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked === true;
-    setValue(newValue);
-    updateFn(setting.name, newValue);
+  const onCheckboxChange = (checked: boolean) => {
+    setValue(checked);
+    updateFn(setting.name, checked);
   };
 
   const onSelectChange = (newValue: string) => {
     setValue(newValue);
     updateFn(setting.name, newValue);
+  };
+
+  const preview = async () => {
+    if (!setting.previewOutputType) {
+      return;
+    }
+    previewField(
+      setting.previewOutputType,
+      keypath,
+      setImagePreviewLoading,
+      setImagePreview,
+      setImagePreviewBlock
+    );
+  };
+
+  const suggest = async () => {
+    if (!setting.suggestOutputType) {
+      return;
+    }
+    suggestField(
+      setting.suggestOutputType,
+      keypath,
+      setSuggesting,
+      (val: string) => {
+        setValue(val);
+        updateFn(setting.name, val);
+      }
+    );
   };
 
   const addToList = (e: any) => {
@@ -171,10 +281,18 @@ export default function SettingElement({
   };
 
   let innerField = <></>;
-  const isDisabled = setting.requiresApproval && !isUserApproved;
+  const isDisabled = false; // setting.requiresApproval && !isUserApproved;
 
   if (setting.type == "text") {
-    innerField = <Input type="text" value={value} onChange={onTextboxChange} />;
+    innerField = (
+      <Input
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
+        type="text"
+        value={value}
+        onChange={onTextboxChange}
+      />
+    );
   } else if (setting.type == "int") {
     innerField = (
       <Input
@@ -182,11 +300,21 @@ export default function SettingElement({
         step="1"
         value={value}
         onChange={onTextboxIntChange}
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
+        min={setting.min || 0}
       />
     );
   } else if (setting.type == "float") {
     innerField = (
-      <Input type="number" value={value} onChange={onTextboxFloatChange} />
+      <Input
+        type="number"
+        value={value}
+        onChange={onTextboxFloatChange}
+        isLoadingMagic={suggesting}
+        disabled={suggesting}
+        min={setting.min || 0}
+      />
     );
   } else if (setting.type == "image") {
     innerField = (
@@ -197,31 +325,37 @@ export default function SettingElement({
         setting={setting}
       />
     );
+  } else if (setting.type == "program") {
+    innerField = (
+      <ProgramInputElement
+        onInputChange={onInputChange}
+        value={value}
+        isDisabled={isDisabled}
+        setting={setting}
+      />
+    );
   } else if (setting.type === "textarea") {
     innerField = (
-      <TextareaAutosize
-        className={cn(
-          inputClassNames,
-          "w-full py-[.6rem] resize-none disabled:cursor-default"
-        )}
+      <AutoResizeTextarea
         value={value}
         onChange={onTextboxChange}
-        maxRows={8}
-        disabled={isDisabled}
+        disabled={isDisabled || suggesting}
+        isLoadingMagic={suggesting}
       />
     );
   } else if (setting.type == "boolean") {
     innerField = (
-      <div key={setting.name}>
-        <Input
-          type="checkbox"
-          checked={value ? true : undefined}
+      <div key={setting.name} className="flex items-center space-x-2">
+        <Switch
+          checked={!!value}
           id={setting.name}
           name={setting.name}
-          onChange={onCheckboxChange}
+          onCheckedChange={onCheckboxChange}
           disabled={isDisabled}
         />
-        <label htmlFor={setting.name}>&nbsp;Yes</label>
+        <Label htmlFor={setting.name}>
+          {value ? "Publically Visible" : "Hidden"}
+        </Label>
       </div>
     );
   } else if (setting.type == "select") {
@@ -234,7 +368,7 @@ export default function SettingElement({
     innerField = (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="ghost" className="my-4 px-4">
+          <Button size="sm" className="my-4 px-4">
             <div className="mr-2">{value}</div>
             <ChevronsUpDownIcon size={24} />
           </Button>
@@ -258,7 +392,7 @@ export default function SettingElement({
     innerField = (
       <div className="space-y-2">
         {setting.options?.map((option) => (
-          <div key={option.value} className="flex flex-row items-start">
+          <div key={option.value} className="flex flex-row">
             <Input
               type="radio"
               checked={value === option.value ? true : undefined}
@@ -268,8 +402,8 @@ export default function SettingElement({
               onChange={onTextboxChange}
               disabled={isDisabled}
             />
-            <label className="select-none" htmlFor={option.value}>
-              <div className="flex flex-row">
+            <label className="select-none flex-grow" htmlFor={option.value}>
+              <div className="flex flex-row items-start">
                 {option?.audioSample && (
                   <AudioPreview voiceId={option.audioSample} />
                 )}
@@ -287,11 +421,38 @@ export default function SettingElement({
     );
   } else if (setting.type == "longtext") {
     innerField = (
-      <Textarea
+      <AutoResizeTextarea
         onChange={onTextboxChange}
         value={value}
-        disabled={isDisabled}
+        disabled={isDisabled || suggesting}
+        isLoadingMagic={suggesting}
       />
+    );
+  } else if (setting.type == "upgrade-offer") {
+    const updateButton =
+      latestAgentVersion == value ? (
+        <TypographyMuted>This is the latest version! </TypographyMuted>
+      ) : (
+        <Button
+          onClick={(e) => {
+            setValue(latestAgentVersion);
+            updateFn(setting.name, latestAgentVersion);
+          }}
+        >
+          Upgrade to {latestAgentVersion}
+        </Button>
+      );
+    innerField = (
+      <div>
+        <Input
+          isLoadingMagic={suggesting}
+          disabled={suggesting}
+          type="text"
+          value={value}
+          onChange={onTextboxChange}
+        />
+        <div className="mt-2">{updateButton}</div>
+      </div>
     );
   } else if (setting.type == "tag-list") {
     const _value = Array.isArray(value) ? value : [];
@@ -331,12 +492,15 @@ export default function SettingElement({
                 </button>
                 <div className="border-l-4 pl-4 py-4">
                   {setting.listof == "object" ? (
-                    (setting.listSchema || []).map((subField) => {
+                    (setting.listSchema || []).map((subField, idx) => {
                       return (
                         <SettingElement
                           key={`${setting.name}.${i}.${subField.name}`}
                           valueAtLoad={subValue[subField.name] || []}
                           setting={subField}
+                          suggestField={suggestField}
+                          keypath={[...keypath, i, subField.name]}
+                          previewField={previewField}
                           existingDynamicThemes={existingDynamicThemes}
                           adventureId={adventureId as string}
                           updateFn={(subFieldName: string, value: any) => {
@@ -347,6 +511,8 @@ export default function SettingElement({
                             });
                           }}
                           isUserApproved={isUserApproved}
+                          isApprovalRequested={isApprovalRequested}
+                          latestAgentVersion={latestAgentVersion}
                         />
                       );
                     })
@@ -360,11 +526,16 @@ export default function SettingElement({
                         ...setting,
                         type: setting.listof as any,
                       }}
+                      suggestField={suggestField}
+                      keypath={[...keypath, i]}
+                      previewField={previewField}
                       inlined={true}
                       updateFn={(_: any, value: any) => {
                         updateItem({ index: i, value: value });
                       }}
                       isUserApproved={isUserApproved}
+                      isApprovalRequested={isApprovalRequested}
+                      latestAgentVersion={latestAgentVersion}
                     />
                   )}
                 </div>
@@ -379,8 +550,16 @@ export default function SettingElement({
     );
   }
 
+  const hasValidationErrors = validationErrors && validationErrors.length > 0;
+  let variablesPermitted = Object.entries(setting?.variablesPermitted || {});
+  variablesPermitted = variablesPermitted.sort(
+    (a: [string, string], b: [string, string]) => {
+      return a[0].localeCompare(b[0], undefined, { numeric: true });
+    }
+  );
+
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {!inlined && setting.type != "divider" && (
         <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
       )}
@@ -401,8 +580,46 @@ export default function SettingElement({
             {setting.description}
           </div>
         )}{" "}
-      {imagePreview && (
-        <img src={imagePreview} className="w-24 h-24 mt-1 mb-1" />
+      {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
+        <ImagePreview url={imagePreview} block={imagePreviewBlock} />
+      )}
+      {variablesPermitted.length > 0 && (
+        <div className="">
+          <TypographyMuted>Prompt Variables Supported:</TypographyMuted>
+          <ul className="ml-2">
+            {variablesPermitted.map(([key, value]) => {
+              return (
+                <li key={key}>
+                  <TypographyMuted>
+                    <b>&#123;{key}&#125;</b>: {value}
+                  </TypographyMuted>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {setting.requiresApproval && !isUserApproved && isApprovalRequested && (
+        <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
+          <div className="w-full flex flex-col items-center justify-center">
+            <TypographyLarge>Status: In Review</TypographyLarge>
+            <TypographyP>
+              Our team will review your game and then release it to the public
+              directory.
+            </TypographyP>
+            <TypographyP>
+              Reach out on{" "}
+              <a
+                href="https://steamship.com/discord"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
+                Discord
+              </a>{" "}
+              if you have questions!
+            </TypographyP>
+          </div>
+        </div>
       )}
       {isDisabled ? (
         <div className="w-full bg-background/90 z-20 p-4 border border-yellow-600 rounded-md relative overflow-hidden">
@@ -436,6 +653,33 @@ export default function SettingElement({
         </div>
       ) : (
         <div>{innerField}</div>
+      )}
+      {setting.previewOutputType && (
+        <div>
+          <Button
+            variant="default"
+            onClick={preview}
+            isLoading={imagePreviewLoading}
+          >
+            Preview
+          </Button>
+        </div>
+      )}
+      {setting.suggestOutputType && (
+        <div>
+          <Button variant="default" onClick={suggest} disabled={suggesting}>
+            {suggesting ? <Loader2 className="animate-spin" /> : "Suggest"}
+          </Button>
+        </div>
+      )}
+      {hasValidationErrors && (
+        <div className="text-sm bg-red-300 border-2 border-red-700 text-black p-2">
+          <ul>
+            {validationErrors.map((validationError: string) => {
+              return <li key={validationError}>{validationError}</li>;
+            })}
+          </ul>
+        </div>
       )}
     </div>
   );

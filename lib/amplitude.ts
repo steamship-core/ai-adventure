@@ -19,8 +19,17 @@ const useAmplitudeInit = () => {
         amplitude.init(AMPLITUDE_API_KEY, undefined, {
           logLevel: amplitude.Types.LogLevel.Warn,
         });
-        if (user) {
-          amplitude.setUserId(user.id);
+      }
+      if (user && amplitude) {
+        amplitude.setUserId(user.id);
+        const emailAddress =
+          user.emailAddresses.length > 0
+            ? user.emailAddresses[0].emailAddress
+            : null;
+        if (emailAddress) {
+          const identifyEvent = new amplitude.Identify();
+          identifyEvent.set("email", emailAddress);
+          amplitude.identify(identifyEvent);
         }
       }
     };

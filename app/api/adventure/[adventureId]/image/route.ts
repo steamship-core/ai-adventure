@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function POST(
   request: Request,
-  { params }: { params: { handle: string } }
+  { params }: { params: { adventureId: string } }
 ): Promise<NextResponse> {
   const { userId } = auth();
   if (!userId) {
@@ -22,7 +22,7 @@ export async function POST(
     return NextResponse.json({ error: "filename not found" }, { status: 404 });
   }
 
-  const adventure = await getAdventureForUser(userId, params.handle);
+  const adventure = await getAdventureForUser(userId, params.adventureId);
   if (!adventure) {
     log.error("No adventure");
     return NextResponse.json({ error: "Adventure not found" }, { status: 404 });

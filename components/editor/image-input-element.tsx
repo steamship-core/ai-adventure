@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/editor-options";
+import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState } from "react";
@@ -49,7 +49,6 @@ const ImageInputElement = ({
       )}
       <Input
         onChange={onChange}
-        id="picture"
         type="file"
         className="hover:cursor-pointer"
         disabled={isDisabled}

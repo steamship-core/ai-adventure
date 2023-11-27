@@ -1,12 +1,9 @@
 import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-audio";
-import { ActionBar } from "@/components/camp/action-bar";
 import { AudioChecker } from "@/components/camp/audio-checker";
-import { CampImage } from "@/components/camp/camp-image";
 import { QuestProgress } from "@/components/camp/quest-progress";
 import { WelcomeModal } from "@/components/camp/welcome-modal";
 import { InGameNavigation } from "@/components/navigation/in-game-navigation";
 import RecoilProvider from "@/components/providers/recoil";
-import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
@@ -47,7 +44,6 @@ export default async function CampPage({
     redirect(`/adventures`);
   }
 
-  console.log(agent?.Adventure?.agentConfig);
   const adventureGoal = (agent?.Adventure?.agentConfig as unknown as any)
     ?.adventure_goal;
 
@@ -108,26 +104,18 @@ export default async function CampPage({
       <WelcomeModal />
 
       <main className="w-full h-full">
-        <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-2 overflow-auto">
-          <div className="flex flex-col gap-2 h-[80%] overflow-hidden">
+        <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-2 md:p-6 gap-2 overflow-hidden">
+          <div className="flex flex-col gap-2 h-full overflow-hidden">
             <InGameNavigation
               isDevelopment={agent.isDevelopment === true}
               workspaceHandle={agent.handle}
               gameEngineVersion={agent.agentVersion || "unknown"}
               showInventory={false}
             />
-            <div className="overflow-auto">
-              <div id="quest-progress">
-                <QuestProgress adventureGoal={adventureGoal} />
-              </div>
-              <div id="camp">
-                <TypographyLarge className="mt-4 mb-2">Camp</TypographyLarge>
-                <CampImage />
-              </div>
-            </div>
-          </div>
-          <div id="actions">
-            <ActionBar />
+            <QuestProgress
+              adventureGoal={adventureGoal}
+              adventure={agent.Adventure}
+            />
           </div>
         </div>
         <AudioChecker />

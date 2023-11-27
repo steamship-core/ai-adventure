@@ -1,20 +1,23 @@
 "use client";
 
-import {
-  getLevel,
-  getRankProgress,
-  getRanksUntilNextLevel,
-} from "@/lib/game/levels";
 import { useBackgroundMusic, useDebugModeSetting } from "@/lib/hooks";
 import { SignOutButton } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
-import { ActivityIcon, BadgeDollarSignIcon, StarIcon } from "lucide-react";
+import { FlameIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Button } from "../ui/button";
-import { Progress } from "../ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Switch } from "../ui/switch";
 import { TypographyH1 } from "../ui/typography/TypographyH1";
@@ -45,7 +48,6 @@ export const CharacterSheet = ({
   const [isDebugMode, setIsDebugMode] = useDebugModeSetting();
   const { push } = useRouter();
   const params = useParams();
-  const rank = gameState?.player?.rank || 0;
   const {
     isOffered: backgroundAudioOffered,
     setIsOffered: setBackgroundAudioOffered,
@@ -171,20 +173,12 @@ export const CharacterSheet = ({
               ) : (
                 <TypographyLarge className="text-sm md:text-lg flex flex-col whitespace-nowrap overflow-ellipsis w-full">
                   <span>{gameState?.player?.name}</span>
-                  <span className="text-xs md:text-sm text-muted-foreground">
-                    {getLevel(rank)}
-                  </span>
                 </TypographyLarge>
               )}
-              {subtitle ? (
+              {subtitle && (
                 <TypographyMuted className="text-xs whitespace-nowrap overflow-ellipsis">
                   {subtitle}
                 </TypographyMuted>
-              ) : (
-                <Progress
-                  value={getRankProgress(rank)}
-                  className="h-2 border border-foreground/20 w-full"
-                />
               )}
             </div>
           </button>
@@ -206,30 +200,36 @@ export const CharacterSheet = ({
               />
             </div>
             <div className="flex flex-col items-center justify-center gap-2 w-full">
-              <TypographyP className="flex items-center">
-                <ActivityIcon size={20} className="mr-2 text-indigo-400" />
-                {energy || 0}
-              </TypographyP>
-              <TypographyP className="flex !mt-0 items-center">
-                <BadgeDollarSignIcon
-                  size={20}
-                  className="mr-2 text-yellow-400"
-                />
-                {gameState?.player?.gold || 0}
-              </TypographyP>
+              <Dialog>
+                <DialogTrigger>
+                  <TypographyP className="flex items-center">
+                    <FlameIcon size={20} className="mr-2 text-orange-400" />
+                    {energy || 0}
+                  </TypographyP>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="flex gap-2 items-center">
+                      Energy
+                    </DialogTitle>
+                    <DialogDescription>
+                      Looking to purchase more energy? Click below to visit the
+                      energy store.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Button
+                    asChild
+                    className="bg-orange-600 text-white hover:bg-orange-700"
+                  >
+                    <Link href="/account/plan">
+                      Purchase Energy <FlameIcon className="ml-2" />
+                    </Link>
+                  </Button>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <div>
-              <TypographyH3>{getLevel(rank)}</TypographyH3>
-              <Progress
-                value={getRankProgress(rank)}
-                className="h-2 border border-foreground/20"
-              />
-              <TypographyMuted className="text-xs md:text-sm ">
-                {getRanksUntilNextLevel(rank)} exp until next level
-              </TypographyMuted>
-            </div>
             <div>
               <TypographyH3>Background</TypographyH3>
               <TypographyMuted className=" whitespace-pre-wrap">

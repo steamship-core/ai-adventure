@@ -3,7 +3,7 @@
 import {
   StoryOptions,
   storyOptionsToDisplay,
-} from "@/lib/editor/editor-options";
+} from "@/lib/editor/DEPRECATED-editor-options";
 import { Adventure } from "@prisma/client";
 import { AlertCircleIcon } from "lucide-react";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
