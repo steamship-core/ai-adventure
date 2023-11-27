@@ -122,7 +122,7 @@ const CharacterCreationComplete = ({
             onClick={onComplete}
             ref={ref}
           >
-            Create Character
+            Start Adventure
           </Button>
           {error && (
             <Alert>

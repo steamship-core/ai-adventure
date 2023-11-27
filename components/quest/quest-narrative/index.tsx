@@ -19,7 +19,7 @@ import { Message } from "ai";
 import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import TextareaAutosize from "react-textarea-autosize";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -76,6 +76,7 @@ export default function QuestNarrative({
   summary,
   agentBaseUrl,
   completeButtonText,
+  priorBlocks,
 }: {
   id: string;
   summary: Block | null;
@@ -84,6 +85,7 @@ export default function QuestNarrative({
   isComplete: boolean;
   agentBaseUrl: string;
   completeButtonText?: string;
+  priorBlocks?: ExtendedBlock[];
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -91,7 +93,6 @@ export default function QuestNarrative({
   const params = useParams<{ handle: string }>();
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
   const [gg, setGameState] = useRecoilState(recoilGameState);
-  const [priorBlocks, setPriorBlocks] = useState<ExtendedBlock[] | undefined>();
   const isContinuationEnabled = useRecoilValue(recoilContinuationState);
   const router = useRouter();
 
@@ -125,32 +126,15 @@ export default function QuestNarrative({
   };
 
   useEffect(() => {
-    // https://stackoverflow.com/questions/60618844/react-hooks-useeffect-is-called-twice-even-if-an-empty-array-is-used-as-an-ar
-    // This suppresses the double-loading. My hypothesis is that this is happening in dev as a result of strict mode, but
-    // even in dev it messes with the remote agent.
-    if (!initialized.current) {
-      initialized.current = true;
-      // On the first load, get the quest history
-      fetch(`/api/game/${params.handle}/quest?questId=${id}`).then(
-        async (response) => {
-          if (response.ok) {
-            let blocks = ((await response.json()) || {})
-              .blocks as ExtendedBlock[];
-            if (blocks && blocks.length > 0) {
-              setPriorBlocks([...blocks]);
-            } else {
-              // Only once the priorBlocks have been loaded, append a message to chat history to kick off the quest
-              // if it hasn't already been started.
-              // TODO: We could find a way to kick off the quest proactively.
-              append({
-                id: "000-000-000",
-                content: "Let's go on an adventure!",
-                role: "user",
-              });
-            }
-          }
-        }
-      );
+    if (initialized.current) return;
+    initialized.current = true;
+
+    if (!priorBlocks || priorBlocks.length === 0) {
+      append({
+        id: "000-000-000",
+        content: "Let's go on an adventure!",
+        role: "user",
+      });
     }
   }, []);
 

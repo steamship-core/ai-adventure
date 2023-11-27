@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InGameNavigation } from "../navigation/in-game-navigation";
 import QuestNarrative from "./quest-narrative";
+import { ExtendedBlock } from "./quest-narrative/utils";
 
 export default function Quest({
   gameState,
@@ -13,12 +14,14 @@ export default function Quest({
   workspaceHandle = "",
   gameEngineVersion = "",
   isDevelopment = false,
+  priorBlocks,
 }: {
   gameState: GameState;
   agentBaseUrl: string;
   isDevelopment: boolean;
   gameEngineVersion?: string;
   workspaceHandle?: string;
+  priorBlocks?: ExtendedBlock[];
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
@@ -73,6 +76,7 @@ export default function Quest({
             summary={summary}
             agentBaseUrl={agentBaseUrl}
             completeButtonText={completeButtonText}
+            priorBlocks={priorBlocks}
           />
         </>
       )}

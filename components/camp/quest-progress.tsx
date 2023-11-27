@@ -10,7 +10,6 @@ import {
   FlameIcon,
   LockIcon,
   MapPinIcon,
-  PackageIcon,
   SparklesIcon,
 } from "lucide-react";
 import { log } from "next-axiom";
@@ -311,20 +310,15 @@ export const QuestProgress = ({
             </button>
           )}
         </div>
-        <InventorySheet>
-          <Button
-            onClick={(e) => {
-              amplitude.track("Button Click", {
-                buttonName: "View Inventory",
-                location: "Camp",
-                action: "view-inventory",
-              });
-            }}
-            variant="outline"
-          >
-            <PackageIcon className="h-4 w-4" />
-          </Button>
-        </InventorySheet>
+        <InventorySheet
+          onClick={() => {
+            amplitude.track("Button Click", {
+              buttonName: "View Inventory",
+              location: "Camp",
+              action: "view-inventory",
+            });
+          }}
+        />
       </div>
       <CampImage />
       <div className="flex items-center justify-center">
