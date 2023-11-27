@@ -12,6 +12,7 @@ export default authMiddleware({
     "/_axiom/logs",
     "/api/shared/(.*)",
     "/adventures",
+    "/policies/(.*)",
     /^\/adventures\/(?!(create|play|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],

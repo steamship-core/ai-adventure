@@ -79,7 +79,7 @@ export default async function AdventurePage({
             react: (
               <AdventureMilestoneEmail
                 username={userName}
-                title={countMap[1]}
+                title={emailSubject}
                 adventureId={adventure.id}
                 adventureName={adventure.name}
               />

@@ -1,6 +1,7 @@
 "use client";
 
-import { SettingGroup } from "@/lib/editor/editor-options";
+import { amplitude } from "@/lib/amplitude";
+import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
@@ -8,14 +9,10 @@ import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import {
-  EditorLayoutImage,
-  recoilEditorLayoutImage,
-  recoilErrorModalState,
-} from "../providers/recoil";
+import { recoilErrorModalState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -46,7 +43,6 @@ export default function SettingGroupForm({
     return _existingDynamicThemes;
   };
   const { groupName, adventureId } = useEditorRouting();
-  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
   const [_, setError] = useRecoilState(recoilErrorModalState);
 
@@ -173,7 +169,6 @@ export default function SettingGroupForm({
           );
           if (res.ok) {
             const blobJson = (await res.json()) as PutBlobResult;
-            setEditorLayoutImage(blobJson.url);
             dataToSave.adventure_image = blobJson.url;
           } else {
             const e = {
@@ -260,14 +255,6 @@ export default function SettingGroupForm({
     },
   });
 
-  useEffect(() => {
-    if (existing?.adventure_image) {
-      setEditorLayoutImage(existing.adventure_image);
-    } else {
-      setEditorLayoutImage(EditorLayoutImage.UNSET);
-    }
-  }, []);
-
   const sg = (settingGroups || []).filter(
     (group) => groupName === group.href
   )[0];
@@ -343,6 +330,12 @@ export default function SettingGroupForm({
   };
 
   const onSave = (e: any) => {
+    amplitude.track("Button Click", {
+      buttonName: "Save Adventure",
+      location: "Editor",
+      action: "save-adventure",
+      adventureId: adventureId,
+    });
     mutate(dataToUpdate);
   };
 

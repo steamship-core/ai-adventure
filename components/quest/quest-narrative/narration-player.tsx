@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { amplitude } from "@/lib/amplitude";
 import { useQuery } from "@tanstack/react-query";
 import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -35,6 +36,16 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
         size="sm"
         disabled={!url || state.buffered.length === 0}
         onClick={() => {
+          if (!didPlay) {
+            amplitude.track("Button Click", {
+              buttonName: "Play Narration",
+              location: "Quest",
+              action: "play-narration",
+              questId: params.questId,
+              workspaceHandle: params.handle,
+              blockId: blockId,
+            });
+          }
           setDidPlay(true);
           if (state.playing) {
             controls.pause();
