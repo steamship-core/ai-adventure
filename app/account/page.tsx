@@ -11,7 +11,7 @@ export default async function AccountPlanPage() {
   }
 
   return (
-    <main className="w-full p-6 sm:p-16">
+    <main className="w-full p-6 sm:p-16 flex-1 flex flex-col">
       <ManageAccount />
     </main>
   );
