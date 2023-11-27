@@ -45,6 +45,16 @@ export const TextBlock = ({
   didComplete?: boolean;
   useTypeEffect?: boolean;
 }) => {
+  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+
+  useEffect(() => {
+    if (hideOutput) return;
+    if (!useTypeEffect) {
+      console.log(text);
+      setContinuationState(true);
+    }
+  }, []);
+
   if (hideOutput) {
     return null;
   }

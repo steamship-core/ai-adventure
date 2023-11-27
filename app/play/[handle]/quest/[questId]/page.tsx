@@ -7,7 +7,10 @@ import { ExtendedBlock } from "@/components/quest/quest-narrative/utils";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { loadExistingQuestBlocks } from "@/lib/game/quest.server";
+import {
+  generateActionChoices,
+  loadExistingQuestBlocks,
+} from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -59,6 +62,13 @@ export default async function QuestPage({
     log.error("Error loading existing quest blocks", e);
   }
 
+  async function generateSuggestions() {
+    "use server";
+    console.log("Generating suggestions");
+    const choices = await generateActionChoices(agent?.agentUrl!);
+    return choices;
+  }
+
   return (
     <RecoilProvider
       gameState={gameState}
@@ -73,6 +83,7 @@ export default async function QuestPage({
         agentBaseUrl={agent.agentUrl}
         isDevelopment={agent.isDevelopment || false}
         priorBlocks={priorBlocks}
+        generateSuggestions={generateSuggestions}
       />
       <DynamicBackgroundAudio />
     </RecoilProvider>
