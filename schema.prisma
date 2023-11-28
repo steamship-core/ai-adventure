@@ -25,6 +25,12 @@ model Adventure {
   devAgentId       Int?      @unique
   devAgent         Agents?   @relation("devAgentRelation", fields: [devAgentId], references: [id])
 
+  // Used for generating a full adventure - the state will be `generating` and the `stateTaskId` will be the
+  // ID of the task that represents the completion of the generation process.
+  state          String?
+  stateTaskId    String?
+  stateUpdatedAt DateTime?
+
   // Whether to feature
   featured Boolean @default(false)
 
