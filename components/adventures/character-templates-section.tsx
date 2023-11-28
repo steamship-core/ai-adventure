@@ -34,7 +34,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
       The profile you choose will influence gameplay and outcomes.
     </TypographyMuted>
   );
-  console.log(adventure);
+
   const onClick = () => {
     amplitude.track("Button Click", {
       buttonName: "Start Adventure",
@@ -44,6 +44,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
       templateCharacter: false,
     });
   };
+
   return (
     <>
       {hasPremadeCharacters && (
