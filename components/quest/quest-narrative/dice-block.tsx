@@ -1,9 +1,10 @@
 import { recoilContinuationState } from "@/components/providers/recoil";
+import { TypographyH4 } from "@/components/ui/typography/TypographyH4";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
-import { XIcon } from "lucide-react";
+import { PointerIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { useRecoilState } from "recoil";
@@ -27,31 +28,31 @@ const RollingDie = ({
   const [doneRolling, setDoneRolling] = useState(
     disableAnimation ? true : false
   );
+  const [clickedRollDie, setClickedRollDie] = useState(false);
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
-    if (disableAnimation) {
-      return;
+    if (!disableAnimation) {
+      setContinuationState(false);
     }
+  }, []);
+
+  const rollDie = () => {
+    if (doneRolling) return;
     const interval = setInterval(() => {
       setNum(Math.floor(Math.random() * 20) + 1);
     }, 50);
-    const timeout = setTimeout(() => {
+    setClickedRollDie(true);
+    setTimeout(() => {
       clearInterval(interval);
       setNum(rolled);
       setContinuationState(true);
       setDoneRolling(true);
     }, 2000);
-    const statusTimeout = setTimeout(() => {
+    setTimeout(() => {
       setShowStatus(true);
     }, 3000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-      clearTimeout(statusTimeout);
-    };
-  }, []);
+  };
 
   const isTwenty = num === 20 && rolled === 20;
 
@@ -60,15 +61,22 @@ const RollingDie = ({
       className="flex flex-col items-center justify-center py-8"
       noTransform={num === 20}
     >
-      <TypographyLarge>Dice Roll</TypographyLarge>
-      <TypographyMuted className="font-bold">
-        Required: {required}
+      <TypographyH4>Dice Roll</TypographyH4>
+      <TypographyMuted className="text-center">
+        Click on the die to roll!
+        <br />
+        You must roll a <b>{required} or higher </b> to succeed.
       </TypographyMuted>
-      <div
+      <button
         className={cn(
           "relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center py-2",
-          isTwenty && doneRolling && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
+          isTwenty && doneRolling && "bg-cyan-500 shadow-lg shadow-cyan-500/50",
+          !clickedRollDie && !disableAnimation && "animate-pulse"
         )}
+        disabled={clickedRollDie || disableAnimation}
+        onClick={() => {
+          rollDie();
+        }}
       >
         <TypographyLarge
           className={cn(
@@ -83,7 +91,12 @@ const RollingDie = ({
             <XIcon className="text-red-600" size={50} />
           </div>
         )}
-      </div>
+      </button>
+      {!clickedRollDie && !disableAnimation && (
+        <div className="absolute bottom-0 animate-bounce">
+          <PointerIcon />
+        </div>
+      )}
       {!disableAnimation && isTwenty && (
         <div className="static top-0 left-0">
           <Confetti numberOfPieces={3000} recycle={false} />
@@ -114,6 +127,8 @@ export const DiceRollBlock = ({
   if (!resultJson) {
     return null;
   }
+
+  console.log(resultJson);
 
   const required = Math.floor(resultJson.required * 20) + 1;
   const rolled = Math.floor(resultJson.rolled * 20) + 1;

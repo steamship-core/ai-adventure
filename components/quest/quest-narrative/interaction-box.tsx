@@ -11,11 +11,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { track } from "@amplitude/analytics-browser";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Loader2Icon,
   LoaderIcon,
   MoveLeft,
   PencilIcon,
@@ -75,7 +75,11 @@ const SuggestionSheet = ({
                 Select an option below to continue your quest.
               </SheetDescription>
               {isLoading && (
-                <Loader2Icon className="animate-spin h-8 w-8" size={32} />
+                <div className="flex flex-col gap-4 max-w-lg h-full">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
               )}
               {data && Array.isArray(data) && (
                 <div className="flex flex-col gap-4 max-w-lg h-full">
