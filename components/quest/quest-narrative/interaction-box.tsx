@@ -14,7 +14,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { track } from "@amplitude/analytics-browser";
-import { useQuery } from "@tanstack/react-query";
 import {
   LoaderIcon,
   MoveLeft,
@@ -22,7 +21,7 @@ import {
   SendIcon,
   SparklesIcon,
 } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 type InteractionOptions = "custom" | "suggest" | "none";
 
@@ -30,26 +29,31 @@ const SuggestionSheet = ({
   setSelectedOption,
   setInput,
   generateSuggestions,
-  messageCount,
   disabled,
 }: {
   setInput: Dispatch<SetStateAction<string>>;
   setSelectedOption: Dispatch<SetStateAction<InteractionOptions>>;
   generateSuggestions: () => Promise<any>;
-  messageCount: number;
   disabled: boolean;
 }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["suggestions", messageCount],
-    queryFn: async () => {
-      return generateSuggestions() as Promise<
+  const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    setIsLoading(true);
+    const getSuggestions = async () => {
+      const s = (await generateSuggestions()) as Promise<
         string[] | { status: { state: string; statusMessage: string } }
       >;
-    },
-    refetchOnWindowFocus: false,
-  });
-  const isObject = !Array.isArray(data) && data;
-  const error = isObject && data.status.state === "failed";
+      if (Array.isArray(s)) {
+        setSuggestions(s);
+      } else {
+        setError(true);
+      }
+      setIsLoading(false);
+    };
+    getSuggestions();
+  }, []);
 
   return (
     <Sheet>
@@ -87,23 +91,21 @@ const SuggestionSheet = ({
                   <Skeleton className="h-10 w-full" />
                 </div>
               )}
-              {data && Array.isArray(data) && (
-                <div className="flex flex-col gap-4 max-w-lg h-full">
-                  {data.map((suggestion, i) => (
-                    <Button
-                      onClick={() => {
-                        setInput(suggestion);
-                        setSelectedOption("custom");
-                      }}
-                      key={i}
-                      variant="outline"
-                      className="h-full"
-                    >
-                      {suggestion}
-                    </Button>
-                  ))}
-                </div>
-              )}
+              <div className="flex flex-col gap-4 max-w-lg h-full">
+                {suggestions.map((suggestion, i) => (
+                  <Button
+                    onClick={() => {
+                      setInput(suggestion);
+                      setSelectedOption("custom");
+                    }}
+                    key={i}
+                    variant="outline"
+                    className="h-full"
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+              </div>
             </>
           )}
         </SheetHeader>
@@ -123,7 +125,6 @@ const InteractionBox = ({
   isComplete,
   setInput,
   generateSuggestions,
-  messageCount,
 }: {
   formRef: React.RefObject<HTMLFormElement>;
   inputRef: React.RefObject<HTMLTextAreaElement>;
@@ -135,7 +136,6 @@ const InteractionBox = ({
   isComplete: boolean;
   setInput: Dispatch<SetStateAction<string>>;
   generateSuggestions: () => Promise<any>;
-  messageCount: number;
 }) => {
   const [selectedOption, setSelectedOption] =
     useState<InteractionOptions>("none");
@@ -158,7 +158,6 @@ const InteractionBox = ({
             setSelectedOption={setSelectedOption}
             setInput={setInput}
             generateSuggestions={generateSuggestions}
-            messageCount={messageCount}
             disabled={isLoading || isComplete}
           />
           <Button

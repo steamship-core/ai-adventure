@@ -214,13 +214,7 @@ export default function QuestNarrative({
       : null;
 
   let nonPersistedUserInput: string | null = null;
-  console.log(
-    isContinuationEnabled,
-    nextBlock,
-    !isComplete,
-    !nextBlock,
-    !isContinuationEnabled && !isComplete && !nextBlock
-  );
+
   if (error) {
     return (
       <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
@@ -301,7 +295,6 @@ export default function QuestNarrative({
                 isComplete={isComplete}
                 setInput={setInput}
                 generateSuggestions={generateSuggestions}
-                messageCount={messages.length}
               />
             ) : (
               <Button
