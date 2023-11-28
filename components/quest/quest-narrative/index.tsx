@@ -289,7 +289,8 @@ export default function QuestNarrative({
           />
         ) : (
           <>
-            {!nextBlock ? (
+            {!nextBlock ||
+            (messages.length <= 1 && priorBlocks?.length === 0) ? (
               <InteractionBox
                 formRef={formRef}
                 inputRef={inputRef}
