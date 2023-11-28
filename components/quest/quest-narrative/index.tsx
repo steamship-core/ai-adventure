@@ -6,25 +6,22 @@ import {
   recoilGameState,
 } from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
-import { inputClassNames } from "@/components/ui/input";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
-import { cn } from "@/lib/utils";
-import { track } from "@vercel/analytics/react";
 import { Message } from "ai";
 import { useChat } from "ai/react";
-import { ArrowDown, ArrowRightIcon, LoaderIcon, SendIcon } from "lucide-react";
+import { ArrowDown, ArrowRightIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import TextareaAutosize from "react-textarea-autosize";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
+import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import { UserInputBlock } from "./user-input-block";
 import {
@@ -77,6 +74,7 @@ export default function QuestNarrative({
   agentBaseUrl,
   completeButtonText,
   priorBlocks,
+  generateSuggestions,
 }: {
   id: string;
   summary: Block | null;
@@ -86,6 +84,7 @@ export default function QuestNarrative({
   agentBaseUrl: string;
   completeButtonText?: string;
   priorBlocks?: ExtendedBlock[];
+  generateSuggestions: () => Promise<any>;
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -102,6 +101,7 @@ export default function QuestNarrative({
     input,
     handleInputChange,
     handleSubmit,
+    setInput,
     isLoading,
     error,
   } = useChat({
@@ -214,7 +214,13 @@ export default function QuestNarrative({
       : null;
 
   let nonPersistedUserInput: string | null = null;
-
+  console.log(
+    isContinuationEnabled,
+    nextBlock,
+    !isComplete,
+    !nextBlock,
+    !isContinuationEnabled && !isComplete && !nextBlock
+  );
   if (error) {
     return (
       <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
@@ -232,6 +238,18 @@ export default function QuestNarrative({
   return (
     <>
       <div className="flex h-full overflow-hidden">
+        <div
+          className="absolute left-1/2 right-0 bottom-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
+          aria-hidden="true"
+        >
+          <div
+            className="aspect-[801/1036] w-[55.0625rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+            style={{
+              clipPath:
+                "polygon(63.1% 29.5%, 100% 17.1%, 76.6% 3%, 48.4% 0%, 44.6% 4.7%, 54.5% 25.3%, 59.8% 49%, 55.2% 57.8%, 44.4% 57.2%, 27.8% 47.9%, 35.1% 81.5%, 0% 97.7%, 39.2% 100%, 35.2% 81.4%, 97.2% 52.8%, 63.1% 29.5%)",
+            }}
+          />
+        </div>
         <QuestNarrativeContainer>
           {priorBlocks && (
             <NarrativeBlock
@@ -272,43 +290,19 @@ export default function QuestNarrative({
         ) : (
           <>
             {!nextBlock ? (
-              <form
-                ref={formRef}
-                className="flex gap-2 w-full"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  inputRef?.current?.focus();
-                  track("Send Message", {
-                    location: "Quest",
-                  });
-                  handleSubmit(e);
-                  scrollToBottom();
-                }}
-              >
-                <TextareaAutosize
-                  className={cn(
-                    inputClassNames,
-                    "w-full py-[.6rem] resize-none"
-                  )}
-                  value={input}
-                  onChange={handleInputChange}
-                  ref={inputRef}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      formRef?.current?.requestSubmit();
-                    }
-                  }}
-                  disabled={isLoading || isComplete}
-                />
-                <Button type="submit" disabled={isLoading || isComplete}>
-                  {isLoading ? (
-                    <LoaderIcon size={16} className="animate-spin" />
-                  ) : (
-                    <SendIcon size={16} />
-                  )}
-                </Button>
-              </form>
+              <InteractionBox
+                formRef={formRef}
+                inputRef={inputRef}
+                handleSubmit={handleSubmit}
+                scrollToBottom={scrollToBottom}
+                input={input}
+                handleInputChange={handleInputChange}
+                isLoading={isLoading}
+                isComplete={isComplete}
+                setInput={setInput}
+                generateSuggestions={generateSuggestions}
+                messageCount={messages.length}
+              />
             ) : (
               <Button
                 disabled={!isContinuationEnabled}

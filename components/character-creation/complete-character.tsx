@@ -1,4 +1,4 @@
-import { updateGameState } from "@/lib/game/game-state.client";
+import { getGameState, updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { AlertTriangle } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -44,6 +44,35 @@ const CharacterCreationComplete = ({
   const [error, setError] = useState<string | null>(null);
   const params = useParams<{ handle: string }>();
 
+  const pollForAgentSideOnboardingComplete = async (i: number = 0) => {
+    if (i > 40) {
+      return;
+    }
+
+    const gameState = await getGameState(params.handle);
+    if (gameState.active_mode == "onboarding") {
+      setTimeout(() => {
+        pollForAgentSideOnboardingComplete(i + 1);
+      }, 700);
+    } else if (gameState.active_mode == "error") {
+      const whatHappened = encodeURIComponent(
+        "Your game has transitioned to an irrecoverable error state."
+      );
+      const whatYouCanDo = encodeURIComponent(
+        "Try creating a new game. We're sorry this happened!"
+      );
+      const technicalDetails = encodeURIComponent(
+        gameState?.unrecoverable_error || "Unknown"
+      );
+      router.push(
+        `/error?whatHappened=${whatHappened}&whatYouCanDo=${whatYouCanDo}&technicalDetails=${technicalDetails}`
+      );
+    } else {
+      // Redirect to camp
+      router.push(`/play/${params.handle}/camp`);
+    }
+  };
+
   const onComplete = async () => {
     setIsVisible(true);
     try {
@@ -66,7 +95,7 @@ const CharacterCreationComplete = ({
         );
         router.push(url.toString());
       } else {
-        router.push(`/play/${params.handle}/camp`);
+        pollForAgentSideOnboardingComplete();
       }
     } catch (e) {
       let url = new URL("/error");
