@@ -1,10 +1,10 @@
 "use client";
 
 import { FlameIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import BackgroundAudioToggle from "../audio/background-audio-toggle";
 import InventorySheet from "../inventory-sheet";
 import { recoilEnergyState } from "../providers/recoil";
 import { Button } from "../ui/button";
@@ -17,6 +17,11 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { TypographySmall } from "../ui/typography/TypographySmall";
+
+const BackgroundAudioToggle = dynamic(
+  () => import("../audio/background-audio-toggle"),
+  { ssr: false }
+);
 
 export const SummaryStats = ({
   showEnergy = true,
