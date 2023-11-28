@@ -27,7 +27,13 @@ export type GameState = {
   await_ask_key?: string;
 
   /** The active mode of the game */
-  active_mode: "onboarding" | "camp" | "quest" | "npc-conversation" | "error";
+  active_mode:
+    | "onboarding"
+    | "camp"
+    | "quest"
+    | "npc-conversation"
+    | "error"
+    | "generating";
 
   unrecoverable_error?: string;
 

@@ -1,5 +1,5 @@
-adventure_name: "Epic Adventure"
-adventure_description: "A pixel-art adventure that unfolds entirely based on your character & choices."
+name: "Epic Adventure"
+description: "A pixel-art adventure that unfolds entirely based on your character & choices."
 characters:
   - name: Pro Grammer
     tagline: Build an AI Game

@@ -2,7 +2,9 @@ import {
   deleteAdventure,
   getAdventure,
   importAdventure,
+  magicCreateAdventure,
   publishAdventure,
+  syncAdventureStateWithAgent,
   updateAdventure,
 } from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
@@ -50,6 +52,12 @@ export const POST = withAxiom(async (request: Request) => {
     if (operation === "update") {
       const adventure = await updateAdventure(userId, id, data);
       return NextResponse.json(adventure, { status: 200 });
+    } else if (operation === "magic-create") {
+      const adventure = await magicCreateAdventure(userId, id, data);
+      return NextResponse.json(adventure, { status: 200 });
+    } else if (operation === "sync-state") {
+      const adventure = await syncAdventureStateWithAgent(userId, id);
+      return NextResponse.json(adventure, { status: 200 });
     } else if (operation === "delete") {
       const adventure = await deleteAdventure(userId, id);
       return NextResponse.json(adventure, { status: 200 });
@@ -63,9 +71,9 @@ export const POST = withAxiom(async (request: Request) => {
       data = {
         ...{
           // Defaults
-          adventure_name: "Untitled Adventure",
-          adventure_description: "Empty Description",
-          adventure_short_description: "Empty Short Description",
+          name: "Untitled Adventure",
+          description: "Empty Description",
+          short_description: "Empty Short Description",
         },
         ...data,
       };

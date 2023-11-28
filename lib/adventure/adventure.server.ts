@@ -5,7 +5,11 @@ import prisma from "../db";
 import { getTopLevelUpdatesFromAdventureConfig } from "../editor/DEPRECATED-editor-options";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
 import { sendSlackMessage } from "../slack/slack.server";
-import { pushServerSettingsToAgent } from "./adventure-agent.server";
+import {
+  getServerSettingsFromAgent,
+  pushServerSettingsToAgent,
+  requestMagicCreation,
+} from "./adventure-agent.server";
 
 export const getAdventures = async (limit?: number, onlyPublic?: boolean) => {
   return prisma.adventure.findMany({
@@ -98,9 +102,6 @@ export const createAdventure = async ({
   description: string;
   agentVersion: string;
 }) => {
-  console.log(
-    `createAdventure -  User ${creatorId}; Agent Version ${agentVersion}`
-  );
   log.info(
     `createAdventure -  User ${creatorId}; Agent Version ${agentVersion}`
   );
@@ -129,9 +130,6 @@ export const createAdventure = async ({
 export const createDevAgentForAdventureAndReturnAdventure = async (
   adventure: Adventure
 ) => {
-  console.log(
-    `createDevAgentForAdventureAndReturnAdventure -  Adventure ${adventure.id}; Agent Version ${adventure.agentVersion}`
-  );
   log.info(
     `createDevAgentForAdventureAndReturnAdventure -  Adventure ${adventure.id}; Agent Version ${adventure.agentVersion}`
   );
@@ -142,9 +140,7 @@ export const createDevAgentForAdventureAndReturnAdventure = async (
     throw Error(`Failed to create dev agent for adventure ${adventure.id}`);
   }
 
-  console.log(
-    `Setting Adventure ${adventure.id} to use dev agent ${devAgent.id}`
-  );
+  log.info(`Setting Adventure ${adventure.id} to use dev agent ${devAgent.id}`);
 
   return await prisma.adventure.update({
     where: { id: adventure.id },
@@ -159,10 +155,8 @@ export const updateAdventure = async (
   adventureId: string,
   updateObj: any
 ) => {
-  console.log(`updateAdventure -  UserId ${userId} AdventureId ${adventureId}`);
   log.info(`updateAdventure -  UserId ${userId} AdventureId ${adventureId}`);
 
-  console.log(`User ${userId} attempting to update adventure ${adventureId}`);
   const adventure = await getAdventure(adventureId, true);
 
   if (!adventure) {
@@ -178,9 +172,7 @@ export const updateAdventure = async (
   if (updateObj.adventure_public === true) {
     const userApproval = await getOrCreateUserApprovals(userId);
     if (!userApproval.isApproved) {
-      console.log(
-        `Warning: User ${userId} is not approved for public adventures`
-      );
+      log.info(`Warning: User ${userId} is not approved for public adventures`);
       log.warn(`Warning: User ${userId} is not approved for public adventures`);
       updateObj.adventure_public = false;
       updateObj.adventure_public_requested = true;
@@ -246,7 +238,174 @@ export const updateAdventure = async (
       );
     }
 
-    return adventure;
+    return newAdventure;
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw e;
+  }
+};
+
+export const magicCreateAdventure = async (
+  userId: string,
+  adventureId: string,
+  updateObj: any
+) => {
+  log.info(
+    `magicCreateAdventure -  UserId ${userId} AdventureId ${adventureId}`
+  );
+
+  const adventure = await getAdventure(adventureId, true);
+
+  if (!adventure) {
+    throw Error(`Failed to get adventure: ${adventureId}`);
+  }
+
+  if (adventure.creatorId !== userId) {
+    throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
+  }
+
+  try {
+    const topLevelUpdates = getTopLevelUpdatesFromAdventureConfig(updateObj);
+
+    // Before we save it, we need to try to load it into the development
+    // agent. This will trigger any sanity checks on the new configuration that -- if they throw an error --
+    // should block the saving!
+    const updatedServerSettings = {
+      ...(adventure.agentDevConfig as object),
+      ...updateObj,
+    };
+
+    // TODO: We're sending too many values up -- should just be what's on that magic page.
+
+    const devAgent = (adventure as any).devAgent;
+    const resp = await requestMagicCreation(
+      devAgent.agentUrl,
+      updatedServerSettings
+    );
+
+    if (!resp.ok) {
+      throw new Error(await resp.text());
+    }
+
+    const result = await resp.json();
+    const taskId = result?.taskId;
+
+    log.info(
+      `magicCreateAdventure -  UserId ${userId} AdventureId ${adventureId} TaskId ${taskId}`
+    );
+
+    const updateData = {
+      ...topLevelUpdates,
+      agentDevConfig: updatedServerSettings,
+      ...{
+        state: "generating",
+        stateTaskId: taskId,
+        stateUpdatedAt: new Date(),
+      },
+    } as any;
+
+    console.log(taskId);
+
+    let newAdventure = await prisma.adventure.update({
+      where: { id: adventure.id },
+      data: updateData,
+    });
+    return newAdventure;
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw e;
+  }
+};
+
+export const syncAdventureStateWithAgent = async (
+  userId: string,
+  adventureId: string
+) => {
+  log.info(
+    `syncAdventureStateWithAgent -  UserId ${userId} AdventureId ${adventureId}`
+  );
+
+  const adventure = await getAdventure(adventureId, true);
+
+  if (!adventure) {
+    throw Error(`Failed to get adventure: ${adventureId}`);
+  }
+
+  if (adventure.creatorId !== userId) {
+    throw Error(`Adventure ${adventureId} was not created by user ${userId}.}`);
+  }
+
+  try {
+    const devAgent = (adventure as any).devAgent;
+    const serverSettings = await getServerSettingsFromAgent(devAgent.agentUrl);
+    const generationTaskId = serverSettings.generation_task_id;
+    console.log(
+      `Agent server settings has generation_task_id: ${generationTaskId}`
+    );
+
+    let data = {
+      state: generationTaskId ? "generating" : "ready",
+      stateUpdatedAt: new Date(),
+      stateTaskId: null,
+    };
+
+    const oldState = adventure.state;
+    const newState = data.state;
+
+    if (oldState == newState) {
+      log.info(
+        `syncAdventureStateWithAgent -  UserId ${userId} AdventureId ${adventureId} State ${newState} (NO CHANGE)`
+      );
+
+      if (newState == "generating") {
+        if (serverSettings.generation_task_id) {
+          // TODO: We need to check to make sure the task hasn't failed.
+          // If it has, it will endlessly be stuck generating here.
+        }
+      }
+      return adventure;
+    }
+
+    if (oldState == "generating" && newState == "ready") {
+      console.log(
+        `Got adventure template from agent: ${JSON.stringify(
+          serverSettings,
+          undefined,
+          2
+        )}`
+      );
+
+      const newDevConfig = {
+        ...serverSettings,
+      } as any;
+
+      (data as any).agentDevConfig = newDevConfig;
+      (data as any).name = newDevConfig.name;
+      (data as any).shortDescription = newDevConfig.short_description;
+      (data as any).description = newDevConfig.description;
+      (data as any).tags = newDevConfig.tags || [];
+      (data as any).image = newDevConfig.image;
+      (data as any).state = newState;
+
+      console.log("Updating database record with:");
+      console.log((data as any).agentDevConfig);
+    }
+
+    let newAdventure = await prisma.adventure.update({
+      where: { id: adventure.id },
+      data: data,
+    });
+
+    console.log(
+      `syncAdventureStateWithAgent -  UserId ${userId} AdventureId ${adventureId} State: ${oldState} -> ${newState}`
+    );
+    log.info(
+      `syncAdventureStateWithAgent -  UserId ${userId} AdventureId ${adventureId} State: ${adventure.state} -> ${newAdventure.state}`
+    );
+
+    return newAdventure;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
@@ -255,7 +414,7 @@ export const updateAdventure = async (
 };
 
 export const deleteAdventure = async (userId: string, adventureId: string) => {
-  console.log(`User ${userId} attempting to delete adventure ${adventureId}`);
+  log.info(`User ${userId} attempting to delete adventure ${adventureId}`);
   const adventure = await getAdventure(adventureId);
 
   if (!adventure) {
@@ -295,9 +454,6 @@ export const publishAdventure = async (userId: string, adventureId: string) => {
   const oldConfig = adventure.agentConfig || {};
   const newConfig = adventure.agentDevConfig || {};
 
-  console.log(
-    `Publishing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
-  );
   log.info(
     `Publishing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
   );
@@ -334,9 +490,6 @@ export const importAdventure = async (
 
   const oldConfig = adventure.agentConfig || {};
 
-  console.log(
-    `Importing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
-  );
   log.info(
     `Importing adventure. Old config was  ${JSON.stringify(oldConfig)}.`
   );
@@ -344,9 +497,7 @@ export const importAdventure = async (
   if (importObj.adventure_public === true) {
     const userApproval = await getOrCreateUserApprovals(userId);
     if (!userApproval.isApproved) {
-      console.log(
-        `Warning: User ${userId} is not approved for public adventures`
-      );
+      log.info(`Warning: User ${userId} is not approved for public adventures`);
       log.warn(`Warning: User ${userId} is not approved for public adventures`);
       importObj.adventure_public = false;
     }
