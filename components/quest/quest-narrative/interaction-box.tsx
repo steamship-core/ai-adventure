@@ -31,11 +31,13 @@ const SuggestionSheet = ({
   setInput,
   generateSuggestions,
   messageCount,
+  disabled,
 }: {
   setInput: Dispatch<SetStateAction<string>>;
   setSelectedOption: Dispatch<SetStateAction<InteractionOptions>>;
   generateSuggestions: () => Promise<any>;
   messageCount: number;
+  disabled: boolean;
 }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["suggestions", messageCount],
@@ -52,7 +54,11 @@ const SuggestionSheet = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="w-full flex gap-4">
+        <Button
+          variant="outline"
+          className="w-full flex gap-4"
+          disabled={disabled}
+        >
           <SparklesIcon className="h-5" /> Suggest
         </Button>
       </SheetTrigger>
@@ -153,11 +159,13 @@ const InteractionBox = ({
             setInput={setInput}
             generateSuggestions={generateSuggestions}
             messageCount={messageCount}
+            disabled={isLoading || isComplete}
           />
           <Button
             variant="outline"
             className="w-full flex gap-4"
             onClick={() => setSelectedOption("custom")}
+            disabled={isLoading || isComplete}
           >
             <PencilIcon className="h-5" /> Custom
           </Button>

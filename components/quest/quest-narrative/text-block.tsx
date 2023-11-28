@@ -66,7 +66,7 @@ export const TextBlock = ({
         className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
       >
         {useTypeEffect ? (
-          <>{didComplete && <Typewriter text={text} delay={15} />}</>
+          <>{didComplete && <Typewriter text={text} delay={5} />}</>
         ) : (
           <> {text} </>
         )}

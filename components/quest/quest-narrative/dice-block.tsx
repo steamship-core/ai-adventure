@@ -4,6 +4,7 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
+import { Player } from "@lottiefiles/react-lottie-player";
 import { PointerIcon, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
@@ -29,6 +30,8 @@ const RollingDie = ({
     disableAnimation ? true : false
   );
   const [clickedRollDie, setClickedRollDie] = useState(false);
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
@@ -46,6 +49,7 @@ const RollingDie = ({
     setTimeout(() => {
       clearInterval(interval);
       setNum(rolled);
+      setShowSuccessAnimation(rolled >= required);
       setContinuationState(true);
       setDoneRolling(true);
     }, 2000);
@@ -70,14 +74,16 @@ const RollingDie = ({
       <button
         className={cn(
           "relative bg-foreground rounded-md mt-2 h-20 aspect-square text-center flex items-center justify-center py-2",
-          isTwenty && doneRolling && "bg-cyan-500 shadow-lg shadow-cyan-500/50",
-          !clickedRollDie && !disableAnimation && "animate-pulse"
+          isTwenty && doneRolling && "bg-cyan-500 shadow-lg shadow-cyan-500/50"
         )}
         disabled={clickedRollDie || disableAnimation}
         onClick={() => {
           rollDie();
         }}
       >
+        {!clickedRollDie && !disableAnimation && (
+          <div className="absolute -z-20 h-3/4 w-3/4 rounded-full bg-indigo-600 m-auto left-0 right-0 top-0 bottom-0 animate-ping" />
+        )}
         <TypographyLarge
           className={cn(
             "text-6xl",
@@ -95,6 +101,17 @@ const RollingDie = ({
       {!clickedRollDie && !disableAnimation && (
         <div className="absolute bottom-0 animate-bounce">
           <PointerIcon />
+        </div>
+      )}
+      {showSuccessAnimation && (
+        <div className="absolute">
+          <Player
+            autoplay
+            loop={false}
+            src="/success-lottie.json"
+            className="h-72 w-72"
+            keepLastFrame
+          />
         </div>
       )}
       {!disableAnimation && isTwenty && (
