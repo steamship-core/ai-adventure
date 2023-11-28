@@ -15,7 +15,6 @@ import {
 
 interface AdventureMilestoneEmailProps {
   title?: string;
-  username?: string;
   adventureId?: string;
   adventureName?: string;
 }
@@ -26,7 +25,6 @@ const baseUrl = process.env.NEXT_PUBLIC_WEB_BASE_URL
 
 export const AdventureMilestoneEmail = ({
   title = `Your Adventure is being played!`,
-  username = "Adventurer",
   adventureId = "123",
   adventureName = "My Adventure",
 }: AdventureMilestoneEmailProps) => {
@@ -52,7 +50,7 @@ export const AdventureMilestoneEmail = ({
               {title}
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
-              Hey {username} 👋
+              Hey there! 👋
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
               Your adventure
