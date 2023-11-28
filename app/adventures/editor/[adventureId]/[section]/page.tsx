@@ -70,6 +70,11 @@ export default async function EditorPage({
     adventure.agentConfig || {}
   );
 
+  const isGenerating = adventure?.state == "generating";
+  const generatingTaskId = adventure?.stateTaskId;
+
+  console.log(`Generating state: ${isGenerating}, ${generatingTaskId}`);
+
   return (
     <Editor
       adventureId={adventure.id}
