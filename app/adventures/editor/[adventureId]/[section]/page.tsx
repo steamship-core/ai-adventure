@@ -50,10 +50,15 @@ export default async function EditorPage({
 
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),
-    adventure_name: adventure.name,
-    adventure_description: adventure.description,
-    adventure_short_description: adventure.shortDescription,
-    adventure_image: adventure.image,
+    adventure_name: adventure.name, // Backwards compatible
+    name: adventure.name,
+    adventure_description: adventure.description, // Backwards compatible
+    description: adventure.description,
+    adventure_short_description: adventure.shortDescription, // Backwards compatible
+    short_description: adventure.shortDescription,
+    adventure_image: adventure.image, // Backwards compatible
+    image: adventure.image,
+    tags: adventure.tags,
     adventure_public: adventure.public,
     adventure_public_requested: adventure.publicRequested,
     game_engine_version: adventure.agentVersion,
@@ -71,6 +76,9 @@ export default async function EditorPage({
       devConfig={devConfig}
       hasUnpublishedChanges={unpublishedChanges}
       isUserApproved={userApproval?.isApproved || false}
+      isGenerating={adventure?.state == "generating"}
+      isGeneratingTaskId={adventure?.stateTaskId}
+      stateUpdatedAt={adventure?.stateUpdatedAt}
     />
   );
 }

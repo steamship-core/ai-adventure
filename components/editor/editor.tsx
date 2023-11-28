@@ -3,7 +3,6 @@
 import { EditorBackButton } from "@/components/editor/editor-back-button";
 import PublishButton from "@/components/editor/publish-button";
 import { PublishCTA } from "@/components/editor/publish-cta";
-import SettingGroupForm from "@/components/editor/setting-group-form";
 import { SidebarNav } from "@/components/editor/sidebar-nav";
 import TestButton from "@/components/editor/test-button";
 import {
@@ -15,22 +14,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { useEditorRouting } from "@/lib/editor/use-editor";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import { recoilEditorLayoutImage } from "../providers/recoil";
 import { Button } from "../ui/button";
+import GeneratingView from "./generating-view";
+import SettingGroupForm from "./setting-group-form";
 
 const Editor = ({
   adventureId,
   devConfig,
   hasUnpublishedChanges,
   isUserApproved,
+  isGenerating = false,
+  isGeneratingTaskId = null,
+  stateUpdatedAt = null,
 }: {
   adventureId: string;
   devConfig: any;
   hasUnpublishedChanges: boolean;
   isUserApproved: boolean;
+  isGenerating: boolean;
+  isGeneratingTaskId?: string | null;
+  stateUpdatedAt?: Date | null;
 }) => {
   const [activeConfig, setDevConfig] = useState(devConfig);
   const [unpublishedChanges, setHasUnpublishedChanges] = useState(
@@ -43,7 +49,7 @@ const Editor = ({
 
   const [isLoading, setIsLoading] = useState(true);
   const [settingGroups, setSettingGroups] = useState<SettingGroup[]>([]);
-  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
+  const { groupName } = useEditorRouting();
 
   useEffect(() => {
     fetch(`/api/adventure/${adventureId}/schema`).then(
@@ -70,15 +76,17 @@ const Editor = ({
     setUnsavedDepartureUrl(destination);
   };
 
-  setEditorLayoutImage(devConfig.adventure_image);
-
   return (
     <>
       <div className="flex flex-row space-x-2">
         <EditorBackButton />
-        <TestButton className="mr-2" />
-        {unpublishedChanges && (
-          <PublishButton className="mr-2" onPublish={onPublish} />
+        {!isGenerating && (
+          <>
+            <TestButton className="mr-2" />
+            {unpublishedChanges && (
+              <PublishButton className="mr-2" onPublish={onPublish} />
+            )}
+          </>
         )}
       </div>
       {unpublishedChanges && (
@@ -97,12 +105,19 @@ const Editor = ({
           )}
         </aside>
         <div className="col-span-9 lg:col-span-10">
-          {!isLoading && (
+          {!isLoading && !isGenerating && (
             <SettingGroupForm
               existing={activeConfig}
               onDataChange={onDataChange}
               isUserApproved={isUserApproved}
               settingGroups={settingGroups}
+            />
+          )}
+          {!isLoading && isGenerating && (
+            <GeneratingView
+              adventureId={adventureId}
+              isGeneratingTaskId={isGeneratingTaskId}
+              stateUpdatedAt={stateUpdatedAt}
             />
           )}
         </div>

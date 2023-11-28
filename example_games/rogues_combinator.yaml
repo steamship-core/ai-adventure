@@ -69,8 +69,8 @@ characters:
       A bumbling idiot who somehow manages to get lucky everytime. Eats only
       fast food. Drinks only soda. Has no idea what's going on.
 adventure_goal: Grow a company from seed stage to IPO.
-adventure_name: Rogue's Combinator
-adventure_tags:
+name: Rogue's Combinator
+tags:
   - comedy
 narrative_tone: Gonzo Adventure
 adventure_image: https://oieuhigellqlbr79.public.blob.vercel-storage.com/041d371d-32dc-412f-8515-a3f4b19f0dcb-eacb394c-f9ad-419e-95ca-403721f686b3-rogues-combinator-Ij8ItxpabQnb4gRPMJUiX9LX902tSV.png
@@ -106,12 +106,12 @@ adventure_background: >
 
   Items: The items are all tech-related, often information about a particular deal, future product, or opportunity to abuse or arbitrage some aspect of the market.
 profile_image_prompt: profile picture, high tech, great hair, cinematic poster quality
-adventure_description: Found a company, raise capital, grow team, and seek the
+description: Found a company, raise capital, grow team, and seek the
   ultimate return. But watch out for the pitfalls of founder life... especially
   those you create yourself.
 min_problems_per_quest: 2
 quest_background_theme: cinematic_animation
-adventure_short_description: Can you make it to IPO as a flawed founder?
+short_description: Can you make it to IPO as a flawed founder?
 camp_music_generation_prompt: electronic background music, ambient, driving
 quest_background_image_prompt: movie poster, cinematic, exciting, high-tech,{description}
 scene_music_generation_prompt: "16-bit game score for an exciting adventure. Scene description: {description}"

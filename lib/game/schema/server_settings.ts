@@ -123,4 +123,6 @@ export type ServerSettings = {
   default_function_capable_llm_model?: "gpt-3.5-turbo" | "gpt-4";
   default_function_capable_llm_temperature?: number;
   default_function_capable_llm_max_tokens?: number;
+
+  generation_task_id?: string;
 };

@@ -14,7 +14,9 @@ export const CreateAdventureButton = () => {
 
   return (
     <Button onClick={onClick} asChild>
-      <Link href="/adventures/template">Create a new adventure template</Link>
+      <Link href="/adventures/create/template">
+        Create a new adventure template
+      </Link>
     </Button>
   );
 };

@@ -41,11 +41,16 @@ export const POST = withAxiom(async (request: Request) => {
       ...(data.unsaved_server_settings || {}),
       short_description:
         data.unsaved_server_settings.adventure_short_description ||
+        data.unsaved_server_settings.short_description ||
         devConfig.shortDescription,
       description:
         data.unsaved_server_settings.adventure_description ||
+        data.unsaved_server_settings.description ||
         devConfig.description,
-      name: data.unsaved_server_settings.adventure_name || devConfig.name,
+      name:
+        data.unsaved_server_settings.adventure_name ||
+        data.unsaved_server_settings.name ||
+        devConfig.name,
     };
 
     if (operation === "preview") {

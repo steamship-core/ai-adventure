@@ -98,6 +98,11 @@ export const TopLevelSpecialCases = {
   adventure_image: "image",
   adventure_tags: "tags",
   adventure_public: "public",
+  name: "name",
+  description: "description",
+  short_description: "shortDescription",
+  image: "image",
+  tags: "tags",
 };
 
 /**

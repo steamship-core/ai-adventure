@@ -9,14 +9,10 @@ import Editor from "@monaco-editor/react";
 import { useMutation } from "@tanstack/react-query";
 import { PutBlobResult } from "@vercel/blob";
 import { CheckIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import {
-  EditorLayoutImage,
-  recoilEditorLayoutImage,
-  recoilErrorModalState,
-} from "../providers/recoil";
+import { recoilErrorModalState } from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -47,7 +43,6 @@ export default function SettingGroupForm({
     return _existingDynamicThemes;
   };
   const { groupName, adventureId } = useEditorRouting();
-  const [, setEditorLayoutImage] = useRecoilState(recoilEditorLayoutImage);
   const { toast } = useToast();
   const [_, setError] = useRecoilState(recoilErrorModalState);
 
@@ -174,7 +169,6 @@ export default function SettingGroupForm({
           );
           if (res.ok) {
             const blobJson = (await res.json()) as PutBlobResult;
-            setEditorLayoutImage(blobJson.url);
             dataToSave.adventure_image = blobJson.url;
           } else {
             const e = {
@@ -261,13 +255,42 @@ export default function SettingGroupForm({
     },
   });
 
-  useEffect(() => {
-    if (existing?.adventure_image) {
-      setEditorLayoutImage(existing.adventure_image);
-    } else {
-      setEditorLayoutImage(EditorLayoutImage.UNSET);
-    }
-  }, []);
+  const {
+    mutate: magicMutate,
+    isPending: magicIsPending,
+    submittedAt: magicSubmittedAt,
+    isSuccess: magicIsSuccess,
+  } = useMutation({
+    mutationKey: ["magic-create", adventureId],
+    mutationFn: async (data: any) => {
+      const dataToSave = data;
+
+      let res = await fetch(`/api/adventure/${adventureId}`, {
+        method: "POST",
+        body: JSON.stringify({
+          operation: "magic-create",
+          id: adventureId,
+          data: dataToSave,
+        }),
+      });
+
+      if (!res.ok) {
+        const e = {
+          title: "Failed to use create with magic.",
+          message: "The server responded with an error response",
+          details: `Status: ${res.status}, StatusText: ${
+            res.statusText
+          }, Body: ${await res.text()}`,
+        };
+        setError(e);
+        console.error(e);
+      } else {
+        window?.scrollTo(0, 0);
+        window?.location?.reload();
+      }
+      return res;
+    },
+  });
 
   const sg = (settingGroups || []).filter(
     (group) => groupName === group.href
@@ -353,6 +376,16 @@ export default function SettingGroupForm({
     mutate(dataToUpdate);
   };
 
+  const onMagic = (e: any) => {
+    amplitude.track("Button Click", {
+      buttonName: "Create with Magic",
+      location: "Editor",
+      action: "magic-create",
+      adventureId: adventureId,
+    });
+    magicMutate(dataToUpdate);
+  };
+
   const setKeyValue = (key: string, value: any) => {
     setDataToUpdate((prior) => {
       return { ...prior, [key]: value };
@@ -414,6 +447,52 @@ export default function SettingGroupForm({
             }}
             value={yaml}
           />
+        </div>
+      ) : sg.href == "magic-mode" ? (
+        <div className="space-y-8">
+          {sg.settings?.map((setting) => (
+            <SettingElement
+              key={setting.name}
+              setting={setting}
+              updateFn={setKeyValue}
+              adventureId={adventureId as string}
+              valueAtLoad={existing ? existing[setting.name] : null}
+              existingDynamicThemes={existingThemes}
+              keypath={[setting.name]}
+              isUserApproved={isUserApproved}
+              isApprovalRequested={
+                setting.approvalRequestedField
+                  ? existing[setting.approvalRequestedField] === true
+                  : false
+              }
+              suggestField={suggestField}
+              previewField={previewField}
+              latestAgentVersion={existing.gameEngineVersionAvailable}
+            />
+          ))}
+          {submittedAt && isSuccess ? (
+            <div className="text-sm text-muted-foreground flex items-center gap-2">
+              <CheckIcon size={14} />
+              Adventure Updated
+            </div>
+          ) : null}
+          <div
+            className={cn(
+              "fixed bottom-0 left-0 w-full transition-all",
+              "translate-y-0"
+            )}
+          >
+            <div className="w-full flex items-center justify-end py-2 px-4 gap-4 bg-indigo-950">
+              <Button
+                value="Magic"
+                onClick={onMagic}
+                isLoading={magicIsPending}
+                className="bg-indigo-500 hover:bg-indigo-600 text-white"
+              >
+                {magicIsPending ? "Creating..." : "Create with Magic"}
+              </Button>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="space-y-8">

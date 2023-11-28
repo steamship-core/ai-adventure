@@ -7,7 +7,7 @@ export const getServerSettingsFromAgent = async (agentBase: string) => {
   const steamship = getSteamshipClient();
   const userSettings = await steamship.agent.get({
     url: agentBase,
-    path: "/serverSettings",
+    path: "/server_settings",
     arguments: {},
   });
   const body = await userSettings.json();
@@ -44,3 +44,15 @@ export const pushAdventureToAgent = async (
 };
 
 export const loadServerSettingsFromDisk = async () => {};
+
+export const requestMagicCreation = async (
+  agentBase: string,
+  serverSettings: ServerSettings
+) => {
+  const steamship = getSteamshipClient();
+  return await steamship.agent.post({
+    url: agentBase,
+    path: "/generate_configuration",
+    arguments: serverSettings,
+  });
+};

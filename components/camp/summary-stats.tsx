@@ -1,7 +1,8 @@
 "use client";
 
-import { FlameIcon, PackageIcon } from "lucide-react";
+import { FlameIcon } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import BackgroundAudioToggle from "../audio/background-audio-toggle";
 import InventorySheet from "../inventory-sheet";
@@ -26,22 +27,19 @@ export const SummaryStats = ({
   showAudio?: boolean;
   showInventory?: boolean;
 }) => {
+  const [shouldRenderAudio, setShouldRenderAudio] = useState(false);
   const energy = useRecoilValue(recoilEnergyState);
+
+  useEffect(() => {
+    if (showAudio) {
+      setShouldRenderAudio(true);
+    }
+  }, [showAudio]);
 
   return (
     <div className="flex flex-row items-center gap-2" id="stats">
-      {showAudio && <BackgroundAudioToggle text="" />}
-      {showInventory && (
-        <InventorySheet>
-          <Button
-            variant="outline"
-            size="icon"
-            className="px-2 py-1 md:px-3 md:py-3 h-8 md:h-10"
-          >
-            <PackageIcon size={16} />
-          </Button>
-        </InventorySheet>
-      )}
+      {shouldRenderAudio && <BackgroundAudioToggle text="" />}
+      {showInventory && <InventorySheet />}
       {showEnergy && (
         <Dialog>
           <DialogTrigger>
