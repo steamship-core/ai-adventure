@@ -36,6 +36,7 @@ export async function POST(request: Request) {
   }
   return NextResponse.json({ adventure }, { status: 201 });
 }
+
 export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const cursor = searchParams.get("cursor") || null;

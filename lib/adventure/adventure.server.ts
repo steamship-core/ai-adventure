@@ -205,14 +205,16 @@ export const updateAdventure = async (
       ...(adventure.agentDevConfig as object),
       ...updateObj,
     };
-    const devAgent = (adventure as any).devAgent;
-    const resp = await pushServerSettingsToAgent(
-      devAgent.agentUrl,
-      updatedServerSettings
-    );
+    if (adventure.devAgent) {
+      const devAgent = adventure.devAgent;
+      const resp = await pushServerSettingsToAgent(
+        devAgent.agentUrl,
+        updatedServerSettings
+      );
 
-    if (!resp.ok) {
-      throw new Error(await resp.text());
+      if (!resp.ok) {
+        throw new Error(await resp.text());
+      }
     }
 
     let newAdventure = await prisma.adventure.update({
