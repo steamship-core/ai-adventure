@@ -51,7 +51,7 @@ const joyrideSteps: StepProps = [
   },
 ];
 
-const CustomTooltip = ({
+export const CustomTooltip = ({
   continuous,
   index,
   step,
@@ -59,6 +59,7 @@ const CustomTooltip = ({
   closeProps,
   primaryProps,
   tooltipProps,
+  isLastStep,
 }: TooltipRenderProps) => (
   <div
     {...tooltipProps}
@@ -68,8 +69,10 @@ const CustomTooltip = ({
     <div className="flex flex-col gap-2">{step.content}</div>
     <div className="flex gap-2 mt-4 justify-end">
       {index > 0 && <Button {...backProps}>Back</Button>}
-      {continuous && <Button {...primaryProps}>Next</Button>}
-      {!continuous && <Button {...closeProps}>Close</Button>}
+      {continuous && (
+        <Button {...primaryProps}>{isLastStep ? "Finish" : "Next"}</Button>
+      )}
+      {!continuous && <Button {...closeProps}>Finish</Button>}
     </div>
   </div>
 );

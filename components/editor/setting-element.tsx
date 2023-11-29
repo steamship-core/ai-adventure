@@ -283,7 +283,7 @@ export default function SettingElement({
   let innerField = <></>;
   const isDisabled = false; // setting.requiresApproval && !isUserApproved;
 
-  if (setting.type == "text") {
+  if (setting.type === "text") {
     innerField = (
       <Input
         isLoadingMagic={suggesting}
@@ -293,7 +293,7 @@ export default function SettingElement({
         onChange={onTextboxChange}
       />
     );
-  } else if (setting.type == "int") {
+  } else if (setting.type === "int") {
     innerField = (
       <Input
         type="number"
@@ -305,7 +305,7 @@ export default function SettingElement({
         min={setting.min || 0}
       />
     );
-  } else if (setting.type == "float") {
+  } else if (setting.type === "float") {
     innerField = (
       <Input
         type="number"
@@ -316,7 +316,7 @@ export default function SettingElement({
         min={setting.min || 0}
       />
     );
-  } else if (setting.type == "image") {
+  } else if (setting.type === "image") {
     innerField = (
       <ImageInputElement
         onInputChange={onInputChange}
@@ -325,7 +325,7 @@ export default function SettingElement({
         setting={setting}
       />
     );
-  } else if (setting.type == "program") {
+  } else if (setting.type === "program") {
     innerField = (
       <ProgramInputElement
         onInputChange={onInputChange}
@@ -343,7 +343,7 @@ export default function SettingElement({
         isLoadingMagic={suggesting}
       />
     );
-  } else if (setting.type == "boolean") {
+  } else if (setting.type === "boolean") {
     innerField = (
       <div key={setting.name} className="flex items-center space-x-2">
         <Switch
@@ -358,10 +358,10 @@ export default function SettingElement({
         </Label>
       </div>
     );
-  } else if (setting.type == "select") {
+  } else if (setting.type === "select") {
     const options = [
       ...(setting.options || []),
-      ...(setting.includeDynamicOptions == "image-themes"
+      ...(setting.includeDynamicOptions === "image-themes"
         ? existingDynamicThemes
         : []),
     ];
