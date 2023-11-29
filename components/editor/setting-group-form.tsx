@@ -123,7 +123,11 @@ export default function SettingGroupForm({
       console.error(e);
     } else {
       let block = (await response.json()) as Block;
-      if (block.text) {
+      if (block.mimeType?.endsWith("json")) {
+        const j = JSON.parse(block.text || "{}");
+        setValue(j);
+        setSuggesting(false);
+      } else if (block.text) {
         let cleanText = block.text.trim();
         if (cleanText.startsWith('"')) {
           cleanText = cleanText.substring(1, cleanText.length);
@@ -137,7 +141,6 @@ export default function SettingGroupForm({
         if (cleanText.endsWith("'")) {
           cleanText = cleanText.substring(0, cleanText.length - 1);
         }
-
         setValue(cleanText);
         setSuggesting(false);
       } else if (block.id) {

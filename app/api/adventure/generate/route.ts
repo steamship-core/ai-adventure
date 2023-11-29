@@ -40,16 +40,16 @@ export const POST = withAxiom(async (request: Request) => {
       ...devConfig,
       ...(data.unsaved_server_settings || {}),
       short_description:
-        data.unsaved_server_settings.adventure_short_description ||
         data.unsaved_server_settings.short_description ||
+        data.unsaved_server_settings.adventure_short_description ||
         devConfig.shortDescription,
       description:
-        data.unsaved_server_settings.adventure_description ||
         data.unsaved_server_settings.description ||
+        data.unsaved_server_settings.adventure_description ||
         devConfig.description,
       name:
-        data.unsaved_server_settings.adventure_name ||
         data.unsaved_server_settings.name ||
+        data.unsaved_server_settings.adventure_name ||
         devConfig.name,
     };
 
