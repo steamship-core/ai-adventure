@@ -15,6 +15,7 @@ export default function Quest({
   gameEngineVersion = "",
   isDevelopment = false,
   priorBlocks,
+  generateSuggestions,
 }: {
   gameState: GameState;
   agentBaseUrl: string;
@@ -22,6 +23,7 @@ export default function Quest({
   gameEngineVersion?: string;
   workspaceHandle?: string;
   priorBlocks?: ExtendedBlock[];
+  generateSuggestions: () => Promise<any>;
 }) {
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
@@ -77,6 +79,7 @@ export default function Quest({
             agentBaseUrl={agentBaseUrl}
             completeButtonText={completeButtonText}
             priorBlocks={priorBlocks}
+            generateSuggestions={generateSuggestions}
           />
         </>
       )}

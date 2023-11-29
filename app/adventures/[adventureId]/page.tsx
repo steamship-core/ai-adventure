@@ -3,6 +3,7 @@ import AdventureDetails from "@/components/adventures/adventure-details";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import EmojiPicker from "@/components/adventures/emoji-picker";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
@@ -200,8 +201,21 @@ export default async function AdventurePage({
           </TypographyLarge>
           <AdventureDescription description={adventure.description} />
         </div>
-        <CharacterTemplatesSection adventure={adventure} />
-        <AdventureDetails adventure={adventure} />
+        {adventure.agentConfig ? (
+          <>
+            <CharacterTemplatesSection adventure={adventure} />
+            <AdventureDetails adventure={adventure} />
+          </>
+        ) : (
+          <Alert>
+            <AlertTitle>This adventure is not finished yet</AlertTitle>
+            <AlertDescription>
+              This adventure cannot be played yet. If you&apos; the creator of
+              this adventure, update the fields from their default values and
+              publish the adventure
+            </AlertDescription>
+          </Alert>
+        )}
       </div>
     </div>
   );

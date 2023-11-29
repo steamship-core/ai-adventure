@@ -98,3 +98,19 @@ export const generateQuestArc = async (agentBase: string) => {
     }
   }
 };
+
+export const generateActionChoices = async (agentBase: string) => {
+  const steamship = getSteamshipClient();
+  try {
+    const resp = await steamship.agent.post({
+      url: agentBase,
+      path: "/generate_action_choices",
+      arguments: {},
+    });
+    const json = await resp.json();
+    return json;
+  } catch (e) {
+    console.log("error", e);
+    log.error(`${e}`);
+  }
+};

@@ -59,14 +59,8 @@ export default async function AdventurePage({
       },
     });
 
-    let userName = "";
     const email = user?.emailAddresses[0].emailAddress;
     if (email) {
-      if (user?.firstName) {
-        userName = user.firstName;
-      } else {
-        userName = email.split("@")[0];
-      }
       const emailSubject = countMap[count as keyof typeof countMap];
       if (emailSubject) {
         const owner = await clerkClient.users.getUser(adventure.creatorId);
@@ -78,7 +72,6 @@ export default async function AdventurePage({
             subject: emailSubject,
             react: (
               <AdventureMilestoneEmail
-                username={userName}
                 title={emailSubject}
                 adventureId={adventure.id}
                 adventureName={adventure.name}
