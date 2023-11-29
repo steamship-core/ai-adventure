@@ -83,7 +83,7 @@ export default async function EditorPage({
 
   if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
     if (version.major === 2 && version.minor === 1) {
-      if (version.patch >= 8) {
+      if (version.patch >= 6) {
         redirect(`/adventures/editor/${adventure.id}/initialize`);
       }
     } else {
