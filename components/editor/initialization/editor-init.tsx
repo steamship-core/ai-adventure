@@ -22,6 +22,7 @@ const EditorInitialization = ({
   requiredSettings: Setting[];
 }) => {
   const [step, setStep] = useState(0);
+  const [isPublishing, setIsPublishing] = useState(false);
   const [settings, setSettings] = useState<{ [key: string]: any }>(
     requiredSettings.reduce((acc, setting) => {
       // @ts-ignore
@@ -59,7 +60,7 @@ const EditorInitialization = ({
   };
 
   const onSave = async () => {
-    console.log(settings);
+    setIsPublishing(true);
     let res = await fetch(`/api/adventure/${adventureId}`, {
       method: "POST",
       body: JSON.stringify({
@@ -82,6 +83,7 @@ const EditorInitialization = ({
       );
     } else {
       setError("Failed to create adventure");
+      setIsPublishing(false);
     }
   };
 
@@ -199,9 +201,21 @@ const EditorInitialization = ({
                       setStep(step + 1);
                     }
                   }}
-                  disabled={!settings?.[requiredSettings[step].name]}
+                  disabled={
+                    !settings?.[requiredSettings[step].name] ||
+                    isPublishing ||
+                    suggesting
+                  }
                 >
-                  {step === requiredSettings.length - 1 ? "Finish" : "Next"}
+                  {step === requiredSettings.length - 1 ? (
+                    isPublishing ? (
+                      <Loader2Icon className="animate-spin" />
+                    ) : (
+                      "Finish"
+                    )
+                  ) : (
+                    "Next"
+                  )}
                 </Button>
               </div>
             </div>
