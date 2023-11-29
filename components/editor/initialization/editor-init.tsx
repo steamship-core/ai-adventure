@@ -172,8 +172,11 @@ const EditorInitialization = ({
               index === step ? "flex" : "hidden"
             }`}
           >
-            <div className="w-full">
-              <TypographyP>{setting.description}</TypographyP>
+            <div className="w-full text-left">
+              <TypographyP>{setting.onboardingTitle}</TypographyP>
+              <TypographyMuted className="text-lg">
+                {setting.onboardingSubtitle}
+              </TypographyMuted>
             </div>
             <div className="w-full text-left">
               {setting.name !== "fixed_quest_arc" && (
