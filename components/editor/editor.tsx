@@ -14,12 +14,60 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
-import { useEditorRouting } from "@/lib/editor/use-editor";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { CustomTooltip } from "../camp/welcome-modal";
 import { Button } from "../ui/button";
+import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import GeneratingView from "./generating-view";
 import SettingGroupForm from "./setting-group-form";
+
+const Joyride = dynamic(() => import("react-joyride"), { ssr: false });
+// @ts-ignore
+const joyrideSteps: StepProps = [
+  {
+    target: "#publish-section",
+    placement: "bottom",
+    title: "Test & Publsh",
+    content: (
+      <>
+        <TypographyMuted className="text-base text-muted-foreground">
+          Click <b> Test</b> to demo your adventure before publishing changes.
+          You can then <b>Publish</b> your changes and make them live. After
+          publishing, you can share your adventure with friends!
+        </TypographyMuted>
+      </>
+    ),
+    disableBeacon: true,
+  },
+  {
+    target: "#editor-side-nav",
+    placement: "right-start",
+    title: "Editor Navigation",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        Adventures are highly customizable. Use the navigation on the left to
+        edit all aspects of your adventure. As a good next step, check out the{" "}
+        <b>Story</b> and <b>Character</b> tabs.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+  {
+    target: "body",
+    placement: "center",
+    title: "Start Building!",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        Congrats! You can either continue exploring the editor, or return to the
+        adventure page and start playing.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+];
 
 const Editor = ({
   adventureId,
@@ -29,6 +77,7 @@ const Editor = ({
   isGenerating = false,
   isGeneratingTaskId = null,
   stateUpdatedAt = null,
+  settingGroups = [],
 }: {
   adventureId: string;
   devConfig: any;
@@ -37,6 +86,7 @@ const Editor = ({
   isGenerating: boolean;
   isGeneratingTaskId?: string | null;
   stateUpdatedAt?: Date | null;
+  settingGroups: SettingGroup[];
 }) => {
   const [activeConfig, setDevConfig] = useState(devConfig);
   const [unpublishedChanges, setHasUnpublishedChanges] = useState(
@@ -46,23 +96,6 @@ const Editor = ({
   const [unsavedDepartureUrl, setUnsavedDepartureUrl] = useState<
     string | undefined
   >(undefined);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [settingGroups, setSettingGroups] = useState<SettingGroup[]>([]);
-  const { groupName } = useEditorRouting();
-
-  useEffect(() => {
-    fetch(`/api/adventure/${adventureId}/schema`).then(
-      async (res) => {
-        const json = await res.json();
-        setIsLoading(false);
-        setSettingGroups(json.settingGroups);
-      },
-      (err) => {
-        console.error(err);
-      }
-    );
-  }, []);
 
   const onPublish = () => {
     setHasUnpublishedChanges(false);
@@ -76,9 +109,26 @@ const Editor = ({
     setUnsavedDepartureUrl(destination);
   };
 
+  const [showTutorial, setShowTutorial] = useState(false);
+  const queryParams = useSearchParams();
+  const initializationSuccess = queryParams.get("initializationSuccess");
+
+  useEffect(() => {
+    // get if the yser has seen the tutorial from local storage
+    const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
+    // if the user has not seen the tutorial, show it
+    if (!hasSeenTutorial && initializationSuccess) {
+      setShowTutorial(true);
+    }
+  }, []);
+
+  const onComplete = () => {
+    localStorage.setItem("hasSeenTutorial", "true");
+  };
+
   return (
     <>
-      <div className="flex flex-row space-x-2">
+      <div className="flex flex-row space-x-2" id="publish-section">
         <EditorBackButton />
         {!isGenerating && (
           <>
@@ -95,17 +145,15 @@ const Editor = ({
         </div>
       )}
       <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
-        <aside className="col-span-3 lg:col-span-2">
-          {!isLoading && (
-            <SidebarNav
-              items={settingGroups}
-              unsavedChangesExist={unsavedChangesExist}
-              displayUnsavedChangesModal={displayUnsavedChangesModal}
-            />
-          )}
+        <aside className="col-span-3 lg:col-span-2" id="editor-side-nav">
+          <SidebarNav
+            items={settingGroups}
+            unsavedChangesExist={unsavedChangesExist}
+            displayUnsavedChangesModal={displayUnsavedChangesModal}
+          />
         </aside>
         <div className="col-span-9 lg:col-span-10">
-          {!isLoading && !isGenerating && (
+          {!isGenerating && (
             <SettingGroupForm
               existing={activeConfig}
               onDataChange={onDataChange}
@@ -113,7 +161,7 @@ const Editor = ({
               settingGroups={settingGroups}
             />
           )}
-          {!isLoading && isGenerating && (
+          {isGenerating && (
             <GeneratingView
               adventureId={adventureId}
               isGeneratingTaskId={isGeneratingTaskId}
@@ -147,7 +195,34 @@ const Editor = ({
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>{" "}
+      <Joyride
+        run={showTutorial}
+        // @ts-ignore
+        steps={joyrideSteps}
+        continuous
+        showProgress
+        hideCloseButton
+        tooltipComponent={CustomTooltip}
+        disableScrolling
+        disableOverlayClose
+        disableCloseOnEsc
+        styles={{
+          // @ts-ignore
+          options: {
+            arrowColor: "hsl(var(--foreground))",
+          },
+        }}
+        callback={(data: any) => {
+          if (
+            data.lifecycle === "complete" &&
+            data.index === 2 &&
+            data.action === "next"
+          ) {
+            onComplete();
+          }
+        }}
+      />
     </>
   );
 };

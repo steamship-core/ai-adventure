@@ -47,6 +47,7 @@ export async function GET(request: Request) {
         style={{
           display: "flex",
           color: "black",
+          backgroundColor: "white",
           width: TWITTER_WIDTH,
           height: TWITTER_HEIGHT,
           flexDirection: "row",
