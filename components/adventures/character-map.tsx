@@ -1,6 +1,7 @@
 "use client";
 import { amplitude } from "@/lib/amplitude";
 import { Character } from "@/lib/game/schema/characters";
+import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
 import { UserIcon } from "lucide-react";
 import Image from "next/image";
@@ -17,17 +18,26 @@ const CharacterMap = ({
   characters: Character[];
 }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+    <div
+      className={cn(
+        "grid gap-6",
+        characters.length === 1 && "grid-cols-1",
+        characters.length === 2 && "grid-cols-2",
+        characters.length >= 3 && "grid-cols-2 md:grid-cols-3 "
+      )}
+    >
       {characters.map((character, i) => {
         const searchParams = new URLSearchParams();
-        searchParams.set("genre", character.genre || "");
-        searchParams.set("tone", character.tone || "");
-        searchParams.set("background", character.background);
-        searchParams.set("motivation", character.motivation);
-        searchParams.set("description", character.description);
-        searchParams.set("name", character.name);
+        if (character.description) {
+          searchParams.set("genre", character.genre || "");
+          searchParams.set("tone", character.tone || "");
+          searchParams.set("background", character.background);
+          searchParams.set("motivation", character.motivation);
+          searchParams.set("description", character.description);
+          searchParams.set("name", character.name);
+        }
         return (
-          <div key={i} className="w-full">
+          <div key={i} className="w-full h-72">
             <a
               href={
                 adventureId
