@@ -210,9 +210,8 @@ export default async function AdventurePage({
           <Alert>
             <AlertTitle>This adventure is not finished yet</AlertTitle>
             <AlertDescription>
-              This adventure cannot be played yet. If you&apos; the creator of
-              this adventure, update the fields from their default values and
-              publish the adventure
+              This adventure cannot be played yet because it is not yet
+              published.
             </AlertDescription>
           </Alert>
         )}
