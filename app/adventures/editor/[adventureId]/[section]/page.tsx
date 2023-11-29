@@ -9,6 +9,7 @@ import {
   Setting,
   SettingGroup,
 } from "@/lib/editor/DEPRECATED-editor-options";
+import { getVersion } from "@/lib/get-version";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
@@ -62,7 +63,7 @@ export default async function EditorPage({
   let requiredSettings: Setting[] = [];
   for (let settingGroup of settingGroups) {
     const requiredSettingsInGroup = settingGroup.settings?.filter(
-      (setting) => setting.required
+      (setting) => setting.required || setting.name === "narrative_tone"
     );
     requiredSettings = [
       ...requiredSettings,
@@ -76,12 +77,18 @@ export default async function EditorPage({
       // @ts-ignore
       return adventure.agentConfig?.[setting.name];
     });
-  console.log(adventure.agentConfig);
-  console.log(requiredSettings);
-  console.log(allSettingsFilled);
 
-  if (!allSettingsFilled) {
-    redirect(`/adventures/editor/${adventure.id}/initialize`);
+  const version = getVersion(agentVersion);
+  // if version is greator than 2.1.6
+
+  if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
+    if (version.major === 2 && version.minor === 1) {
+      if (version.patch >= 5) {
+        redirect(`/adventures/editor/${adventure.id}/initialize`);
+      }
+    } else {
+      redirect(`/adventures/editor/${adventure.id}/initialize`);
+    }
   }
 
   const userApproval = await prisma.userApprovals.findFirst({
@@ -89,8 +96,6 @@ export default async function EditorPage({
       userId: userId,
     },
   });
-
-  let innerConfig = (adventure.agentDevConfig as any) || {};
 
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),

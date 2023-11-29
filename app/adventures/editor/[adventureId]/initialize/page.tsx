@@ -52,13 +52,28 @@ export default async function EditorInitPage({
   let requiredSettings: Setting[] = [];
   for (let settingGroup of settingGroups) {
     const requiredSettingsInGroup = settingGroup.settings?.filter(
-      (setting) => setting.required
+      (setting) => setting.required || setting.name === "narrative_tone"
     );
     requiredSettings = [
       ...requiredSettings,
       ...(requiredSettingsInGroup || []),
     ];
   }
+
+  const order = [
+    "narrative_voice",
+    "narrative_tone",
+    "name",
+    "short_description",
+    "description",
+    "image",
+    "fixed_quest_arc",
+  ];
+  requiredSettings.sort((a, b) => {
+    return order.indexOf(a.name) - order.indexOf(b.name);
+  });
+
+  console.log(requiredSettings);
 
   return (
     <EditorInitialization

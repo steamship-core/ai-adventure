@@ -1,18 +1,68 @@
 "use client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AutoResizeTextarea } from "@/components/ui/textarea";
+import { TypographyLead } from "@/components/ui/typography/TypographyLead";
+import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
 import { suggestField } from "@/lib/editor/suggest-field";
 import { useEditorRouting } from "@/lib/editor/use-editor";
+import { cn } from "@/lib/utils";
 import { Adventure } from "@prisma/client";
 import { Loader2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ImageInputElement from "../image-input-element";
+
+const ObjectList = ({
+  settings,
+  setting,
+  requiredSettings,
+}: {
+  settings: { [key: string]: any };
+  setting: Setting;
+  requiredSettings: Setting[];
+}) => {
+  const requiredSetting = requiredSettings.find((s) => s.name === setting.name);
+  if (!requiredSetting) return null;
+
+  const listSchema = requiredSetting.listSchema;
+
+  if (!listSchema) return null;
+
+  if (!settings[setting.name] || settings[setting.name]?.length === 0)
+    return null;
+
+  return (
+    <div className="flex flex-row gap-6 overflow-scroll my-2">
+      {settings[setting.name]?.map((item: any, index: number) => (
+        <div
+          key={item[listSchema[0].name]}
+          className="flex flex-col bg-gradient-to-br from-background to-muted/60 rounded-md p-4 min-w-[20rem] border"
+        >
+          <span className="text-indigo-500 font-bold">{index + 1}</span>
+
+          <div className="flex flex-col gap-2">
+            {listSchema.map(
+              (schema, i) =>
+                item[schema.name] && (
+                  <div key={schema.name}>
+                    {i === 0 ? (
+                      <TypographyLead>{item[schema.name]}</TypographyLead>
+                    ) : (
+                      <TypographyMuted>{item[schema.name]}</TypographyMuted>
+                    )}
+                  </div>
+                )
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const EditorInitialization = ({
   adventure,
@@ -37,7 +87,8 @@ const EditorInitialization = ({
 
   const onSuggestField = async (
     fieldName: string,
-    fieldKeyPath: (string | number)[]
+    fieldKeyPath: (string | number)[],
+    type: string
   ) => {
     setSuggesting(true);
     try {
@@ -50,7 +101,7 @@ const EditorInitialization = ({
       if (text) {
         setSettings((prevSettings) => ({
           ...prevSettings,
-          [fieldName]: text,
+          [fieldName]: type === "list" ? JSON.parse(text) : text,
         }));
       }
     } catch (e) {
@@ -87,6 +138,8 @@ const EditorInitialization = ({
     }
   };
 
+  console.log(requiredSettings);
+  console.log(settings);
   return (
     <div className="h-full w-full flex items-center justify-center relative flex-col">
       <div className="absolute top-0 left-0 w-full h-full -z-20 blur-2xl">
@@ -123,10 +176,17 @@ const EditorInitialization = ({
               <TypographyP>{setting.description}</TypographyP>
             </div>
             <div className="w-full text-left">
-              <Label>{setting.label}</Label>
-              <div className="flex gap-2 w-full items-end justify-between">
+              {setting.name !== "fixed_quest_arc" && (
+                <Label>{setting.label}</Label>
+              )}
+              <div
+                className={cn(
+                  setting.name === "fixed_quest_arc" && "flex-col",
+                  "flex gap-2 w-full justify-between"
+                )}
+              >
                 {setting.type === "text" && (
-                  <Input
+                  <AutoResizeTextarea
                     value={settings?.[setting.name] || ""}
                     onChange={(e) => {
                       setSettings((prevSettings) => ({
@@ -165,13 +225,30 @@ const EditorInitialization = ({
                     }}
                   />
                 )}
-                <div className="p-0.5">
+                {setting.type === "list" && setting.listof === "object" && (
+                  <ObjectList
+                    setting={setting}
+                    requiredSettings={requiredSettings}
+                    settings={settings}
+                  />
+                )}
+                <div
+                  className={cn(
+                    setting.name === "fixed_quest_arc" && "w-full",
+                    "p-0.5"
+                  )}
+                >
                   <Button
                     onClick={() => {
-                      onSuggestField(setting.name, [setting.name]);
+                      onSuggestField(
+                        setting.name,
+                        [setting.name],
+                        setting.type
+                      );
                     }}
                     disabled={suggesting}
                     variant="secondary"
+                    className="w-full"
                   >
                     {suggesting ? (
                       <Loader2Icon className="animate-spin" />

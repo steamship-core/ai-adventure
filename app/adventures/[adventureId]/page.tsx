@@ -1,5 +1,4 @@
 import { AdventureDescription } from "@/components/adventures/adventure-description";
-import AdventureDetails from "@/components/adventures/adventure-details";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
 import EmojiPicker from "@/components/adventures/emoji-picker";
@@ -204,7 +203,7 @@ export default async function AdventurePage({
         {adventure.agentConfig ? (
           <>
             <CharacterTemplatesSection adventure={adventure} />
-            <AdventureDetails adventure={adventure} />
+            {/* <AdventureDetails adventure={adventure} /> */}
           </>
         ) : (
           <Alert>
