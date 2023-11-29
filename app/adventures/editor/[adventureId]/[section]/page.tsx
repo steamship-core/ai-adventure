@@ -65,8 +65,6 @@ export default async function EditorPage({
     gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
-  console.log(devConfig);
-
   let unpublishedChanges = !objectEquals(
     adventure.agentDevConfig || {},
     adventure.agentConfig || {}
