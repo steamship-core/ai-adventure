@@ -264,6 +264,7 @@ export default function SettingGroupForm({
     mutationKey: ["magic-create", adventureId],
     mutationFn: async (data: any) => {
       const dataToSave = data;
+      console.log("SAVE", dataToSave);
 
       let res = await fetch(`/api/adventure/${adventureId}`, {
         method: "POST",
