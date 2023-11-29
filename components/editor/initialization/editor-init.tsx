@@ -73,13 +73,51 @@ const EditorInitialization = ({
 }) => {
   const [step, setStep] = useState(0);
   const [isPublishing, setIsPublishing] = useState(false);
+
+  const legacyMap = {
+    name: "adventure_name",
+    description: "adventure_description",
+    image: "adventure_image",
+  };
+
+  const legacyValues = {
+    short_description: adventure.shortDescription,
+  };
   const [settings, setSettings] = useState<{ [key: string]: any }>(
     requiredSettings.reduce((acc, setting) => {
       // @ts-ignore
-      acc[setting.name] = adventure.agentConfig?.[setting.name] || undefined;
+
+      const curValue = adventure.agentConfig?.[setting.name];
+      if (!curValue) {
+        // @ts-ignore
+
+        const legacyKey = legacyMap[setting.name];
+        if (legacyKey) {
+          // @ts-ignore
+
+          const legacyValue = adventure.agentConfig?.[legacyKey];
+          if (legacyValue) {
+            // @ts-ignore
+
+            acc[setting.name] = legacyValue;
+            return acc;
+          }
+        }
+        // @ts-ignore
+
+        const legacyValue = legacyValues[setting.name];
+        if (legacyValue) {
+          acc[setting.name] = legacyValue;
+          return acc;
+        }
+      } else {
+        // @ts-ignore
+        acc[setting.name] = adventure.agentConfig?.[setting.name] || undefined;
+      }
       return acc;
     }, {} as { [key: string]: any })
   );
+  console.log(adventure.agentConfig);
   const { adventureId } = useEditorRouting();
   const [error, setError] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
@@ -200,6 +238,7 @@ const EditorInitialization = ({
                     disabled={suggesting}
                     isLoadingMagic={suggesting}
                     className="w-full"
+                    placeholder={setting.default ? `${setting.default}` : ""}
                   />
                 )}
                 {setting.type === "textarea" && (
