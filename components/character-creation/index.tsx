@@ -64,8 +64,6 @@ export default function CharacterCreation({
       searchParams.has("motivation")
   );
 
-  const createImmediately = searchParams.has("createImmediately");
-
   const [activeStep, setActiveStep] = useState(
     isCompleteConfig ? MAX_STEPS : 0
   );
