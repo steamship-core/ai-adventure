@@ -14,12 +14,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { Adventure } from "@prisma/client";
+import { PlayIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CharacterTemplatesSection from "../adventures/character-templates-section";
 import { CustomTooltip } from "../camp/welcome-modal";
 import { Button } from "../ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import GeneratingView from "./generating-view";
 import SettingGroupForm from "./setting-group-form";
@@ -41,6 +45,7 @@ const joyrideSteps: StepProps = [
       </>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
   {
     target: "#editor-side-nav",
@@ -54,7 +59,34 @@ const joyrideSteps: StepProps = [
       </TypographyMuted>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
+  {
+    target: "#description",
+    placement: "top",
+    title: "Auto Generated Description",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        Based on your adventure settings, we&apos;ve generated a description for
+        your adventure. You can edit this description, or write your own.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+    disableScrolling: true,
+  },
+  {
+    target: "#image",
+    placement: "top",
+    title: "Auto Generated Image",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        We also generated an image for your adventure. You can edit this image,
+        or upload your own.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+
   {
     target: "body",
     placement: "center",
@@ -66,10 +98,12 @@ const joyrideSteps: StepProps = [
       </TypographyMuted>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
 ];
 
 const Editor = ({
+  adventure,
   adventureId,
   devConfig,
   hasUnpublishedChanges,
@@ -79,6 +113,7 @@ const Editor = ({
   stateUpdatedAt = null,
   settingGroups = [],
 }: {
+  adventure: Adventure;
   adventureId: string;
   devConfig: any;
   hasUnpublishedChanges: boolean;
@@ -128,6 +163,19 @@ const Editor = ({
 
   return (
     <>
+      <div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-4 text-lg flex gap-2">
+              <PlayIcon />
+              Start adventure
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="bottom">
+            <CharacterTemplatesSection adventure={adventure} />
+          </SheetContent>
+        </Sheet>
+      </div>
       <div className="flex flex-row space-x-2" id="publish-section">
         <EditorBackButton />
         {!isGenerating && (
@@ -195,7 +243,7 @@ const Editor = ({
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>{" "}
+      </Dialog>
       <Joyride
         run={showTutorial}
         // @ts-ignore
@@ -204,7 +252,6 @@ const Editor = ({
         showProgress
         hideCloseButton
         tooltipComponent={CustomTooltip}
-        disableScrolling
         disableOverlayClose
         disableCloseOnEsc
         styles={{

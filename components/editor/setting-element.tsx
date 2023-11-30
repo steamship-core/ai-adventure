@@ -353,9 +353,7 @@ export default function SettingElement({
           onCheckedChange={onCheckboxChange}
           disabled={isDisabled}
         />
-        <Label htmlFor={setting.name}>
-          {value ? "Publically Visible" : "Hidden"}
-        </Label>
+        <Label htmlFor={setting.name}>{value ? "Yes" : "No"}</Label>
       </div>
     );
   } else if (setting.type === "select") {
@@ -559,7 +557,7 @@ export default function SettingElement({
   );
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" id={setting.name}>
       {!inlined && setting.type != "divider" && (
         <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
       )}

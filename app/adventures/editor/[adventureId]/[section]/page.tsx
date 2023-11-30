@@ -6,9 +6,9 @@ import { getSchema } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
 import {
   DEPRECATEDSettingGroups,
-  Setting,
   SettingGroup,
 } from "@/lib/editor/DEPRECATED-editor-options";
+import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
@@ -60,17 +60,7 @@ export default async function EditorPage({
     settingGroups = responseJson.settingGroups;
   }
 
-  let requiredSettings: Setting[] = [];
-  for (let settingGroup of settingGroups) {
-    const requiredSettingsInGroup = settingGroup.settings?.filter(
-      (setting) => setting.required || setting.name === "narrative_tone"
-    );
-    requiredSettings = [
-      ...requiredSettings,
-      ...(requiredSettingsInGroup || []),
-    ];
-  }
-
+  const requiredSettings = getRequiredFields(settingGroups);
   const allSettingsFilled =
     adventure.agentConfig &&
     requiredSettings.every((setting) => {
@@ -126,7 +116,7 @@ export default async function EditorPage({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between">
+      <div className="flex flex-col md:flex-row justify-between mt-4">
         <div>
           <TypographyH1>Adventure Editor</TypographyH1>
           <TypographyMuted className="text-lg">
@@ -135,6 +125,7 @@ export default async function EditorPage({
         </div>
       </div>
       <Editor
+        adventure={adventure}
         adventureId={adventure.id}
         devConfig={devConfig}
         hasUnpublishedChanges={unpublishedChanges}

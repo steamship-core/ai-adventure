@@ -75,10 +75,10 @@ export default function LandingHero() {
                   <h1 className="text-4xl font-bold tracking-tigh md:text-6xl">
                     Where Imagination and AI Merge
                   </h1>
-                  <p className="relative mt-6 text-lg leading-8 sm:max-w-md lg:max-w-none">
+                  <h2 className="relative mt-6 text-lg leading-8 sm:max-w-md lg:max-w-none">
                     Step into a universe of player-crafted epics. Or, wield the
                     power of AI to script your own legendary saga.
-                  </p>
+                  </h2>
                   <div className="mt-10 flex items-center gap-x-6">
                     <Link
                       href="/adventures"
