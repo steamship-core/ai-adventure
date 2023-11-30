@@ -18,6 +18,10 @@ module.exports = withAxiom({
         protocol: "https",
         hostname: "img.clerk.com",
       },
+      {
+        protocol: "https",
+        hostname: "ai-adventure.steamship.com",
+      },
     ],
   },
 });

@@ -1,10 +1,35 @@
+"use client";
+
 import Image from "next/image";
 
-const Card = ({ children }: { children: React.ReactNode }) => (
-  <div className="group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg">
-    {children}
-  </div>
-);
+const Card = ({
+  adventureId,
+  children,
+}: {
+  adventureId?: string;
+  children: React.ReactNode;
+}) => {
+  const extraCss = adventureId ? "cursor-pointer" : "";
+
+  if (adventureId) {
+    return (
+      <a
+        className={`block group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg ${extraCss}}`}
+        href={`/adventures/${adventureId}`}
+      >
+        {children}
+      </a>
+    );
+  } else {
+    return (
+      <div
+        className={`group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg`}
+      >
+        {children}
+      </div>
+    );
+  }
+};
 
 const CardDescription = ({
   title,
@@ -30,14 +55,16 @@ export default function PlayAsCharacterCard({
   adventureName,
   image,
   adventureDescription,
+  adventureId,
 }: {
   characterName: string;
   adventureName: string;
+  adventureId?: string;
   image: string;
   adventureDescription?: string;
 }) {
   return (
-    <Card>
+    <Card adventureId={adventureId}>
       <Image src={image} alt={characterName} fill className="object-cover" />
       <CardDescription
         title={adventureName}
