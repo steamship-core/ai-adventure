@@ -1,7 +1,7 @@
 import { getGameState, updateGameState } from "@/lib/game/game-state.client";
 import { GameState } from "@/lib/game/schema/game_state";
 import { AlertTriangle } from "lucide-react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import useLoadingScreen from "../loading/use-loading-screen";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -43,9 +43,6 @@ const CharacterCreationComplete = ({
   const ref = useRef<HTMLButtonElement>(null);
   const [error, setError] = useState<string | null>(null);
   const params = useParams<{ handle: string }>();
-
-  const searchParams = useSearchParams();
-  const createImmediately = searchParams.has("createImmediately");
 
   const pollForAgentSideOnboardingComplete = async (i: number = 0) => {
     if (i > 40) {
@@ -110,12 +107,6 @@ const CharacterCreationComplete = ({
       router.push(url.toString());
     }
   };
-
-  // useEffect(() => {
-  //   if (createImmediately === true) {
-  //     onComplete();
-  //   }
-  // }, [createImmediately]);
 
   return (
     <div className="w-full items-start">
