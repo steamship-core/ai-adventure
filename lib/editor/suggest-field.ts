@@ -37,21 +37,24 @@ export const suggestField = async (
   } else {
     let block = (await response.json()) as Block;
     if (block.text) {
-      let cleanText = block.text.trim();
-      if (cleanText.startsWith('"')) {
-        cleanText = cleanText.substring(1, cleanText.length);
+      if (block.mimeType?.endsWith("json")) {
+        return JSON.parse(block.text);
+      } else {
+        let cleanText = block.text.trim();
+        if (cleanText.startsWith('"')) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith('"')) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+        if (cleanText.startsWith("'")) {
+          cleanText = cleanText.substring(1, cleanText.length);
+        }
+        if (cleanText.endsWith("'")) {
+          cleanText = cleanText.substring(0, cleanText.length - 1);
+        }
+        return cleanText;
       }
-      if (cleanText.endsWith('"')) {
-        cleanText = cleanText.substring(0, cleanText.length - 1);
-      }
-      if (cleanText.startsWith("'")) {
-        cleanText = cleanText.substring(1, cleanText.length);
-      }
-      if (cleanText.endsWith("'")) {
-        cleanText = cleanText.substring(0, cleanText.length - 1);
-      }
-
-      return cleanText;
     } else if (block.id) {
       const blockUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
       if (block.mimeType?.startsWith("image")) {
