@@ -116,7 +116,7 @@ export default async function EditorPage({
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between my-4">
+      <div className="flex flex-col md:flex-row justify-between mt-4">
         <div>
           <TypographyH1>Adventure Editor</TypographyH1>
           <TypographyMuted className="text-lg">
