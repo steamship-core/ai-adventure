@@ -53,6 +53,8 @@ export const requestMagicCreation = async (
   return await steamship.agent.post({
     url: agentBase,
     path: "/generate_configuration",
-    arguments: serverSettings,
+    arguments: {
+      unsaved_server_settings: serverSettings,
+    },
   });
 };

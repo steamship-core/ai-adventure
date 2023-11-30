@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
   log.debug(`/api/chat [user ${userId}] Begin`);
-
   // Extract the `prompt` from the body of the request
   // TODO: It's not secure to allow the web user to pass the agentBaseUrl, but
   // Edge functions don't support Prisma. Can we use a Clerk user param? Or Session Cookie?
@@ -24,7 +23,6 @@ export async function POST(req: Request) {
     messages: Message[];
     agentBaseUrl: string;
   };
-
   log.debug(`/api/chat [user ${userId}] Base url: ${agentBaseUrl}`);
 
   log.debug(
