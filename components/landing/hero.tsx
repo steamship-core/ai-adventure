@@ -1,29 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
+import PlayAsCharacterCard from "../adventures/play-character-card";
 import Nav from "./nav";
-
-const Card = ({ children }: { children: React.ReactNode }) => (
-  <div className="group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg">
-    {children}
-  </div>
-);
-
-const CardDescription = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => (
-  <div className="absolute bottom-0 left-0 w-full">
-    <div className="backdrop-blur-sm p-2 bg-background/40 text-xs">
-      <div className="font-bold">{title}</div>
-      <div className="h-0 group-hover:mt-2 group-hover:h-[13rem] transition-all invisible group-hover:visible">
-        {description}
-      </div>
-    </div>
-  </div>
-);
 
 export default function LandingHero() {
   return (
@@ -69,91 +46,61 @@ export default function LandingHero() {
                 <div className="mt-14 flex justify-center gap-8 sm:-mt-36 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                   <div className="ml-auto hidden sm:block w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                     <div className="relative">
-                      <Card>
-                        <Image
-                          src="/characters/eldora.png"
-                          alt="Eldora"
-                          fill
-                          className="object-cover"
-                        />
-                        <CardDescription
-                          title="Mystic Blades of the Sorceress Guard"
-                          description=" A quest that combines magical prowess with martial
-                              combat, where the wizard warrior must retrieve
-                              ancient enchanted weapons to save her realm from a
-                              dark sorcery."
-                        />
-                      </Card>
+                      <PlayAsCharacterCard
+                        characterName="Eldora"
+                        adventureName="Mystic Blades of the Sorceress Guard"
+                        image="/characters/eldora.png"
+                        adventureDescription="A quest that combines magical prowess with martial
+                        combat, where the wizard warrior must retrieve
+                        ancient enchanted weapons to save her realm from a
+                        dark sorcery."
+                      />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                   </div>
                   <div className="w-40 sm:w-44 flex-none space-y-8 sm:pt-52 lg:pt-36">
                     <div className="relative">
-                      <Card>
-                        <Image
-                          src="/characters/gnome.png"
-                          alt="Gnome"
-                          fill
-                          className="object-cover"
-                        />
-                        <CardDescription
-                          title="Gizmos and Gadgets: The Great Tinkertown Heist"
-                          description="A lighthearted, puzzle-filled escapade where the
-                              gnome uses their wits and inventions to outsmart
-                              rivals in a race to uncover a legendary gadget in
-                              the heart of Tinkertown."
-                        />
-                      </Card>
+                      <PlayAsCharacterCard
+                        characterName="Gnome"
+                        adventureName="Gizmos and Gadgets: The Great Tinkertown Heist"
+                        image="/characters/gnome.png"
+                        adventureDescription="A lighthearted, puzzle-filled escapade where the
+                        gnome uses their wits and inventions to outsmart
+                        rivals in a race to uncover a legendary gadget in
+                        the heart of Tinkertown."
+                      />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                     <div className="relative">
-                      <Card>
-                        <Image
-                          src="/characters/space-person.png"
-                          alt="Space Person"
-                          fill
-                          className="object-cover"
-                        />
-                        <CardDescription
-                          title="Stars Beyond: The Orion Enigma"
-                          description="A thrilling space opera, where the Galactic Operative travels across star systems, facing interstellar intrigue and unknown cosmic threats to unravel the mysteries of the Orion Enigma."
-                        />
-                      </Card>
+                      <PlayAsCharacterCard
+                        characterName="Space Person"
+                        adventureName="Stars Beyond: The Orion Enigma"
+                        image="/characters/space-person.png"
+                        adventureDescription="A thrilling space opera, where the Galactic Operative travels across star systems, facing interstellar intrigue and unknown cosmic threats to unravel the mysteries of the Orion Enigma."
+                      />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                   </div>
                   <div className="w-40 sm:w-44 flex-none space-y-8 pt-32 sm:pt-0">
                     <div className="relative">
-                      <Card>
-                        <Image
-                          src="/characters/detective.png"
-                          alt="Detective"
-                          fill
-                          className="object-cover"
-                        />
-                        <CardDescription
-                          title="Shadows over Bridgetown: The Whispering Culprit"
-                          description="A gripping mystery where the detective unravels a series of cryptic clues leading to the heart of a deep conspiracy in the mist-covered streets of Bridgetown."
-                        />
-                      </Card>
+                      <PlayAsCharacterCard
+                        characterName="Detective"
+                        adventureName="Shadows over Bridgetown: The Whispering Culprit"
+                        image="/characters/detective.png"
+                        adventureDescription="A gripping mystery where the detective unravels a series of cryptic clues leading to the heart of a deep conspiracy in the mist-covered streets of Bridgetown."
+                      />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                     <div className="relative">
-                      <Card>
-                        <Image
-                          src="/characters/zara.png"
-                          alt="Zara"
-                          fill
-                          className="object-cover"
-                        />
-                        <CardDescription
-                          title="Lionheart's Roar: Quest for the Jungle Crown"
-                          description="A vibrant and humorous journey through a cartoon
-                              jungle, where the lion girl overcomes various
-                              challenges to find the mythical Jungle Crown and
-                              become the queen of the wilds."
-                        />
-                      </Card>
+                      <PlayAsCharacterCard
+                        characterName="Zara"
+                        adventureName="Lionheart's Roar: Quest for the Jungle Crown"
+                        image="/characters/zara.png"
+                        adventureDescription="A vibrant and humorous journey through a cartoon
+                        jungle, where the lion girl overcomes various
+                        challenges to find the mythical Jungle Crown and
+                        become the queen of the wilds."
+                      />
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                   </div>
