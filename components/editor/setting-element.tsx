@@ -353,9 +353,7 @@ export default function SettingElement({
           onCheckedChange={onCheckboxChange}
           disabled={isDisabled}
         />
-        <Label htmlFor={setting.name}>
-          {value ? "Publically Visible" : "Hidden"}
-        </Label>
+        <Label htmlFor={setting.name}>{value ? "Yes" : "No"}</Label>
       </div>
     );
   } else if (setting.type === "select") {
