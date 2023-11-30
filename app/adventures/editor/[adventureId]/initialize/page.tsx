@@ -3,9 +3,9 @@ import { getAdventure } from "@/lib/adventure/adventure.server";
 import { getSchema } from "@/lib/agent/agent.server";
 import {
   DEPRECATEDSettingGroups,
-  Setting,
   SettingGroup,
 } from "@/lib/editor/DEPRECATED-editor-options";
+import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -49,16 +49,7 @@ export default async function EditorInitPage({
     settingGroups = responseJson.settingGroups;
   }
 
-  let requiredSettings: Setting[] = [];
-  for (let settingGroup of settingGroups) {
-    const requiredSettingsInGroup = settingGroup.settings?.filter(
-      (setting) => setting.required || setting.name === "narrative_tone"
-    );
-    requiredSettings = [
-      ...requiredSettings,
-      ...(requiredSettingsInGroup || []),
-    ];
-  }
+  const requiredSettings = getRequiredFields(settingGroups);
 
   const order = [
     "narrative_voice",
@@ -72,8 +63,6 @@ export default async function EditorInitPage({
   requiredSettings.sort((a, b) => {
     return order.indexOf(a.name) - order.indexOf(b.name);
   });
-
-  console.log(requiredSettings);
 
   return (
     <EditorInitialization

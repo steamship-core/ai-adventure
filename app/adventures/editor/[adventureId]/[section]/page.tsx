@@ -6,9 +6,9 @@ import { getSchema } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
 import {
   DEPRECATEDSettingGroups,
-  Setting,
   SettingGroup,
 } from "@/lib/editor/DEPRECATED-editor-options";
+import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
@@ -60,17 +60,7 @@ export default async function EditorPage({
     settingGroups = responseJson.settingGroups;
   }
 
-  let requiredSettings: Setting[] = [];
-  for (let settingGroup of settingGroups) {
-    const requiredSettingsInGroup = settingGroup.settings?.filter(
-      (setting) => setting.required || setting.name === "narrative_tone"
-    );
-    requiredSettings = [
-      ...requiredSettings,
-      ...(requiredSettingsInGroup || []),
-    ];
-  }
-
+  const requiredSettings = getRequiredFields(settingGroups);
   const allSettingsFilled =
     adventure.agentConfig &&
     requiredSettings.every((setting) => {
