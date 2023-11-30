@@ -2,7 +2,6 @@
 
 import { Adventure } from "@prisma/client";
 import { PlayIcon } from "lucide-react";
-import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
@@ -16,20 +15,13 @@ export const StartAdventureSection = ({
 }: {
   adventure: Adventure;
 }) => {
-  const [isCreatingCharacter, setIsCreatingCharacter] = useState(false);
-
   return (
     <div className="p-4 md:p-6 flex gap-6 flex-col">
       <div className="flex flex-col gap-4">
         <TypographyH1>{adventure.name}</TypographyH1>
         <Sheet>
           <SheetTrigger asChild>
-            <Button
-              className="text-white bg-indigo-500 hover:bg-indigo-700 p-6 text-2xl flex gap-2 w-full"
-              onClick={() => {
-                setIsCreatingCharacter(true);
-              }}
-            >
+            <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-6 text-2xl flex gap-2 w-full">
               <PlayIcon />
               Start adventure
             </Button>
