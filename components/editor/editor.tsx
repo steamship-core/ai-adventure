@@ -41,6 +41,7 @@ const joyrideSteps: StepProps = [
       </>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
   {
     target: "#editor-side-nav",
@@ -54,7 +55,34 @@ const joyrideSteps: StepProps = [
       </TypographyMuted>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
+  {
+    target: "#description",
+    placement: "top",
+    title: "Auto Generated Description",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        Based on your adventure settings, we&apos;ve generated a description for
+        your adventure. You can edit this description, or write your own.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+    disableScrolling: true,
+  },
+  {
+    target: "#image",
+    placement: "top",
+    title: "Auto Generated Image",
+    content: (
+      <TypographyMuted className="text-base text-muted-foreground">
+        We also generated an image for your adventure. You can edit this image,
+        or upload your own.
+      </TypographyMuted>
+    ),
+    disableBeacon: true,
+  },
+
   {
     target: "body",
     placement: "center",
@@ -66,6 +94,7 @@ const joyrideSteps: StepProps = [
       </TypographyMuted>
     ),
     disableBeacon: true,
+    disableScrolling: true,
   },
 ];
 
@@ -204,7 +233,6 @@ const Editor = ({
         showProgress
         hideCloseButton
         tooltipComponent={CustomTooltip}
-        disableScrolling
         disableOverlayClose
         disableCloseOnEsc
         styles={{
