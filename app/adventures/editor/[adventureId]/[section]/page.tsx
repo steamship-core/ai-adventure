@@ -125,6 +125,7 @@ export default async function EditorPage({
         </div>
       </div>
       <Editor
+        adventure={adventure}
         adventureId={adventure.id}
         devConfig={devConfig}
         hasUnpublishedChanges={unpublishedChanges}

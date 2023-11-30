@@ -14,12 +14,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { Adventure } from "@prisma/client";
+import { PlayIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import CharacterTemplatesSection from "../adventures/character-templates-section";
 import { CustomTooltip } from "../camp/welcome-modal";
 import { Button } from "../ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import GeneratingView from "./generating-view";
 import SettingGroupForm from "./setting-group-form";
@@ -99,6 +103,7 @@ const joyrideSteps: StepProps = [
 ];
 
 const Editor = ({
+  adventure,
   adventureId,
   devConfig,
   hasUnpublishedChanges,
@@ -108,6 +113,7 @@ const Editor = ({
   stateUpdatedAt = null,
   settingGroups = [],
 }: {
+  adventure: Adventure;
   adventureId: string;
   devConfig: any;
   hasUnpublishedChanges: boolean;
@@ -157,6 +163,19 @@ const Editor = ({
 
   return (
     <>
+      <div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-4 text-lg flex gap-2">
+              <PlayIcon />
+              Start adventure
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="bottom">
+            <CharacterTemplatesSection adventure={adventure} />
+          </SheetContent>
+        </Sheet>
+      </div>
       <div className="flex flex-row space-x-2" id="publish-section">
         <EditorBackButton />
         {!isGenerating && (
@@ -224,7 +243,7 @@ const Editor = ({
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>{" "}
+      </Dialog>
       <Joyride
         run={showTutorial}
         // @ts-ignore
