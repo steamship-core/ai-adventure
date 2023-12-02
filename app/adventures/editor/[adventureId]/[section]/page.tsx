@@ -1,6 +1,4 @@
 import Editor from "@/components/editor/editor";
-import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
-import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import { getSchema } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
@@ -10,7 +8,6 @@ import {
 } from "@/lib/editor/DEPRECATED-editor-options";
 import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
-import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { log } from "next-axiom";
@@ -74,10 +71,10 @@ export default async function EditorPage({
   if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
     if (version.major === 2 && version.minor === 1) {
       if (version.patch >= 6) {
-        redirect(`/adventures/editor/${adventure.id}/initialize`);
+        redirect(`/adventures/${adventure.id}/initialize`);
       }
     } else {
-      redirect(`/adventures/editor/${adventure.id}/initialize`);
+      redirect(`/adventures/${adventure.id}/initialize`);
     }
   }
 
@@ -104,31 +101,11 @@ export default async function EditorPage({
     gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
-  let unpublishedChanges = !objectEquals(
-    adventure.agentDevConfig || {},
-    adventure.agentConfig || {}
-  );
-
-  const isGenerating = adventure?.state == "generating";
-  const generatingTaskId = adventure?.stateTaskId;
-
-  console.log(`Generating state: ${isGenerating}, ${generatingTaskId}`);
-
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between mt-4">
-        <div>
-          <TypographyH1>Adventure Editor</TypographyH1>
-          <TypographyMuted className="text-lg">
-            Create a custom adventure to share with your friends.
-          </TypographyMuted>
-        </div>
-      </div>
       <Editor
-        adventure={adventure}
         adventureId={adventure.id}
         devConfig={devConfig}
-        hasUnpublishedChanges={unpublishedChanges}
         isUserApproved={userApproval?.isApproved || false}
         isGenerating={adventure?.state == "generating"}
         isGeneratingTaskId={adventure?.stateTaskId}
