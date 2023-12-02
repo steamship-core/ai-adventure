@@ -2,6 +2,7 @@
 
 import { amplitude } from "@/lib/amplitude";
 import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { suggestField } from "@/lib/editor/suggest-field";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
@@ -12,7 +13,10 @@ import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import { recoilErrorModalState } from "../providers/recoil";
+import {
+  recoilErrorModalState,
+  recoilUnsavedChangesExist,
+} from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -23,12 +27,10 @@ import SettingElement from "./setting-element";
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
-  onDataChange,
   isUserApproved,
   settingGroups,
 }: {
   existing: Record<string, any>;
-  onDataChange: (field: string, value: any) => void;
   isUserApproved: boolean;
   settingGroups: SettingGroup[];
 }) {
@@ -91,114 +93,46 @@ export default function SettingGroupForm({
   };
 
   // TODO: Send up changes in progress
-  const suggestField = async (
+  const onSuggestField = async (
     fieldName: string,
     fieldKeyPath: (string | number)[],
     setSuggesting: (val: boolean) => void,
     setValue: (val: string) => void
   ) => {
     setSuggesting(true);
-    const response = await fetch(`/api/adventure/generate`, {
-      method: "POST",
-      body: JSON.stringify({
-        operation: "suggest",
-        id: adventureId,
-        data: {
-          field_name: fieldName,
-          field_key_path: fieldKeyPath,
-          unsaved_server_settings: dataToUpdate,
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      const e = {
-        title: "Failed suggestion request.",
-        message: "The server responded with an error response",
-        details: `Status: ${response.status}, StatusText: ${
-          response.statusText
-        }, Body: ${await response.text()}`,
-      };
-      setError(e);
-      console.error(e);
-    } else {
-      let block = (await response.json()) as Block;
-      if (block.text) {
-        let cleanText = block.text.trim();
-        if (cleanText.startsWith('"')) {
-          cleanText = cleanText.substring(1, cleanText.length);
-        }
-        if (cleanText.endsWith('"')) {
-          cleanText = cleanText.substring(0, cleanText.length - 1);
-        }
-        if (cleanText.startsWith("'")) {
-          cleanText = cleanText.substring(1, cleanText.length);
-        }
-        if (cleanText.endsWith("'")) {
-          cleanText = cleanText.substring(0, cleanText.length - 1);
-        }
-
-        setValue(cleanText);
-        setSuggesting(false);
-      } else if (block.id) {
-        const blockUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
-        if (block.mimeType?.startsWith("image")) {
-          setValue(blockUrl);
-        } else {
-          const blockContent = await fetch(blockUrl);
-          const streamedText = await blockContent.text();
-          setValue(streamedText);
-        }
-        setSuggesting(false);
+    try {
+      const text = await suggestField(
+        fieldName,
+        fieldKeyPath,
+        adventureId as string,
+        dataToUpdate
+      );
+      if (text) {
+        setValue(text);
       }
+    } catch (e) {
+      setError(e as unknown as Error);
     }
+    setSuggesting(false);
   };
 
   const { mutate, isPending, submittedAt, isSuccess } = useMutation({
     mutationKey: ["update-adventure", adventureId],
     mutationFn: async (data: any) => {
-      const dataToSave = data;
-      if (data.adventure_image) {
-        if (!(typeof data.adventure_image == "string")) {
+      for (let key in data) {
+        if (data[key] instanceof File) {
           const res = await fetch(
-            `/api/adventure/${adventureId}/image?filename=${data.adventure_image.name}`,
+            `/api/adventure/${adventureId}/file?filename=${data[key].name}`,
             {
               method: "POST",
-              body: data.adventure_image,
+              body: data[key],
             }
           );
           if (res.ok) {
             const blobJson = (await res.json()) as PutBlobResult;
-            dataToSave.adventure_image = blobJson.url;
+            data[key] = blobJson.url;
           } else {
-            const e = {
-              title: "Upload failures",
-              message: "Unable to upload your image.",
-              details: `Status: ${res.status}, StatusText: ${
-                res.statusText
-              }, Body: ${await res.text()}`,
-            };
-            setError(e);
-            console.error(e);
-            return;
-          }
-        }
-      }
-
-      if (data.game_program) {
-        if (data.game_program instanceof File) {
-          const res = await fetch(
-            `/api/adventure/${adventureId}/file?filename=${data.game_program.name}`,
-            {
-              method: "POST",
-              body: data.game_program,
-            }
-          );
-          if (res.ok) {
-            const blobJson = (await res.json()) as PutBlobResult;
-            data.game_program = blobJson.url;
-          } else {
-            data.game_program = null;
+            data[key] = null;
           }
         }
       }
@@ -222,8 +156,8 @@ export default function SettingGroupForm({
         }
       }
 
-      if (typeof dataToSave.themes != "undefined") {
-        setExistingThemes(existingThemesFromConfig(dataToSave));
+      if (typeof data.themes != "undefined") {
+        setExistingThemes(existingThemesFromConfig(data));
       }
 
       let res = await fetch(`/api/adventure/${adventureId}`, {
@@ -231,7 +165,7 @@ export default function SettingGroupForm({
         body: JSON.stringify({
           operation: "update",
           id: adventureId,
-          data: dataToSave,
+          data: data,
         }),
       });
 
@@ -387,11 +321,13 @@ export default function SettingGroupForm({
     magicMutate(dataToUpdate);
   };
 
+  const [, setUnsavedChanges] = useRecoilState(recoilUnsavedChangesExist);
+
   const setKeyValue = (key: string, value: any) => {
     setDataToUpdate((prior) => {
       return { ...prior, [key]: value };
     });
-    onDataChange(key, value);
+    setUnsavedChanges(true);
   };
 
   if (!sg) {
@@ -466,7 +402,7 @@ export default function SettingGroupForm({
                   ? existing[setting.approvalRequestedField] === true
                   : false
               }
-              suggestField={suggestField}
+              suggestField={onSuggestField}
               previewField={previewField}
               latestAgentVersion={existing.gameEngineVersionAvailable}
             />
@@ -512,7 +448,7 @@ export default function SettingGroupForm({
                   ? existing[setting.approvalRequestedField] === true
                   : false
               }
-              suggestField={suggestField}
+              suggestField={onSuggestField}
               previewField={previewField}
               latestAgentVersion={existing.gameEngineVersionAvailable}
             />

@@ -62,6 +62,7 @@ export default async function AdventuresPage() {
                         src={adventureTemplate.image || "/adventurer.png"}
                         fill
                         alt="Adventurer"
+                        className="object-cover"
                       />
                     </div>
                   </div>

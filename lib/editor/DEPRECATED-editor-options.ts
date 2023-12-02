@@ -77,6 +77,8 @@ export type Setting = {
   approvalRequestedField?: string;
   variablesPermitted?: Record<string, string>;
   min?: number;
+  onboardingTitle?: string;
+  onboardingSubtitle?: string;
 };
 
 export type SettingGroup = {

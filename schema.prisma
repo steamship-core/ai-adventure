@@ -43,6 +43,17 @@ model Adventure {
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
   Reactions         Reactions[]
+  Comment           Comment[]
+}
+
+model Comment {
+  id          Int       @id @default(autoincrement())
+  adventureId String
+  userId      String
+  comment     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Adventure   Adventure @relation(fields: [adventureId], references: [id])
 }
 
 model CharacterTemplate {

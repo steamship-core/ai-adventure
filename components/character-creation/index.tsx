@@ -103,7 +103,7 @@ export default function CharacterCreation({
     {
       placeholder:
         "Thumblemore is a disheveled wizard with silver-white hair that cascades wildly, ...",
-      text: "Describe your character's appearance. An image will be generated based on your description - so be as detailed as you want!",
+      text: "Describe your character's appearance.",
       buttonText: "Set appearance",
       initialValue: configuration.player.description,
       setConfiguration: (description: string) => {
@@ -116,7 +116,7 @@ export default function CharacterCreation({
     {
       placeholder:
         "Thumblemore was once a prodigious student at the Arcanum Academy, ...",
-      text: "Describe the background of your character. Where did they come from? What is their backstory?",
+      text: "Describe your character's background. Where did they come from? What is their backstory?",
       buttonText: "Set background",
       initialValue: configuration.player.background,
       setConfiguration: (background: string) => {
