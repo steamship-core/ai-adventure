@@ -158,7 +158,6 @@ const EditorInitialization = ({
     setSuggesting(true);
     try {
       const result = await _suggestField(fieldName, fieldKeyPath, type);
-      console.log("result", result);
       if (result) {
         setSettings((prevSettings) => ({
           ...prevSettings,
