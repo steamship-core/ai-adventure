@@ -9,6 +9,7 @@ const AccountLayout = ({ children }: { children: ReactNode }) => (
           <AdventureNavBar />
         </div>
       </div>
+
       {children}
     </div>
   </div>

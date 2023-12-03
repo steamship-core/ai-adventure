@@ -13,7 +13,10 @@ import { CheckIcon } from "lucide-react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { parse, stringify } from "yaml";
-import { recoilErrorModalState } from "../providers/recoil";
+import {
+  recoilErrorModalState,
+  recoilUnsavedChangesExist,
+} from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -24,12 +27,10 @@ import SettingElement from "./setting-element";
 // https://github.com/shadcn-ui/ui/blob/main/apps/www/app/examples/forms/notifications/page.tsx
 export default function SettingGroupForm({
   existing,
-  onDataChange,
   isUserApproved,
   settingGroups,
 }: {
   existing: Record<string, any>;
-  onDataChange: (field: string, value: any) => void;
   isUserApproved: boolean;
   settingGroups: SettingGroup[];
 }) {
@@ -100,14 +101,14 @@ export default function SettingGroupForm({
   ) => {
     setSuggesting(true);
     try {
-      const text = await suggestField(
+      const value = await suggestField(
         fieldName,
         fieldKeyPath,
         adventureId as string,
         dataToUpdate
       );
-      if (text) {
-        setValue(text);
+      if (value) {
+        setValue(value);
       }
     } catch (e) {
       setError(e as unknown as Error);
@@ -320,11 +321,13 @@ export default function SettingGroupForm({
     magicMutate(dataToUpdate);
   };
 
+  const [, setUnsavedChanges] = useRecoilState(recoilUnsavedChangesExist);
+
   const setKeyValue = (key: string, value: any) => {
     setDataToUpdate((prior) => {
       return { ...prior, [key]: value };
     });
-    onDataChange(key, value);
+    setUnsavedChanges(true);
   };
 
   if (!sg) {

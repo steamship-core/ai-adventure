@@ -142,7 +142,9 @@ const EditorInitialization = ({
       settings
     );
     if (result) {
-      return type === "list" ? JSON.parse(result) : result;
+      return type === "list" && typeof result == "string"
+        ? JSON.parse(result)
+        : result;
     }
     return null;
   };

@@ -48,6 +48,16 @@ export const recoilErrorModalState = atom<ErrorDetails | undefined>({
   default: undefined,
 });
 
+export const recoilUnsavedChangesExist = atom<boolean>({
+  key: "UnsavedChangesExist",
+  default: false,
+});
+
+export const recoilUnsavedDepartureUrl = atom<string | undefined>({
+  key: "UnsavedDepartureUrl",
+  default: undefined,
+});
+
 const backgroundAudioOfferedBlocked =
   typeof window != "undefined" &&
   window.localStorage &&
@@ -102,6 +112,8 @@ function initializeState(
   set(recoilBlockHistory, []);
   set(recoilInitialBlock, undefined);
   set(recoilErrorModalState, errorModalState);
+  set(recoilUnsavedChangesExist, false);
+  set(recoilUnsavedDepartureUrl, undefined);
 }
 
 function RecoilProvider({
