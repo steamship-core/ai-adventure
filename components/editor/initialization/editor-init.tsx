@@ -142,7 +142,9 @@ const EditorInitialization = ({
       settings
     );
     if (result) {
-      return type === "list" ? JSON.parse(result) : result;
+      return type === "list" && typeof result == "string"
+        ? JSON.parse(result)
+        : result;
     }
     return null;
   };
@@ -156,6 +158,7 @@ const EditorInitialization = ({
     setSuggesting(true);
     try {
       const result = await _suggestField(fieldName, fieldKeyPath, type);
+      console.log("result", result);
       if (result) {
         setSettings((prevSettings) => ({
           ...prevSettings,

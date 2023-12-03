@@ -101,14 +101,14 @@ export default function SettingGroupForm({
   ) => {
     setSuggesting(true);
     try {
-      const text = await suggestField(
+      const value = await suggestField(
         fieldName,
         fieldKeyPath,
         adventureId as string,
         dataToUpdate
       );
-      if (text) {
-        setValue(text);
+      if (value) {
+        setValue(value);
       }
     } catch (e) {
       setError(e as unknown as Error);

@@ -38,7 +38,8 @@ export const suggestField = async (
     let block = (await response.json()) as Block;
     if (block.text) {
       if (block.mimeType?.endsWith("json")) {
-        return JSON.parse(block.text);
+        const j = JSON.parse(block.text);
+        return j;
       } else {
         let cleanText = block.text.trim();
         if (cleanText.startsWith('"')) {
