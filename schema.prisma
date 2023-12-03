@@ -44,6 +44,8 @@ model Adventure {
   updatedAt         DateTime            @default(now()) @updatedAt
   Reactions         Reactions[]
   Comment           Comment[]
+
+  AvailableAgents AvailableAgents[] @relation("availableAgents")
 }
 
 model Comment {
@@ -68,18 +70,35 @@ model CharacterTemplate {
 }
 
 model Agents {
-  id              Int        @id @default(autoincrement())
-  ownerId         String
-  agentUrl        String
-  handle          String     @default("agent")
-  agentVersion    String?    @default("")
-  createdAt       DateTime   @default(now())
-  Adventure       Adventure? @relation("agents", fields: [adventureId], references: [id])
-  adventureId     String?
-  isDevelopment   Boolean?   @default(false)
-  DevAdventure    Adventure? @relation("devAgentRelation")
-  workspaceId     String?
-  workspaceHandle String?
+  id                       Int        @id @default(autoincrement())
+  ownerId                  String
+  agentUrl                 String
+  handle                   String     @default("agent")
+  agentVersion             String?    @default("")
+  createdAt                DateTime   @default(now())
+  Adventure                Adventure? @relation("agents", fields: [adventureId], references: [id])
+  adventureId              String?
+  isDevelopment            Boolean?   @default(false)
+  DevAdventure             Adventure? @relation("devAgentRelation")
+  workspaceId              String?
+  workspaceHandle          String?
+  completeOnboardingCalled Boolean?
+}
+
+// These agents are pre-created and available for use.
+model AvailableAgents {
+  id                       Int        @id @default(autoincrement())
+  agentUrl                 String
+  handle                   String     @default("agent")
+  agentVersion             String?    @default("")
+  createdAt                DateTime   @default(now())
+  Adventure                Adventure? @relation("availableAgents", fields: [adventureId], references: [id])
+  adventureId              String?
+  onboardedData            String?
+  isDevelopment            Boolean?   @default(false)
+  workspaceId              String?
+  workspaceHandle          String?
+  completeOnboardingCalled Boolean?
 }
 
 model UserExperience {
