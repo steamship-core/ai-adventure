@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 export const useBlockStream = ({
   blockId,
   onFinish,
-  maxRetries = 3, // maximum number of retries
-  retryInterval = 2000, // time between retries in milliseconds
+  maxRetries = 3,
+  retryInterval = 2000,
 }: {
   blockId: string;
   onFinish?: (prompt: string, result: string) => void;
@@ -37,17 +37,15 @@ export const useBlockStream = ({
 
   useEffect(() => {
     if (blockId) {
-      setRetryCount(0); // reset retry count when blockId changes
+      setRetryCount(0);
       complete("");
     }
   }, [blockId]);
 
-  // Optional: Effect to handle max retry limit reached
   useEffect(() => {
     if (retryCount >= maxRetries) {
       console.error(`Max retries reached for blockId ${blockId}`);
       setError(true);
-      // Handle max retry limit reached scenario
     }
   }, [retryCount, maxRetries, blockId]);
 
