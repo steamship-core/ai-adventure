@@ -20,7 +20,8 @@ export type Character = {
   inventory: Item[];
 
   /** The motivation of the character */
-  motivation: string;
+  motivation?: string;
+  custom?: boolean;
   inventory_last_updated?: string;
 };
 
