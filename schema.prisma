@@ -86,6 +86,8 @@ model Agents {
 }
 
 // These agents are pre-created and available for use.
+// They are not owned by any user -- instead they are taken over from a user and turned into an Agent row.
+// These agents may only be taken over if they are in the `ready` state.
 model AvailableAgents {
   id                       Int        @id @default(autoincrement())
   agentUrl                 String?
