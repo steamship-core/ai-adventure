@@ -26,13 +26,13 @@ const CompletionBlock = ({
     setFinishedAndOfferAudio(offerAudio === true);
     setDidComplete(true);
   };
-  const text = useBlockStream({ blockId: block.id, onFinish });
+  const { completion } = useBlockStream({ blockId: block.id, onFinish });
 
   return (
     <TextBlock
       blockId={block.id}
       offerAudio={alreadyFinishedAndOfferAudio || finishedAndOfferAudio}
-      text={text}
+      text={completion}
       useTypeEffect={wasAlreadyComplete}
       didComplete={didComplete}
       hideOutput={hideOutput}
