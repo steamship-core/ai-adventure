@@ -51,7 +51,6 @@ export const TextBlock = ({
   useEffect(() => {
     if (hideOutput) return;
     if (!useTypeEffect) {
-      console.log(text);
       setContinuationState(true);
     }
   }, []);
