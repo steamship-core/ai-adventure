@@ -16,7 +16,7 @@ export const useBlockStream = ({
   const [retryCount, setRetryCount] = useState(0);
 
   const api = `/api/block/${blockId}?retryCount=${retryCount}`;
-  console.log(`api: ${api}`);
+
   const { completion, complete } = useCompletion({
     api,
     onFinish,
@@ -37,7 +37,6 @@ export const useBlockStream = ({
 
   useEffect(() => {
     if (blockId) {
-      console.log("reset retry count");
       setRetryCount(0); // reset retry count when blockId changes
       complete("");
     }
