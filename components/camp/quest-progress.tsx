@@ -51,6 +51,7 @@ const QuestProgressElement = ({
   index,
   totalQuests,
   adventure,
+  questId,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string; description?: string };
@@ -63,6 +64,7 @@ const QuestProgressElement = ({
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   setIsVisible: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
+  questId?: string;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
@@ -95,7 +97,8 @@ const QuestProgressElement = ({
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
-      router.push(`/play/${params.handle}/quest/${gameState?.current_quest}`);
+      // Intentionally not using the router here because we want to force a reload.
+      window.location.href = `/play/${params.handle}/quest/${gameState?.current_quest}`;
       setIsLoading(false);
       return;
     }
@@ -148,7 +151,8 @@ const QuestProgressElement = ({
       questId: questId,
     });
     log.debug(`Activating new quest: ${questId}`);
-    router.push(`/play/${params.handle}/quest/${questId}`);
+    // Intentionally not using the router here because we want to force a reload.
+    window.location.href = `/play/${params.handle}/quest/${questId}`;
     setIsLoading(false);
   };
 
@@ -246,8 +250,9 @@ const QuestProgressElement = ({
             </Button>
           )}
           {isCompleteQuest && (
-            <Button onClick={onClick} variant="outline" disabled={isLoading}>
-              View Quest
+            <Button variant="outline" disabled={isLoading}>
+              {/* Intentionally not using Link here because we want to force a reoload*/}
+              <a href={`/play/${params.handle}/quest/${questId}`}>View Quest</a>
             </Button>
           )}
         </CardFooter>
@@ -336,6 +341,8 @@ export const QuestProgress = ({
           const isCurrentquest = questCount === i;
           const isIncompleteQuest = questCount < i + 1;
           const isCompleteQuest = !isCurrentquest && !isIncompleteQuest;
+          const questId = gameState?.quests?.[i]?.name;
+          console.log({ questId, questCount, i });
           return (
             <QuestProgressElement
               totalQuests={questArc.length}
@@ -350,6 +357,7 @@ export const QuestProgress = ({
               setLowEnergyModalOpen={setLowEnergyModalOpen}
               setIsVisible={setIsVisible}
               adventure={adventure}
+              questId={questId}
             />
           );
         })}
