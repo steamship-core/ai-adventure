@@ -8,6 +8,7 @@ import { Adventure } from "@prisma/client";
 import {
   CheckIcon,
   FlameIcon,
+  Loader2,
   LockIcon,
   MapPinIcon,
   SparklesIcon,
@@ -18,7 +19,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import InventorySheet from "../inventory-sheet";
-import useLoadingScreen from "../loading/use-loading-screen";
 import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -41,7 +41,6 @@ const QuestProgressElement = ({
   isCompleteQuest,
   isCurrentquest,
   setLowEnergyModalOpen,
-  setIsVisible,
   index,
   totalQuests,
   adventure,
@@ -56,7 +55,6 @@ const QuestProgressElement = ({
   isClamped: boolean;
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
-  setIsVisible: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
   questId?: string;
 }) => {
@@ -85,7 +83,6 @@ const QuestProgressElement = ({
       return;
     }
 
-    setIsVisible(true);
     setIsLoading(true);
 
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
@@ -103,7 +100,6 @@ const QuestProgressElement = ({
     });
     if (!resp.ok) {
       setIsLoading(false);
-      setIsVisible(false);
       let res = "";
       try {
         res = await resp.text();
@@ -122,7 +118,6 @@ const QuestProgressElement = ({
 
     if (json?.quest?.status?.state === "failed") {
       setIsLoading(false);
-      setIsVisible(false);
       alert(`Failed to start quest: ${JSON.stringify(json)}`);
       log.error(`Failed to start quest: ${JSON.stringify(json)}`);
       return;
@@ -131,7 +126,6 @@ const QuestProgressElement = ({
     const questId = json.quest.name;
     if (!questId) {
       setIsLoading(false);
-      setIsVisible(false);
       alert(`Failed to get questId: ${JSON.stringify(json)}`);
       log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
       return;
@@ -227,7 +221,11 @@ const QuestProgressElement = ({
               disabled={isLoading}
             >
               <SparklesIcon className="mr-2" />
-              {isInQuest ? "Continue Quest" : "Start Quest"}
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <> {isInQuest ? "Continue Quest" : "Start Quest"}</>
+              )}
             </Button>
           )}
           {disabledQuest && (
@@ -259,7 +257,6 @@ export const QuestProgress = ({
   const [isArcClamped, setIsArcClamped] = useState(true);
   const params = useParams<{ handle: string }>();
   const [lowEnergyModalOpen, setLowEnergyModalOpen] = useState(false);
-  const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
 
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
@@ -341,7 +338,6 @@ export const QuestProgress = ({
               setIsClamped={setIsArcClamped}
               isClamped={isArcClamped}
               setLowEnergyModalOpen={setLowEnergyModalOpen}
-              setIsVisible={setIsVisible}
               adventure={adventure}
               questId={questId}
             />
@@ -372,7 +368,6 @@ export const QuestProgress = ({
           </Button>
         </DialogContent>
       </Dialog>
-      {loadingScreen}
     </>
   );
 };
