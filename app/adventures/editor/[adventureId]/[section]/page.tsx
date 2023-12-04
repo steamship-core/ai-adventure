@@ -9,14 +9,33 @@ import {
 import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
 import { auth } from "@clerk/nextjs";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
-};
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { section: string };
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+
+  // section is the name of the section formatted as word-word or word
+  // replace the dashes with spaces and capitalize the first letter of each word
+  const section = params.section
+    .split("-")
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+  let ret = { ...(await parent) };
+  ret = {
+    ...ret,
+    title: `${section} - AI Adventure Editor` as any,
+  };
+  return ret as Metadata;
+}
 
 export default async function EditorPage({
   params,
