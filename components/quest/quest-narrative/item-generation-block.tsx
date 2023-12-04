@@ -13,7 +13,7 @@ const CompletionBlock = ({
   block: Block;
   hideOutput: boolean;
 }) => {
-  const text = useBlockStream({ blockId: block.id });
+  const { completion } = useBlockStream({ blockId: block.id });
   if (hideOutput) {
     return null;
   }
@@ -22,7 +22,9 @@ const CompletionBlock = ({
       className={"p-4 border border-foreground/50 rounded-md flex flex-col"}
     >
       <TypographyLarge>Item Found! 🎉</TypographyLarge>
-      <TypographyP className="whitespace-pre-wrap text-sm">{text}</TypographyP>
+      <TypographyP className="whitespace-pre-wrap text-sm">
+        {completion}
+      </TypographyP>
     </BlockContainer>
   );
 };
