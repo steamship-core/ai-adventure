@@ -88,14 +88,15 @@ model Agents {
 // These agents are pre-created and available for use.
 model AvailableAgents {
   id                       Int        @id @default(autoincrement())
-  agentUrl                 String
-  handle                   String     @default("agent")
+  agentUrl                 String?
+  handle                   String?    @default("agent")
   agentVersion             String?    @default("")
   createdAt                DateTime   @default(now())
   Adventure                Adventure? @relation("availableAgents", fields: [adventureId], references: [id])
   adventureId              String?
   onboardedData            String?
   isDevelopment            Boolean?   @default(false)
+  state                    String?    @default("waiting") // waiting | creating | ready | claimed
   workspaceId              String?
   workspaceHandle          String?
   completeOnboardingCalled Boolean?
