@@ -39,6 +39,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
               {
                 name: "Custom Character",
                 tagline: "Create your own character",
+                custom: true,
               },
             ]}
             adventureId={adventure.id}

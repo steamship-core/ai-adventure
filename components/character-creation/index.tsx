@@ -60,8 +60,7 @@ export default function CharacterCreation({
   const [isCompleteConfig, setIsCompleteConfig] = useState(
     searchParams.has("name") &&
       searchParams.has("description") &&
-      searchParams.has("background") &&
-      searchParams.has("motivation")
+      searchParams.has("background")
   );
 
   const [activeStep, setActiveStep] = useState(
@@ -74,7 +73,6 @@ export default function CharacterCreation({
       name: searchParams.get("name") || "",
       description: searchParams.get("description") || "",
       background: searchParams.get("background") || "",
-      motivation: searchParams.get("motivation") || "",
       rank: 1,
       gold: 0,
       inventory: [],
