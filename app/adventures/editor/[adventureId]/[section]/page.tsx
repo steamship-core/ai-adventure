@@ -1,16 +1,41 @@
 import Editor from "@/components/editor/editor";
 import { getAdventure } from "@/lib/adventure/adventure.server";
+import { getSchema } from "@/lib/agent/agentSteamship.server";
 import prisma from "@/lib/db";
-import { objectEquals } from "@/lib/utils";
+import {
+  DEPRECATEDSettingGroups,
+  SettingGroup,
+} from "@/lib/editor/DEPRECATED-editor-options";
+import { getRequiredFields } from "@/lib/editor/get-required-fields";
+import { getVersion } from "@/lib/get-version";
 import { auth } from "@clerk/nextjs";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
-};
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { section: string };
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+
+  // section is the name of the section formatted as word-word or word
+  // replace the dashes with spaces and capitalize the first letter of each word
+  const section = params.section
+    .split("-")
+    .map((word) => word[0].toUpperCase() + word.slice(1))
+    .join(" ");
+  let ret = { ...(await parent) };
+  ret = {
+    ...ret,
+    title: `${section} - AI Adventure Editor` as any,
+  };
+  return ret as Metadata;
+}
 
 export default async function EditorPage({
   params,
@@ -24,7 +49,7 @@ export default async function EditorPage({
     throw new Error("no user");
   }
 
-  const adventure = await getAdventure(params.adventureId);
+  const adventure = await getAdventure(params.adventureId, true);
   if (!adventure) {
     log.error("No adventure");
     throw new Error("no adventure");
@@ -40,13 +65,43 @@ export default async function EditorPage({
     redirect("/adventures");
   }
 
+  const agentVersionParts = adventure.agentVersion.split("@");
+  const agentVersion = agentVersionParts.length > 1 ? agentVersionParts[1] : "";
+
+  let settingGroups: SettingGroup[] = [];
+  if (agentVersion?.startsWith("1.")) {
+    settingGroups = DEPRECATEDSettingGroups;
+  } else {
+    const responseJson = await getSchema(adventure.devAgent?.agentUrl!);
+    settingGroups = responseJson.settingGroups;
+  }
+
+  const requiredSettings = getRequiredFields(settingGroups);
+  const allSettingsFilled =
+    adventure.agentConfig &&
+    requiredSettings.every((setting) => {
+      // @ts-ignore
+      return adventure.agentConfig?.[setting.name];
+    });
+
+  const version = getVersion(agentVersion);
+  // if version is greator than 2.1.6
+
+  if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
+    if (version.major === 2 && version.minor === 1) {
+      if (version.patch >= 6) {
+        redirect(`/adventures/${adventure.id}/initialize`);
+      }
+    } else {
+      redirect(`/adventures/${adventure.id}/initialize`);
+    }
+  }
+
   const userApproval = await prisma.userApprovals.findFirst({
     where: {
       userId: userId,
     },
   });
-
-  let innerConfig = (adventure.agentDevConfig as any) || {};
 
   let devConfig = {
     ...((adventure.agentDevConfig as any) || {}),
@@ -65,25 +120,17 @@ export default async function EditorPage({
     gameEngineVersionAvailable: process.env.STEAMSHIP_AGENT_VERSION,
   };
 
-  let unpublishedChanges = !objectEquals(
-    adventure.agentDevConfig || {},
-    adventure.agentConfig || {}
-  );
-
-  const isGenerating = adventure?.state == "generating";
-  const generatingTaskId = adventure?.stateTaskId;
-
-  console.log(`Generating state: ${isGenerating}, ${generatingTaskId}`);
-
   return (
-    <Editor
-      adventureId={adventure.id}
-      devConfig={devConfig}
-      hasUnpublishedChanges={unpublishedChanges}
-      isUserApproved={userApproval?.isApproved || false}
-      isGenerating={adventure?.state == "generating"}
-      isGeneratingTaskId={adventure?.stateTaskId}
-      stateUpdatedAt={adventure?.stateUpdatedAt}
-    />
+    <>
+      <Editor
+        adventureId={adventure.id}
+        devConfig={devConfig}
+        isUserApproved={userApproval?.isApproved || false}
+        isGenerating={adventure?.state == "generating"}
+        isGeneratingTaskId={adventure?.stateTaskId}
+        stateUpdatedAt={adventure?.stateUpdatedAt}
+        settingGroups={settingGroups}
+      />
+    </>
   );
 }

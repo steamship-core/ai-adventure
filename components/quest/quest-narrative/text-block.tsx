@@ -3,6 +3,7 @@ import { BlockContainer } from "./block-container";
 import { NarrationPlayer } from "./narration-player";
 
 import { recoilContinuationState } from "@/components/providers/recoil";
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Typewriter = ({ text, delay }: { text: string; delay: number }) => {
@@ -50,7 +51,6 @@ export const TextBlock = ({
   useEffect(() => {
     if (hideOutput) return;
     if (!useTypeEffect) {
-      console.log(text);
       setContinuationState(true);
     }
   }, []);
@@ -66,7 +66,13 @@ export const TextBlock = ({
         className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
       >
         {useTypeEffect ? (
-          <>{didComplete && <Typewriter text={text} delay={5} />}</>
+          <>
+            {didComplete ? (
+              <Typewriter text={text} delay={5} />
+            ) : (
+              <Loader className="animate-spin" />
+            )}
+          </>
         ) : (
           <> {text} </>
         )}

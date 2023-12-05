@@ -27,22 +27,16 @@ export const getAdventure = async (
   adventureId: string,
   includeDevAgent: boolean = false
 ) => {
-  const includeBit = includeDevAgent
-    ? {
-        include: {
-          devAgent: true,
-        },
-      }
-    : {};
-
   const ret = await prisma.adventure.findFirst({
     where: {
       id: adventureId,
       // Only if it isn't null
       deletedAt: null,
     },
-    ...includeBit,
-  } as any);
+    include: {
+      devAgent: true,
+    },
+  });
 
   if (ret?.id != adventureId) {
     throw new Error(`Asked for adventureId ${adventureId} but got ${ret?.id}`);
@@ -211,14 +205,16 @@ export const updateAdventure = async (
       ...(adventure.agentDevConfig as object),
       ...updateObj,
     };
-    const devAgent = (adventure as any).devAgent;
-    const resp = await pushServerSettingsToAgent(
-      devAgent.agentUrl,
-      updatedServerSettings
-    );
+    if (adventure.devAgent) {
+      const devAgent = adventure.devAgent;
+      const resp = await pushServerSettingsToAgent(
+        devAgent.agentUrl,
+        updatedServerSettings
+      );
 
-    if (!resp.ok) {
-      throw new Error(await resp.text());
+      if (!resp.ok) {
+        throw new Error(await resp.text());
+      }
     }
 
     let newAdventure = await prisma.adventure.update({

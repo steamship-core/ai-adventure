@@ -80,6 +80,7 @@ export default async function AdventuresPage() {
                           src={agent.Adventure?.image || "/adventurer.png"}
                           fill
                           alt="Adventurer"
+                          className="object-cover"
                         />
                       </div>
                     </div>

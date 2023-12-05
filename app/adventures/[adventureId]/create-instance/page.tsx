@@ -1,6 +1,8 @@
+import { getAdventure } from "@/lib/adventure/adventure.server";
 import { createAgent } from "@/lib/agent/agent.server";
 import prisma from "@/lib/db";
 import AdventureMilestoneEmail from "@/lib/emails/adventure-creation";
+import { GameState } from "@/lib/game/schema/game_state";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -30,16 +32,43 @@ export default async function AdventurePage({
   const user = await currentUser();
 
   const isDevelopment = searchParams["isDevelopment"] === "true";
-  const adventure = await prisma.adventure.findUnique({
-    where: {
-      id: params.adventureId,
-    },
-  });
+  const adventure = await getAdventure(params.adventureId);
   if (!adventure) {
     log.error("No Adventure - redirecting to /adventures");
     redirect("/adventures");
   }
-  const agent = await createAgent(userId, params.adventureId, isDevelopment);
+
+  const useAvailableAgentCache = true;
+  let gameState:
+    | (Partial<GameState> & {
+        player: Partial<GameState["player"]>;
+      })
+    | undefined = undefined;
+
+  if (
+    searchParams["fastOnboard"] === "true" &&
+    searchParams["name"] &&
+    searchParams["description"] &&
+    searchParams["background"]
+  ) {
+    // Fast create! Let's attempt to advance straight to camp
+    gameState = {
+      player: {
+        name: searchParams["name"],
+        description: searchParams["description"],
+        background: searchParams["background"],
+        inventory: [],
+      },
+    };
+  }
+
+  const agent = await createAgent(
+    userId,
+    params.adventureId,
+    isDevelopment,
+    useAvailableAgentCache,
+    gameState
+  );
 
   if (!agent) {
     log.error("No agent - redirecting to /adventures");
@@ -82,6 +111,12 @@ export default async function AdventurePage({
       }
     }
   }
-  const search = new URLSearchParams(searchParams);
-  redirect(`/play/${agent.handle}/character-creation?${search.toString()}`);
+
+  // Finally, we redirect either to camp or to the character-creation based on whether we're in fast-create mode.
+  if (gameState) {
+    redirect(`/play/${agent.handle}/camp`);
+  } else {
+    const search = new URLSearchParams(searchParams);
+    redirect(`/play/${agent.handle}/character-creation?${search.toString()}`);
+  }
 }

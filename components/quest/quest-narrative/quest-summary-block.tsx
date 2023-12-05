@@ -15,8 +15,8 @@ export const QuestSummaryBlock = ({
     onSummary(block);
   };
 
-  const text = useBlockStream({ blockId: block.id, onFinish });
-  block.text = text;
+  const { completion } = useBlockStream({ blockId: block.id, onFinish });
+  block.text = completion;
 
   return (
     <DebugBlock block={block} title="Streaming" className="border-indigo-600" />

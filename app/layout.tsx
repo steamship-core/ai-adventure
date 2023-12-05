@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const font = Barlow({
@@ -24,22 +25,25 @@ export const viewport = {
 const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
 
 export const metadata: Metadata = {
-  title: "AI Adventure",
-  description: "Create your own AI Adventure",
+  title: "AI Adventure: Interactive AI-Powered Storytelling",
+  description:
+    "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
   metadataBase: new URL(url),
   openGraph: {
     url: url,
     type: "website",
-    title: "AI Adventure",
-    description: "Create your own AI Adventure",
+    title: "AI Adventure: Interactive AI-Powered Storytelling",
+    description:
+      "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
     images: `${url}/adventurer.png`,
   },
   twitter: {
     creator: "@GetSteamship",
     card: "summary_large_image",
-    title: "AI Adventure",
+    title: "AI Adventure: Interactive AI-Powered Storytelling",
     site: "@GetSteamship",
-    description: "Create your own AI Adventure",
+    description:
+      "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
     images: `${url}/adventurer.png`,
   },
 };
@@ -86,6 +90,13 @@ export default function RootLayout({
             </ThemeProvider>
           </QueryProvider>
         </body>
+        <Script id="reddit-analytics">
+          {`
+          <!-- Reddit Pixel -->
+          !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_e225irsre6sn', {"optOut":false,"useDecimalCurrencyValues":true});rdt('track', 'PageVisit');
+          <!-- DO NOT MODIFY UNLESS TO REPLACE A USER IDENTIFIER -->
+          <!-- End Reddit Pixel -->`}
+        </Script>
       </html>
     </ClerkProvider>
   );

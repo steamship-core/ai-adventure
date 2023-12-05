@@ -6,6 +6,11 @@ import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Fragment, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  recoilUnsavedChangesExist,
+  recoilUnsavedDepartureUrl,
+} from "../providers/recoil";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
@@ -13,17 +18,11 @@ import { TypographyMuted } from "../ui/typography/TypographyMuted";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: SettingGroup[];
-  unsavedChangesExist: boolean;
-  displayUnsavedChangesModal: (url: string) => void;
 }
 
-export function SidebarNav({
-  className,
-  unsavedChangesExist = false,
-  displayUnsavedChangesModal,
-  items,
-  ...props
-}: SidebarNavProps) {
+export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+  const unsavedChangesExist = useRecoilValue(recoilUnsavedChangesExist);
+  const [, setUnsavedDepartureUrl] = useRecoilState(recoilUnsavedDepartureUrl);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const params = useParams<{ adventureId: string; section: string }>();
   const { section } = params;
@@ -31,8 +30,7 @@ export function SidebarNav({
   const guardForUnsavedChanges = (e: any, destinationUrl: string) => {
     if (unsavedChangesExist) {
       e.preventDefault();
-      console.log(e.target);
-      displayUnsavedChangesModal(destinationUrl);
+      setUnsavedDepartureUrl(destinationUrl);
     }
   };
 

@@ -44,39 +44,49 @@ const CharacterCreationComplete = ({
   const [error, setError] = useState<string | null>(null);
   const params = useParams<{ handle: string }>();
 
-  const pollForAgentSideOnboardingComplete = async (i: number = 0) => {
-    if (i > 40) {
-      return;
-    }
-
-    const gameState = await getGameState(params.handle);
-    if (gameState.active_mode == "onboarding") {
-      setTimeout(() => {
-        pollForAgentSideOnboardingComplete(i + 1);
-      }, 700);
-    } else if (gameState.active_mode == "error") {
-      const whatHappened = encodeURIComponent(
-        "Your game has transitioned to an irrecoverable error state."
-      );
-      const whatYouCanDo = encodeURIComponent(
-        "Try creating a new game. We're sorry this happened!"
-      );
-      const technicalDetails = encodeURIComponent(
-        gameState?.unrecoverable_error || "Unknown"
-      );
-      router.push(
-        `/error?whatHappened=${whatHappened}&whatYouCanDo=${whatYouCanDo}&technicalDetails=${technicalDetails}`
-      );
-    } else {
-      // Redirect to camp
-      router.push(`/play/${params.handle}/camp`);
-    }
+  const pollForAgentSideOnboardingComplete = async () => {
+    // Call getGameState once every second until the game state is no longer onboarding
+    // or an error occurs. Attempt this for 3 minutes.
+    let count = 0;
+    const interval = setInterval(async () => {
+      count += 1;
+      console.log(`polling for agent side onboarding complete count: ${count}`);
+      const gameState = await getGameState(params.handle);
+      let isError = false;
+      if (count > 180) {
+        clearInterval(interval);
+        isError = gameState.active_mode !== "error" ? false : true;
+      } else {
+        isError = gameState.active_mode === "error";
+      }
+      if (isError) {
+        const whatHappened = encodeURIComponent(
+          "Your game has transitioned to an irrecoverable error state."
+        );
+        const whatYouCanDo = encodeURIComponent(
+          "Try creating a new game. We're sorry this happened!"
+        );
+        const technicalDetails = encodeURIComponent(
+          gameState?.unrecoverable_error || "Unknown"
+        );
+        router.push(
+          `/error?whatHappened=${whatHappened}&whatYouCanDo=${whatYouCanDo}&technicalDetails=${technicalDetails}`
+        );
+      } else if (gameState.active_mode !== "onboarding") {
+        clearInterval(interval);
+        router.push(`/play/${params.handle}/camp`);
+      }
+    }, 2000);
   };
 
   const onComplete = async () => {
     setIsVisible(true);
     try {
+      let start = Date.now();
       await updateGameState(config as GameState, params.handle);
+      let end = Date.now();
+      console.log(`updateGameState took ${end - start}ms`);
+      start = Date.now();
       const res = await fetch(
         `/api/agent/${params.handle}/completeOnboarding`,
         {
@@ -84,6 +94,8 @@ const CharacterCreationComplete = ({
           body: JSON.stringify({}),
         }
       );
+      end = Date.now();
+      console.log(`completeOnboarding took ${end - start}ms`);
       if (!res.ok) {
         let url = new URL(
           `${window.location.protocol}//${window.location.hostname}/error`

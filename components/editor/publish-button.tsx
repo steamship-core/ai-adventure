@@ -66,6 +66,7 @@ const PublishButton = ({
         isLoading={isLoading}
         disabled={isLoading}
         className={`justify-start ${className}`}
+        id="publish-button"
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
         Publish
