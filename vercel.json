@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/curate-available-agent-pool",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}

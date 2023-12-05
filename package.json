@@ -45,6 +45,7 @@
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "eventsource-parser": "^1.1.1",
+    "json-stable-stringify": "^1.1.0",
     "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.292.0",
     "micro-cors": "^0.1.1",
@@ -77,6 +78,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "@types/cors": "^2.8.14",
+    "@types/json-stable-stringify": "^1.0.36",
     "@types/node": "^20.9.1",
     "@types/react": "^18",
     "@types/react-dom": "^18",

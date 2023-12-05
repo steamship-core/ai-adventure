@@ -7,7 +7,7 @@ const EditorSectionLoading = () => (
       <Skeleton className="w-32 h-8" />
     </div>
     <div className="flex flex-col gap-4">
-      {[...Array(10)].map((_, i) => (
+      {[...Array(3)].map((_, i) => (
         <div key={i} className="w-full flex flex-col gap-2">
           <Skeleton className="w-32 h-8" />
           <Skeleton className="w-56 h-8" />
