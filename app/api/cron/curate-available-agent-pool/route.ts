@@ -12,11 +12,11 @@ const appCodeCutoffSeconds = 60 * 4; // 4 minutes
  */
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
-  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-  //   return new Response("Unauthorized", {
-  //     status: 401,
-  //   });
-  // }
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
 
   const start = Date.now();
   let end = Date.now();
