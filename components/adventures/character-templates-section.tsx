@@ -1,6 +1,9 @@
 "use client";
 import { Character } from "@/lib/game/schema/characters";
 import { Adventure } from "@prisma/client";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
+import LoadingScreen from "../loading/loading-screen";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import CharacterMap from "./character-map";
@@ -17,6 +20,9 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
   const characters = getAgentConfig(adventure)?.characters || [];
   const playerSingularNoun =
     getAgentConfig(adventure)?.adventure_player_singular_noun || "Player";
+  const [loading, setIsLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const isDevelopment = searchParams.get("isDevelopment") === "true";
 
   return (
     <>
@@ -32,6 +38,9 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
         </div>
         <div className="overflow-auto max-h-[50vh]">
           <CharacterMap
+            setIsLoading={setIsLoading}
+            isDevelopment={isDevelopment}
+            enabled={!loading}
             characters={[
               // @ts-ignore
               ...(characters || []),
@@ -46,6 +55,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
           />
         </div>
       </div>
+      {loading && <LoadingScreen />}
     </>
   );
 };

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { amplitude } from "@/lib/amplitude";
 import { useQuery } from "@tanstack/react-query";
-import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
+import { LoaderIcon, PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useAudio } from "react-use";
@@ -9,6 +9,8 @@ import { useAudio } from "react-use";
 export function NarrationPlayer({ blockId }: { blockId: string }) {
   const [didPlay, setDidPlay] = useState(false);
   const params = useParams();
+  const [audioRequested, setAudioRequested] = useState(false);
+
   const { data: url } = useQuery({
     queryKey: ["narration", blockId],
     queryFn: async () => {
@@ -20,12 +22,15 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
       return data.url || "";
     },
     refetchOnWindowFocus: false,
+    enabled: audioRequested,
   });
 
   const [audio, state, controls, ref] = useAudio({
     src: url,
     autoPlay: false,
   });
+
+  const isProcessing = !url && audioRequested;
 
   return (
     <div className="flex gap-2 rounded-full border border-foreground/20">
@@ -34,8 +39,8 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
         variant="ghost"
         className="rounded-full"
         size="sm"
-        disabled={!url || state.buffered.length === 0}
-        onClick={() => {
+        // disabled={!url || state.buffered.length === 0}
+        onClick={async () => {
           if (!didPlay) {
             amplitude.track("Button Click", {
               buttonName: "Play Narration",
@@ -47,6 +52,8 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
             });
           }
           setDidPlay(true);
+          setAudioRequested(true);
+
           if (state.playing) {
             controls.pause();
           } else {
@@ -54,7 +61,13 @@ export function NarrationPlayer({ blockId }: { blockId: string }) {
           }
         }}
       >
-        {state.playing ? <PauseIcon size={16} /> : <PlayIcon size={16} />}
+        {state.playing ? (
+          <PauseIcon size={16} />
+        ) : isProcessing ? (
+          <LoaderIcon size={16} />
+        ) : (
+          <PlayIcon size={16} />
+        )}
       </Button>
       {didPlay && (
         <Button

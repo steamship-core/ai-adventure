@@ -28,7 +28,7 @@ const TestButton = ({ className = "" }: { className?: string }) => {
     >
       <Link
         target="_blank"
-        href={`/adventures/${adventureId}/create-instance?isDevelopment=true`}
+        href={`/adventures/${adventureId}?isDevelopment=true`}
         className="flex flex-row justify-start items-center"
       >
         <RocketIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
