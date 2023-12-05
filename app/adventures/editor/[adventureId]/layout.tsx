@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
-import { getSchema } from "@/lib/agent/agent.server";
+import { getSchema } from "@/lib/agent/agentSteamship.server";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,

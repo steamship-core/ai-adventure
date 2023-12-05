@@ -1,6 +1,6 @@
 import Editor from "@/components/editor/editor";
 import { getAdventure } from "@/lib/adventure/adventure.server";
-import { getSchema } from "@/lib/agent/agent.server";
+import { getSchema } from "@/lib/agent/agentSteamship.server";
 import prisma from "@/lib/db";
 import {
   DEPRECATEDSettingGroups,
