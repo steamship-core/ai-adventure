@@ -6,9 +6,15 @@ import PlayAsCharacterCard from "./play-character-card";
 const CharacterMap = ({
   adventureId,
   characters,
+  setIsLoading,
+  isDevelopment,
+  enabled,
 }: {
   adventureId?: string;
   characters: Character[];
+  setIsLoading: (isLoading: boolean) => void;
+  enabled: boolean;
+  isDevelopment: boolean;
 }) => {
   return (
     <div
@@ -28,7 +34,10 @@ const CharacterMap = ({
             description={character.tagline || ""}
             image={character.image!}
             variant="adventure"
+            enabled={enabled}
+            isDevelopment={isDevelopment}
             fastOnboard={true}
+            setIsLoading={setIsLoading}
             onboardingParams={{
               name: character.name,
               description: character.description,

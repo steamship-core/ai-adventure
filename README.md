@@ -190,3 +190,15 @@ Related Repositories:
 
 - **Web Interface** The web interface is at [steamship-core/ai-adventure](https://github.com/steamship-core/ai-adventure)
 - **Game Engine** The game engine is at [steamship-core/ai-adventure-agent](https://github.com/steamship-core/ai-adventure-agent)
+
+## Development Tricks
+
+### Trigger Cron Manually
+
+```
+curl -i \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer PASSWORD" \
+  https://staging.ai-adventure.steamship.com/api/cron/curate-available-agent-pool
+```
