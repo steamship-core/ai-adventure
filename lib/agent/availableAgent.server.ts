@@ -1,7 +1,11 @@
 import { Adventure, AvailableAgents } from "@prisma/client";
+import stringify from "json-stable-stringify";
 import { log } from "next-axiom";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
+import { saveGameState } from "../game/game-state.server";
+import { completeOnboarding } from "../game/onboarding";
+import { GameState } from "../game/schema/game_state";
 import { createAgentInSteamship } from "./agentSteamship.server";
 
 export const deleteAvailableAgent = async (id: number) => {
@@ -18,7 +22,7 @@ export const deleteAvailableAgent = async (id: number) => {
 export const createAvailableAgentIntent = async (
   adventure: Adventure,
   isDevelopment: boolean,
-  onboardingDataJson: Record<string, any> | undefined = undefined
+  gameState: Partial<GameState> | undefined = undefined
 ) => {
   const adventureId = adventure.id;
 
@@ -26,18 +30,14 @@ export const createAvailableAgentIntent = async (
   log.info(`createAvailableAgentIntent -  AdventureId ${adventureId}`);
 
   try {
-    const _onboardingDataJson = onboardingDataJson || {};
+    const _gameState = gameState || {};
 
-    // Stringify in a way that always prints the keys in the right order
-    const onboardedData = JSON.stringify(
-      _onboardingDataJson,
-      Object.keys(_onboardingDataJson).sort()
-    );
+    const fixedGameState = stringify(_gameState);
 
     const agentData = {
       adventureId: adventure.id,
       agentVersion: adventure.agentVersion,
-      onboardedData,
+      gameState: fixedGameState,
       isDevelopment,
       state: "waiting",
     } as any;
@@ -63,23 +63,20 @@ export const getAvailableAgent = async (
   adventureId: string,
   agentVersion: string,
   isDevelopment: boolean,
-  onboardingDataJson: Record<string, any> | undefined = undefined,
+  gameState: Partial<GameState> | undefined = undefined,
   oldState: string,
   newState: string
 ): Promise<AvailableAgents | null> => {
-  const _onboardingDataJson = onboardingDataJson || {};
+  const _gameState = gameState || {};
 
   // Stringify in a way that always prints the keys in the right order
-  const onboardedData = JSON.stringify(
-    _onboardingDataJson,
-    Object.keys(_onboardingDataJson).sort()
-  );
+  const fixedGameState = stringify(_gameState);
 
   console.log("Trying to get agent", {
     adventureId,
     agentVersion,
     isDevelopment,
-    onboardedData,
+    fixedGameState,
     oldState,
   });
 
@@ -87,7 +84,7 @@ export const getAvailableAgent = async (
     where: {
       adventureId,
       agentVersion,
-      onboardedData,
+      gameState: fixedGameState,
       isDevelopment,
       state: oldState,
     },
@@ -185,10 +182,39 @@ export const completeAvailableAgentIntent = async (
       availableAgent.isDevelopment || false
     );
 
+    let completeOnboardingCalled = false;
+
+    if (availableAgent.gameState) {
+      log.info(
+        `🎲 AvailableAgent has a GameState so will complete onboarding - ${adventure.name}`
+      );
+
+      const start2 = Date.now();
+
+      const gameState = JSON.parse(availableAgent.gameState);
+
+      log.info(`Saving gameState`);
+      await saveGameState(_agentData.agentUrl, gameState as GameState);
+
+      log.info(`Completing onboarding`);
+      await completeOnboarding(_agentData.agentUrl);
+
+      const end2 = Date.now();
+      log.info(
+        `🎲 Onboarding AvailableAgent for a game of ${
+          adventure.name
+        } [CachedAgent: ${!!availableAgent}; OnboardingTimeMs: ${
+          end2 - start2
+        }] `
+      );
+      completeOnboardingCalled = true;
+    }
+
     const updated = await prisma.availableAgents.updateMany({
       data: {
         ..._agentData,
         state: "ready",
+        completeOnboardingCalled,
       },
       where: {
         id: availableAgent.id,
@@ -204,7 +230,7 @@ export const completeAvailableAgentIntent = async (
 
     const end = Date.now();
     log.info(
-      `🎲 Just completed AvailableAgent for a game of ${
+      `🎲 Just created AvailableAgent for a game of ${
         adventure.name
       } [CachedAgent: ${!!availableAgent}; CreateTimeMs: ${end - start}] `
     );

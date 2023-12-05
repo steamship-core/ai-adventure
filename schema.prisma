@@ -96,7 +96,7 @@ model AvailableAgents {
   createdAt                DateTime   @default(now())
   Adventure                Adventure? @relation("availableAgents", fields: [adventureId], references: [id])
   adventureId              String?
-  onboardedData            String?
+  gameState                String?
   isDevelopment            Boolean?   @default(false)
   state                    String?    @default("waiting") // waiting | creating | ready | claimed
   workspaceId              String?
