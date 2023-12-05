@@ -1,6 +1,6 @@
 import EditorInitialization from "@/components/editor/initialization/editor-init";
 import { getAdventure } from "@/lib/adventure/adventure.server";
-import { getSchema } from "@/lib/agent/agent.server";
+import { getSchema } from "@/lib/agent/agentSteamship.server";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,
