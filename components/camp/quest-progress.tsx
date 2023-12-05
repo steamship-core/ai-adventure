@@ -22,13 +22,7 @@ import useLoadingScreen from "../loading/use-loading-screen";
 import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import {
   Dialog,
   DialogContent,
@@ -218,14 +212,6 @@ const QuestProgressElement = ({
               {questArc.location}
             </CardTitle>
           </div>
-          {questArc.description && (
-            <div className="flex gap-2">
-              <CardDescription>
-                <b className="mr-2">Description:</b>
-                {questArc.description}
-              </CardDescription>
-            </div>
-          )}
           {questArc.goal && (
             <TypographyMuted className="flex mt-4">
               <b className="mr-2">Goal:</b>
