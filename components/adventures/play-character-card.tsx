@@ -75,7 +75,7 @@ const CardDescription = ({
   description?: string;
   variant: "landing" | "adventure";
 }) => (
-  <div className="absolute bottom-0 left-0 w-full">
+  <div className="absolute bottom-0 left-0 w-full z-20">
     <div className="backdrop-blur-sm p-2 bg-background/40 text-xs">
       <div className="font-bold">{title}</div>
       {description && (

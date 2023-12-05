@@ -2,6 +2,9 @@ import { Agents, AvailableAgents } from "@prisma/client";
 import { log } from "next-axiom";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
+import { saveGameState } from "../game/game-state.server";
+import { completeOnboarding } from "../game/onboarding";
+import { GameState } from "../game/schema/game_state";
 import { sendSlackMessage } from "../slack/slack.server";
 import { createAgentInSteamship } from "./agentSteamship.server";
 import {
@@ -59,13 +62,13 @@ export const createAgent = async (
   adventureId: string,
   isDevelopment: boolean = false,
   useAvailableAgentCache = true,
-  onboardingDataJson: Record<string, any> | undefined = undefined
+  gameState: Partial<GameState> | undefined = undefined
 ) => {
   console.log(
-    `createAgent -  UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}; useAvailableAgentCache ${useAvailableAgentCache}`
+    `createAgent - UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}; useAvailableAgentCache ${useAvailableAgentCache}; gameState ${gameState}`
   );
   log.info(
-    `createAgent -  UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}; useAvailableAgentCache ${useAvailableAgentCache}`
+    `createAgent - UserId ${userId}; AdventureId ${adventureId}; isDevelopment ${isDevelopment}; useAvailableAgentCache ${useAvailableAgentCache}; gameState ${gameState}`
   );
   const start = Date.now();
 
@@ -79,7 +82,7 @@ export const createAgent = async (
         adventureId,
         adventure.agentVersion,
         isDevelopment,
-        onboardingDataJson,
+        gameState,
         "ready",
         "claimed"
       );
@@ -87,6 +90,7 @@ export const createAgent = async (
 
     let agent: Agents | undefined = undefined;
     let agentData: any | undefined = undefined;
+    let cachedAgent = false;
 
     if (availableAgent) {
       // We need to swap this over to the agent table!
@@ -118,6 +122,8 @@ export const createAgent = async (
           id: availableAgent.id,
         },
       });
+
+      cachedAgent = true;
     } else {
       // We need to create a new agent from scratch!
       const _agentData = await createAgentInSteamship(adventure, isDevelopment);
@@ -147,19 +153,21 @@ export const createAgent = async (
       return null;
     }
 
+    if (!cachedAgent && gameState) {
+      // Save the game state
+      console.log(`Saving gamestate ${gameState}`);
+      await saveGameState(agent.agentUrl, gameState as GameState);
+
+      // Completing onboarding
+      console.log(`Completing onboarding`);
+      await completeOnboarding(agent.agentUrl);
+    }
+
     // Now we need to enqueue a few clones of this agent!
-    await createAvailableAgentIntent(
-      adventure,
-      isDevelopment,
-      onboardingDataJson
-    );
+    await createAvailableAgentIntent(adventure, isDevelopment, gameState);
 
     // Do it again!
-    await createAvailableAgentIntent(
-      adventure,
-      isDevelopment,
-      onboardingDataJson
-    );
+    await createAvailableAgentIntent(adventure, isDevelopment, gameState);
 
     if (!isDevelopment) {
       const end = Date.now();
