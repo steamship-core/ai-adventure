@@ -3,8 +3,10 @@
 import { amplitude } from "@/lib/amplitude";
 import { cn } from "@/lib/utils";
 import { track } from "@vercel/analytics/react";
-import { UserIcon } from "lucide-react";
+import { LoaderIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Card = ({
   adventureId,
@@ -12,13 +14,17 @@ const Card = ({
   onboardingParams,
   fastOnboard,
   variant = "landing",
+  onClick,
 }: {
   adventureId?: string;
   children: React.ReactNode;
   onboardingParams?: Record<string, any>;
   fastOnboard?: boolean;
   variant: "landing" | "adventure";
+  onClick: (e: any) => void;
 }) => {
+  let url = `/adventures/${adventureId}`;
+
   const className = cn(
     `block group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg`,
     adventureId ? "cursor-pointer" : "",
@@ -26,38 +32,8 @@ const Card = ({
   );
 
   if (adventureId) {
-    const registerClick = () => {
-      amplitude.track("Button Click", {
-        buttonName: "Start Adventure",
-        location: "Adventure",
-        action: "start-adventure",
-        adventureId: adventureId,
-        templateCharacter: !!onboardingParams,
-      });
-      if (onboardingParams) {
-        track("Character Selected", {
-          character: onboardingParams["name"] || "Unknown name",
-        });
-      }
-      return true;
-    };
-
-    let url = `/adventures/${adventureId}`;
-    if (onboardingParams) {
-      const searchParams = new URLSearchParams();
-      for (const key in onboardingParams) {
-        if (onboardingParams[key]) {
-          searchParams.set(key, onboardingParams[key]);
-        }
-      }
-      if (fastOnboard) {
-        searchParams.set("fastOnboard", "true");
-      }
-      url = `/adventures/${adventureId}/create-instance?${searchParams.toString()}`;
-    }
-
     return (
-      <a className={className} href={url} onClick={registerClick}>
+      <a className={className} href={url} onClick={onClick}>
         {children}
       </a>
     );
@@ -103,6 +79,9 @@ export default function PlayAsCharacterCard({
   fastOnboard,
   custom,
   variant = "landing",
+  isDevelopment = false,
+  enabled = true,
+  setIsLoading = undefined,
 }: {
   title: string;
   description: string;
@@ -112,14 +91,97 @@ export default function PlayAsCharacterCard({
   onboardingParams?: Record<string, any>;
   fastOnboard?: boolean;
   custom?: boolean;
+  isDevelopment?: boolean;
+  enabled?: boolean;
+  setIsLoading?: (isLoading: boolean) => void;
   variant?: "landing" | "adventure";
 }) {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  if (loading) {
+    return (
+      <Card
+        adventureId={adventureId}
+        onboardingParams={onboardingParams}
+        fastOnboard={fastOnboard}
+        variant={variant}
+        onClick={(e) => {}}
+      >
+        <div className="flex items-center justify-center w-full h-full">
+          <LoaderIcon size={64} className="z-10" />
+        </div>
+
+        <CardDescription variant={variant} title={"Loading..."} />
+      </Card>
+    );
+  }
+
+  const loadAdventure = async (e: any) => {
+    amplitude.track("Button Click", {
+      buttonName: "Start Adventure",
+      location: "Adventure",
+      action: "start-adventure",
+      adventureId: adventureId,
+      templateCharacter: !!onboardingParams,
+    });
+    if (!onboardingParams) {
+      return true;
+    }
+    if (onboardingParams) {
+      track("Character Selected", {
+        character: onboardingParams["name"] || "Unknown name",
+      });
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!enabled) {
+      console.log("Not enabled");
+      return;
+    }
+
+    setLoading(true);
+    if (setIsLoading) {
+      setIsLoading(true);
+    }
+
+    let payload: any = {
+      adventureId,
+      isDevelopment: isDevelopment,
+    };
+
+    if (onboardingParams && onboardingParams["name"] != "Custom Character") {
+      payload["gameState"] = { player: {} };
+
+      const searchParams = new URLSearchParams();
+      for (const key in onboardingParams) {
+        if (onboardingParams[key]) {
+          payload["gameState"]["player"][key] = onboardingParams[key];
+        }
+      }
+      if (fastOnboard) {
+        searchParams.set("fastOnboard", "true");
+      }
+    }
+
+    const resp = await fetch(`/api/adventure/create-instance`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+
+    const respJson = await resp.json();
+    router.push(respJson.url);
+  };
+
   return (
     <Card
       adventureId={adventureId}
       onboardingParams={onboardingParams}
       fastOnboard={fastOnboard}
       variant={variant}
+      onClick={loadAdventure}
     >
       {image ? (
         <Image
