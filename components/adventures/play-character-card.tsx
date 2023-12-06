@@ -137,7 +137,9 @@ export default function PlayAsCharacterCard({
     e.preventDefault();
 
     if (!isSignedIn) {
-      clerk.openSignIn({});
+      clerk.openSignIn({
+        redirectUrl: document.location.href,
+      });
       return;
     }
 
