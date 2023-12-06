@@ -77,6 +77,8 @@ export default async function EditorPage({
   }
 
   const requiredSettings = getRequiredFields(settingGroups);
+  console.log("required settings", requiredSettings);
+
   const allSettingsFilled =
     adventure.agentConfig &&
     requiredSettings.every((setting) => {
@@ -85,8 +87,17 @@ export default async function EditorPage({
     });
 
   const version = getVersion(agentVersion);
-  // if version is greator than 2.1.6
 
+  if (!allSettingsFilled) {
+    for (let setting of requiredSettings) {
+      // @ts-ignore
+      if (!adventure.agentConfig?.[setting.name]) {
+        console.log(`Missing setting ${setting.name}`);
+      }
+    }
+  }
+
+  // if version is greater than 2.1.6
   if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
     if (version.major === 2 && version.minor === 1) {
       if (version.patch >= 6) {
