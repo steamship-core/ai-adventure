@@ -44,6 +44,7 @@ const QuestProgressElement = ({
   totalQuests,
   adventure,
   questId,
+  onStartQuest,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string; description?: string };
@@ -56,6 +57,7 @@ const QuestProgressElement = ({
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
   questId?: string;
+  onStartQuest: () => Promise<void>;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
@@ -93,9 +95,6 @@ const QuestProgressElement = ({
         workspaceHandle: params.handle,
         questId: gameState?.current_quest,
       });
-      // Intentionally not using the router here because we want to force a reload.
-      window.location.href = `/play/${params.handle}/quest/${gameState?.current_quest}`;
-      return;
     } else {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
       amplitude.track("Button Click", {
@@ -106,9 +105,10 @@ const QuestProgressElement = ({
         workspaceHandle: params.handle,
         questId: gameState?.current_quest,
       });
-      // Intentionally not using the router here because we want to force a reload.
-      window.location.href = `/play/${params.handle}/quest`;
     }
+    const nextQuestId = await onStartQuest();
+    // Intentionally not using the router here because we want to force a reload.
+    window.location.href = `/play/${params.handle}/quest/${nextQuestId}`;
   };
 
   const disabledQuest = isIncompleteQuest && !isCurrentquest;
@@ -215,9 +215,11 @@ const QuestProgressElement = ({
 export const QuestProgress = ({
   adventureGoal,
   adventure,
+  onStartQuest,
 }: {
   adventureGoal?: string;
   adventure?: Adventure | null;
+  onStartQuest: () => Promise<void>;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
@@ -292,7 +294,6 @@ export const QuestProgress = ({
           const isIncompleteQuest = questCount < i + 1;
           const isCompleteQuest = !isCurrentquest && !isIncompleteQuest;
           const questId = gameState?.quests?.[i]?.name;
-          console.log({ questId, questCount, i });
           return (
             <QuestProgressElement
               totalQuests={questArc.length}
@@ -307,6 +308,7 @@ export const QuestProgress = ({
               setLowEnergyModalOpen={setLowEnergyModalOpen}
               adventure={adventure}
               questId={questId}
+              onStartQuest={onStartQuest}
             />
           );
         })}

@@ -113,7 +113,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
         <div className="w-full">
           <div className="relative">
             <Input
-              placeholder="Search"
+              placeholder="Search by title, description, or tag"
               id="search"
               defaultValue={searchQuery}
               onChange={(e) => {

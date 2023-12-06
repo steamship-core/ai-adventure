@@ -1,7 +1,13 @@
 import OrbLoader from "@/components/loading/orb-loader";
 
 const PlayLoading = () => {
-  return <OrbLoader text="Loading your adventure" />;
+  return (
+    <OrbLoader
+      title="Loading Adventure ..."
+      text="Loading your adventure"
+      hideProgress
+    />
+  );
 };
 
 export default PlayLoading;
