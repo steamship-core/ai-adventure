@@ -34,6 +34,7 @@ export const StartAdventureSection = ({
           {adventure.shortDescription}
         </TypographyLarge>
         <AdventureDescription description={adventure.description} />
+        <CharacterTemplatesSection adventure={adventure} />
       </div>
       {!adventure.agentConfig && (
         <Alert>
