@@ -36,6 +36,7 @@ export const createAvailableAgentIntent = async (
 
     const agentData = {
       adventureId: adventure.id,
+      adventureVersion: adventure.version,
       agentVersion: adventure.agentVersion,
       gameState: fixedGameState,
       isDevelopment,
@@ -61,6 +62,7 @@ export const createAvailableAgentIntent = async (
 
 export const getAvailableAgent = async (
   adventureId: string,
+  adventureVersion: number,
   agentVersion: string,
   isDevelopment: boolean,
   gameState: Partial<GameState> | undefined = undefined,
@@ -74,6 +76,7 @@ export const getAvailableAgent = async (
 
   console.log("Trying to get agent", {
     adventureId,
+    adventureVersion,
     agentVersion,
     isDevelopment,
     fixedGameState,
@@ -83,6 +86,7 @@ export const getAvailableAgent = async (
   const agent = await prisma.availableAgents.findFirst({
     where: {
       adventureId,
+      adventureVersion,
       agentVersion,
       gameState: fixedGameState,
       isDevelopment,

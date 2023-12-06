@@ -80,6 +80,7 @@ export const createAgent = async (
     if (useAvailableAgentCache) {
       availableAgent = await getAvailableAgent(
         adventureId,
+        adventure.version,
         adventure.agentVersion,
         isDevelopment,
         gameState,
@@ -110,6 +111,7 @@ export const createAgent = async (
         ownerId: userId!,
         isDevelopment: isDevelopment,
         completeOnboardingCalled: availableAgent.completeOnboardingCalled,
+        adventureVersion: availableAgent.adventureVersion,
       };
       log.info(
         `Deleting AvailableAgent and turning to Agent. AvailableAgentId=${
@@ -131,6 +133,7 @@ export const createAgent = async (
         ..._agentData,
         ownerId: userId!,
         isDevelopment: isDevelopment,
+        adventureVersion: adventure.version,
       } as any;
       log.info(
         `Creating entirely new agent; no cached one existed: ${JSON.stringify(

@@ -223,6 +223,9 @@ export const updateAdventure = async (
         ...topLevelUpdates,
         ...publicModifiers,
         agentDevConfig: updatedServerSettings,
+        version: {
+          increment: 1,
+        },
       },
     });
 
@@ -305,7 +308,12 @@ export const magicCreateAdventure = async (
 
     let newAdventure = await prisma.adventure.update({
       where: { id: adventure.id },
-      data: updateData,
+      data: {
+        ...updateData,
+        version: {
+          increment: 1,
+        },
+      },
     });
     return newAdventure;
   } catch (e) {
@@ -391,7 +399,12 @@ export const syncAdventureStateWithAgent = async (
 
     let newAdventure = await prisma.adventure.update({
       where: { id: adventure.id },
-      data: data,
+      data: {
+        ...data,
+        version: {
+          increment: 1,
+        },
+      },
     });
 
     console.log(
@@ -426,6 +439,9 @@ export const deleteAdventure = async (userId: string, adventureId: string) => {
       where: { id: adventure.id },
       data: {
         deletedAt: new Date(),
+        version: {
+          increment: 1,
+        },
       },
     });
     return adventure;
@@ -505,6 +521,9 @@ export const importAdventure = async (
       data: {
         ...getTopLevelUpdatesFromAdventureConfig(importObj),
         agentDevConfig: importObj,
+        version: {
+          increment: 1,
+        },
       },
     });
     return adventure;
