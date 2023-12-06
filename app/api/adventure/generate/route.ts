@@ -63,8 +63,6 @@ export const POST = withAxiom(async (request: Request) => {
       throw new Error(`Unknown operation: ${operation}.`);
     }
 
-    console.log(path, data);
-
     const response = await steamship.agent.post({
       url: devAgent.agentUrl,
       path,

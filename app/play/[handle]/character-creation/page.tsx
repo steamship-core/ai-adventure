@@ -28,18 +28,14 @@ export default async function CharacterCreationPage({
 
   if (gameState.active_mode == "camp") {
     redirect(`/play/${agent.handle}/camp`);
-    return;
   }
 
   if (gameState.active_mode == "quest" && gameState.current_quest) {
     redirect(`/play/${agent.handle}/quest/${gameState.current_quest}`);
-    return;
   }
 
   if (gameState.active_mode == "quest") {
     redirect(`/play/${agent.handle}/camp`);
-    return;
   }
-
   return <CharacterCreation isDevelopment={agent.isDevelopment || false} />;
 }
