@@ -41,7 +41,7 @@ export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const cursor = searchParams.get("cursor") || null;
   const search = searchParams.get("search") || null;
-  const sort = searchParams.get("sort") || "newest";
+  const sort = searchParams.get("sort") || "reactions";
 
   const take = 25;
 
@@ -52,10 +52,10 @@ export async function GET(request: Request) {
     orderBy: {
       ...(sort === "updated"
         ? { updatedAt: "desc" }
-        : {
-            // @ts-ignore
-            createdAt: sortOptions[sort] || "desc",
-          }),
+        : sort === "reactions"
+        ? { Reactions: { _count: "desc" } }
+        : // @ts-ignore
+          { createdAt: sortOptions[sort] }),
     },
     where: {
       public: true,

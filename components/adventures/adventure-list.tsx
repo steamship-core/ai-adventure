@@ -91,7 +91,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
   // @ts-ignore
   const sort = sortOptions[searchParams.get("sort")]
     ? searchParams.get("sort")
-    : "newest";
+    : "reactions";
 
   useEffect(() => {
     // debounce refetch call
@@ -109,7 +109,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
 
   return (
     <>
-      <div className="flex gap-2 items-end">
+      <div className="flex gap-2 items-center">
         <div className="w-full">
           <div className="relative">
             <Input
@@ -136,6 +136,15 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={() => {
+                router.push(
+                  pathname + "?" + createQueryString("sort", "reactions")
+                );
+              }}
+            >
+              Reactions
+            </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 router.push(
