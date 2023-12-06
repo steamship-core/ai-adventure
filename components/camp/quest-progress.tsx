@@ -2,23 +2,22 @@
 
 import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
-import { Quest } from "@/lib/game/schema/quest";
 import { cn } from "@/lib/utils";
 import { Adventure } from "@prisma/client";
 import {
   CheckIcon,
   FlameIcon,
+  Loader2,
   LockIcon,
   MapPinIcon,
   SparklesIcon,
 } from "lucide-react";
 import { log } from "next-axiom";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import InventorySheet from "../inventory-sheet";
-import useLoadingScreen from "../loading/use-loading-screen";
 import { recoilEnergyState, recoilGameState } from "../providers/recoil";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -41,11 +40,11 @@ const QuestProgressElement = ({
   isCompleteQuest,
   isCurrentquest,
   setLowEnergyModalOpen,
-  setIsVisible,
   index,
   totalQuests,
   adventure,
   questId,
+  onStartQuest,
 }: {
   totalQuests: number;
   questArc: { location: string; goal: string; description?: string };
@@ -56,16 +55,15 @@ const QuestProgressElement = ({
   isClamped: boolean;
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
-  setIsVisible: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
   questId?: string;
+  onStartQuest: () => Promise<string>;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
   const params = useParams();
   const isInQuest = gameState?.active_mode === "quest";
   const energy = useRecoilValue(recoilEnergyState);
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -80,74 +78,37 @@ const QuestProgressElement = ({
 
   const onClick = async () => {
     const lowEnergy = (energy || 0) < 10;
+    setIsLoading(true);
     if (lowEnergy) {
       setLowEnergyModalOpen(true);
       return;
     }
 
-    setIsVisible(true);
-    setIsLoading(true);
-
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
-      // Intentionally not using the router here because we want to force a reload.
-      window.location.href = `/play/${params.handle}/quest/${gameState?.current_quest}`;
-      setIsLoading(false);
-      return;
+      amplitude.track("Button Click", {
+        buttonName: "Go on an Adventure",
+        location: "Camp",
+        action: "continue-quest",
+        adventureId: adventure?.id,
+        workspaceHandle: params.handle,
+        questId: gameState?.current_quest,
+      });
+    } else {
+      log.debug(`Activating existing quest: ${gameState?.current_quest}`);
+      amplitude.track("Button Click", {
+        buttonName: "Go on an Adventure",
+        location: "Camp",
+        action: "start-quest",
+        adventureId: adventure?.id,
+        workspaceHandle: params.handle,
+        questId: gameState?.current_quest,
+      });
     }
-
-    // IF we're still here, then we need to start a new quest.
-    const resp = await fetch(`/api/game/${params.handle}/quest`, {
-      method: "POST",
-    });
-    if (!resp.ok) {
-      setIsLoading(false);
-      setIsVisible(false);
-      let res = "";
-      try {
-        res = await resp.text();
-      } catch {
-        alert(`Failed to start quest: ${res}`);
-        log.error(`Failed to start quest: ${res}`);
-        return;
-      }
-      alert(`Failed to start quest: ${res}`);
-      log.error(`Failed to start quest: ${res}`);
-      return;
-    }
-    const json = (await resp.json()) as {
-      quest: Quest & { status: { state: string; statusMessage: string } };
-    };
-
-    if (json?.quest?.status?.state === "failed") {
-      setIsLoading(false);
-      setIsVisible(false);
-      alert(`Failed to start quest: ${JSON.stringify(json)}`);
-      log.error(`Failed to start quest: ${JSON.stringify(json)}`);
-      return;
-    }
-
-    const questId = json.quest.name;
-    if (!questId) {
-      setIsLoading(false);
-      setIsVisible(false);
-      alert(`Failed to get questId: ${JSON.stringify(json)}`);
-      log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
-      return;
-    }
-    amplitude.track("Button Click", {
-      buttonName: "Go on an Adventure",
-      location: "Camp",
-      action: "start-quest",
-      adventureId: adventure?.id,
-      workspaceHandle: params.handle,
-      questId: questId,
-    });
-    log.debug(`Activating new quest: ${questId}`);
+    const nextQuestId = await onStartQuest();
     // Intentionally not using the router here because we want to force a reload.
-    window.location.href = `/play/${params.handle}/quest/${questId}`;
-    setIsLoading(false);
+    window.location.href = `/play/${params.handle}/quest/${nextQuestId}`;
   };
 
   const disabledQuest = isIncompleteQuest && !isCurrentquest;
@@ -227,7 +188,11 @@ const QuestProgressElement = ({
               disabled={isLoading}
             >
               <SparklesIcon className="mr-2" />
-              {isInQuest ? "Continue Quest" : "Start Quest"}
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <> {isInQuest ? "Continue Quest" : "Start Quest"}</>
+              )}
             </Button>
           )}
           {disabledQuest && (
@@ -250,16 +215,17 @@ const QuestProgressElement = ({
 export const QuestProgress = ({
   adventureGoal,
   adventure,
+  onStartQuest,
 }: {
   adventureGoal?: string;
   adventure?: Adventure | null;
+  onStartQuest: () => Promise<string>;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
   const [isArcClamped, setIsArcClamped] = useState(true);
   const params = useParams<{ handle: string }>();
   const [lowEnergyModalOpen, setLowEnergyModalOpen] = useState(false);
-  const { loadingScreen, setIsVisible } = useLoadingScreen("Starting Quest...");
 
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
@@ -328,7 +294,6 @@ export const QuestProgress = ({
           const isIncompleteQuest = questCount < i + 1;
           const isCompleteQuest = !isCurrentquest && !isIncompleteQuest;
           const questId = gameState?.quests?.[i]?.name;
-          console.log({ questId, questCount, i });
           return (
             <QuestProgressElement
               totalQuests={questArc.length}
@@ -341,9 +306,9 @@ export const QuestProgress = ({
               setIsClamped={setIsArcClamped}
               isClamped={isArcClamped}
               setLowEnergyModalOpen={setLowEnergyModalOpen}
-              setIsVisible={setIsVisible}
               adventure={adventure}
               questId={questId}
+              onStartQuest={onStartQuest}
             />
           );
         })}
@@ -372,7 +337,6 @@ export const QuestProgress = ({
           </Button>
         </DialogContent>
       </Dialog>
-      {loadingScreen}
     </>
   );
 };

@@ -55,7 +55,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
           />
         </div>
       </div>
-      {loading && <LoadingScreen />}
+      {loading && <LoadingScreen title="Creating Adventure ..." />}
     </>
   );
 };

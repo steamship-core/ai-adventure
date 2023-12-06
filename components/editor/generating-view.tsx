@@ -57,7 +57,6 @@ const GeneratingView = ({
   };
 
   useEffect(() => {
-    console.log(stateUpdatedAt);
     if (stateUpdatedAt == null) {
       refreshState();
     } else {
