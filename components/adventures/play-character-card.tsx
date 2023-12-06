@@ -1,6 +1,7 @@
 "use client";
 
 import { amplitude } from "@/lib/amplitude";
+import { CUSTOM_CHARACTER_NAME } from "@/lib/characters";
 import { cn } from "@/lib/utils";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { track } from "@vercel/analytics/react";
@@ -168,7 +169,7 @@ export default function PlayAsCharacterCard({
       isDevelopment: isDevelopment,
     };
 
-    if (onboardingParams && onboardingParams["name"] != " ") {
+    if (onboardingParams && onboardingParams["name"] != CUSTOM_CHARACTER_NAME) {
       payload["gameState"] = { player: {} };
 
       const searchParams = new URLSearchParams();

@@ -1,4 +1,5 @@
 "use client";
+import { CUSTOM_CHARACTER_NAME } from "@/lib/characters";
 import { Character } from "@/lib/game/schema/characters";
 import { Adventure } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
@@ -46,7 +47,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
               ...(characters || []),
               // @ts-ignore
               {
-                name: "Custom Character",
+                name: CUSTOM_CHARACTER_NAME,
                 tagline: "Create your own character",
                 custom: true,
               },
