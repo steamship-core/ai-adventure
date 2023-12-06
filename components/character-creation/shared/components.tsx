@@ -10,18 +10,13 @@ export const CreationContainer = ({ children }: { children: ReactNode }) => (
 
 export const CreationContent = ({
   children,
-  isCurrent,
   onClick,
 }: {
   children: ReactNode;
-  isCurrent: boolean;
   onClick?: () => any;
 }) => (
   <div
-    className={cn(
-      "w-full transition-opacity duration-500",
-      !isCurrent && "opacity-50"
-    )}
+    className={cn("w-full transition-opacity duration-500")}
     onClick={onClick ? onClick : () => null}
   >
     {children}

@@ -254,7 +254,6 @@ const EditorInitialization = ({
   return (
     <div className="h-full w-full flex items-center justify-center relative flex-col">
       <div className="absolute top-0 left-0 w-full h-full -z-20 blur-2xl overflow-hidden">
-        {/* random circles and shapes  */}
         <div className="relative w-full h-full opacity-40">
           <div className="absolute top-[14rem] left-[12.5rem] h-44 w-44 bg-indigo-500 rounded-full " />
           <div className="absolute top-[19rem] left-[16.5rem] h-44 w-56 bg-indigo-600 rounded-full " />
