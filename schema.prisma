@@ -46,6 +46,8 @@ model Adventure {
   Comment           Comment[]
 
   AvailableAgents AvailableAgents[] @relation("availableAgents")
+
+  version Int @default(0)
 }
 
 model Comment {
@@ -83,6 +85,7 @@ model Agents {
   workspaceId              String?
   workspaceHandle          String?
   completeOnboardingCalled Boolean?
+  adventureVersion         Int        @default(0)
 }
 
 // These agents are pre-created and available for use.
@@ -102,6 +105,7 @@ model AvailableAgents {
   workspaceId              String?
   workspaceHandle          String?
   completeOnboardingCalled Boolean?
+  adventureVersion         Int        @default(0)
 }
 
 model UserExperience {

@@ -3,6 +3,7 @@ import { BlockContainer } from "./block-container";
 import { NarrationPlayer } from "./narration-player";
 
 import { recoilContinuationState } from "@/components/providers/recoil";
+import { addNewlines } from "@/lib/text";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -59,6 +60,8 @@ export const TextBlock = ({
     return null;
   }
 
+  const _text = addNewlines(text);
+
   return (
     <BlockContainer className="group">
       <div
@@ -68,13 +71,13 @@ export const TextBlock = ({
         {useTypeEffect ? (
           <>
             {didComplete ? (
-              <Typewriter text={text} delay={5} />
+              <Typewriter text={_text} delay={5} />
             ) : (
               <Loader className="animate-spin" />
             )}
           </>
         ) : (
-          <> {text} </>
+          <> {_text} </>
         )}
       </div>
       {blockId && offerAudio && didComplete && (

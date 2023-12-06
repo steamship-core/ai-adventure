@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/curate-available-agent-pool",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/1 * * * *"
     }
   ]
 }
