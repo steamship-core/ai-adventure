@@ -175,7 +175,8 @@ export const updateAdventure = async (
         publicRequested: true,
       };
       await sendSlackMessage(
-        `👋 User ${userId} requested ${adventure.id} to be approved to be PUBLIC`
+        `👋 User ${userId} requested public approval: ${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${adventure.id}`,
+        process.env.SLACK_APPROVAL_CHANNEL_ID
       );
     } else {
       publicModifiers = {
