@@ -1,6 +1,8 @@
 import ErrorReport from "@/components/error/error-report";
+import { Button } from "@/components/ui/button";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function ErrorPage({ params }: { params: {} }) {
   return (
@@ -15,6 +17,9 @@ export default async function ErrorPage({ params }: { params: {} }) {
             className="rounded-xl"
           />
           <TypographyH1>An error occurred..</TypographyH1>
+          <Button asChild className="mt-8">
+            <Link href="/adventures">Go back home</Link>
+          </Button>
           <br />
           <ErrorReport />
         </div>
