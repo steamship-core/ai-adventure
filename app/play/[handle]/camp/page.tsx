@@ -102,7 +102,7 @@ export default async function CampPage({
     }
 
     const quest = await startQuest(userId, agent!.agentUrl);
-    return quest.name;
+    return quest.name!;
   };
 
   return (
