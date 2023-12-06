@@ -82,11 +82,7 @@ const CharacterCreationComplete = ({
   const onComplete = async () => {
     setIsVisible(true);
     try {
-      let start = Date.now();
       await updateGameState(config as GameState, params.handle);
-      let end = Date.now();
-      console.log(`updateGameState took ${end - start}ms`);
-      start = Date.now();
       const res = await fetch(
         `/api/agent/${params.handle}/completeOnboarding`,
         {
@@ -94,8 +90,6 @@ const CharacterCreationComplete = ({
           body: JSON.stringify({}),
         }
       );
-      end = Date.now();
-      console.log(`completeOnboarding took ${end - start}ms`);
       if (!res.ok) {
         let url = new URL(
           `${window.location.protocol}//${window.location.hostname}/error`

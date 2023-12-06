@@ -2,7 +2,6 @@
 
 import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
-import { Quest } from "@/lib/game/schema/quest";
 import { cn } from "@/lib/utils";
 import { Adventure } from "@prisma/client";
 import {
@@ -15,7 +14,7 @@ import {
 } from "lucide-react";
 import { log } from "next-axiom";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import InventorySheet from "../inventory-sheet";
@@ -63,7 +62,6 @@ const QuestProgressElement = ({
   const params = useParams();
   const isInQuest = gameState?.active_mode === "quest";
   const energy = useRecoilValue(recoilEnergyState);
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -78,70 +76,39 @@ const QuestProgressElement = ({
 
   const onClick = async () => {
     const lowEnergy = (energy || 0) < 10;
+    setIsLoading(true);
     if (lowEnergy) {
       setLowEnergyModalOpen(true);
       return;
     }
 
-    setIsLoading(true);
-
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);
+      amplitude.track("Button Click", {
+        buttonName: "Go on an Adventure",
+        location: "Camp",
+        action: "continue-quest",
+        adventureId: adventure?.id,
+        workspaceHandle: params.handle,
+        questId: gameState?.current_quest,
+      });
       // Intentionally not using the router here because we want to force a reload.
       window.location.href = `/play/${params.handle}/quest/${gameState?.current_quest}`;
-      setIsLoading(false);
       return;
+    } else {
+      log.debug(`Activating existing quest: ${gameState?.current_quest}`);
+      amplitude.track("Button Click", {
+        buttonName: "Go on an Adventure",
+        location: "Camp",
+        action: "start-quest",
+        adventureId: adventure?.id,
+        workspaceHandle: params.handle,
+        questId: gameState?.current_quest,
+      });
+      // Intentionally not using the router here because we want to force a reload.
+      window.location.href = `/play/${params.handle}/quest`;
     }
-
-    // IF we're still here, then we need to start a new quest.
-    const resp = await fetch(`/api/game/${params.handle}/quest`, {
-      method: "POST",
-    });
-    if (!resp.ok) {
-      setIsLoading(false);
-      let res = "";
-      try {
-        res = await resp.text();
-      } catch {
-        alert(`Failed to start quest: ${res}`);
-        log.error(`Failed to start quest: ${res}`);
-        return;
-      }
-      alert(`Failed to start quest: ${res}`);
-      log.error(`Failed to start quest: ${res}`);
-      return;
-    }
-    const json = (await resp.json()) as {
-      quest: Quest & { status: { state: string; statusMessage: string } };
-    };
-
-    if (json?.quest?.status?.state === "failed") {
-      setIsLoading(false);
-      alert(`Failed to start quest: ${JSON.stringify(json)}`);
-      log.error(`Failed to start quest: ${JSON.stringify(json)}`);
-      return;
-    }
-
-    const questId = json.quest.name;
-    if (!questId) {
-      setIsLoading(false);
-      alert(`Failed to get questId: ${JSON.stringify(json)}`);
-      log.error(`Failed to get QuestId: ${JSON.stringify(json)}`);
-      return;
-    }
-    amplitude.track("Button Click", {
-      buttonName: "Go on an Adventure",
-      location: "Camp",
-      action: "start-quest",
-      adventureId: adventure?.id,
-      workspaceHandle: params.handle,
-      questId: questId,
-    });
-    log.debug(`Activating new quest: ${questId}`);
-    // Intentionally not using the router here because we want to force a reload.
-    window.location.href = `/play/${params.handle}/quest/${questId}`;
-    setIsLoading(false);
   };
 
   const disabledQuest = isIncompleteQuest && !isCurrentquest;
