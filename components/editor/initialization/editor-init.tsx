@@ -86,8 +86,15 @@ const EditorInitialization = ({
   const [settings, setSettings] = useState<{ [key: string]: any }>(
     requiredSettings.reduce((acc, setting) => {
       // @ts-ignore
+      let curValue = adventure.agentConfig?.[setting.name];
+      // @ts-ignore
+      const devValue = adventure.agentDevConfig?.[setting.name];
 
-      const curValue = adventure.agentConfig?.[setting.name];
+      if (devValue && curValue != devValue) {
+        // Prefer the devValue if it exists and is different from the curValue
+        curValue = devValue;
+      }
+
       if (!curValue) {
         // @ts-ignore
 

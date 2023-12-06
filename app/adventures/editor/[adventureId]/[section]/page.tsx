@@ -77,6 +77,7 @@ export default async function EditorPage({
   }
 
   const requiredSettings = getRequiredFields(settingGroups);
+
   const allSettingsFilled =
     adventure.agentConfig &&
     requiredSettings.every((setting) => {
@@ -85,8 +86,8 @@ export default async function EditorPage({
     });
 
   const version = getVersion(agentVersion);
-  // if version is greator than 2.1.6
 
+  // if version is greater than 2.1.6
   if (version.major >= 2 && version.minor >= 1 && !allSettingsFilled) {
     if (version.major === 2 && version.minor === 1) {
       if (version.patch >= 6) {

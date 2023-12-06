@@ -121,22 +121,17 @@ export default function PlayAsCharacterCard({
   }
 
   const loadAdventure = async (e: any) => {
-    amplitude.track("Button Click", {
-      buttonName: "Start Adventure",
-      location: "Adventure",
-      action: "start-adventure",
-      adventureId: adventureId,
-      templateCharacter: !!onboardingParams,
-    });
     if (!onboardingParams) {
       return true;
     }
 
-    if (onboardingParams) {
-      track("Character Selected", {
-        character: onboardingParams["name"] || "Unknown name",
-      });
-    }
+    amplitude.track("Button Click", {
+      buttonName: "Start Adventure",
+      location: "Adventure",
+      action: "start-adventure-pre-login-check",
+      adventureId: adventureId,
+      templateCharacter: !!onboardingParams,
+    });
 
     e.stopPropagation();
     e.preventDefault();
@@ -145,6 +140,18 @@ export default function PlayAsCharacterCard({
       clerk.openSignIn({});
       return;
     }
+
+    track("Character Selected", {
+      character: onboardingParams["name"] || "Unknown name",
+    });
+
+    amplitude.track("Button Click", {
+      buttonName: "Start Adventure",
+      location: "Adventure",
+      action: "start-adventure",
+      adventureId: adventureId,
+      templateCharacter: !!onboardingParams,
+    });
 
     if (!enabled) {
       console.log("Not enabled");
@@ -161,7 +168,7 @@ export default function PlayAsCharacterCard({
       isDevelopment: isDevelopment,
     };
 
-    if (onboardingParams && onboardingParams["name"] != "Custom Character") {
+    if (onboardingParams && onboardingParams["name"] != " ") {
       payload["gameState"] = { player: {} };
 
       const searchParams = new URLSearchParams();
