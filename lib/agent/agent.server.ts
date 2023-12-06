@@ -167,10 +167,10 @@ export const createAgent = async (
     }
 
     // Now we need to enqueue a few clones of this agent!
-    await createAvailableAgentIntent(adventure, isDevelopment, gameState);
-
-    // Do it again!
-    await createAvailableAgentIntent(adventure, isDevelopment, gameState);
+    const CREATE_CACHED_AGENTS_COUNT = 5;
+    for (let i = 0; i < CREATE_CACHED_AGENTS_COUNT; i++) {
+      await createAvailableAgentIntent(adventure, isDevelopment, gameState);
+    }
 
     if (!isDevelopment) {
       const end = Date.now();
