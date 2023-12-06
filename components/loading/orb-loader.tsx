@@ -8,9 +8,11 @@ import { TypographyH1 } from "../ui/typography/TypographyH1";
 const OrbLoader = ({
   hideProgress,
   text,
+  title = "Loading ...",
 }: {
   hideProgress?: boolean;
   text?: string;
+  title?: string;
 }) => {
   const [progress, setProgress] = useState(0);
 
@@ -57,7 +59,7 @@ const OrbLoader = ({
   return (
     <div className="h-full w-full flex  px-12 max-w-xl mx-auto flex-col gap-4 items-center justify-center">
       <div className="w-full text-center">
-        <TypographyH1>Loading ...</TypographyH1>
+        <TypographyH1>{title}</TypographyH1>
         <div className="h-72 w-full flex items-center justify-center">
           <Player autoplay loop src="/ai-orb.json" className="w-72" />
         </div>

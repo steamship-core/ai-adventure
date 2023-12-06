@@ -19,6 +19,7 @@ import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { PlayIcon } from "lucide-react";
 import { log } from "next-axiom";
+import { revalidatePath } from "next/cache";
 import { ReactNode } from "react";
 
 export default async function EditorLayout({
@@ -58,6 +59,11 @@ export default async function EditorLayout({
     settingGroups = responseJson.settingGroups;
   }
 
+  const revalidate = async () => {
+    "use server";
+    revalidatePath("/adventures/editor/[adventureId]", "layout");
+  };
+
   return (
     <RecoilProvider>
       <div className="flex flex-grow flex-col gap-6 px-4 md:px-6">
@@ -85,6 +91,7 @@ export default async function EditorLayout({
         <EditorActions
           hasUnpublishedChanges={hasUnpublishedChanges}
           isGenerating={isGenerating}
+          revalidate={revalidate}
         />
         <div className="flex flex-col md:grid md:grid-cols-12 gap-6">
           <aside className="col-span-3 lg:col-span-2" id="editor-side-nav">

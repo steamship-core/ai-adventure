@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import { EditorBackButton } from "@/components/editor/editor-back-button";
 import PublishButton from "@/components/editor/publish-button";
@@ -10,15 +9,18 @@ import { useState } from "react";
 const EditorActions = ({
   hasUnpublishedChanges,
   isGenerating = false,
+  revalidate,
 }: {
   hasUnpublishedChanges: boolean;
   isGenerating: boolean;
+  revalidate: () => Promise<void>;
 }) => {
   const [unpublishedChanges, setHasUnpublishedChanges] = useState(
     hasUnpublishedChanges
   );
   const onPublish = () => {
     setHasUnpublishedChanges(false);
+    revalidate();
   };
 
   return (
