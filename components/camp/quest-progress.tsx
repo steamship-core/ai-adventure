@@ -57,7 +57,7 @@ const QuestProgressElement = ({
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
   questId?: string;
-  onStartQuest: () => Promise<void>;
+  onStartQuest: () => Promise<string>;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const gameState = useRecoilValue(recoilGameState);
@@ -219,7 +219,7 @@ export const QuestProgress = ({
 }: {
   adventureGoal?: string;
   adventure?: Adventure | null;
-  onStartQuest: () => Promise<void>;
+  onStartQuest: () => Promise<string>;
 }) => {
   const [gameState, setGameState] = useRecoilState(recoilGameState);
   const [isClamped, setIsClamped] = useState(true);
