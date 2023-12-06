@@ -2,6 +2,7 @@
 
 import { amplitude } from "@/lib/amplitude";
 import { cn } from "@/lib/utils";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { track } from "@vercel/analytics/react";
 import { LoaderIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
@@ -98,6 +99,8 @@ export default function PlayAsCharacterCard({
 }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isSignedIn, user, isLoaded } = useUser();
+  const clerk = useClerk();
 
   if (loading) {
     return (
@@ -128,6 +131,7 @@ export default function PlayAsCharacterCard({
     if (!onboardingParams) {
       return true;
     }
+
     if (onboardingParams) {
       track("Character Selected", {
         character: onboardingParams["name"] || "Unknown name",
@@ -136,6 +140,11 @@ export default function PlayAsCharacterCard({
 
     e.stopPropagation();
     e.preventDefault();
+
+    if (!isSignedIn) {
+      clerk.openSignIn({});
+      return;
+    }
 
     if (!enabled) {
       console.log("Not enabled");
