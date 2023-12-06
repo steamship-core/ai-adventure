@@ -21,7 +21,6 @@ export const POST = withAxiom(
     try {
       // Initiate
       completeOnboarding(agent.agentUrl);
-      console.log("Returning");
       return NextResponse.json({ agent }, { status: 200 });
     } catch (e) {
       log.error(`${e}`);
