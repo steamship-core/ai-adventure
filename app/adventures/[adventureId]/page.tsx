@@ -30,6 +30,7 @@ export async function generateMetadata(
   let imageUrl = adventure.image;
 
   if (imageUrl?.endsWith("/raw")) {
+    // The Steamship engine will ignore the filename.. but the .png extension is required for Twitter to realize it's an image.
     imageUrl = `${imageUrl}/image.png`;
   }
 
