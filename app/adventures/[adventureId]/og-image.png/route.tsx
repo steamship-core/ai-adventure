@@ -1,7 +1,6 @@
 /*
  * This page returns an IMAGE.
  */
-import { getAdventure } from "@/lib/adventure/adventure.server";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
@@ -15,17 +14,28 @@ const ITEM_PAD = 9;
 const TEXT_WIDTH =
   TWITTER_WIDTH - ITEM_EMBED_SIZE - 2 * OUTER_PAD_X - 2 * ITEM_PAD;
 
-export default async function GET({
-  params,
-}: {
-  params: { adventureId: string };
-}) {
-  const adventure = (await getAdventure(params.adventureId)) as any;
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
 
-  let imageUrl = adventure.image;
-  if (imageUrl?.endsWith("/raw")) {
-    // The Steamship engine will ignore the filename.. but the .png extension is required for Twitter to realize it's an image.
-    imageUrl = `${imageUrl}/image.png`;
+  // Defaults.
+  let imageUrl = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/share-card-404.png`;
+  let itemTitle = `Unknown Item`;
+  let itemDescription = `An item of unknown origin.`;
+  // Override with the real data.
+
+  const itemImage = `${searchParams.get("itemImage")}`;
+  if (itemImage) {
+    imageUrl = itemImage as string;
+  }
+
+  const _title = `${searchParams.get("title")}`;
+  if (_title) {
+    itemTitle = _title;
+  }
+
+  const _description = `${searchParams.get("description")}`;
+  if (_description) {
+    itemDescription = _description;
   }
 
   return new ImageResponse(
@@ -34,61 +44,13 @@ export default async function GET({
         style={{
           display: "flex",
           color: "black",
-          backgroundColor: "white",
+          backgroundImage: `url(${imageUrl})`,
+          backgroundSize: "cover",
           width: TWITTER_WIDTH,
           height: TWITTER_HEIGHT,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
           overflow: "hidden",
         }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={imageUrl}
-          style={{
-            height: "80%",
-            borderRadius: 10,
-          }}
-          alt={adventure.name}
-        />
-        <div
-          style={{
-            display: "flex",
-            paddingLeft: "20px",
-            paddingRight: "12px",
-            color: "black",
-            width: TEXT_WIDTH,
-            height: "100%",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            alignItems: "flex-start",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: 36,
-              marginBottom: 2,
-              fontWeight: "bolder",
-            }}
-          >
-            {adventure.name}
-          </h1>
-          <p
-            style={{
-              fontSize: 24,
-              maxWidth: "100%",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 9,
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-            }}
-          >
-            {adventure.shortDescription}
-          </p>
-        </div>
-      </div>
+      ></div>
     ),
     {
       width: TWITTER_WIDTH,

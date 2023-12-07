@@ -34,6 +34,12 @@ export async function generateMetadata(
     imageUrl = `${imageUrl}/image.png`;
   }
 
+  // Now, finally, we dynamically render the image.
+  let shareImageUrl = new URL(`${url}/og-image.png`);
+  shareImageUrl.searchParams.set("itemImage", imageUrl as string);
+
+  imageUrl = shareImageUrl.toString();
+
   ret.title = adventure.name;
   ret.description = adventure.shortDescription;
   ret.metadataBase = new URL(url);
@@ -44,7 +50,7 @@ export async function generateMetadata(
     title: adventure.name,
     description: adventure.shortDescription,
     images: adventure.image
-      ? [{ url: imageUrl }]
+      ? [{ url: shareImageUrl }]
       : [{ url: "/adventurer.png" }],
   };
 
@@ -53,7 +59,7 @@ export async function generateMetadata(
     title: adventure.name,
     description: adventure.shortDescription,
     images: adventure.image
-      ? [{ url: imageUrl }]
+      ? [{ url: shareImageUrl }]
       : [{ url: "/adventurer.png" }],
   } as any;
 
