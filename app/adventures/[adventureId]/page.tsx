@@ -27,7 +27,7 @@ export async function generateMetadata(
   let ret = { ...(await parent) };
 
   const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`;
-  const imageUrl = `/og-image.png?image=${adventure.image}`;
+  const imageUrl = adventure.image;
 
   ret.title = adventure.name;
   ret.description = adventure.shortDescription;
