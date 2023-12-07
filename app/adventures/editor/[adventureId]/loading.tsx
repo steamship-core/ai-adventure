@@ -1,3 +1,2 @@
-const EditorLoading = () => <div />;
-
-export default EditorLoading;
+const EditorSectionLoading = () => <div />;
+export default EditorSectionLoading;

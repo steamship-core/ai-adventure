@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import LandingFooter from "../landing/footer";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
@@ -25,12 +24,12 @@ const ManageAccount = () => {
   return (
     <div className="flex flex-col gap-6 h-full flex-1">
       <div className="flex-1 flex flex-col gap-6">
-        <div className="flex gap-12 border rounded-md p-6">
+        <div className="flex gap-6 md:gap-12 border rounded-md p-6">
           <Image
             src={user.imageUrl}
             width={128}
             height={128}
-            className="rounded-full aspect-square"
+            className="w-20 h-20 rounded-full aspect-square"
             alt="Profile picture"
           />
           <div className="flex flex-col gap-4">
@@ -44,7 +43,7 @@ const ManageAccount = () => {
         </div>
         <div className="p-6 rounded-md border-muted border flex flex-col gap-8 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-background/50 z-10 backdrop-blur-md">
-            <div className="w-full h-full flex items-center justify-center flex-col">
+            <div className="w-full h-full flex items-center justify-center flex-col p-6">
               <TypographyH3>Get ready for an epic upgrade! 🏆 </TypographyH3>
               <TypographyP className="max-w-md text-center">
                 User experience enhancements, permanent power-ups, and exclusive
@@ -111,7 +110,6 @@ const ManageAccount = () => {
           </Button>
         </div>
       </div>
-      <LandingFooter />
     </div>
   );
 };

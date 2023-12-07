@@ -39,13 +39,18 @@ const AdventureNavBar = () => {
   return (
     <nav className="w-full flex flex-col px-4 md:px-6 items-center border-b border-muted bg-background">
       <div className="w-full flex justify-between items-center">
-        <div className="flex gap-6">
+        <div className="flex gap-2 md:gap-6">
           <NavBarLink href="/adventures">Discover</NavBarLink>
           <NavBarLink href="/adventures/create">Create</NavBarLink>
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <div className="flex gap-2 items-center">
-          <Button asChild size="sm" variant="link">
+          <Button
+            asChild
+            size="sm"
+            variant="link"
+            className="hidden md:visible"
+          >
             <a href="https://steamship.com/discord">
               <span className="hidden sm:inline">Join our&nbsp;</span>
               Discord
