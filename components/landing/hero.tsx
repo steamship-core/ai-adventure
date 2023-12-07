@@ -22,13 +22,13 @@ const FeaturedCharacters = [
       "https://ai-adventure.steamship.com/_next/image?url=https%3A%2F%2Fywo4zgeb2hydwgmk.public.blob.vercel-storage.com%2Ff961185e-be73-4d50-b69f-beef09979206-57ff4ceb-6b62-47d9-904b-df5f2d94f13b-DALL%25C2%25B7E%25202023-11-16%252017.24.49%2520-%2520A%2520playful%2520and%2520adventurous%2520dog%2C%2520resembling%2520a%2520Beagle%2C%2520with%2520alert%2C%2520bright%2520eyes%2520and%2520a%2520joyful%2520demeanor.%2520This%2520dog%2520sports%2520a%2520colorful%2520kerchief%2520around%2520its%2520neck-3xWDwxkrmxsLt5fj8YKBTeu90Wy6mm.png&w=3840&q=75",
   },
   {
-    alt: "JB",
-    title: "The Other",
-    adventureId: "0df86831-4cf7-41bc-9df5-36991b8808ef",
+    alt: "Mr. Meatball",
+    title: "Mr. Meatball's Saucy Escape",
+    adventureId: "48113aac-1560-47b2-ba49-37bd196a0f00",
     description:
-      "Artist. Thinker. Sometimes revolutionary. What will you do when a stranger steps into your life?",
+      "Mr. Meatball finds himself accidentally rolled out of the kitchen of a busy Italian restaurant and must navigate his way back while avoiding hungry pets, cleaning obstacles, and the perilous outdoors.",
     image:
-      "https://ai-adventure.steamship.com/_next/image?url=https%3A%2F%2Fywo4zgeb2hydwgmk.public.blob.vercel-storage.com%2F80a2412e-436d-411e-82c4-ebe13711b15b-0b90f355-91ff-4290-ad23-eb2800050a70-DALL%25C2%25B7E%25202023-11-08%252006.13.24%2520-%2520A%2520black%2520and%2520white%2520cartoon%2520image%2520of%2520a%2520man%2520in%2520a%2520trench%2520coat%2520wearing%2520a%2520hat%2520that%2520covers%2520his%2520eyes%2520and%2520sheds%2520a%2520shadow%2520over%2520the%2520bottom%2520half%2520of%2520his%2520face-2kgcRM973qJF7lyEzgI2FPUGizkD2B.png&w=3840&q=75",
+      "https://ai-adventure.steamship.com/_next/image?url=https%3A%2F%2Fywo4zgeb2hydwgmk.public.blob.vercel-storage.com%2F48113aac-1560-47b2-ba49-37bd196a0f00-5eb0a62b-cc82-415b-884b-3afdf8601137-steamshipmax_a_cartoon_meatball_with_legs_and_arms_in_an_italia_a83b27d5-a387-4bf5-83b4-3a169e6bcc3a-HZpIACMaqug002MG9kOD4k3yAgfPso.png&w=1920&q=75",
   },
   {
     alt: "Christine",
