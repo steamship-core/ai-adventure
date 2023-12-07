@@ -1,7 +1,5 @@
 import { GameState } from "@/lib/game/schema/game_state";
-import { AlertTriangle } from "lucide-react";
-import { useRef, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { useRef } from "react";
 import { Button } from "../ui/button";
 import { CreationActions, CreationContent } from "./shared/components";
 
@@ -20,7 +18,6 @@ export type CharacterConfig =
 
 const CharacterCreationComplete = ({ config }: { config: CharacterConfig }) => {
   const ref = useRef<HTMLButtonElement>(null);
-  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="w-full items-start">
@@ -34,13 +31,6 @@ const CharacterCreationComplete = ({ config }: { config: CharacterConfig }) => {
           >
             Start Adventure
           </Button>
-          {error && (
-            <Alert>
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Failed to create character</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
         </CreationActions>
       </CreationContent>
     </div>
