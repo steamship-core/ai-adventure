@@ -34,6 +34,35 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { CampImage } from "./camp-image";
 
+function ConditionalLockIcon({ disabledQuest }: { disabledQuest: boolean }) {
+  if (disabledQuest) {
+    return <LockIcon size={16} className="h-3 w-3" />;
+  }
+  return null;
+}
+
+function ConditionalSparklesIcon({
+  isCurrentquest,
+}: {
+  isCurrentquest: boolean;
+}) {
+  if (isCurrentquest) {
+    return <SparklesIcon className="text-black h-4 w-4" />;
+  }
+  return null;
+}
+
+function ConditionalCheckIcon({
+  isCompleteQuest,
+}: {
+  isCompleteQuest: boolean;
+}) {
+  if (isCompleteQuest) {
+    return <CheckIcon className="text-black h-4 w-4" />;
+  }
+  return null;
+}
+
 const QuestProgressElement = ({
   questArc,
   isIncompleteQuest,
@@ -137,13 +166,9 @@ const QuestProgressElement = ({
                 )}
               >
                 <div className="w-full h-full flex items-center justify-center">
-                  {isCompleteQuest && (
-                    <CheckIcon className="text-black h-4 w-4" />
-                  )}
-                  {isCurrentquest && (
-                    <SparklesIcon className="text-black h-4 w-4" />
-                  )}
-                  {disabledQuest && <LockIcon size={16} className="h-3 w-3" />}
+                  <ConditionalCheckIcon isCompleteQuest={isCompleteQuest} />
+                  <ConditionalSparklesIcon isCurrentquest={isCurrentquest} />
+                  <ConditionalLockIcon disabledQuest={disabledQuest} />
                 </div>
               </div>
             </div>
