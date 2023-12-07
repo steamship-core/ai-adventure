@@ -40,3 +40,5 @@ export const characters = [
       "Mr. Meatball desires nothing more than to spread joy, make friends, and perhaps, find a purpose big enough for his massive size. Although he's content with the occasional visit to nearby towns for festivals where he's the star attraction, he harbors a deep-seated wish to find others like him, or at least learn why he was brought into existence. Guided by his boundless curiosity, Mr. Meatball seeks adventure, hoping to uncover the deeper mysteries of his origin and to perhaps find a place where he truly fits in – both figuratively and literally.",
   },
 ];
+
+export const CUSTOM_CHARACTER_NAME = "Custom Character";

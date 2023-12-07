@@ -26,6 +26,7 @@ const CharacterMap = ({
       )}
     >
       {characters.map((character, i) => {
+        if (!character.name) return null;
         return (
           <PlayAsCharacterCard
             key={i}
@@ -40,8 +41,8 @@ const CharacterMap = ({
             setIsLoading={setIsLoading}
             onboardingParams={{
               name: character.name,
-              description: character.description,
-              background: character.background,
+              description: character.description || "Unknown",
+              background: character.background || "Unknown",
             }}
           />
         );

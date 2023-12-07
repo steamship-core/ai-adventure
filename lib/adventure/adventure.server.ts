@@ -175,7 +175,8 @@ export const updateAdventure = async (
         publicRequested: true,
       };
       await sendSlackMessage(
-        `👋 User ${userId} requested ${adventure.id} to be approved to be PUBLIC`
+        `👋 User ${userId} requested public approval: ${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${adventure.id} if you approve, use this link and set the approval key: ${process.env.NEXT_PUBLIC_WEB_BASE_URL}/api/admin/approve?adventureId=${adventure.id}&approveKey=`,
+        process.env.SLACK_APPROVAL_CHANNEL_ID
       );
     } else {
       publicModifiers = {
@@ -237,6 +238,24 @@ export const updateAdventure = async (
       );
     }
 
+    return newAdventure;
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw e;
+  }
+};
+
+export const approveAdventure = async (adventureId: string) => {
+  log.info(`approveAdventure - AdventureId ${adventureId}`);
+  try {
+    let newAdventure = await prisma.adventure.update({
+      where: { id: adventureId },
+      data: {
+        public: true,
+        publicRequested: false,
+      },
+    });
     return newAdventure;
   } catch (e) {
     log.error(`${e}`);

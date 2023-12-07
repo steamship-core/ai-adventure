@@ -45,6 +45,12 @@ const AdventureNavBar = () => {
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <div className="flex gap-2 items-center">
+          <Button asChild size="sm" variant="link">
+            <a href="https://steamship.com/discord">
+              <span className="hidden sm:inline">Join our&nbsp;</span>
+              Discord
+            </a>
+          </Button>
           <Button variant="ghost" asChild>
             <Link href="/account/plan">
               <FlameIcon className="h-5 w-5 text-orange-500" />

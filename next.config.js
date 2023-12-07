@@ -1,6 +1,8 @@
+const million = require('million/compiler');
 const { withAxiom } = require("next-axiom");
 
-module.exports = withAxiom({
+module.exports = million.next(
+  withAxiom({
   images: {
     remotePatterns: [
       {
@@ -24,4 +26,5 @@ module.exports = withAxiom({
       },
     ],
   },
-});
+}), { auto: { rsc: true } }
+);

@@ -7,7 +7,7 @@ import RecoilProvider from "@/components/providers/recoil";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { generateQuestArc } from "@/lib/game/quest.server";
+import { generateQuestArc, startQuest } from "@/lib/game/quest.server";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
@@ -93,6 +93,18 @@ export default async function CampPage({
     }
   }
 
+  const onStartQuest = async () => {
+    "use server";
+    // If the game state says we're currently in a quest, then we should re-direct ot that quest.
+    if (gameState?.active_mode === "quest" && gameState?.current_quest) {
+      log.debug(`Activating existing quest: ${gameState?.current_quest}`);
+      return gameState?.current_quest;
+    }
+
+    const quest = await startQuest(userId, agent!.agentUrl);
+    return quest.name!;
+  };
+
   return (
     <RecoilProvider
       gameState={gameState}
@@ -115,6 +127,7 @@ export default async function CampPage({
             <QuestProgress
               adventureGoal={adventureGoal}
               adventure={agent.Adventure}
+              onStartQuest={onStartQuest}
             />
           </div>
         </div>

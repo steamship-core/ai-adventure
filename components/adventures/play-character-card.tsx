@@ -1,7 +1,9 @@
 "use client";
 
 import { amplitude } from "@/lib/amplitude";
+import { CUSTOM_CHARACTER_NAME } from "@/lib/characters";
 import { cn } from "@/lib/utils";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { track } from "@vercel/analytics/react";
 import { LoaderIcon, UserIcon } from "lucide-react";
 import Image from "next/image";
@@ -98,6 +100,8 @@ export default function PlayAsCharacterCard({
 }) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isSignedIn, user, isLoaded } = useUser();
+  const clerk = useClerk();
 
   if (loading) {
     return (
@@ -118,6 +122,32 @@ export default function PlayAsCharacterCard({
   }
 
   const loadAdventure = async (e: any) => {
+    if (!onboardingParams) {
+      return true;
+    }
+
+    amplitude.track("Button Click", {
+      buttonName: "Start Adventure",
+      location: "Adventure",
+      action: "start-adventure-pre-login-check",
+      adventureId: adventureId,
+      templateCharacter: !!onboardingParams,
+    });
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!isSignedIn) {
+      clerk.openSignIn({
+        redirectUrl: document.location.href,
+      });
+      return;
+    }
+
+    track("Character Selected", {
+      character: onboardingParams["name"] || "Unknown name",
+    });
+
     amplitude.track("Button Click", {
       buttonName: "Start Adventure",
       location: "Adventure",
@@ -125,17 +155,6 @@ export default function PlayAsCharacterCard({
       adventureId: adventureId,
       templateCharacter: !!onboardingParams,
     });
-    if (!onboardingParams) {
-      return true;
-    }
-    if (onboardingParams) {
-      track("Character Selected", {
-        character: onboardingParams["name"] || "Unknown name",
-      });
-    }
-
-    e.stopPropagation();
-    e.preventDefault();
 
     if (!enabled) {
       console.log("Not enabled");
@@ -152,7 +171,7 @@ export default function PlayAsCharacterCard({
       isDevelopment: isDevelopment,
     };
 
-    if (onboardingParams && onboardingParams["name"] != "Custom Character") {
+    if (onboardingParams && onboardingParams["name"] != CUSTOM_CHARACTER_NAME) {
       payload["gameState"] = { player: {} };
 
       const searchParams = new URLSearchParams();
