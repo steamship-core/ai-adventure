@@ -1,6 +1,5 @@
 import AdventureTag from "@/components/adventures/adventure-tag";
 import EmojiPicker from "@/components/adventures/emoji-picker";
-import AdventureNavBar from "@/components/adventures/nav-bar";
 import { StartAdventureSection } from "@/components/adventures/start-adventure-section";
 import { Button } from "@/components/ui/button";
 import { getAdventure } from "@/lib/adventure/adventure.server";
@@ -167,7 +166,6 @@ export default async function AdventurePage({
   const isCreator = adventure.creatorId === userId;
   return (
     <div>
-      <AdventureNavBar />
       <div className="relative h-96 w-full mt-2">
         <Image
           src={adventure?.image || "/adventurer.png"}
