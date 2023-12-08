@@ -207,6 +207,7 @@ export default function PlayAsCharacterCard({
           src={image}
           alt={alt || title}
           fill
+          sizes="1000px"
           className="object-cover z-10"
         />
       ) : (

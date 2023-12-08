@@ -189,6 +189,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
                     src={adventure.image || "/adventurer.png"}
                     fill
                     alt="Adventurer"
+                    sizes="524px"
                   />
                   {Object.keys(adventure.mappedReactions).length > 0 && (
                     <div className="bottom-0 left-0 w-full absolute z-20 bg-background/80">

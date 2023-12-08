@@ -5,6 +5,7 @@ import { AmplitudeAnalytics } from "@/lib/amplitude";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Barlow } from "next/font/google";
 import Script from "next/script";
@@ -89,6 +90,7 @@ export default function RootLayout({
               <AmplitudeAnalytics />
             </ThemeProvider>
           </QueryProvider>
+          <SpeedInsights />
         </body>
         <Script id="reddit-analytics">
           {`

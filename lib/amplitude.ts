@@ -17,6 +17,7 @@ const useAmplitudeInit = () => {
       if (!amplitude) {
         amplitude = amplitudeBrowser;
         amplitude.init(AMPLITUDE_API_KEY, undefined, {
+          defaultTracking: true,
           logLevel: amplitude.Types.LogLevel.Warn,
         });
       }

@@ -88,6 +88,7 @@ export default async function AdventuresPage() {
                           fill
                           alt="Adventurer"
                           className="object-cover"
+                          sizes="460px"
                         />
                       </div>
                     </div>

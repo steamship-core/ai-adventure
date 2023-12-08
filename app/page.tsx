@@ -60,6 +60,7 @@ export default async function Home() {
                       src={adventure.image || "/adventurer.png"}
                       alt="Adventure Image"
                       fill
+                      sizes="768px"
                     />
                   </div>
                   <h3 className="mt-6 text-lg font-semibold leading-8 tracking-tight">
