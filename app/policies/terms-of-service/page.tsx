@@ -1,6 +1,12 @@
 import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Terms of Service - AI Adventure",
+  description: "See our terms of service and how it relates to you.",
+};
 
 function PolicyContent() {
   return (

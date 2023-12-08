@@ -25,7 +25,7 @@ export const viewport = {
 const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
 
 export const metadata: Metadata = {
-  title: "AI Adventure: Interactive AI-Powered Storytelling",
+  title: "Interactive AI-Powered Storytelling - AI Adventure",
   description:
     "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
   metadataBase: new URL(url),

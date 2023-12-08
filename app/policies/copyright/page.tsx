@@ -1,6 +1,12 @@
 import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Copyright Policy - AI Adventure",
+  description: "See our copyright policy and how it relates to you.",
+};
 
 function Copyright() {
   return (

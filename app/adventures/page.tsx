@@ -3,6 +3,13 @@ import AdventureNavBar from "@/components/adventures/nav-bar";
 import { TypographyH2 } from "@/components/ui/typography/TypographyH2";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import prisma from "@/lib/db";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Discover Adventures - AI Adventure",
+  description:
+    "Discover adventures created by the community and embark on your storytelling journey.",
+};
 
 // set Adventure to features in SQL
 export default async function AdventuresPage() {

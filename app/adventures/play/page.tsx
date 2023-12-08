@@ -10,9 +10,16 @@ import prisma from "@/lib/db";
 import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
+import { Metadata } from "next";
 import { log } from "next-axiom";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Play Adventures - AI Adventure",
+  description:
+    "Continue an adventure you have already started. Dive back into the story and continue your journey.",
+};
 
 export default async function AdventuresPage() {
   const { userId } = auth();
