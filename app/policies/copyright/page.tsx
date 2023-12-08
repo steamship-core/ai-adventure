@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 function Copyright() {
   return (
     <div className="space-y-6">
+      <h1>Copyright Policy</h1>
       <p className="italic">Last Updated: April 2, 2023</p>
       <p>
         Steamship respects intellectual property rights and expects its users to

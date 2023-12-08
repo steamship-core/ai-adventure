@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 function PolicyContent() {
   return (
     <div className="space-y-6">
+      <h1>Terms of Service</h1>
+
       <p className="italic">Last Updated: March 29, 2023</p>
       <p>
         Welcome to the Terms of Service (these “Terms”) for the platform,
