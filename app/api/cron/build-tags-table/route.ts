@@ -16,7 +16,12 @@ export async function GET(request: NextRequest) {
 
   // Gets all the tags from adventures and builds the Tags table.
   let tags: Record<string, number> = {};
-  let adventures = await prisma.adventure.findMany({});
+  let adventures = await prisma.adventure.findMany({
+    where: {
+      deletedAt: null,
+      public: true,
+    },
+  });
   for (const adventure of adventures) {
     for (const tag of adventure.tags) {
       if (tags[tag]) {
@@ -28,7 +33,7 @@ export async function GET(request: NextRequest) {
   }
 
   for (const tag in tags) {
-    await prisma.tag.upsert({
+    await prisma.tags.upsert({
       where: {
         name: tag,
       },
