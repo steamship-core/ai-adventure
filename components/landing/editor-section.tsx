@@ -30,13 +30,15 @@ export default function EditorSection() {
               </div>
             </div>
           </div>
-          <Image
-            src="/editor-screenshot.png"
-            alt="Product screenshot"
-            className="w-[44rem] max-w-none rounded-xl shadow-xl shadow-muted ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:ml-0"
-            width={2432}
-            height={1442}
-          />
+          <div>
+            <Image
+              src="/editor-screenshot.png"
+              alt="Product screenshot"
+              className="h-[34rem] w-auto max-w-none rounded-xl shadow-xl shadow-muted ring-1 ring-gray-400/10 sm:h-[44rem]  sm:w-auto md:-ml-4 lg:ml-0"
+              width={2432}
+              height={1442}
+            />
+          </div>
         </div>
       </div>
     </div>
