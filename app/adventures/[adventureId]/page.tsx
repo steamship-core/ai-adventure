@@ -187,7 +187,7 @@ export default async function AdventurePage({
           <div className="flex flex-col gap-2 w-full justify-start items-start">
             <div className="flex gap-2 flex-wrap">
               {(adventure?.tags || []).map((tag: string) => {
-                return <AdventureTag key={tag} tag={tag} />;
+                return <AdventureTag key={tag} tag={tag} isLink />;
               })}
             </div>
             <EmojiPicker

@@ -5,13 +5,17 @@ const AdventureTag = ({
   tag,
   children,
   className,
+  isLink = false,
 }: {
   tag: string;
   children?: ReactNode;
   className?: string;
+  isLink?: boolean;
 }) => {
+  const Comp = isLink ? "a" : "div";
+
   return (
-    <a
+    <Comp
       href={`/adventures/tagged/${tag}`}
       key={tag}
       className={cn(
@@ -39,7 +43,7 @@ const AdventureTag = ({
     >
       {tag}
       {children}
-    </a>
+    </Comp>
   );
 };
 
