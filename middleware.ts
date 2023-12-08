@@ -9,7 +9,7 @@ export default authMiddleware({
     "/api/webhooks/stripe",
     "/api/adventure",
     "/sitemap.xml",
-    "/api/cron/curate-available-agent-pool",
+    "/api/cron/(.*)",
     "/share/quest",
     "/_axiom/logs",
     "/api/shared/(.*)",
