@@ -25,12 +25,18 @@ import AdventureTag from "./adventure-tag";
 
 const fetchPage = async (
   pageParam?: string | undefined | null,
-  incomingSearchParams?: URLSearchParams
+  incomingSearchParams?: URLSearchParams,
+  tagFilter?: string
 ) => {
   const searchParams = new URLSearchParams(incomingSearchParams);
   if (pageParam) {
     searchParams.set("cursor", pageParam);
   }
+
+  if (tagFilter) {
+    searchParams.set("tag", tagFilter);
+  }
+
   const res = await fetch(`/api/adventure?${searchParams.toString()}`);
   return res.json() as Promise<{
     results: (Adventure & {
@@ -41,7 +47,13 @@ const fetchPage = async (
   }>;
 };
 
-const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
+const AdventureList = ({
+  emojis,
+  tagName = undefined,
+}: {
+  tagName?: string;
+  emojis: Emojis[];
+}) => {
   const { inView, ref } = useInView();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -62,7 +74,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
     ...result
   } = useInfiniteQuery({
     queryKey: ["all-adventures"],
-    queryFn: ({ pageParam }) => fetchPage(pageParam, searchParams),
+    queryFn: ({ pageParam }) => fetchPage(pageParam, searchParams, tagName),
     initialPageParam: "",
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     getPreviousPageParam: (firstPage) => {

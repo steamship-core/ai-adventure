@@ -41,9 +41,55 @@ export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   const cursor = searchParams.get("cursor") || null;
   const search = searchParams.get("search") || null;
+  const tag = searchParams.get("tag") || null;
   const sort = searchParams.get("sort") || "reactions";
 
   const take = 25;
+
+  let freeTextClause = {
+    ...(search && {
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          shortDescription: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          tags: {
+            has: search,
+          },
+        },
+      ],
+    }),
+  };
+
+  let whereExtension: any = tag
+    ? {
+        AND: [
+          {
+            tags: {
+              has: tag,
+            },
+          },
+          { ...freeTextClause },
+        ],
+      }
+    : {
+        ...freeTextClause,
+      };
 
   const results = await prisma.adventure.findMany({
     take,
@@ -60,33 +106,7 @@ export async function GET(request: Request) {
     where: {
       public: true,
       deletedAt: null, // Only those that are not deleted
-      ...(search && {
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            shortDescription: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          {
-            tags: {
-              has: search,
-            },
-          },
-        ],
-      }),
+      ...whereExtension,
     },
     include: {
       Reactions: true,

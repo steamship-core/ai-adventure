@@ -15,6 +15,7 @@ export default authMiddleware({
     "/api/shared/(.*)",
     "/adventures",
     "/policies/(.*)",
+    "/adventures/tagged/(.*)",
     /^\/adventures\/(?!(create|play|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],

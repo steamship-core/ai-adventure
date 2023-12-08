@@ -11,7 +11,8 @@ const AdventureTag = ({
   className?: string;
 }) => {
   return (
-    <div
+    <a
+      href={`/adventures/tagged/${tag}`}
       key={tag}
       className={cn(
         "bg-gray-600 rounded-full text-sm px-2 flex gap-2 items-center justify-between",
@@ -38,7 +39,7 @@ const AdventureTag = ({
     >
       {tag}
       {children}
-    </div>
+    </a>
   );
 };
 
