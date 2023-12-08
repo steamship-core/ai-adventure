@@ -20,7 +20,7 @@ const font = Barlow({
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
 };
 
 const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
