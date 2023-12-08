@@ -9,19 +9,20 @@ export default async function AdventurePage({
 }: {
   params: { tagName: string };
 }) {
+  const _tagName = decodeURIComponent(params.tagName);
   const emojis = await prisma.emojis.findMany({});
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
       <div className="flex flex-col justify-between">
         <TypographyH2 className="border-none">
-          Adventures tagged &quot;{params.tagName}&quot;
+          Adventures tagged &quot;{_tagName}&quot;
         </TypographyH2>
         <TypographyMuted className="text-lg">
           Adventures created by the community
         </TypographyMuted>
       </div>
-      <AdventureList emojis={emojis} tagName={params.tagName} />
+      <AdventureList emojis={emojis} tagName={_tagName} />
     </div>
   );
 }
