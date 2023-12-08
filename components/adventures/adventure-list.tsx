@@ -189,7 +189,7 @@ const AdventureList = ({
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {result.data?.pages.map((page, i) => (
-          <Fragment key={i}>
+          <Fragment key={page.nextCursor}>
             {page.results.map((adventure) => (
               <Link
                 key={adventure.id}
