@@ -38,7 +38,8 @@ model Adventure {
   public          Boolean @default(false)
   publicRequested Boolean @default(false)
 
-  tags              String[]            @default([])
+  tags String[] @default([])
+
   Agents            Agents[]            @relation("agents")
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
@@ -171,6 +172,11 @@ model Emojis {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   Reactions   Reactions[]
+}
+
+model Tags {
+  name  String @id
+  count Int    @default(0)
 }
 
 model Reactions {
