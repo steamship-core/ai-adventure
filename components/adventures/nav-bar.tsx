@@ -61,37 +61,37 @@ const AdventureNavBar = () => {
               <FlameIcon className="h-5 w-5 text-orange-500" />
             </Link>
           </Button>
-          {isLoaded ? (
-            <>
-              {user ? (
-                <Button
-                  variant="ghost"
-                  className="flex items-center justify-center"
-                  asChild
-                >
-                  <Link href="/account">
-                    {user.imageUrl ? (
-                      <Image
-                        src={user.imageUrl}
-                        width={64}
-                        height={64}
-                        alt="Profile"
-                        className="rounded-full h-8 w-8"
-                      />
-                    ) : (
-                      <User2Icon className="h-5 w-5" />
-                    )}
-                  </Link>
-                </Button>
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center w-20"
+            asChild
+          >
+            <Link href={user ? "/account" : "/sign-in"}>
+              {isLoaded ? (
+                <>
+                  {user ? (
+                    <>
+                      {user.imageUrl ? (
+                        <Image
+                          src={user.imageUrl}
+                          width={64}
+                          height={64}
+                          alt="Profile"
+                          className="rounded-full h-8 w-8"
+                        />
+                      ) : (
+                        <User2Icon className="h-5 w-5" />
+                      )}
+                    </>
+                  ) : (
+                    "Login"
+                  )}
+                </>
               ) : (
-                <Button variant="ghost">
-                  <Link href="/sign-in">Login</Link>
-                </Button>
+                ""
               )}
-            </>
-          ) : (
-            <div className="ml-4 w-[32px]" />
-          )}
+            </Link>
+          </Button>
         </div>
       </div>
     </nav>
