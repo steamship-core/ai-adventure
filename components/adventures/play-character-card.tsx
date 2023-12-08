@@ -207,7 +207,7 @@ export default function PlayAsCharacterCard({
           src={image}
           alt={alt || title}
           fill
-          sizes="1000px"
+          sizes="720px"
           className="object-cover z-10"
         />
       ) : (
@@ -215,7 +215,6 @@ export default function PlayAsCharacterCard({
           <UserIcon size={64} className="z-10" />
         </div>
       )}
-
       <CardDescription
         variant={variant}
         title={title}
