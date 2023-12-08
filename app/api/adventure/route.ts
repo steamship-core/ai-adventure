@@ -39,12 +39,12 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   const searchParams = new URL(request.url).searchParams;
-  const cursor = searchParams.get("cursor") || null;
+  const page = parseInt(searchParams.get("pageParam") || "0");
   const search = searchParams.get("search") || null;
   const tag = searchParams.get("tag") || null;
   const sort = searchParams.get("sort") || "reactions";
 
-  const take = 25;
+  const pageSize = 25;
 
   let freeTextClause = {
     ...(search && {
@@ -90,11 +90,9 @@ export async function GET(request: Request) {
     : {
         ...freeTextClause,
       };
-
   const results = await prisma.adventure.findMany({
-    take,
-    skip: cursor ? 1 : 0,
-    ...(cursor && { cursor: { id: cursor } }),
+    take: pageSize,
+    skip: page * pageSize,
     orderBy: {
       ...(sort === "updated"
         ? { updatedAt: "desc" }
@@ -125,11 +123,9 @@ export async function GET(request: Request) {
     );
   });
 
-  const lastPostInResults = results.length === take ? results[take - 1] : null;
-  const nextCursor = lastPostInResults ? lastPostInResults.id : null;
   return NextResponse.json({
-    nextCursor,
-    prevCusor: cursor ? cursor : null,
+    nextPage: page + 1,
+    prevPage: page > 0 ? page - 1 : null,
     results,
   });
 }

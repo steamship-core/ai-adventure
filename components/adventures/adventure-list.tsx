@@ -24,13 +24,13 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 import AdventureTag from "./adventure-tag";
 
 const fetchPage = async (
-  pageParam?: string | undefined | null,
+  pageParam?: number,
   incomingSearchParams?: URLSearchParams,
   tagFilter?: string
 ) => {
   const searchParams = new URLSearchParams(incomingSearchParams);
   if (pageParam) {
-    searchParams.set("cursor", pageParam);
+    searchParams.set("pageParam", `${pageParam}`);
   }
 
   if (tagFilter) {
@@ -42,8 +42,8 @@ const fetchPage = async (
     results: (Adventure & {
       mappedReactions: Record<string, number>;
     })[];
-    nextCursor?: string;
-    prevCursor?: string;
+    nextPage?: number;
+    prevPage?: number;
   }>;
 };
 
@@ -74,12 +74,12 @@ const AdventureList = ({
     ...result
   } = useInfiniteQuery({
     queryKey: ["all-adventures"],
-    queryFn: ({ pageParam }) => fetchPage(pageParam, searchParams, tagName),
-    initialPageParam: "",
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam, searchParams, tagName),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
     getPreviousPageParam: (firstPage) => {
-      if (firstPage.prevCursor) {
-        return firstPage.prevCursor;
+      if (firstPage.prevPage) {
+        return firstPage.prevPage;
       }
       return null;
     },
@@ -189,7 +189,7 @@ const AdventureList = ({
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {result.data?.pages.map((page, i) => (
-          <Fragment key={page.nextCursor}>
+          <Fragment key={page.nextPage}>
             {page.results.map((adventure) => (
               <Link
                 key={adventure.id}
