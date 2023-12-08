@@ -26,6 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
+      url: `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/tagged`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
       url: `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/create`,
       lastModified: new Date(),
       changeFrequency: "monthly",
