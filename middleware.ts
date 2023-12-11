@@ -16,7 +16,7 @@ export default authMiddleware({
     "/adventures",
     "/policies/(.*)",
     "/adventures/tagged/(.*)",
-    /^\/adventures\/(?!(create|play|editor))[^\/]*$/,
+    /^\/adventures\/(?!(create|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],
 });

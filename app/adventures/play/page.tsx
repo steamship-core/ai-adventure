@@ -6,9 +6,9 @@ import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAgents } from "@/lib/agent/agent.server";
+import { auth } from "@/lib/auth/auth.server";
 import prisma from "@/lib/db";
 import { getSteamshipClient } from "@/lib/utils";
-import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { Metadata } from "next";
 import { log } from "next-axiom";
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdventuresPage() {
-  const { userId } = auth();
+  const { userId } = await auth(true);
 
   if (!userId) {
     log.error("No user");
