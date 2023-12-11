@@ -19,6 +19,14 @@ export const MessageTypes = {
   DICE_ROLL: "DICE_ROLL",
 } as const;
 
+export const validTypes = [
+  MessageTypes.IMAGE,
+  MessageTypes.TEXT,
+  MessageTypes.STREAMING_BLOCK,
+  MessageTypes.ITEM_GENERATION_CONTENT,
+  MessageTypes.DICE_ROLL,
+] as string[];
+
 export type ExtendedBlock = Block & {
   /**
    * Used to indicate the block is from a prior chat history session. Important because we

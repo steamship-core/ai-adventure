@@ -28,14 +28,14 @@ const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
 export const metadata: Metadata = {
   title: "Interactive AI-Powered Storytelling - AI Adventure",
   description:
-    "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
+    "Embark on a unique AI text based adventure with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own RPG, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
   metadataBase: new URL(url),
   openGraph: {
     url: url,
     type: "website",
     title: "AI Adventure: Interactive AI-Powered Storytelling",
     description:
-      "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
+      "Embark on a unique AI text based adventure with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own RPG, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
     images: `${url}/adventurer.png`,
   },
   twitter: {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     title: "AI Adventure: Interactive AI-Powered Storytelling",
     site: "@GetSteamship",
     description:
-      "Embark on a unique journey with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own story, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
+      "Embark on a unique AI text based adventure with AI Adventure: Interactive AI-Powered Storytelling. Craft and experience your own RPG, guided by advanced AI, and dive into a world of endless possibilities. Unleash your creativity now!",
     images: `${url}/adventurer.png`,
   },
 };
