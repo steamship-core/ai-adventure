@@ -1,6 +1,5 @@
 import { recoilBlockHistory } from "@/components/providers/recoil";
 import { Block } from "@/lib/streaming-client/src";
-import { LoaderIcon } from "lucide-react";
 import { useMemo } from "react";
 import { useRecoilState } from "recoil";
 import { CompletionBlock } from "./completion-block";
@@ -20,12 +19,7 @@ import { QuestSummaryBlock } from "./quest-summary-block";
 import { StreamingBlock } from "./streaming-block";
 import { TextBlock } from "./text-block";
 import { UserInputBlock } from "./user-input-block";
-import {
-  ExtendedBlock,
-  MessageTypes,
-  getMessageType,
-  validTypes,
-} from "./utils";
+import { ExtendedBlock, MessageTypes, getMessageType } from "./utils";
 
 export const NarrativeBlock = ({
   blocks,
@@ -62,14 +56,13 @@ export const NarrativeBlock = ({
       .toReversed();
   }, [blocks]);
 
-  const hasValidTypes = sortedBlocks.some((block) =>
-    validTypes.includes(getMessageType(block))
-  );
+  // const hasValidTypes = sortedBlocks.some((block) =>
+  //   validTypes.includes(getMessageType(block))
+  // );
 
-  if (!hasValidTypes && sortedBlocks.length !== 0) {
-    console.log(`sortedBlocks`, sortedBlocks);
-    return <LoaderIcon className="animate-spin" />;
-  }
+  // if (!hasValidTypes && sortedBlocks.length !== 0) {
+  //   return <LoaderIcon className="animate-spin" />;
+  // }
 
   // Begin Debug Information State Management
   try {
