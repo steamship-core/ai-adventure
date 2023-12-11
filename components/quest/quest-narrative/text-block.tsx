@@ -7,30 +7,50 @@ import { addNewlines } from "@/lib/text";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const Typewriter = ({ text, delay }: { text: string; delay: number }) => {
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
-
-  useEffect(() => {
-    if (currentIndex < text.length) {
-      setContinuationState(false);
-      const timeout = setTimeout(() => {
-        setCurrentText((prevText) => prevText + text[currentIndex]);
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-      }, delay);
-
-      return () => clearTimeout(timeout);
-    } else {
-      // broadcast completion
-      setContinuationState(true);
-    }
-  }, [currentIndex, delay, text]);
-
-  return <span>{currentText}</span>;
+const FadingText = ({ text }: { text: string }) => {
+  return <span className="fadeIn">{text}</span>;
 };
 
-export default Typewriter;
+const MessageDisplay = ({
+  message,
+  wasAlreadyComplete,
+}: {
+  message: string;
+  wasAlreadyComplete: boolean;
+}) => {
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
+  const [chunks, setChunks] = useState<string[]>([]);
+  const chunkSize = 5;
+  const delay = 50;
+
+  useEffect(() => {
+    if (wasAlreadyComplete && currentChunkIndex < message.length) {
+      const interval = setInterval(() => {
+        const nextChunkEnd = Math.min(
+          currentChunkIndex + chunkSize,
+          message.length
+        );
+        const nextChunk = message.substring(currentChunkIndex, nextChunkEnd);
+        setChunks((prevChunks) => [...prevChunks, nextChunk]);
+        setCurrentChunkIndex(nextChunkEnd);
+      }, delay);
+
+      return () => clearInterval(interval);
+    }
+  }, [message, wasAlreadyComplete, currentChunkIndex, chunkSize, delay]);
+
+  if (!wasAlreadyComplete) {
+    return <FadingText text={message} />;
+  }
+
+  return (
+    <div>
+      {chunks.map((chunk, index) => (
+        <FadingText key={index} text={chunk} />
+      ))}
+    </div>
+  );
+};
 
 export const TextBlock = ({
   text,
@@ -38,20 +58,22 @@ export const TextBlock = ({
   offerAudio,
   hideOutput,
   didComplete,
-  useTypeEffect,
+  wasAlreadyComplete = false,
+  isPrior,
 }: {
   text: string;
   blockId?: string;
   offerAudio?: boolean;
   hideOutput?: boolean;
   didComplete?: boolean;
-  useTypeEffect?: boolean;
+  wasAlreadyComplete?: boolean;
+  isPrior?: boolean;
 }) => {
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
   useEffect(() => {
     if (hideOutput) return;
-    if (!useTypeEffect) {
+    if (wasAlreadyComplete) {
       setContinuationState(true);
     }
   }, []);
@@ -68,16 +90,19 @@ export const TextBlock = ({
         data-blocktype="text-block"
         className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
       >
-        {useTypeEffect ? (
+        {!text ? (
+          <Loader className="animate-spin" />
+        ) : (
           <>
-            {didComplete ? (
-              <Typewriter text={_text} delay={5} />
+            {!isPrior ? (
+              <MessageDisplay
+                message={_text}
+                wasAlreadyComplete={wasAlreadyComplete}
+              />
             ) : (
-              <Loader className="animate-spin" />
+              <span>{_text}</span>
             )}
           </>
-        ) : (
-          <> {_text} </>
         )}
       </div>
       {blockId && offerAudio && didComplete && (

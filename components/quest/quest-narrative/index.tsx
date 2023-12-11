@@ -14,7 +14,7 @@ import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
 import { Message } from "ai";
 import { useChat } from "ai/react";
-import { ArrowDown, ArrowRightIcon } from "lucide-react";
+import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
 import { useInView } from "react-intersection-observer";
@@ -29,6 +29,7 @@ import {
   MessageTypes,
   getFormattedBlocks,
   getMessageType,
+  validTypes,
 } from "./utils";
 
 const ScrollButton = () => {
@@ -56,14 +57,6 @@ const ScrollButton = () => {
     </>
   );
 };
-
-const validTypes = [
-  MessageTypes.IMAGE,
-  MessageTypes.TEXT,
-  MessageTypes.STREAMING_BLOCK,
-  MessageTypes.ITEM_GENERATION_CONTENT,
-  MessageTypes.DICE_ROLL,
-] as string[];
 
 export default function QuestNarrative({
   id,
@@ -261,16 +254,22 @@ export default function QuestNarrative({
               return <UserInputBlock text={message.content} key={message.id} />;
             }
             return (
-              <NarrativeBlock
-                key={message.id}
-                offerAudio
-                blocks={getFormattedBlocks(message, nonPersistedUserInput)}
-                onSummary={onSummary}
-                onComplete={onComplete}
-                orderedBlocks={orderedBlocks}
-              />
+              <>
+                <NarrativeBlock
+                  key={message.id}
+                  offerAudio
+                  blocks={getFormattedBlocks(message, nonPersistedUserInput)}
+                  onSummary={onSummary}
+                  onComplete={onComplete}
+                  orderedBlocks={orderedBlocks}
+                />
+              </>
             );
           })}
+          {messages.length > 1 &&
+            messages[messages.length - 1].role === "user" && (
+              <LoaderIcon className="animate-spin" />
+            )}
           <ScrollButton />
         </QuestNarrativeContainer>
       </div>

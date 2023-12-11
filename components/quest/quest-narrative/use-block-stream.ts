@@ -17,7 +17,7 @@ export const useBlockStream = ({
 
   const api = `/api/block/${blockId}?retryCount=${retryCount}`;
 
-  const { completion, complete } = useCompletion({
+  const { completion, complete, isLoading } = useCompletion({
     api,
     onFinish,
     onError(error) {
