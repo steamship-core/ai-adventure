@@ -7,17 +7,21 @@ import { NextResponse } from "next/server";
 
 export const POST = withAxiom(
   async (request: Request, { params }: { params: { handle: string } }) => {
+    log.info("Updating agent");
     const { userId } = auth();
     if (!userId) {
       log.error("No user");
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+    log.info("Fetching agent");
 
     const agent = await getAgent(userId, params.handle);
 
     if (!agent) {
+      log.error("Agent Not found");
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
+    log.info("Attempting save");
 
     try {
       // TODO: Filter what the user can send to the agent.
