@@ -129,7 +129,27 @@ export default function CharacterCreation({
     e.preventDefault();
     setIsVisible(true);
     try {
-      await updateGameState(configuration as GameState, params.handle);
+      const updateRes = await updateGameState(
+        configuration as GameState,
+        params.handle
+      );
+      if (!updateRes.ok) {
+        let url = new URL(
+          `${window.location.protocol}//${window.location.hostname}/error`
+        );
+        url.searchParams.append(
+          "technicalDetails",
+          `
+        ${await updateRes.text()};
+        Game state could not be updated.`
+        );
+        url.searchParams.append(
+          "whatHappened",
+          "We were unable to complete your adventure onboarding."
+        );
+        router.push(url.toString());
+        return;
+      }
       const res = await fetch(
         `/api/agent/${params.handle}/completeOnboarding`,
         {

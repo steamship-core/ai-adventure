@@ -26,6 +26,7 @@ export const POST = withAxiom(
     try {
       // TODO: Filter what the user can send to the agent.
       const config = await request.json();
+      console.log("Saving gamestate:", config);
       await saveGameState(agent.agentUrl, config as GameState);
       return NextResponse.json({ agent }, { status: 200 });
     } catch (e) {
