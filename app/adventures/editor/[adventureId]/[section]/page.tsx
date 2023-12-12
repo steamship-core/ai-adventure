@@ -8,6 +8,7 @@ import {
 } from "@/lib/editor/DEPRECATED-editor-options";
 import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
+import { getNonNullMetadata } from "@/lib/metadata";
 import { auth } from "@clerk/nextjs";
 import { Metadata, ResolvingMetadata } from "next";
 import { log } from "next-axiom";
@@ -29,7 +30,7 @@ export async function generateMetadata(
     .split("-")
     .map((word) => word[0].toUpperCase() + word.slice(1))
     .join(" ");
-  let ret = { ...(await parent) };
+  let ret = await getNonNullMetadata(parent);
   ret = {
     ...ret,
     title: `${section} - AI Adventure Editor` as any,

@@ -4,6 +4,7 @@ import { StartAdventureSection } from "@/components/adventures/start-adventure-s
 import { Button } from "@/components/ui/button";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import prisma from "@/lib/db";
+import { getNonNullMetadata } from "@/lib/metadata";
 import { auth } from "@clerk/nextjs";
 import { PencilIcon } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
@@ -22,8 +23,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const adventure = (await getAdventure(params.adventureId)) as any;
-
-  let ret = { ...(await parent) };
+  const ret = await getNonNullMetadata(parent);
 
   const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`;
   let imageUrl = adventure.image;
