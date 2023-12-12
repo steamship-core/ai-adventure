@@ -205,7 +205,7 @@ const AdventureList = ({
                   />
                   {Object.keys(adventure.mappedReactions).length > 0 && (
                     <div className="bottom-0 left-0 w-full absolute z-20 bg-background/80">
-                      <div className="flex gap-4 px-2 py-1">
+                      <div className="flex gap-4 px-2 py-1 flex-wrap">
                         {Object.keys(adventure.mappedReactions).map((key) => (
                           <div
                             className="text-sm flex gap-1"
