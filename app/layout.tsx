@@ -7,13 +7,12 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { Barlow } from "next/font/google";
+import { Figtree } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const font = Barlow({
+const font = Figtree({
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 

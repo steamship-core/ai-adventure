@@ -7,15 +7,9 @@ import OpenSource from "@/components/landing/open-source-section";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import prisma from "@/lib/db";
 import { cn } from "@/lib/utils";
-import { Open_Sans } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
-
-const font = Open_Sans({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 const getFeaturedAdventures = async () =>
   prisma.adventure.findMany({
@@ -32,10 +26,7 @@ export default async function Home() {
   const featuredAdventures = await getFeaturedAdventures();
 
   return (
-    <div
-      id="main-container"
-      className={cn("h-full flex flex-col", font.className)}
-    >
+    <div id="main-container" className={cn("h-full flex flex-col")}>
       <LandingHero />
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
         <div>
