@@ -15,15 +15,16 @@ function shouldUpgrade(adventure: Adventure) {
     console.log(`[SKIP; Special Case] ${adventure.name}`);
     return false;
   }
-  if (adventure.name == "Mr. Meatball's Saucy Escape") {
-    return true;
-  }
-  return false;
+  return true;
 }
 
 const upgradeAdventuresToNewAgentVersion = async () => {
   // console.log("These are all the game instances");
-  var adventures = await prisma.adventure.findMany({});
+  var adventures = await prisma.adventure.findMany({
+    where: {
+      deletedAt: null,
+    },
+  });
   console.log(`Got ${adventures?.length} Adventures`);
 
   for (const adventure of adventures) {
