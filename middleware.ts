@@ -19,7 +19,7 @@ const authMiddlewareConfig = {
     "/adventures",
     "/policies/(.*)",
     "/adventures/tagged/(.*)",
-    /^\/adventures\/(?!(create|editor))[^\/]*$/,
+    /^\/adventures\/(?!(create|play|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],
 };
