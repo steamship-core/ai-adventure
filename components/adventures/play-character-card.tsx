@@ -137,11 +137,14 @@ export default function PlayAsCharacterCard({
     e.stopPropagation();
     e.preventDefault();
 
-    if (!isSignedIn) {
-      clerk.openSignIn({
-        redirectUrl: document.location.href,
-      });
-      return;
+    if (!(process.env.NEXT_PUBLIC_ALLOW_NOAUTH_GAMEPLAY === "true")) {
+      // If we aren't explicitly allowing unauthed gameplay, then we need to redirect to signin at this point.
+      if (!isSignedIn) {
+        clerk.openSignIn({
+          redirectUrl: document.location.href,
+        });
+        return;
+      }
     }
 
     track("Character Selected", {

@@ -1,6 +1,6 @@
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { SteamshipStream } from "@/lib/streaming-client/src";
 import { getSteamshipClient } from "@/lib/utils";
-import { auth } from "@clerk/nextjs";
 import { Message } from "ai";
 import { log } from "next-axiom";
 import { NextResponse } from "next/server";
@@ -9,7 +9,8 @@ import { NextResponse } from "next/server";
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon(false);
+
   if (!userId) {
     log.error("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });

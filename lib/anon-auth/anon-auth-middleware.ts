@@ -2,7 +2,6 @@ import { NextMiddlewareResult } from "next/dist/server/web/types";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
-const COOKIE_NAME = process.env.IRON_SESSION_COOKIE_NAME;
 const ANON_ID_PREFIX = process.env.ANON_ID_PREFIX;
 
 function createAnonId(): string {
@@ -16,25 +15,25 @@ function createAnonId(): string {
 export async function anonAuthMiddleware(
   req: NextRequest
 ): Promise<NextMiddlewareResult> {
-  if (!COOKIE_NAME) {
-    throw new Error("Please set COOKIE_NAME env var");
+  if (!process.env.IRON_SESSION_COOKIE_NAME) {
+    throw new Error("Please set IRON_SESSION_COOKIE_NAME env var");
   }
 
   const response = NextResponse.next();
 
   // If the cookie is already set, do nothing.
-  const cooks = req.cookies.getAll();
-  console.log(JSON.stringify(cooks));
-  if (req.cookies.get(COOKIE_NAME)) {
+  if (req.cookies.get(process.env.IRON_SESSION_COOKIE_NAME)) {
     console.log(
-      `User had anonId ${JSON.stringify(req.cookies.get(COOKIE_NAME))}`
+      `User had anonId ${JSON.stringify(
+        req.cookies.get(process.env.IRON_SESSION_COOKIE_NAME)
+      )}`
     );
     return NextResponse.next();
   }
-
-  response.cookies.set(COOKIE_NAME, createAnonId());
   console.log(
-    `Gave user anonId ${JSON.stringify(req.cookies.get(COOKIE_NAME))}`
+    `Gave user anonId ${JSON.stringify(
+      req.cookies.get(process.env.IRON_SESSION_COOKIE_NAME)
+    )}`
   );
   return response;
 }
