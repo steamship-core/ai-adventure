@@ -1,4 +1,3 @@
-import AnonAuthLogin from "@/components/account/anon-auth-logger";
 import AdventureInstanceDropdown from "@/components/adventures/adventure-instance-dropdown";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import { getSteamshipClient } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
 import { Metadata } from "next";
+import { log } from "next-axiom";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,7 +22,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AdventuresPage() {
-  const { userId } = await auth();
+  const { userId } = auth();
+
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
 
   const agents = await getAgents(userId);
   async function deleteAgent(agentId: number) {
@@ -53,7 +58,6 @@ export default async function AdventuresPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 px-4 md:px-6 py-8">
-      <AnonAuthLogin />
       <div className="flex flex-col justify-between">
         <TypographyH2 className="border-none">
           Continue An Adventure

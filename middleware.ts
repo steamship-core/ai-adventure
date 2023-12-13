@@ -6,10 +6,6 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { anonAuthMiddleware } from "./lib/anon-auth/anon-auth-middleware";
 
-function afterAuth(auth: any, req: any, evt: any) {
-  console.log("After auth", typeof auth, typeof req, typeof evt);
-}
-
 const authMiddlewareConfig = {
   publicRoutes: [
     "/",
@@ -26,9 +22,9 @@ const authMiddlewareConfig = {
     /^\/adventures\/(?!(create|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],
-  afterAuth,
 };
 
+// For future: This is a hack to make cookies immediately available on the request object.
 function ApplySetCookie(req: NextRequest, res: NextResponse): void {
   // parse the outgoing Set-Cookie header
   const setCookies = new ResponseCookies(res.headers);
