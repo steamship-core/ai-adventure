@@ -194,6 +194,13 @@ export default function PlayAsCharacterCard({
     });
 
     const respJson = await resp.json();
+
+    if (!respJson?.url) {
+      console.log(respJson);
+      console.log(resp.status);
+      alert("Unable to start quest. Please try again.");
+      return;
+    }
     router.push(respJson.url);
   };
 
