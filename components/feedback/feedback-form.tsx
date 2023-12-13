@@ -3,7 +3,7 @@
 import { addFeedback, updateFeedback } from "@/app/actions/feedback";
 import { cn } from "@/lib/utils";
 import { PartyPopper } from "lucide-react";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useRef, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import { AutoResizeTextarea } from "../ui/textarea";
@@ -14,6 +14,8 @@ export const FeedbackForm = () => {
   const [feedbackString, setFeedbackString] = useState<string | undefined>();
   const [didSubmit, setDidSubmit] = useState<boolean | undefined>();
 
+  const ref = useRef<HTMLButtonElement>(null);
+  const alertRef = useRef<HTMLDivElement>(null);
   const createFeedback = async (
     isPositive: boolean | undefined,
     feedbackStr?: string
@@ -23,12 +25,14 @@ export const FeedbackForm = () => {
       const feedback = await addFeedback({
         isPositive,
         feedback: feedbackStr,
+        url: window.location.href,
       });
       setFeedbackId(feedback.id);
     } else {
       await updateFeedback(feedbackId, {
         isPositive,
         feedback: feedbackStr,
+        url: window.location.href,
       });
     }
     if (feedbackStr) {
@@ -42,6 +46,20 @@ export const FeedbackForm = () => {
     }
     await createFeedback(isEnjoying, feedbackString);
   };
+
+  useEffect(() => {
+    if (isEnjoying === undefined) return;
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isEnjoying]);
+
+  useEffect(() => {
+    if (didSubmit && alertRef.current) {
+      // scroll alert ref into view
+      alertRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [didSubmit]);
 
   return (
     <form className="flex flex-col gap-8 pt-4" onSubmit={onSubmit}>
@@ -87,12 +105,15 @@ export const FeedbackForm = () => {
             placeholder="Your feedback here"
             onChange={(e) => setFeedbackString(e.target.value)}
             value={feedbackString}
+            autoFocus
           />
-          <Button disabled={didSubmit}>Submit</Button>
+          <Button disabled={didSubmit} ref={ref}>
+            Submit
+          </Button>
         </div>
       )}
       {didSubmit && (
-        <Alert>
+        <Alert ref={alertRef}>
           <PartyPopper className="h-4 w-4" />
           <AlertTitle>Thank you!</AlertTitle>
           <AlertDescription>

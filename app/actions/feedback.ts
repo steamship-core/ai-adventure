@@ -6,9 +6,11 @@ import { auth } from "@clerk/nextjs";
 export async function addFeedback({
   isPositive,
   feedback = "",
+  url = "",
 }: {
   isPositive: boolean;
   feedback?: string;
+  url?: string;
 }) {
   const { userId } = auth();
   if (!userId) throw new Error("No user");
@@ -18,6 +20,7 @@ export async function addFeedback({
       userId: userId,
       isPositive,
       feedback,
+      url,
     },
   });
   return fb;
@@ -28,9 +31,11 @@ export async function updateFeedback(
   {
     isPositive,
     feedback = "",
+    url = "",
   }: {
     isPositive: boolean;
     feedback?: string;
+    url?: string;
   }
 ) {
   const { userId } = auth();
@@ -45,6 +50,7 @@ export async function updateFeedback(
       userId: userId,
       isPositive,
       feedback,
+      url,
     },
   });
   return fb;
