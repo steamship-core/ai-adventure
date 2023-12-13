@@ -191,3 +191,12 @@ model Reactions {
 
   @@unique([userId, emojiId, adventureId])
 }
+
+model Feedback {
+  id         String   @id @default(cuid())
+  userId     String
+  isPositive Boolean
+  feedback   String?  @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

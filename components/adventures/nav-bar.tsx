@@ -2,11 +2,12 @@
 
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
-import { FlameIcon, User2Icon } from "lucide-react";
+import { FlameIcon, MessageSquarePlus, User2Icon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
+import { FeedbackModal } from "../feedback/feedback-modal";
 import { Button } from "../ui/button";
 
 const NavBarLink = ({
@@ -36,6 +37,7 @@ const NavBarLink = ({
 
 const AdventureNavBar = () => {
   const { user, isLoaded } = useUser();
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   return (
     <nav className="w-full flex flex-col px-4 md:px-6 items-center border-b border-muted bg-background">
       <div className="w-full flex justify-between items-center">
@@ -45,26 +47,33 @@ const AdventureNavBar = () => {
           <NavBarLink href="/adventures/play">Play</NavBarLink>
         </div>
         <div className="flex gap-2 items-center">
-          <Button
-            asChild
-            size="sm"
-            variant="link"
-            className="hidden md:visible"
-          >
-            <a href="https://steamship.com/discord">
-              <span className="hidden sm:inline">Join our&nbsp;</span>
-              Discord
-            </a>
-          </Button>
-          <Button variant="ghost" asChild>
+          {user && (
+            <Button
+              size="sm"
+              variant="link"
+              className="px-1 sm:px-3"
+              onClick={() => setIsFeedbackOpen(true)}
+            >
+              <span className="sm:hidden">
+                <MessageSquarePlus className="h-5 w-5" />
+              </span>
+              <span className="hidden sm:inline">Feedback</span>
+            </Button>
+          )}
+          <FeedbackModal
+            isOpen={isFeedbackOpen}
+            setIsOpen={(open) => setIsFeedbackOpen(open)}
+          />
+          <Button variant="link" asChild size="sm" className="px-1 sm:px-3">
             <Link href="/account/plan">
               <FlameIcon className="h-5 w-5 text-orange-500" />
             </Link>
           </Button>
           <Button
             variant="ghost"
-            className="flex items-center justify-center w-20"
+            className="flex items-center justify-center w-12 sm:w-20 px-1 sm:px-3"
             asChild
+            size="sm"
           >
             <Link href={user ? "/account" : "/sign-in"}>
               {isLoaded ? (
