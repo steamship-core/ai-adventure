@@ -30,14 +30,9 @@ function errorRedirect(what: string, cando: string, deets: string) {
   );
 }
 
-export function getUserIdFromClerkOrAnon(
+export function getAnonId(
   throwErrorAndRedirect: boolean = true
 ): string | null {
-  const { userId } = auth();
-  if (userId) {
-    return userId;
-  }
-
   if (!(process.env.NEXT_PUBLIC_ALLOW_NOAUTH_GAMEPLAY === "true")) {
     if (throwErrorAndRedirect) {
       errorRedirect(
@@ -76,4 +71,15 @@ export function getUserIdFromClerkOrAnon(
   }
 
   return cookie?.value;
+}
+
+export function getUserIdFromClerkOrAnon(
+  throwErrorAndRedirect: boolean = true
+): string | null {
+  const { userId } = auth();
+  if (userId) {
+    return userId;
+  }
+
+  return getAnonId(throwErrorAndRedirect);
 }
