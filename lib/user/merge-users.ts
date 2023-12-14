@@ -1,6 +1,11 @@
+import { log } from "next-axiom";
 import prisma from "../db";
 
 export async function mergeUsers(fromUserId: string, toUserId: string) {
+  let _msg = `[mergeUsers] from ${fromUserId} to {toUserId}`;
+  log.info(_msg);
+  console.log(_msg);
+
   await prisma.agents.updateMany({
     where: {
       ownerId: fromUserId,
