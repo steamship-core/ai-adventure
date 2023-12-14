@@ -6,8 +6,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { Webhook } from "svix";
 
 export async function POST(request: NextRequest) {
-  let requestJson = await request.json();
-
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   if (!process.env.CLERK_WEBHOOK_SECRET) {
     throw new Error(
