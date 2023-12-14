@@ -17,6 +17,7 @@ const authMiddlewareConfig = {
     "/_axiom/logs",
     "/api/shared/(.*)",
     "/api/adventure/create-instance",
+    "/api/account/post-sign-in",
     "/adventures",
     "/play/(.*)",
     "/error",
