@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
 
   // Get the body
   const payload = await request.json();
-  console.log("Got payload", payload);
 
   const body = JSON.stringify(payload);
 
