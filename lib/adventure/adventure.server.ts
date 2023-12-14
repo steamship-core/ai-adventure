@@ -37,6 +37,9 @@ export const getAdventure = async (
       devAgent: true,
       NarrativeSnippet: {
         take: 10,
+        orderBy: {
+          createdAt: "desc",
+        },
       },
     },
   });

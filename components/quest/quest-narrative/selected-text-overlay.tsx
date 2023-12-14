@@ -72,16 +72,27 @@ const SelectedTextOverlay = ({
     if (!selectedText) return null;
     if (!user) return null;
     setIsLoading(true);
-    const snippet = await createSnippet(selectedText, adventureId);
-    setIsLoading(false);
-    setIsSharing(false);
-    toast({
-      title: "Shared Snippet",
-      description: <span className="line-clamp-2">{snippet.text}</span>,
-      variant: "success",
-      duration: 2000,
-    });
-    setSelectedText("");
+    try {
+      const snippet = await createSnippet(selectedText, adventureId);
+      setIsLoading(false);
+      setIsSharing(false);
+      toast({
+        title: "Shared Snippet",
+        description: <span className="line-clamp-2">{snippet.text}</span>,
+        variant: "success",
+        duration: 2000,
+      });
+      setSelectedText("");
+    } catch (e) {
+      setIsLoading(false);
+      setIsSharing(false);
+      toast({
+        title: "Error",
+        description: "There was an error sharing your snippet.",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
   };
 
   if (!selectedText) return null;

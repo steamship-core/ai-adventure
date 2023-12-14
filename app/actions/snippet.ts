@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs";
 export const createSnippet = async (text: string, adventureId: string) => {
   const { userId } = auth();
   if (!userId) throw new Error("No user");
-
+  console.log("userId", userId);
   const snippet = await prisma.narrativeSnippet.create({
     data: {
       text,
