@@ -1,7 +1,7 @@
 import CharacterCreation from "@/components/character-creation";
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -10,7 +10,7 @@ export default async function CharacterCreationPage({
 }: {
   params: { handle: string };
 }) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon();
 
   if (!userId) {
     log.error("No user");

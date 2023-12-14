@@ -56,6 +56,14 @@ export const NarrativeBlock = ({
       .toReversed();
   }, [blocks]);
 
+  // const hasValidTypes = sortedBlocks.some((block) =>
+  //   validTypes.includes(getMessageType(block))
+  // );
+
+  // if (!hasValidTypes && sortedBlocks.length !== 0) {
+  //   return <LoaderIcon className="animate-spin" />;
+  // }
+
   // Begin Debug Information State Management
   try {
     return sortedBlocks.map((block) => {
@@ -78,6 +86,7 @@ export const NarrativeBlock = ({
               blockId={block.id}
               text={block.text!}
               hideOutput={hideOutput}
+              isPrior={isPrior}
             />
           );
         case MessageTypes.DICE_ROLL:
@@ -99,6 +108,7 @@ export const NarrativeBlock = ({
               blockId={block.id}
               offerAudio={offerAudio}
               text={block.text || ""}
+              isPrior={isPrior}
             />
           );
         case MessageTypes.FUNCTION_SELECTION:
@@ -118,6 +128,7 @@ export const NarrativeBlock = ({
               offerAudio={offerAudio}
               block={block}
               hideOutput={hideOutput}
+              isPrior={isPrior}
             />
           );
         case MessageTypes.QUEST_COMPLETE:

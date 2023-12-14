@@ -1,12 +1,12 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
-import { MoveRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 
 const Nav = () => {
   const { user } = useUser();
+
   return (
     <nav className="w-full flex justify-between px-4 md:px-6 py-4 max-w-7xl mx-auto">
       <div className="flex items-center gap-6">
@@ -25,15 +25,9 @@ const Nav = () => {
         <Button variant="link" asChild>
           <Link href="https://steamship.com/discord">Join our Discord</Link>
         </Button>
-        <Button variant={user ? "outline" : "link"}>
+        <Button variant="outline" className="w-24">
           <Link href={user ? "/adventures" : "/sign-in"} className="flex">
-            {user ? (
-              "Adventures"
-            ) : (
-              <>
-                Login <MoveRightIcon size={20} className="ml-2" />
-              </>
-            )}
+            {user ? "Adventures" : "Login"}
           </Link>
         </Button>
       </div>

@@ -1,4 +1,5 @@
 import SharedQuest from "@/components/share/shared-quest";
+import { getNonNullMetadata } from "@/lib/metadata";
 import { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
@@ -13,7 +14,7 @@ export async function generateMetadata(
   const title = searchParams.title;
   let description = searchParams.description as string;
   // optionally access and extend (rather than replace) parent metadata
-  const parentMetadata = (await parent) || {};
+  const parentMetadata = await getNonNullMetadata(parent);
 
   const _url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}`;
 

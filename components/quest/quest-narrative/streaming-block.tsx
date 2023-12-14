@@ -1,6 +1,8 @@
 "use client";
+import { recoilContinuationState } from "@/components/providers/recoil";
 import { Block } from "@/lib/streaming-client/src";
 import { useMemo, useState } from "react";
+import { useRecoilState } from "recoil";
 import { TextBlock } from "./text-block";
 import { useBlockStream } from "./use-block-stream";
 
@@ -8,11 +10,15 @@ const CompletionBlock = ({
   block,
   offerAudio,
   hideOutput,
+  isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
   hideOutput?: boolean;
+  isPrior?: boolean;
 }) => {
+  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+
   const wasAlreadyComplete = useMemo(
     () => block?.streamState !== "complete",
     []
@@ -25,6 +31,7 @@ const CompletionBlock = ({
   const onFinish = () => {
     setFinishedAndOfferAudio(offerAudio === true);
     setDidComplete(true);
+    setContinuationState(true);
   };
   const { completion } = useBlockStream({ blockId: block.id, onFinish });
 
@@ -33,9 +40,10 @@ const CompletionBlock = ({
       blockId={block.id}
       offerAudio={alreadyFinishedAndOfferAudio || finishedAndOfferAudio}
       text={completion}
-      useTypeEffect={wasAlreadyComplete}
+      wasAlreadyComplete={wasAlreadyComplete}
       didComplete={didComplete}
       hideOutput={hideOutput}
+      isPrior={isPrior}
     />
   );
 };
@@ -44,10 +52,12 @@ export const StreamingBlock = ({
   block,
   offerAudio,
   hideOutput,
+  isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
   hideOutput?: boolean;
+  isPrior?: boolean;
 }) => {
   const wasAlreadyComplete = useMemo(
     () => block?.streamState === "complete",
@@ -56,15 +66,20 @@ export const StreamingBlock = ({
 
   const alreadyFinishedAndOfferAudio =
     block?.streamState === "complete" && offerAudio === true;
+
+  if (hideOutput) {
+    return null;
+  }
   if (wasAlreadyComplete) {
     return (
       <TextBlock
         blockId={block.id}
         offerAudio={alreadyFinishedAndOfferAudio}
         text={block.text!}
-        useTypeEffect={false}
+        wasAlreadyComplete={wasAlreadyComplete}
         didComplete={true}
         hideOutput={hideOutput}
+        isPrior={isPrior}
       />
     );
   }
@@ -74,6 +89,7 @@ export const StreamingBlock = ({
       block={block}
       offerAudio={offerAudio}
       hideOutput={hideOutput}
+      isPrior={isPrior}
     />
   );
 };

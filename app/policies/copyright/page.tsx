@@ -1,10 +1,17 @@
 import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Copyright Policy - AI Adventure",
+  description: "See our copyright policy and how it relates to you.",
+};
 
 function Copyright() {
   return (
     <div className="space-y-6">
+      <h1>Copyright Policy</h1>
       <p className="italic">Last Updated: April 2, 2023</p>
       <p>
         Steamship respects intellectual property rights and expects its users to

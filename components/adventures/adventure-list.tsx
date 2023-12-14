@@ -24,24 +24,36 @@ import { TypographySmall } from "../ui/typography/TypographySmall";
 import AdventureTag from "./adventure-tag";
 
 const fetchPage = async (
-  pageParam?: string | undefined | null,
-  incomingSearchParams?: URLSearchParams
+  pageParam?: number,
+  incomingSearchParams?: URLSearchParams,
+  tagFilter?: string
 ) => {
   const searchParams = new URLSearchParams(incomingSearchParams);
   if (pageParam) {
-    searchParams.set("cursor", pageParam);
+    searchParams.set("pageParam", `${pageParam}`);
   }
+
+  if (tagFilter) {
+    searchParams.set("tag", tagFilter);
+  }
+
   const res = await fetch(`/api/adventure?${searchParams.toString()}`);
   return res.json() as Promise<{
     results: (Adventure & {
       mappedReactions: Record<string, number>;
     })[];
-    nextCursor?: string;
-    prevCursor?: string;
+    nextPage?: number;
+    prevPage?: number;
   }>;
 };
 
-const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
+const AdventureList = ({
+  emojis,
+  tagName = undefined,
+}: {
+  tagName?: string;
+  emojis: Emojis[];
+}) => {
   const { inView, ref } = useInView();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -62,12 +74,12 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
     ...result
   } = useInfiniteQuery({
     queryKey: ["all-adventures"],
-    queryFn: ({ pageParam }) => fetchPage(pageParam, searchParams),
-    initialPageParam: "",
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam, searchParams, tagName),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
     getPreviousPageParam: (firstPage) => {
-      if (firstPage.prevCursor) {
-        return firstPage.prevCursor;
+      if (firstPage.prevPage) {
+        return firstPage.prevPage;
       }
       return null;
     },
@@ -177,7 +189,7 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {result.data?.pages.map((page, i) => (
-          <Fragment key={i}>
+          <Fragment key={page.nextPage}>
             {page.results.map((adventure) => (
               <Link
                 key={adventure.id}
@@ -189,10 +201,11 @@ const AdventureList = ({ emojis }: { emojis: Emojis[] }) => {
                     src={adventure.image || "/adventurer.png"}
                     fill
                     alt="Adventurer"
+                    sizes="524px"
                   />
                   {Object.keys(adventure.mappedReactions).length > 0 && (
                     <div className="bottom-0 left-0 w-full absolute z-20 bg-background/80">
-                      <div className="flex gap-4 px-2 py-1">
+                      <div className="flex gap-4 px-2 py-1 flex-wrap">
                         {Object.keys(adventure.mappedReactions).map((key) => (
                           <div
                             className="text-sm flex gap-1"

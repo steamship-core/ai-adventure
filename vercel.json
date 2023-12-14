@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/curate-available-agent-pool",
       "schedule": "*/1 * * * *"
+    },
+    {
+      "path": "/api/cron/build-tags-table",
+      "schedule": "*/30 * * * *"
     }
   ]
 }

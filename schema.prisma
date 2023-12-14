@@ -38,7 +38,8 @@ model Adventure {
   public          Boolean @default(false)
   publicRequested Boolean @default(false)
 
-  tags              String[]            @default([])
+  tags String[] @default([])
+
   Agents            Agents[]            @relation("agents")
   CharacterTemplate CharacterTemplate[]
   updatedAt         DateTime            @default(now()) @updatedAt
@@ -173,6 +174,11 @@ model Emojis {
   Reactions   Reactions[]
 }
 
+model Tags {
+  name  String @id
+  count Int    @default(0)
+}
+
 model Reactions {
   id          Int       @id @default(autoincrement())
   emojiId     Int
@@ -184,4 +190,14 @@ model Reactions {
   Adventure   Adventure @relation(fields: [adventureId], references: [id])
 
   @@unique([userId, emojiId, adventureId])
+}
+
+model Feedback {
+  id         String   @id @default(cuid())
+  userId     String
+  isPositive Boolean
+  feedback   String?  @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  url        String?  @default("")
 }

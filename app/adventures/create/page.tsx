@@ -8,9 +8,16 @@ import { TypographySmall } from "@/components/ui/typography/TypographySmall";
 import { getAdventuresForUser } from "@/lib/adventure/adventure.server";
 import { auth } from "@clerk/nextjs";
 import { format } from "date-fns";
+import { Metadata } from "next";
 import { log } from "next-axiom";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Create Adventures - AI Adventure",
+  description:
+    "Create interactive AI powered adventures. Design unique, interactive stories to share with friends and the global community. Explore a world where your imagination shapes the narrative in real-time, crafting experiences that are as boundless as your ideas.",
+};
 
 export default async function AdventuresPage() {
   const { userId } = auth();
@@ -63,6 +70,7 @@ export default async function AdventuresPage() {
                         fill
                         alt="Adventurer"
                         className="object-cover"
+                        sizes="460px"
                       />
                     </div>
                   </div>

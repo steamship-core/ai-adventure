@@ -1,5 +1,5 @@
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { setEnergy } from "@/lib/energy/energy.server";
-import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export async function POST(
   request: Request,
   { params }: { params: { handle: string } }
 ) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon(false);
 
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });

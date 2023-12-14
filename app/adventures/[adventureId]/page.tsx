@@ -1,10 +1,10 @@
 import AdventureTag from "@/components/adventures/adventure-tag";
 import EmojiPicker from "@/components/adventures/emoji-picker";
-import AdventureNavBar from "@/components/adventures/nav-bar";
 import { StartAdventureSection } from "@/components/adventures/start-adventure-section";
 import { Button } from "@/components/ui/button";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import prisma from "@/lib/db";
+import { getNonNullMetadata } from "@/lib/metadata";
 import { auth } from "@clerk/nextjs";
 import { PencilIcon } from "lucide-react";
 import { Metadata, ResolvingMetadata } from "next";
@@ -23,11 +23,21 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const adventure = (await getAdventure(params.adventureId)) as any;
-
-  let ret = { ...(await parent) };
+  const ret = await getNonNullMetadata(parent);
 
   const url = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures/${params.adventureId}`;
-  const imageUrl = `/og-image.png?image=${adventure.image}`;
+  let imageUrl = adventure.image;
+
+  if (imageUrl?.endsWith("/raw")) {
+    // The Steamship engine will ignore the filename.. but the .png extension is required for Twitter to realize it's an image.
+    imageUrl = `${imageUrl}/image.png`;
+  }
+
+  // Now, finally, we dynamically render the image.
+  let shareImageUrl = new URL(`${url}/og-image.png`);
+  shareImageUrl.searchParams.set("itemImage", imageUrl as string);
+
+  imageUrl = shareImageUrl.toString();
 
   ret.title = adventure.name;
   ret.description = adventure.shortDescription;
@@ -39,7 +49,7 @@ export async function generateMetadata(
     title: adventure.name,
     description: adventure.shortDescription,
     images: adventure.image
-      ? [{ url: imageUrl }]
+      ? [{ url: shareImageUrl }]
       : [{ url: "/adventurer.png" }],
   };
 
@@ -48,7 +58,7 @@ export async function generateMetadata(
     title: adventure.name,
     description: adventure.shortDescription,
     images: adventure.image
-      ? [{ url: imageUrl }]
+      ? [{ url: shareImageUrl }]
       : [{ url: "/adventurer.png" }],
   } as any;
 
@@ -156,7 +166,6 @@ export default async function AdventurePage({
   const isCreator = adventure.creatorId === userId;
   return (
     <div>
-      <AdventureNavBar />
       <div className="relative h-96 w-full mt-2">
         <Image
           src={adventure?.image || "/adventurer.png"}
@@ -178,7 +187,7 @@ export default async function AdventurePage({
           <div className="flex flex-col gap-2 w-full justify-start items-start">
             <div className="flex gap-2 flex-wrap">
               {(adventure?.tags || []).map((tag: string) => {
-                return <AdventureTag key={tag} tag={tag} />;
+                return <AdventureTag key={tag} tag={tag} isLink />;
               })}
             </div>
             <EmojiPicker

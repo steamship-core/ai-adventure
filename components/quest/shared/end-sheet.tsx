@@ -1,4 +1,5 @@
 "use client";
+import { FeedbackForm } from "@/components/feedback/feedback-form";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -196,12 +197,12 @@ const EndSheet = ({
                 </TypographySmall>
               )}
             </div>
-            <div className="flex flex-col gap-2 items-center justify-center">
-              <Button asChild>
+            <div className="flex flex-col gap-2 items-center justify-center w-full my-4">
+              <Button asChild className="w-full">
                 <a href={`/play/${params.handle}/camp`}>Back to camp</a>
               </Button>
               <a
-                className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-full flex items-center gap-2 justify-center"
+                className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-md w-full flex items-center gap-2 justify-center"
                 href={twitterLink.href}
                 target="_blank"
               >
@@ -215,6 +216,7 @@ const EndSheet = ({
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>
           <ItemsGained gameState={gameState} quest={quest} />
+          <FeedbackForm />
         </SheetBody>
       </SheetContent>
     </Sheet>

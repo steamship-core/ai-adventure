@@ -1,27 +1,34 @@
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { saveGameState } from "@/lib/game/game-state.server";
 import { GameState } from "@/lib/game/schema/game_state";
-import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
 
 export const POST = withAxiom(
   async (request: Request, { params }: { params: { handle: string } }) => {
-    const { userId } = auth();
+    log.info("Updating agent");
+
+    const userId = getUserIdFromClerkOrAnon(false);
+
     if (!userId) {
       log.error("No user");
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+    log.info("Fetching agent");
 
     const agent = await getAgent(userId, params.handle);
 
     if (!agent) {
+      log.error("Agent Not found");
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
+    log.info("Attempting save");
 
     try {
       // TODO: Filter what the user can send to the agent.
       const config = await request.json();
+      console.log("Saving gamestate:", config);
       await saveGameState(agent.agentUrl, config as GameState);
       return NextResponse.json({ agent }, { status: 200 });
     } catch (e) {

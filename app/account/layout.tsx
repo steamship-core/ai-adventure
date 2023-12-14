@@ -1,4 +1,5 @@
 import AdventureNavBar from "@/components/adventures/nav-bar";
+import LandingFooter from "@/components/landing/footer";
 import { ReactNode } from "react";
 
 const AccountLayout = ({ children }: { children: ReactNode }) => (
@@ -11,6 +12,7 @@ const AccountLayout = ({ children }: { children: ReactNode }) => (
       </div>
 
       {children}
+      <LandingFooter />
     </div>
   </div>
 );

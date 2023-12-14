@@ -1,9 +1,16 @@
 import LandingFooter from "@/components/landing/footer";
 import Nav from "@/components/landing/nav";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy - AI Adventure",
+  description: "See our privacy policy and how it relates to you.",
+};
 
 function PrivacyPolicy() {
   return (
     <div className={"space-y-6"}>
+      <h1>Privacy Policy</h1>
       <p>
         <strong>PRIVACY NOTICE</strong> <br />
         &nbsp;

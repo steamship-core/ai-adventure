@@ -137,11 +137,14 @@ export default function PlayAsCharacterCard({
     e.stopPropagation();
     e.preventDefault();
 
-    if (!isSignedIn) {
-      clerk.openSignIn({
-        redirectUrl: document.location.href,
-      });
-      return;
+    if (!(process.env.NEXT_PUBLIC_ALLOW_NOAUTH_GAMEPLAY === "true")) {
+      // If we aren't explicitly allowing unauthed gameplay, then we need to redirect to signin at this point.
+      if (!isSignedIn) {
+        clerk.openSignIn({
+          redirectUrl: document.location.href,
+        });
+        return;
+      }
     }
 
     track("Character Selected", {
@@ -191,6 +194,13 @@ export default function PlayAsCharacterCard({
     });
 
     const respJson = await resp.json();
+
+    if (!respJson?.url) {
+      console.log(respJson);
+      console.log(resp.status);
+      alert("Unable to start quest. Please try again.");
+      return;
+    }
     router.push(respJson.url);
   };
 
@@ -207,6 +217,7 @@ export default function PlayAsCharacterCard({
           src={image}
           alt={alt || title}
           fill
+          sizes="720px"
           className="object-cover z-10"
         />
       ) : (
@@ -214,7 +225,6 @@ export default function PlayAsCharacterCard({
           <UserIcon size={64} className="z-10" />
         </div>
       )}
-
       <CardDescription
         variant={variant}
         title={title}

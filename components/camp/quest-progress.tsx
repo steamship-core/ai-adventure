@@ -3,7 +3,9 @@
 import { amplitude } from "@/lib/amplitude";
 import { getGameState } from "@/lib/game/game-state.client";
 import { cn } from "@/lib/utils";
+import { useAuth, useClerk } from "@clerk/nextjs";
 import { Adventure } from "@prisma/client";
+
 import {
   CheckIcon,
   FlameIcon,
@@ -94,6 +96,8 @@ const QuestProgressElement = ({
   const isInQuest = gameState?.active_mode === "quest";
   const energy = useRecoilValue(recoilEnergyState);
   const [isLoading, setIsLoading] = useState(false);
+  const clerk = useClerk();
+  const { userId } = useAuth();
 
   useEffect(() => {
     if (isCurrentquest) {
@@ -106,6 +110,16 @@ const QuestProgressElement = ({
   }, []);
 
   const onClick = async () => {
+    // ANON AUTH: If this is > Quest 1 then we need to make sure the user is logged in.
+    if (index > 0) {
+      if (!userId) {
+        clerk.openSignIn({
+          redirectUrl: document.location.href,
+        });
+        return;
+      }
+    }
+
     const lowEnergy = (energy || 0) < 10;
     setIsLoading(true);
     if (lowEnergy) {

@@ -1,17 +1,36 @@
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import { createAgent } from "@/lib/agent/agent.server";
+import { anonAuth } from "@/lib/anon-auth/anon-auth-server";
 import prisma from "@/lib/db";
 import { sendAdventureMilestoneEmail } from "@/lib/emails/adventure-creation";
 import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const POST = withAxiom(async (request: Request) => {
-  const { userId } = auth();
+export const POST = withAxiom(async (request: NextRequest) => {
+  let { userId } = auth();
   if (!userId) {
-    log.error("No user");
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!(process.env.NEXT_PUBLIC_ALLOW_NOAUTH_GAMEPLAY === "true")) {
+      // We aren't permitting un-authedgameplay.
+      log.error("No user");
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    } else {
+      let resp = await anonAuth(request);
+      userId = resp.userId || null;
+      if (!userId) {
+        log.error("No anon user session. Unable to create instance.");
+        return NextResponse.json(
+          { error: "No anon user session. Unable to create instance." },
+          { status: 404 }
+        );
+      } else {
+        console.log(`create-instance got anon user ${userId}`);
+      }
+    }
   }
+
+  // At this point the userId could be the clerk Id or the anon|uuid id.
+
   try {
     let { adventureId, isDevelopment, gameState } = await request.json();
 

@@ -1,3 +1,4 @@
+import { log } from "next-axiom";
 import { getSteamshipClient } from "../utils";
 import { GameState } from "./schema/game_state";
 
@@ -16,7 +17,9 @@ export const saveGameState = async (
   agentBase: string,
   gameState: GameState
 ) => {
+  log.info("Attempting get steamship");
   const steamship = getSteamshipClient();
+  log.info("Attempting get agent");
   return await steamship.agent.post({
     url: agentBase,
     path: "/game_state",
