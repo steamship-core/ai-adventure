@@ -63,10 +63,13 @@ export default authMiddleware({
     );
     returnBackUrl.searchParams.set("redirectUrl", req.url);
 
+    // TODO(ted): See if we cna use the post-sign-in one.
+    const effectiveReturnBackUrl = req.url; // returnBackUrl.toString()
+
     // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({
-        returnBackUrl: returnBackUrl.toString(),
+        returnBackUrl: effectiveReturnBackUrl,
       });
     }
 
