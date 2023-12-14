@@ -22,6 +22,11 @@ export default async function QuestPage({
 }) {
   const userId = getUserIdFromClerkOrAnon();
 
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+
   const agent = await getAgent(userId, params.handle);
   if (!agent) {
     redirect("/adventures");

@@ -28,6 +28,11 @@ export default async function CampPage({
 }) {
   const userId = getUserIdFromClerkOrAnon();
 
+  if (!userId) {
+    log.error("No user");
+    throw new Error("no user");
+  }
+
   const agent = await getAgent(userId, params.handle);
 
   if (!agent) {
