@@ -25,7 +25,7 @@ export const FeedbackModal = ({
             We are constantly improving AI Adventure and would love to hear your
             feedback.
           </DialogDescription>
-          <FeedbackForm />
+          <FeedbackForm onComplete={() => setIsOpen(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
