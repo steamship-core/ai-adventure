@@ -26,16 +26,9 @@ export async function anonAuthMiddleware(
   const cooks = req.cookies.getAll();
   console.log(JSON.stringify(cooks));
   if (req.cookies.get(COOKIE_NAME)) {
-    console.log(
-      `User had anonId ${JSON.stringify(req.cookies.get(COOKIE_NAME))}`
-    );
     return NextResponse.next();
   }
-
   response.cookies.set(COOKIE_NAME, createAnonId());
-  console.log(
-    `Gave user anonId ${JSON.stringify(req.cookies.get(COOKIE_NAME))}`
-  );
   return response;
 }
 
