@@ -72,6 +72,7 @@
     "recoil": "^0.7.7",
     "resend": "^2.0.0",
     "stripe": "^14.5.0",
+    "svix": "^1.15.0",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.1.3",
