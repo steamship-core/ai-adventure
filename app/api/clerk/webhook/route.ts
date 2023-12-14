@@ -1,3 +1,4 @@
+import prisma from "@/lib/db";
 import type { WebhookEvent } from "@clerk/clerk-sdk-node";
 import { log } from "next-axiom";
 import { headers } from "next/headers";
@@ -65,12 +66,30 @@ export async function POST(request: NextRequest) {
 
   switch (evt.type) {
     case "user.created":
-      // UserJSON.first_name is a string
-      const firstName = evt.data.first_name;
-      // UserJSON.last_name is a string
-      const lastName = evt.data.last_name;
-      // UserJSON.email_addresses is an array of EmailAddressJSON
       const emails = evt.data.email_addresses;
+      let email: string | null = null;
+      let emailVerified: boolean | null = null;
+
+      if (emails.length > 0) {
+        email = emails[0].email_address;
+        emailVerified = emails[0].verification?.status == "verified";
+      }
+
+      const data = {
+        userId: evt.data.id,
+        firstName: evt.data.first_name,
+        lastName: evt.data.last_name,
+        email: email,
+        emailVerified: emailVerified,
+        username: evt.data.username,
+        profileImageUrl: evt.data.profile_image_url || evt.data.image_url,
+        privateMetadata: { ...(evt.data.private_metadata as any) },
+        publicMetadata: { ...(evt.data.public_metadata as any) },
+        unsafeMetadata: { ...(evt.data.unsafe_metadata as any) },
+      };
+
+      await prisma.userInfo.create({ data });
+
       break;
     default:
       // Unhandled

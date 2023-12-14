@@ -121,6 +121,8 @@ model UserInfo {
   privateMetadata Json?
   publicMetadata  Json?
   unsafeMetadata  Json?
+  isInternal      Boolean? @default(false)
+  isAdmin         Boolean? @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
