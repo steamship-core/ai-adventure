@@ -12,7 +12,7 @@ export const FeedbackForm = ({ onComplete }: { onComplete: () => void }) => {
   const [feedbackId, setFeedbackId] = useState<string | undefined>();
   const [feedbackString, setFeedbackString] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState<boolean | undefined>();
-
+  const [didComplete, setDidComplete] = useState<boolean | undefined>(false);
   const ref = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
 
@@ -45,6 +45,7 @@ export const FeedbackForm = ({ onComplete }: { onComplete: () => void }) => {
         variant: "success",
         duration: 2000,
       });
+      setDidComplete(true);
     }
   };
 
@@ -73,6 +74,7 @@ export const FeedbackForm = ({ onComplete }: { onComplete: () => void }) => {
               "text-4xl h-auto bg-green-300 hover:bg-green-500",
               isEnjoying === false && "opacity-20"
             )}
+            disabled={didComplete}
             onClick={() => {
               setIsEnjoying(true);
               createFeedback(true);
@@ -82,6 +84,7 @@ export const FeedbackForm = ({ onComplete }: { onComplete: () => void }) => {
           </Button>
           <Button
             type="button"
+            disabled={didComplete}
             className={cn(
               "text-4xl h-auto bg-red-300 hover:bg-red-500",
               isEnjoying === true && "opacity-20"
@@ -104,8 +107,9 @@ export const FeedbackForm = ({ onComplete }: { onComplete: () => void }) => {
             onChange={(e) => setFeedbackString(e.target.value)}
             value={feedbackString}
             autoFocus
+            disabled={didComplete}
           />
-          <Button ref={ref} disabled={isLoading}>
+          <Button ref={ref} disabled={isLoading || didComplete}>
             {isLoading ? "Submitting..." : "Submit"}
           </Button>
         </div>
