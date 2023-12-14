@@ -1,10 +1,11 @@
 "use client";
 
-import { FlameIcon } from "lucide-react";
+import { FlameIcon, MessageSquarePlus } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { FeedbackModal } from "../feedback/feedback-modal";
 import InventorySheet from "../inventory-sheet";
 import { recoilEnergyState } from "../providers/recoil";
 import { Button } from "../ui/button";
@@ -33,6 +34,7 @@ export const SummaryStats = ({
   showInventory?: boolean;
 }) => {
   const [shouldRenderAudio, setShouldRenderAudio] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const energy = useRecoilValue(recoilEnergyState);
 
   useEffect(() => {
@@ -43,6 +45,10 @@ export const SummaryStats = ({
 
   return (
     <div className="flex flex-row items-center gap-2" id="stats">
+      <FeedbackModal isOpen={isFeedbackOpen} setIsOpen={setIsFeedbackOpen} />
+      <Button variant="ghost" onClick={() => setIsFeedbackOpen(true)}>
+        <MessageSquarePlus className="h-5 w-5" />
+      </Button>
       {shouldRenderAudio && <BackgroundAudioToggle text="" />}
       {showInventory && <InventorySheet />}
       {showEnergy && (
