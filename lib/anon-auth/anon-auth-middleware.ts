@@ -23,8 +23,6 @@ export async function anonAuthMiddleware(
   const response = NextResponse.next();
 
   // If the cookie is already set, do nothing.
-  const cooks = req.cookies.getAll();
-  console.log(JSON.stringify(cooks));
   if (req.cookies.get(COOKIE_NAME)) {
     return NextResponse.next();
   }
