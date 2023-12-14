@@ -81,13 +81,12 @@ const QuestProgressElement = ({
   }, []);
 
   const onClick = async () => {
-    // ANON AUTH: If this is > Quest 1 then we need to make sure the user is logged in.
     if (index > 0) {
       if (!userId) {
         const redirectBackUrl = new URL(
           `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/account/migrate-from-unauthed`
         );
-        redirectBackUrl.searchParams.set("redirectUrl", document.location.href);
+        redirectBackUrl.searchParams.set("redirect", document.location.href);
         clerk.openSignIn({
           redirectUrl: redirectBackUrl.toString(),
         });
