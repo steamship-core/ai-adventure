@@ -5,10 +5,10 @@ import { WelcomeModal } from "@/components/camp/welcome-modal";
 import { InGameNavigation } from "@/components/navigation/in-game-navigation";
 import RecoilProvider from "@/components/providers/recoil";
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { generateQuestArc, startQuest } from "@/lib/game/quest.server";
-import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -26,15 +26,10 @@ export default async function CampPage({
 }: {
   params: { handle: string };
 }) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon();
 
   if (!userId) {
     log.error("No user");
-    errorRedirect(
-      "Login required.",
-      "Try logging in first.",
-      "No user id found."
-    );
     throw new Error("no user");
   }
 

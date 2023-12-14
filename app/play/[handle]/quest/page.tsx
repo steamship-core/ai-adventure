@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getGameState } from "@/lib/game/game-state.server";
 import { startQuest } from "@/lib/game/quest.server";
-import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -12,7 +12,7 @@ export default async function QuestPage({
 }: {
   params: { handle: string; questId: string };
 }) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon();
 
   if (!userId) {
     log.error("No user");

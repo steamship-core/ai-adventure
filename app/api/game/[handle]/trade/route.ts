@@ -1,13 +1,14 @@
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { tradeItems } from "@/lib/game/trade";
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
   { params }: { params: { handle: string } }
 ) {
-  const { userId } = auth();
+  const userId = getUserIdFromClerkOrAnon(false);
+
   if (!userId) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }

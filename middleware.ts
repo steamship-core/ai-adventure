@@ -16,10 +16,18 @@ const authMiddlewareConfig = {
     "/share/quest",
     "/_axiom/logs",
     "/api/shared/(.*)",
+    "/api/adventure/create-instance",
     "/adventures",
+    "/play/(.*)",
+    "/error",
+    "/play/(.*)/(.*)",
+    /^\/api\/chat.*$/,
+    /^\/api\/game\/.*$/,
+    /^\/api\/agent\/.*$/,
+    /^\/api\/block\/.*$/,
     "/policies/(.*)",
     "/adventures/tagged/(.*)",
-    /^\/adventures\/(?!(create|editor))[^\/]*$/,
+    /^\/adventures\/(?!(create|play|editor))[^\/]*$/,
     "/(.*)/opengraph-image",
   ],
 };
@@ -50,9 +58,16 @@ export default authMiddleware({
   async afterAuth(auth, req, evt) {
     const response = await anonAuthMiddleware(req);
 
+    let returnBackUrl = new URL(
+      `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/api/account/post-sign-in`
+    );
+    returnBackUrl.searchParams.set("redirectUrl", req.url);
+
     // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      return redirectToSignIn({
+        returnBackUrl: returnBackUrl.toString(),
+      });
     }
 
     return response;

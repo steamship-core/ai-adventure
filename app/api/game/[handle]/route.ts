@@ -1,12 +1,12 @@
 import { getAgent } from "@/lib/agent/agent.server";
+import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = withAxiom(
   async (request: NextRequest, { params }: { params: { handle: string } }) => {
-    const { userId } = auth();
+    const userId = getUserIdFromClerkOrAnon(false);
     if (!userId) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
