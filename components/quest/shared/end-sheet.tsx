@@ -216,7 +216,7 @@ const EndSheet = ({
           </TypographyMuted>
           <TypographyH3>Items Gained</TypographyH3>
           <ItemsGained gameState={gameState} quest={quest} />
-          <FeedbackForm />
+          <FeedbackForm onComplete={() => null} />
         </SheetBody>
       </SheetContent>
     </Sheet>
