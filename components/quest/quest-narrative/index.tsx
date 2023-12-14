@@ -23,6 +23,7 @@ import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
+import SelectedTextOverlay from "./selected-text-overlay";
 import { UserInputBlock } from "./user-input-block";
 import {
   ExtendedBlock,
@@ -68,6 +69,7 @@ export default function QuestNarrative({
   completeButtonText,
   priorBlocks,
   generateSuggestions,
+  adventureId,
 }: {
   id: string;
   summary: Block | null;
@@ -78,6 +80,7 @@ export default function QuestNarrative({
   completeButtonText?: string;
   priorBlocks?: ExtendedBlock[];
   generateSuggestions: () => Promise<any>;
+  adventureId?: string;
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -238,6 +241,11 @@ export default function QuestNarrative({
           />
         </div>
         <QuestNarrativeContainer>
+          <SelectedTextOverlay
+            divId="quest-narrative-container"
+            adventureId={adventureId!}
+          />
+
           {priorBlocks && (
             <NarrativeBlock
               blocks={priorBlocks}

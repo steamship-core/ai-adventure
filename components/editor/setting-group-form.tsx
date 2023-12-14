@@ -18,7 +18,6 @@ import {
   recoilUnsavedChangesExist,
 } from "../providers/recoil";
 import { Button } from "../ui/button";
-import { Toaster } from "../ui/toaster";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
 import { TypographyLead } from "../ui/typography/TypographyLead";
 import { useToast } from "../ui/use-toast";
@@ -486,8 +485,6 @@ export default function SettingGroupForm({
           </div>
         </div>
       )}
-
-      <Toaster />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import QueryProvider from "@/components/providers/react-query";
 import { OpenAIBanner } from "@/components/status-banners/open-ai";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import { AmplitudeAnalytics } from "@/lib/amplitude";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -87,6 +88,7 @@ export default function RootLayout({
               {children}
               <Analytics />
               <AmplitudeAnalytics />
+              <Toaster />
             </ThemeProvider>
           </QueryProvider>
           <SpeedInsights />

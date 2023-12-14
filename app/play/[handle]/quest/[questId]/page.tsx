@@ -84,6 +84,7 @@ export default async function QuestPage({
         isDevelopment={agent.isDevelopment || false}
         priorBlocks={priorBlocks}
         generateSuggestions={generateSuggestions}
+        adventureId={agent.adventureId!}
       />
       <DynamicBackgroundAudio />
     </RecoilProvider>

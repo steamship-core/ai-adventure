@@ -2,6 +2,8 @@ import AdventureTag from "@/components/adventures/adventure-tag";
 import EmojiPicker from "@/components/adventures/emoji-picker";
 import { StartAdventureSection } from "@/components/adventures/start-adventure-section";
 import { Button } from "@/components/ui/button";
+import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
+import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
 import prisma from "@/lib/db";
 import { getNonNullMetadata } from "@/lib/metadata";
@@ -72,7 +74,7 @@ export default async function AdventurePage({
 }) {
   const { userId, ...rest } = auth();
 
-  const adventure = (await getAdventure(params.adventureId)) as any;
+  const adventure = await getAdventure(params.adventureId);
 
   if (!adventure) {
     redirect(`/adventures`);
@@ -200,6 +202,22 @@ export default async function AdventurePage({
         </div>
       </div>
       <StartAdventureSection adventure={adventure} />
+      <div className="mt-8">
+        <TypographyH3>Snippets from this adventure</TypographyH3>
+        <TypographyMuted>
+          These are snippets that have been shared by other adventurers.
+        </TypographyMuted>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+          {adventure?.NarrativeSnippet.map((snippet) => (
+            <div
+              key={snippet.id}
+              className="border rounded-md text-md text-muted-foreground flex items-center justify-center text-center"
+            >
+              <span className="line-clamp-5 italic p-2">{snippet.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

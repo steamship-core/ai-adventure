@@ -196,6 +196,7 @@ const InteractionBox = ({
               }
             }}
             disabled={isLoading || isComplete}
+            autoFocus
           />
           <Button type="submit" disabled={isLoading || isComplete}>
             {isLoading ? (

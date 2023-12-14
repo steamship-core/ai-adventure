@@ -27,7 +27,7 @@ export function InGameNavigation({
   className?: string;
 }) {
   return (
-    <div className={`flex flex-col w-full ${className}`}>
+    <div className={`flex flex-col w-full ${className}`} id="in-game-nav">
       {isDevelopment && <PlayTestBanner />}
       <div className="flex flex-row items-center overflow-hidden justify-start gap-4">
         <HeaderBackButton />

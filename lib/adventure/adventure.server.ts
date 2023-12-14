@@ -35,6 +35,9 @@ export const getAdventure = async (
     },
     include: {
       devAgent: true,
+      NarrativeSnippet: {
+        take: 10,
+      },
     },
   });
 

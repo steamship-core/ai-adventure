@@ -4,6 +4,7 @@ import { NarrationPlayer } from "./narration-player";
 
 import { recoilContinuationState } from "@/components/providers/recoil";
 import { addNewlines } from "@/lib/text";
+import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -70,6 +71,7 @@ export const TextBlock = ({
   isPrior?: boolean;
 }) => {
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
+  const [isHover, setIsHover] = useState(false);
 
   useEffect(() => {
     if (hideOutput) return;
@@ -85,10 +87,13 @@ export const TextBlock = ({
   const _text = addNewlines(text);
 
   return (
-    <BlockContainer className="group">
+    <BlockContainer>
       <div
         data-blocktype="text-block"
-        className="whitespace-pre-wrap text-normal hover:!bg-background group-hover:bg-sky-300/10 rounded-md"
+        className={cn(
+          "whitespace-pre-wrap text-normal  rounded-md",
+          isHover && "bg-sky-300/10"
+        )}
       >
         {!text ? (
           <Loader className="animate-spin" />
@@ -110,7 +115,12 @@ export const TextBlock = ({
           <div className="w-full px-2">
             <div className="border-t border-foreground/20 w-full px-2" />
           </div>
-          <NarrationPlayer blockId={blockId} />
+          <div
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}
+          >
+            <NarrationPlayer blockId={blockId} />
+          </div>
           <div className="w-full px-2">
             <div className="border-t border-foreground/20 w-full px-2" />
           </div>
