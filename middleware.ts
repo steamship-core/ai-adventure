@@ -59,15 +59,18 @@ export default authMiddleware({
   async afterAuth(auth, req, evt) {
     const response = await anonAuthMiddleware(req);
 
+    // TODO
     let returnBackUrl = new URL(
       `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/api/account/post-sign-in`
     );
     returnBackUrl.searchParams.set("redirectUrl", req.url);
 
+    const effectiveReturnBackUrl = req.url; // returnBackUrl.toString()
+
     // Handle users who aren't authenticated
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({
-        returnBackUrl: returnBackUrl.toString(),
+        returnBackUrl: effectiveReturnBackUrl,
       });
     }
 
