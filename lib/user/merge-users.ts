@@ -1,7 +1,12 @@
+import { log } from "next-axiom";
 import prisma from "../db";
 
 export async function mergeUsers(fromUserId: string, toUserId: string) {
-  await prisma.agents.updateMany({
+  let _msg = `[mergeUsers] from ${fromUserId} to ${toUserId}`;
+  log.info(_msg);
+  console.log(_msg);
+
+  const agentsUpdated = await prisma.agents.updateMany({
     where: {
       ownerId: fromUserId,
     },
@@ -9,6 +14,10 @@ export async function mergeUsers(fromUserId: string, toUserId: string) {
       ownerId: toUserId,
     },
   });
+
+  _msg = `[mergeUsers] from ${fromUserId} to ${toUserId}: count=${agentsUpdated.count}`;
+  log.info(_msg);
+  console.log(_msg);
 
   // TODO: If we want to permit unauthed users to do the below things, then we can also choose
   // to re-associate them here.

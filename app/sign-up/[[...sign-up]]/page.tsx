@@ -8,9 +8,17 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
+  // TODO: Fix
+  // let returnBackUrl = new URL(
+  //   `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/api/account/post-sign-in`
+  // );
+  const adventuresUrl = `${process.env.NEXT_PUBLIC_WEB_BASE_URL}/adventures`;
+  // returnBackUrl.searchParams.set("redirectUrl", adventuresUrl);
+  const afterSignupUrl = adventuresUrl; // returnBackUrl.toString();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <SignUp afterSignUpUrl="/adventures" />
+      <SignUp afterSignUpUrl={afterSignupUrl} />
     </main>
   );
 }
