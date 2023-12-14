@@ -159,10 +159,6 @@ The non-generative portions of the Game UI are all contained within this NextJS 
 You can start exploring by looking at the pages in `app/pages`.
 When running on localhost, your browser will update automatically when you edit and save a file.
 
-### Customizing Generated Images
-
-TODO: Document `configuration/`
-
 ## Advanced Customization
 
 The generative game engine is a [separate open-source project](https://github.com/steamship-core/ai-adventure-agent) deployed to [Steamship](https://steamship.com). It maintains most of the game state -- this web app is mostly a headless client.
