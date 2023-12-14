@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
 
   // Get the body
   const payload = await request.json();
+  console.log("Got payload", payload);
+
   const body = JSON.stringify(payload);
 
   // Create a new Svix instance with your secret.
@@ -56,7 +58,7 @@ export async function POST(request: NextRequest) {
 
   if (evt.object != "event") {
     // See: https://clerk.com/docs/users/sync-data
-    const _msg = `The 'object' field should always be 'event'. Was: ${requestJson.object}`;
+    const _msg = `The 'object' field should always be 'event'. Was: ${payload.object}`;
     log.error(_msg);
     console.error(_msg);
     return NextResponse.json({ error: _msg }, { status: 500 });
