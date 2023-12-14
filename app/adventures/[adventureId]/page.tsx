@@ -207,6 +207,13 @@ export default async function AdventurePage({
         <TypographyMuted>
           These are snippets that have been shared by other adventurers.
         </TypographyMuted>
+        {adventure?.NarrativeSnippet.length === 0 && (
+          <div className="w-full mt-8 text-center">
+            <TypographyMuted>
+              There are no snippets for this adventure yet.
+            </TypographyMuted>
+          </div>
+        )}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
           {adventure?.NarrativeSnippet.map((snippet) => (
             <div
