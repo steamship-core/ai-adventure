@@ -110,6 +110,21 @@ model AvailableAgents {
   adventureVersion         Int        @default(0)
 }
 
+model UserInfo {
+  userId          String   @id
+  firstName       String?
+  lastName        String?
+  email           String?
+  username        String?
+  emailVerified   Boolean?
+  profileImageUrl String?
+  privateMetadata Json?
+  publicMetadata  Json?
+  unsafeMetadata  Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model UserExperience {
   id         Int      @id @default(autoincrement())
   userId     String
