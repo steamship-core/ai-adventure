@@ -14,6 +14,10 @@ export const CompletionBlock = ({
   }, []);
 
   return (
-    <DebugBlock block={block} className="border-red-600" title="User Message" />
+    <DebugBlock
+      block={block}
+      className="border-red-600"
+      title="Completion Block"
+    />
   );
 };

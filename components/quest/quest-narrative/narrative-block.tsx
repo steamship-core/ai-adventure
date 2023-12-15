@@ -13,6 +13,7 @@ import {
   UserMessageDebugBlock,
 } from "./debug-blocks";
 import { DiceRollBlock } from "./dice-block";
+import { FailedBlock } from "./failed-block";
 import { ImageBlock } from "./image-block";
 import { ItemGenerationBlock } from "./item-generation-block";
 import { QuestSummaryBlock } from "./quest-summary-block";
@@ -31,7 +32,7 @@ export const NarrativeBlock = ({
 }: {
   blocks: ExtendedBlock[];
   onSummary: (block: Block) => void;
-  onComplete: () => void;
+  onComplete: (failed?: boolean) => void;
   offerAudio?: boolean;
   orderedBlocks: Block[];
   isPrior?: boolean;
@@ -138,6 +139,10 @@ export const NarrativeBlock = ({
               block={block}
               onComplete={onComplete}
             />
+          );
+        case MessageTypes.QUEST_FAILED:
+          return (
+            <FailedBlock key={block.id} block={block} onComplete={onComplete} />
           );
         case MessageTypes.QUEST_SUMMARY:
           return (
