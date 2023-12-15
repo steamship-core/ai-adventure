@@ -12,6 +12,7 @@ import {
   Loader2,
   LockIcon,
   MapPinIcon,
+  Redo2Icon,
   SparklesIcon,
 } from "lucide-react";
 import { log } from "next-axiom";
@@ -43,7 +44,9 @@ const QuestProgressElement = ({
   isCurrentquest,
   setLowEnergyModalOpen,
   index,
+  isFailed,
   totalQuests,
+  lastQuestFailed,
   adventure,
   questId,
   onStartQuest,
@@ -54,7 +57,9 @@ const QuestProgressElement = ({
   isCompleteQuest: boolean;
   isCurrentquest: boolean;
   index: number;
+  isFailed?: boolean;
   isClamped: boolean;
+  lastQuestFailed: boolean;
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
   adventure?: Adventure | null;
@@ -128,7 +133,11 @@ const QuestProgressElement = ({
     window.location.href = `/play/${params.handle}/quest/${nextQuestId}`;
   };
 
-  const disabledQuest = isIncompleteQuest && !isCurrentquest;
+  const disabledQuest =
+    (isIncompleteQuest && !isCurrentquest) ||
+    (isCurrentquest && lastQuestFailed);
+  const offerQuest = isCurrentquest && !lastQuestFailed;
+
   return (
     <div className="relative w-full pl-12 py-2">
       <div className="absolute left-0 w-12 h-full pr-[1.65rem] pl-[1.05rem]">
@@ -178,9 +187,11 @@ const QuestProgressElement = ({
         {isCompleteQuest && (
           <Badge
             variant="outline"
-            className="absolute right-4 top-4 border-indigo-400"
+            className={`absolute right-4 top-4 ${
+              isFailed ? "border-red-400" : "border-indigo-400"
+            }`}
           >
-            Completed
+            {isFailed ? "Attempted" : "Completed"}
           </Badge>
         )}
         <CardHeader>
@@ -198,7 +209,7 @@ const QuestProgressElement = ({
           )}
         </CardHeader>
         <CardFooter>
-          {isCurrentquest && (
+          {offerQuest && (
             <Button
               onClick={onClick}
               className="bg-indigo-600 text-white hover:bg-indigo-800"
@@ -217,10 +228,24 @@ const QuestProgressElement = ({
               Start Quest
             </Button>
           )}
-          {isCompleteQuest && (
+          {isCompleteQuest && !(isFailed === true) && (
             <Button variant="outline" disabled={isLoading}>
               {/* Intentionally not using Link here because we want to force a reoload*/}
               <a href={`/play/${params.handle}/quest/${questId}`}>View Quest</a>
+            </Button>
+          )}
+          {isCompleteQuest && isFailed === true && (
+            <Button
+              onClick={onClick}
+              className="bg-indigo-600 text-white hover:bg-indigo-800"
+              disabled={isLoading}
+            >
+              <Redo2Icon className="mr-2" />
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>Try Again</>
+              )}
             </Button>
           )}
         </CardFooter>
@@ -311,6 +336,10 @@ export const QuestProgress = ({
           const isIncompleteQuest = questCount < i + 1;
           const isCompleteQuest = !isCurrentquest && !isIncompleteQuest;
           const questId = gameState?.quests?.[i]?.name;
+          const isFailed = gameState?.quests?.[i]?.completed_success === false;
+          const lastQuestFailed =
+            i > 0 && gameState?.quests?.[i - 1]?.completed_success === false;
+
           return (
             <QuestProgressElement
               totalQuests={questArc.length}
@@ -321,10 +350,12 @@ export const QuestProgress = ({
               index={i}
               key={i}
               setIsClamped={setIsArcClamped}
+              lastQuestFailed={lastQuestFailed}
               isClamped={isArcClamped}
               setLowEnergyModalOpen={setLowEnergyModalOpen}
               adventure={adventure}
               questId={questId}
+              isFailed={isFailed}
               onStartQuest={onStartQuest}
             />
           );
