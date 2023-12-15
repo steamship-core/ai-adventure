@@ -37,43 +37,31 @@ const backfill = async () => {
       separator: "-",
     });
 
+    const data = {
+      email:
+        user.emailAddresses.length === 0
+          ? undefined
+          : user.emailAddresses[0].emailAddress,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      publicMetadata: user.publicMetadata as {},
+      privateMetadata: user.privateMetadata as {},
+      unsafeMetadata: user.unsafeMetadata as {},
+      profileImageUrl: user.imageUrl,
+      emailVerified:
+        user.emailAddresses.length === 0
+          ? undefined
+          : user.emailAddresses[0].emailVerified,
+      username,
+    };
+
     try {
       await prisma.userInfo.upsert({
         create: {
           userId: user.id,
-          email:
-            user.emailAddresses.length === 0
-              ? undefined
-              : user.emailAddresses[0].emailAddress,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          publicMetadata: user.publicMetadata as {},
-          privateMetadata: user.privateMetadata as {},
-          unsafeMetadata: user.unsafeMetadata as {},
-          profileImageUrl: user.imageUrl,
-          emailVerified:
-            user.emailAddresses.length === 0
-              ? undefined
-              : user.emailAddresses[0].emailVerified,
-          username,
+          ...data,
         },
-        update: {
-          email:
-            user.emailAddresses.length === 0
-              ? undefined
-              : user.emailAddresses[0].emailAddress,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          publicMetadata: user.publicMetadata as {},
-          privateMetadata: user.privateMetadata as {},
-          unsafeMetadata: user.unsafeMetadata as {},
-          profileImageUrl: user.imageUrl,
-          emailVerified:
-            user.emailAddresses.length === 0
-              ? undefined
-              : user.emailAddresses[0].emailVerified,
-          username,
-        },
+        update: data,
         where: {
           userId: user.id,
         },
