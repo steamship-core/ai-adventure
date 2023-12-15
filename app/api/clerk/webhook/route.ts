@@ -4,6 +4,12 @@ import { log } from "next-axiom";
 import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { Webhook } from "svix";
+import {
+  NumberDictionary,
+  adjectives,
+  animals,
+  uniqueNamesGenerator,
+} from "unique-names-generator";
 
 export async function POST(request: NextRequest) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -74,13 +80,22 @@ export async function POST(request: NextRequest) {
         emailVerified = emails[0].verification?.status == "verified";
       }
 
+      const numberDictionary = NumberDictionary.generate({
+        min: 100,
+        max: 9999,
+      });
+      const username = uniqueNamesGenerator({
+        dictionaries: [adjectives, animals, numberDictionary],
+        separator: "-",
+      });
+
       const data = {
         userId: evt.data.id,
         firstName: evt.data.first_name,
         lastName: evt.data.last_name,
         email: email,
         emailVerified: emailVerified,
-        username: evt.data.username,
+        username: username,
         profileImageUrl: evt.data.profile_image_url || evt.data.image_url,
         privateMetadata: { ...(evt.data.private_metadata as any) },
         publicMetadata: { ...(evt.data.public_metadata as any) },

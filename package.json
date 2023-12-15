@@ -78,6 +78,7 @@
     "tsx": "^4.6.2",
     "typescript": "^5.3.3",
     "typewriter-effect": "^2.21.0",
+    "unique-names-generator": "^4.7.1",
     "unique-username-generator": "^1.2.0",
     "uuid": "^9.0.1",
     "yaml": "^2.3.3"
