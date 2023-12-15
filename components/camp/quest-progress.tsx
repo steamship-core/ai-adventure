@@ -12,6 +12,7 @@ import {
   Loader2,
   LockIcon,
   MapPinIcon,
+  Redo2Icon,
   SparklesIcon,
 } from "lucide-react";
 import { log } from "next-axiom";
@@ -43,6 +44,7 @@ const QuestProgressElement = ({
   isCurrentquest,
   setLowEnergyModalOpen,
   index,
+  isFailed,
   totalQuests,
   adventure,
   questId,
@@ -54,6 +56,7 @@ const QuestProgressElement = ({
   isCompleteQuest: boolean;
   isCurrentquest: boolean;
   index: number;
+  isFailed?: boolean;
   isClamped: boolean;
   setIsClamped: Dispatch<SetStateAction<boolean>>;
   setLowEnergyModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -217,10 +220,24 @@ const QuestProgressElement = ({
               Start Quest
             </Button>
           )}
-          {isCompleteQuest && (
+          {isCompleteQuest && !(isFailed === true) && (
             <Button variant="outline" disabled={isLoading}>
               {/* Intentionally not using Link here because we want to force a reoload*/}
               <a href={`/play/${params.handle}/quest/${questId}`}>View Quest</a>
+            </Button>
+          )}
+          {isCompleteQuest && isFailed === true && (
+            <Button
+              onClick={onClick}
+              className="bg-indigo-600 text-white hover:bg-indigo-800"
+              disabled={isLoading}
+            >
+              <Redo2Icon className="mr-2" />
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>Try Again</>
+              )}
             </Button>
           )}
         </CardFooter>

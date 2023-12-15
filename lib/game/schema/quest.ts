@@ -26,4 +26,6 @@ export type Quest = {
   rank_delta?: number;
   gold_delta?: number;
   social_media_summary?: string;
+  completed_timestamp?: string;
+  completed_success?: boolean;
 };
