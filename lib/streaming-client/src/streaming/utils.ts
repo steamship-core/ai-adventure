@@ -68,7 +68,10 @@ const stringToStream = (s: string): ReadableStream => {
 
 const isStreamTerminatingBlock = (block: Block) => {
   for (const tag of block?.tags || []) {
-    if (tag.kind == "agent-status-message" && tag.name == "request-complete") {
+    if (
+      tag.kind == "agent-status-message" &&
+      (tag.name == "request-complete" || tag.name == "request-failed")
+    ) {
       return true;
     }
   }

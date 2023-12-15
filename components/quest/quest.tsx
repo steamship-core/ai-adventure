@@ -30,7 +30,7 @@ export default function Quest({
   const [summary, setSummary] = useState<Block | null>(null);
   const { questId } = useParams();
   const quest = gameState?.quests?.find((q) => q.name === questId);
-
+  const [didFail, setFailed] = useState(false);
   const questArcs = gameState?.quest_arc || [];
   const questIndex = gameState?.quests?.findIndex((q) => q.name === questId);
   const questArc = questIndex > questArcs.length ? null : questArcs[questIndex];
@@ -46,8 +46,9 @@ export default function Quest({
     setSummary(summary);
   };
 
-  const onComplete = () => {
+  const onComplete = (failed?: boolean) => {
     setIsComplete(true);
+    setFailed(failed || false);
   };
 
   useEffect(() => {
@@ -77,6 +78,7 @@ export default function Quest({
             onSummary={onSummary}
             onComplete={onComplete}
             isComplete={isComplete}
+            didFail={didFail}
             summary={summary}
             agentBaseUrl={agentBaseUrl}
             completeButtonText={completeButtonText}

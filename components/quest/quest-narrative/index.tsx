@@ -70,17 +70,19 @@ export default function QuestNarrative({
   priorBlocks,
   generateSuggestions,
   adventureId,
+  didFail,
 }: {
   id: string;
   summary: Block | null;
   onSummary: (block: Block) => void;
-  onComplete: () => void;
+  onComplete: (failed?: boolean) => void;
   isComplete: boolean;
   agentBaseUrl: string;
   completeButtonText?: string;
   priorBlocks?: ExtendedBlock[];
   generateSuggestions: () => Promise<any>;
   adventureId?: string;
+  didFail?: boolean;
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -287,6 +289,7 @@ export default function QuestNarrative({
             isEnd={true}
             summary={summary}
             completeButtonText={completeButtonText}
+            didFail={didFail}
           />
         ) : (
           <>

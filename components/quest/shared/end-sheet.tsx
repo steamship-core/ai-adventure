@@ -78,10 +78,12 @@ const EndSheet = ({
   isEnd,
   summary,
   completeButtonText = "Complete Quest",
+  didFail,
 }: {
   isEnd: boolean;
   summary: Block | null;
   completeButtonText?: string;
+  didFail?: boolean;
 }) => {
   const params = useParams<{ handle: string; questId: string }>();
   const [gameState, setGameState] = useState<GameState | null>(null);
@@ -158,64 +160,85 @@ const EndSheet = ({
           className="w-full"
           onClick={onCompleteButtonClick}
         >
-          {completeButtonText}
+          {didFail ? "Quest Failed - View Summary" : completeButtonText}
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="w-100% h-[100dvh] flex flex-col">
         <SheetHeader>
-          <SheetTitle>Your Adventure has come to an end</SheetTitle>
+          <SheetTitle>
+            {didFail ? "Quest Failed" : "Your Adventure has come to an end"}
+          </SheetTitle>
           <SheetDescription>
-            Great job, adventurer. Time to collect your rewards.
+            {didFail
+              ? "Failure is a part of life. Don't let it get you down."
+              : "Great job, adventurer. Time to collect your rewards."}
           </SheetDescription>
         </SheetHeader>
         <SheetBody>
           <TypographyH1 className="text-center mt-4 md:mt-8">
-            Quest Completed
+            {didFail ? "Better luck next time" : "Quest Complete"}
           </TypographyH1>
+          {didFail && (
+            <TypographyMuted className="text-center mt-4 md:mt-8">
+              Unfortunately, you didn&apos;t make it through this quest. But you
+              know what they say: if at first you don&apos;t succeed, try, try
+              again.
+            </TypographyMuted>
+          )}
           <div className="flex items-center justify-center my-4 md:my-8 flex-col gap-6">
-            <Player
-              autoplay
-              src="/award-lottie.json"
-              keepLastFrame
-              className="h-44 w-44"
-            />
-            <TypographyLarge>You did it!</TypographyLarge>
-            <div className="flex gap-6">
-              {quest?.gold_delta && (
-                <TypographySmall className="flex items-center">
-                  <BadgeDollarSignIcon
-                    size={16}
-                    className="mr-2 text-yellow-400"
-                  />
-                  {quest?.gold_delta}
-                </TypographySmall>
-              )}
-              {quest?.new_items && (
-                <TypographySmall className="flex items-center">
-                  <PackageIcon size={16} className="mr-2 text-blue-400" />
-                  {quest?.new_items?.length}
-                </TypographySmall>
-              )}
-            </div>
+            {!didFail && (
+              <>
+                <Player
+                  autoplay
+                  src="/award-lottie.json"
+                  keepLastFrame
+                  className="h-44 w-44"
+                />
+                <TypographyLarge>You did it!</TypographyLarge>
+                <div className="flex gap-6">
+                  {quest?.gold_delta && (
+                    <TypographySmall className="flex items-center">
+                      <BadgeDollarSignIcon
+                        size={16}
+                        className="mr-2 text-yellow-400"
+                      />
+                      {quest?.gold_delta}
+                    </TypographySmall>
+                  )}
+                  {quest?.new_items && (
+                    <TypographySmall className="flex items-center">
+                      <PackageIcon size={16} className="mr-2 text-blue-400" />
+                      {quest?.new_items?.length}
+                    </TypographySmall>
+                  )}
+                </div>
+              </>
+            )}
             <div className="flex flex-col gap-2 items-center justify-center w-full my-4">
               <Button asChild className="w-full">
                 <a href={`/play/${params.handle}/camp`}>Back to camp</a>
               </Button>
-              <a
-                className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-md w-full flex items-center gap-2 justify-center"
-                href={twitterLink.href}
-                target="_blank"
-              >
-                <TwitterIcon size={16} /> Share on Twitter
-              </a>
+              {!didFail && (
+                <a
+                  className="bg-[#00aced] hover:bg-[#0084b4] text-white font-bold text-base py-2 px-4 rounded-md w-full flex items-center gap-2 justify-center"
+                  href={twitterLink.href}
+                  target="_blank"
+                >
+                  <TwitterIcon size={16} /> Share on Twitter
+                </a>
+              )}
             </div>
           </div>
-          <TypographyH3>Journey Overview</TypographyH3>
-          <TypographyMuted className="text-base mb-12">
-            {summary && summary.text}
-          </TypographyMuted>
-          <TypographyH3>Items Gained</TypographyH3>
-          <ItemsGained gameState={gameState} quest={quest} />
+          {!didFail && (
+            <>
+              <TypographyH3>Journey Overview</TypographyH3>
+              <TypographyMuted className="text-base mb-12">
+                {summary && summary.text}
+              </TypographyMuted>
+              <TypographyH3>Items Gained</TypographyH3>
+              <ItemsGained gameState={gameState} quest={quest} />
+            </>
+          )}
           <FeedbackForm onComplete={() => null} />
         </SheetBody>
       </SheetContent>

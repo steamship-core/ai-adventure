@@ -17,6 +17,7 @@ export const MessageTypes = {
   TEXT: "TEXT",
   QUEST_ARC: "QUEST_ARC",
   DICE_ROLL: "DICE_ROLL",
+  QUEST_FAILED: "QUEST_FAILED",
 } as const;
 
 export const validTypes = [
@@ -54,6 +55,9 @@ export const getMessageType = (block: Block) => {
   }
   if (block.tags?.find((tag) => tag.name === "quest-complete")) {
     return MessageTypes.QUEST_COMPLETE;
+  }
+  if (block.tags?.find((tag) => tag.name === "quest-failed")) {
+    return MessageTypes.QUEST_FAILED;
   }
   if (block.tags?.find((tag) => tag.name === "quest_summary")) {
     return MessageTypes.QUEST_SUMMARY;
