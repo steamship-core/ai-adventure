@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
 
-export const GET = withAxiom(async (request: Request) => {
+export const POST = withAxiom(async (request: Request) => {
   const searchParams = new URL(request.url).searchParams;
   const redirectUrl =
     searchParams.get("redirectUrl") ||

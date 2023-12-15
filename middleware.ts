@@ -13,6 +13,7 @@ const authMiddlewareConfig = {
     "/api/adventure",
     "/sitemap.xml",
     "/api/cron/(.*)",
+    "/api/clerk/webhook",
     "/share/quest",
     "/_axiom/logs",
     "/api/shared/(.*)",
