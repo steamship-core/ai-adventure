@@ -115,7 +115,7 @@ model UserInfo {
   firstName       String?
   lastName        String?
   email           String?
-  username        String?
+  username        String?  @unique
   emailVerified   Boolean?
   profileImageUrl String?
   privateMetadata Json?
