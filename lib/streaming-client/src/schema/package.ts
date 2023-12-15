@@ -84,8 +84,8 @@ export interface IPackageClient {
   }): Promise<Response>;
 
   waitForInit({
-    timeoutSeconds = 0.5,
-    retryCount = 15,
+    timeoutSeconds,
+    retryCount,
     handle,
     id,
   }: {
