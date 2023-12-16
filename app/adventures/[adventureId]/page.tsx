@@ -166,6 +166,11 @@ export default async function AdventurePage({
   const userReactionMap = userReactions.map((reaction) => reaction.emojiId);
 
   const isCreator = adventure.creatorId === userId;
+  const ownerUserInfo = await prisma.userInfo.findUnique({
+    where: {
+      userId: adventure.creatorId,
+    },
+  });
   return (
     <div>
       <div className="relative h-96 w-full mt-2">
@@ -201,7 +206,10 @@ export default async function AdventurePage({
           </div>
         </div>
       </div>
-      <StartAdventureSection adventure={adventure} />
+      <StartAdventureSection
+        adventure={adventure}
+        ownerUserInfo={ownerUserInfo}
+      />
       <div className="mt-8">
         <TypographyH3>Snippets from this adventure</TypographyH3>
         <TypographyMuted>
