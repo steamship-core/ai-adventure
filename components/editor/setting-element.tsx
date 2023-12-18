@@ -28,6 +28,7 @@ import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
 import { recoilErrorModalState } from "../providers/recoil";
 import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
 import { Switch } from "../ui/switch";
 import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyP } from "../ui/typography/TypographyP";
@@ -153,6 +154,20 @@ export default function SettingElement({
     const newValue = e.target.value;
     setValue(newValue);
     updateFn(setting.name, newValue);
+  };
+
+  const onSliderChange = (newValue: number[]) => {
+    if (
+      typeof setting.min !== "undefined" &&
+      setting.min >= 0 &&
+      newValue[0] < setting.min
+    ) {
+      setValue(setting.min);
+      updateFn(setting.name, setting.min);
+      return;
+    }
+    setValue(newValue[0]);
+    updateFn(setting.name, newValue[0]);
   };
 
   const onTextboxIntChange = (
@@ -294,28 +309,62 @@ export default function SettingElement({
       />
     );
   } else if (setting.type === "int") {
-    innerField = (
-      <Input
-        type="number"
-        step="1"
-        value={value}
-        onChange={onTextboxIntChange}
-        isLoadingMagic={suggesting}
-        disabled={suggesting}
-        min={setting.min || 0}
-      />
-    );
+    if (setting.min !== undefined && setting.max !== undefined) {
+      innerField = (
+        <div className="flex flex-col gap-4">
+          <div className="text-right">
+            <TypographyMuted>{value}</TypographyMuted>
+          </div>
+          <Slider
+            onValueChange={onSliderChange}
+            min={setting.min}
+            max={setting.max}
+            step={1}
+            value={[value]}
+          />
+        </div>
+      );
+    } else {
+      innerField = (
+        <Input
+          type="number"
+          step="1"
+          value={value}
+          onChange={onTextboxIntChange}
+          isLoadingMagic={suggesting}
+          disabled={suggesting}
+          min={setting.min || 0}
+        />
+      );
+    }
   } else if (setting.type === "float") {
-    innerField = (
-      <Input
-        type="number"
-        value={value}
-        onChange={onTextboxFloatChange}
-        isLoadingMagic={suggesting}
-        disabled={suggesting}
-        min={setting.min || 0}
-      />
-    );
+    if (setting.min !== undefined && setting.max !== undefined) {
+      innerField = (
+        <div className="flex flex-col gap-4">
+          <div className="text-right">
+            <TypographyMuted>{value}</TypographyMuted>
+          </div>
+          <Slider
+            onValueChange={onSliderChange}
+            min={setting.min}
+            max={setting.max}
+            value={[value]}
+            step={0.1}
+          />
+        </div>
+      );
+    } else {
+      innerField = (
+        <Input
+          type="number"
+          value={value}
+          onChange={onTextboxFloatChange}
+          isLoadingMagic={suggesting}
+          disabled={suggesting}
+          min={setting.min || 0}
+        />
+      );
+    }
   } else if (setting.type === "image") {
     innerField = (
       <ImageInputElement

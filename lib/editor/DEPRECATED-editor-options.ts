@@ -77,6 +77,7 @@ export type Setting = {
   approvalRequestedField?: string;
   variablesPermitted?: Record<string, string>;
   min?: number;
+  max?: number;
   onboardingTitle?: string;
   onboardingSubtitle?: string;
 };
