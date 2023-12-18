@@ -25,7 +25,7 @@ const EditorActions = ({
 
   return (
     <>
-      <div className="flex flex-row space-x-2" id="publish-section">
+      <div className="flex flex-row gap-2 flex-wrap" id="publish-section">
         <EditorBackButton />
         {!isGenerating && (
           <>
