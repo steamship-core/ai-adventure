@@ -264,16 +264,14 @@ export default function QuestNarrative({
               return <UserInputBlock text={message.content} key={message.id} />;
             }
             return (
-              <>
-                <NarrativeBlock
-                  key={message.id}
-                  offerAudio
-                  blocks={getFormattedBlocks(message, nonPersistedUserInput)}
-                  onSummary={onSummary}
-                  onComplete={onComplete}
-                  orderedBlocks={orderedBlocks}
-                />
-              </>
+              <NarrativeBlock
+                key={message.id}
+                offerAudio
+                blocks={getFormattedBlocks(message, nonPersistedUserInput)}
+                onSummary={onSummary}
+                onComplete={onComplete}
+                orderedBlocks={orderedBlocks}
+              />
             );
           })}
           {messages.length > 1 &&
