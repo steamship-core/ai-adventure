@@ -1,4 +1,5 @@
 import { useCompletion } from "ai/react";
+import { log } from "next-axiom";
 import { useEffect, useState } from "react";
 
 export const useBlockStream = ({
@@ -22,6 +23,7 @@ export const useBlockStream = ({
     onFinish,
     onError(error) {
       console.error(error);
+      log.error(`${error}`);
       handleRetry();
     },
   });
@@ -45,6 +47,7 @@ export const useBlockStream = ({
   useEffect(() => {
     if (retryCount >= maxRetries) {
       console.error(`Max retries reached for blockId ${blockId}`);
+      log.error(`Max retries reached for blockId ${blockId}`);
       setError(true);
     }
   }, [retryCount, maxRetries, blockId]);
