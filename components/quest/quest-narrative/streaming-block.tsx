@@ -19,10 +19,6 @@ const CompletionBlock = ({
 }) => {
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
-  const wasAlreadyComplete = useMemo(
-    () => block?.streamState !== "complete",
-    []
-  );
   const [didComplete, setDidComplete] = useState(false);
   const alreadyFinishedAndOfferAudio =
     block?.streamState === "complete" && offerAudio === true;
@@ -30,9 +26,13 @@ const CompletionBlock = ({
 
   const onFinish = () => {
     setFinishedAndOfferAudio(offerAudio === true);
+  };
+
+  const onFinishedRendering = () => {
     setDidComplete(true);
     setContinuationState(true);
   };
+
   const { completion } = useBlockStream({ blockId: block.id, onFinish });
 
   return (
@@ -40,10 +40,11 @@ const CompletionBlock = ({
       blockId={block.id}
       offerAudio={alreadyFinishedAndOfferAudio || finishedAndOfferAudio}
       text={completion}
-      wasAlreadyComplete={wasAlreadyComplete}
+      wasAlreadyComplete={false}
       didComplete={didComplete}
       hideOutput={hideOutput}
       isPrior={isPrior}
+      onFinishedRendering={onFinishedRendering}
     />
   );
 };
@@ -76,7 +77,7 @@ export const StreamingBlock = ({
         blockId={block.id}
         offerAudio={alreadyFinishedAndOfferAudio}
         text={block.text!}
-        wasAlreadyComplete={wasAlreadyComplete}
+        wasAlreadyComplete={true}
         didComplete={true}
         hideOutput={hideOutput}
         isPrior={isPrior}

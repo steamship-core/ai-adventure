@@ -15,9 +15,11 @@ const FadingText = ({ text }: { text: string }) => {
 const MessageDisplay = ({
   message,
   wasAlreadyComplete,
+  onFinishedRendering,
 }: {
   message: string;
   wasAlreadyComplete: boolean;
+  onFinishedRendering?: () => void;
 }) => {
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
   const [chunks, setChunks] = useState<string[]>([]);
@@ -25,7 +27,7 @@ const MessageDisplay = ({
   const delay = 50;
 
   useEffect(() => {
-    if (wasAlreadyComplete && currentChunkIndex < message.length) {
+    if (!wasAlreadyComplete && currentChunkIndex < message.length) {
       const interval = setInterval(() => {
         const nextChunkEnd = Math.min(
           currentChunkIndex + chunkSize,
@@ -34,13 +36,16 @@ const MessageDisplay = ({
         const nextChunk = message.substring(currentChunkIndex, nextChunkEnd);
         setChunks((prevChunks) => [...prevChunks, nextChunk]);
         setCurrentChunkIndex(nextChunkEnd);
+        if (nextChunkEnd >= message.length) {
+          onFinishedRendering?.();
+        }
       }, delay);
 
       return () => clearInterval(interval);
     }
   }, [message, wasAlreadyComplete, currentChunkIndex, chunkSize, delay]);
 
-  if (!wasAlreadyComplete) {
+  if (wasAlreadyComplete) {
     return <FadingText text={message} />;
   }
 
@@ -54,13 +59,8 @@ const MessageDisplay = ({
 };
 
 export const TextBlock = ({
-  text,
-  blockId,
-  offerAudio,
   hideOutput,
-  didComplete,
-  wasAlreadyComplete = false,
-  isPrior,
+  ...rest
 }: {
   text: string;
   blockId?: string;
@@ -69,20 +69,38 @@ export const TextBlock = ({
   didComplete?: boolean;
   wasAlreadyComplete?: boolean;
   isPrior?: boolean;
+  onFinishedRendering?: () => void;
+}) => {
+  if (hideOutput) {
+    return null;
+  }
+
+  return <TextBlockInner {...rest} />;
+};
+
+export const TextBlockInner = ({
+  text,
+  blockId,
+  offerAudio,
+  didComplete,
+  wasAlreadyComplete = false,
+  isPrior,
+  onFinishedRendering,
+}: {
+  text: string;
+  blockId?: string;
+  offerAudio?: boolean;
+  didComplete?: boolean;
+  wasAlreadyComplete?: boolean;
+  isPrior?: boolean;
+  onFinishedRendering?: () => void;
 }) => {
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
   const [isHover, setIsHover] = useState(false);
 
   useEffect(() => {
-    if (hideOutput) return;
-    if (wasAlreadyComplete) {
-      setContinuationState(true);
-    }
+    setContinuationState(false);
   }, []);
-
-  if (hideOutput) {
-    return null;
-  }
 
   const _text = addNewlines(text);
 
@@ -103,6 +121,7 @@ export const TextBlock = ({
               <MessageDisplay
                 message={_text}
                 wasAlreadyComplete={wasAlreadyComplete}
+                onFinishedRendering={onFinishedRendering}
               />
             ) : (
               <span>{_text}</span>
