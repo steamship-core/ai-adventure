@@ -1,7 +1,8 @@
 "use client";
+import { resetDevAgent } from "@/app/actions/adventure";
 import { amplitude } from "@/lib/amplitude";
 import { useEditorRouting } from "@/lib/editor/use-editor";
-import { SparklesIcon } from "lucide-react";
+import { SparklesIcon, Undo2Icon } from "lucide-react";
 import { log } from "next-axiom";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -15,6 +16,8 @@ const PublishButton = ({
   onPublish: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isUndoLoading, setIsUndoLoading] = useState(false);
+
   const [isVisible, setIsVisible] = useState(true);
   const { adventureId } = useEditorRouting();
   const { toast } = useToast();
@@ -59,6 +62,13 @@ const PublishButton = ({
     log.debug(`Published Adventure: ${adventureId}`);
   };
 
+  const undoChanges = async () => {
+    setIsUndoLoading(true);
+    await resetDevAgent(adventureId as string);
+    window.location.reload();
+    setIsUndoLoading(false);
+  };
+
   return (
     <>
       <Button
@@ -70,6 +80,16 @@ const PublishButton = ({
       >
         <SparklesIcon className="h-6 w-6 fill-blue-600 text-blue-600 mr-2" />
         Publish
+      </Button>
+      <Button
+        onClick={undoChanges}
+        isLoading={isUndoLoading}
+        disabled={isUndoLoading}
+        className={`justify-start ${className}`}
+        variant="outline"
+      >
+        <Undo2Icon className="h-6 w-6  mr-2" />
+        Undo all changes
       </Button>
     </>
   );
