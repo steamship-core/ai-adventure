@@ -2,8 +2,9 @@ export const dynamic = "force-dynamic";
 
 import Logs from "@/components/logs/Logs";
 import { getAgent } from "@/lib/agent/agent.server";
-import { getLogs } from "@/lib/agent/agentSteamship.server";
-import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
+import { getWorkspaceId } from "@/lib/agent/agentSteamship.server";
+import { isUserAdmin } from "@/lib/user/is-admin";
+import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -12,11 +13,17 @@ export default async function QuestPage({
 }: {
   params: { handle: string; questId: string };
 }) {
-  const userId = getUserIdFromClerkOrAnon();
+  const isAdmin = await isUserAdmin();
+  const { userId } = auth();
+
+  if (!isAdmin) {
+    log.error("Not an admin");
+    throw new Error("Not an admin");
+  }
 
   if (!userId) {
-    log.error("No user");
-    throw new Error("no user");
+    log.error("No user id");
+    throw new Error("No user id");
   }
 
   const agent = await getAgent(userId, params.handle);
@@ -25,16 +32,15 @@ export default async function QuestPage({
   }
 
   const workspaceHandle = agent.handle;
-
-  const logs = await getLogs(workspaceHandle);
-
-  console.log(logs);
+  const workspaceId = await getWorkspaceId(workspaceHandle);
 
   return (
     <Logs
       workspaceHandle={agent.handle}
       gameEngineVersion={agent.agentVersion || "Unknown"}
       agentBaseUrl={agent.agentUrl}
+      elasticLink={process.env.ELASTIC_LINK}
+      workspaceId={workspaceId}
       adventureId={agent.adventureId!}
     />
   );
