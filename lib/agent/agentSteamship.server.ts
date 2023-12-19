@@ -1,3 +1,5 @@
+"use server";
+
 import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
@@ -116,6 +118,37 @@ export const getSchema = async (agentBase: string) => {
     // TODO: The server returns a list of SettingGroup objects.
     const schemaResponseJson = await schemaResponse.json();
     return { settingGroups: schemaResponseJson };
+  } catch (e) {
+    log.error(`${e}`);
+    console.error(e);
+    throw Error("Failed to create agent.");
+  }
+};
+
+export const getLogs = async (workspaceHandle: string) => {
+  console.log(`getLogs -  workspace ${workspaceHandle}`);
+  log.info(`getLogs -  workspace ${workspaceHandle}`);
+
+  const steamship = await getSteamshipClient().switchWorkspace({
+    workspace: workspaceHandle,
+  });
+
+  steamship.config.apiKey = process.env.STEAMSHIP_LOGS_KEY;
+
+  console.log(steamship.config.workspaceId);
+  console.log(steamship.config.workspace);
+  console.log(steamship.config);
+
+  const payload = {
+    size: 1000,
+  };
+
+  console.log(payload);
+
+  try {
+    const logList = await steamship.post("/logs/list", payload);
+    const logListJson = logList.json();
+    return logListJson;
   } catch (e) {
     log.error(`${e}`);
     console.error(e);
