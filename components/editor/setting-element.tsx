@@ -291,6 +291,7 @@ export default function SettingElement(props: SettingElementProps) {
       setValue((items: any[]) => {
         const oldIndex = items.findIndex((i) => i.id === active.id);
         const newIndex = items.findIndex((i) => i.id === over.id);
+        updateFn(setting.name, arrayMove(items, oldIndex, newIndex));
         return arrayMove(items, oldIndex, newIndex);
       });
     }
@@ -300,6 +301,7 @@ export default function SettingElement(props: SettingElementProps) {
     setValue((items: any[]) => {
       const oldIndex = items.findIndex((i) => i.id === id);
       const newIndex = index;
+      updateFn(setting.name, arrayMove(items, oldIndex, newIndex));
       return arrayMove(items, oldIndex, newIndex);
     });
   };

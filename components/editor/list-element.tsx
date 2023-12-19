@@ -69,12 +69,8 @@ export function SortableItem(props: any) {
           )}
         </div>
         <div className="flex flex-col gap-4 w-full h-full">
-          <Collapsible
-            open={open}
-            onOpenChange={(o) => setOpen(o)}
-            className="h-full flex"
-          >
-            <div className="flex w-full">
+          <Collapsible open={open} onOpenChange={(o) => setOpen(o)}>
+            <div className="flex w-full items-center">
               <div className="w-full text-base flex items-center h-full">
                 {props.title || "Untitled"}
               </div>
