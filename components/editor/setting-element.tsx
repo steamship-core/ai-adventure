@@ -2,13 +2,7 @@
 import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
 import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import {
-  AlertTriangleIcon,
-  ChevronsUpDownIcon,
-  Loader2,
-  MinusCircleIcon,
-  PlusCircleIcon,
-} from "lucide-react";
+import { AlertTriangleIcon, ChevronsUpDownIcon, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
@@ -24,8 +18,10 @@ import { TypographyLead } from "../ui/typography/TypographyLead";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import { AudioPreview } from "./audio-preview";
 // import TagListElement from "./tag-list-element";
+import { arrayMove } from "@dnd-kit/sortable";
 import dynamic from "next/dynamic";
 import { useRecoilState } from "recoil";
+import { v4 } from "uuid";
 import { recoilErrorModalState } from "../providers/recoil";
 import { Label } from "../ui/label";
 import { Slider } from "../ui/slider";
@@ -34,6 +30,7 @@ import { TypographyLarge } from "../ui/typography/TypographyLarge";
 import { TypographyP } from "../ui/typography/TypographyP";
 import ImageInputElement from "./image-input-element";
 import { ImagePreview } from "./image-preview";
+import { ListElement } from "./list-element";
 import ProgramInputElement from "./program-input-element";
 
 const TagListElement = dynamic(() => import("./tag-list-element"), {
@@ -50,20 +47,7 @@ function findPromptVariables(input: string): string[] {
   return [];
 }
 
-export default function SettingElement({
-  setting,
-  updateFn,
-  valueAtLoad,
-  suggestField,
-  previewField,
-  inlined = false,
-  existingDynamicThemes = [],
-  keypath = [],
-  isUserApproved,
-  isApprovalRequested,
-  adventureId = "",
-  latestAgentVersion = "",
-}: {
+export type SettingElementProps = {
   setting: Setting;
   updateFn: (key: string, value: any) => void;
   valueAtLoad: any;
@@ -87,8 +71,37 @@ export default function SettingElement({
   isApprovalRequested: boolean;
   adventureId?: string;
   latestAgentVersion: string;
-}) {
-  let [value, setValue] = useState(valueAtLoad || setting.default);
+};
+
+const assignIds = (obj: any) => {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => {
+      if (typeof item == "object" && !item.id) {
+        return { ...item, id: v4() };
+      } else {
+        return item;
+      }
+    });
+  }
+  return obj;
+};
+
+export default function SettingElement(props: SettingElementProps) {
+  const {
+    setting,
+    updateFn,
+    valueAtLoad,
+    suggestField,
+    previewField,
+    inlined = false,
+    existingDynamicThemes = [],
+    keypath = [],
+    isUserApproved,
+    isApprovalRequested,
+    adventureId = "",
+    latestAgentVersion = "",
+  } = props;
+  let [value, setValue] = useState(assignIds(valueAtLoad || setting.default));
   let [imagePreview, setImagePreview] = useState<string | undefined>();
   let [imagePreviewBlock, setImagePreviewBlock] = useState<Block>();
   let [imagePreviewLoading, setImagePreviewLoading] = useState<boolean>(false);
@@ -242,23 +255,52 @@ export default function SettingElement({
     );
   };
 
-  const addToList = (e: any) => {
+  const addToList = (index: number) => {
     const newVal =
-      setting.listof == "object" ? {} : setting.listof == "text" ? "" : null;
+      setting.listof == "object"
+        ? {
+            id: v4(),
+          }
+        : setting.listof == "text"
+        ? ""
+        : null;
+    setValue((old: any[]) => {
+      const arrayWithNewVal = [
+        ...old.slice(0, index),
+        newVal,
+        ...old.slice(index),
+      ];
+      updateFn(setting.name, arrayWithNewVal);
+      return arrayWithNewVal;
+    });
+  };
+
+  const removeItem = (id: string) => {
     setValue((old: any) => {
-      const ret = [...(Array.isArray(old) ? old : []), newVal];
+      const ret = (old || []).filter((item: any) => {
+        return item.id && item.id !== id;
+      });
       updateFn(setting.name, ret);
       return ret;
     });
   };
 
-  const removeItem = (i: number) => {
-    setValue((old: any) => {
-      const ret = (old || []).filter((_: any, index: number) => {
-        return i != index;
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setValue((items: any[]) => {
+        const oldIndex = items.findIndex((i) => i.id === active.id);
+        const newIndex = items.findIndex((i) => i.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
       });
-      updateFn(setting.name, ret);
-      return ret;
+    }
+  };
+
+  const moveTo = (id: string, index: number) => {
+    setValue((items: any[]) => {
+      const oldIndex = items.findIndex((i) => i.id === id);
+      const newIndex = index;
+      return arrayMove(items, oldIndex, newIndex);
     });
   };
 
@@ -521,79 +563,17 @@ export default function SettingElement({
       </div>
     );
   } else if (setting.type == "list") {
-    const _value = Array.isArray(value) ? value : [];
     innerField = (
-      <div>
-        <ul>
-          {_value.map((subValue: any, i: number) => {
-            const remove = () => {
-              removeItem(i);
-            };
-            return (
-              <li
-                key={`${setting.name}.${i}`}
-                className="flex flex-row items-start space-y-3"
-              >
-                <button onClick={remove} className="px-4 mt-4">
-                  <MinusCircleIcon />
-                </button>
-                <div className="border-l-4 pl-4 py-4">
-                  {setting.listof == "object" ? (
-                    (setting.listSchema || []).map((subField, idx) => {
-                      return (
-                        <SettingElement
-                          key={`${setting.name}.${i}.${subField.name}`}
-                          valueAtLoad={subValue[subField.name] || []}
-                          setting={subField}
-                          suggestField={suggestField}
-                          keypath={[...keypath, i, subField.name]}
-                          previewField={previewField}
-                          existingDynamicThemes={existingDynamicThemes}
-                          adventureId={adventureId as string}
-                          updateFn={(subFieldName: string, value: any) => {
-                            updateItem({
-                              index: i,
-                              subField: subFieldName,
-                              value: value,
-                            });
-                          }}
-                          isUserApproved={isUserApproved}
-                          isApprovalRequested={isApprovalRequested}
-                          latestAgentVersion={latestAgentVersion}
-                        />
-                      );
-                    })
-                  ) : (
-                    <SettingElement
-                      key={`${setting.name}.${i}._`}
-                      valueAtLoad={subValue || null}
-                      adventureId={adventureId as string}
-                      existingDynamicThemes={existingDynamicThemes}
-                      setting={{
-                        ...setting,
-                        type: setting.listof as any,
-                      }}
-                      suggestField={suggestField}
-                      keypath={[...keypath, i]}
-                      previewField={previewField}
-                      inlined={true}
-                      updateFn={(_: any, value: any) => {
-                        updateItem({ index: i, value: value });
-                      }}
-                      isUserApproved={isUserApproved}
-                      isApprovalRequested={isApprovalRequested}
-                      latestAgentVersion={latestAgentVersion}
-                    />
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-        <button onClick={addToList} className="flex flex-row items-center mt-4">
-          <PlusCircleIcon /> &nbsp; Add New
-        </button>
-      </div>
+      <ListElement
+        {...props}
+        handleDragEnd={handleDragEnd}
+        value={value}
+        setting={setting}
+        updateItem={updateItem}
+        onRemove={removeItem}
+        addToList={addToList}
+        moveTo={moveTo}
+      />
     );
   }
 
@@ -607,26 +587,28 @@ export default function SettingElement({
 
   return (
     <div className="flex flex-col gap-2" id={setting.name}>
-      {!inlined && setting.type != "divider" && (
-        <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
-      )}
-      {!inlined && setting.unused && (
-        <Alert className="my-2 border-red-200">
-          <AlertTriangleIcon className="h-4 w-4 mt-2" />
-          <AlertTitle className="text-lg">Coming Soon</AlertTitle>
-          <AlertDescription>
-            This setting isn&apos;t yet wired in to gameplay.
-          </AlertDescription>
-        </Alert>
-      )}
-      {!inlined &&
-        !isDisabled &&
-        setting.type != "divider" &&
-        setting.description && (
-          <div className="text-sm text-muted-foreground mb-2">
-            {setting.description}
-          </div>
-        )}{" "}
+      <div>
+        {!inlined && setting.type != "divider" && (
+          <TypographyLead className="space-y-6">{setting.label}</TypographyLead>
+        )}
+        {!inlined && setting.unused && (
+          <Alert className="my-2 border-red-200">
+            <AlertTriangleIcon className="h-4 w-4 mt-2" />
+            <AlertTitle className="text-lg">Coming Soon</AlertTitle>
+            <AlertDescription>
+              This setting isn&apos;t yet wired in to gameplay.
+            </AlertDescription>
+          </Alert>
+        )}
+        {!inlined &&
+          !isDisabled &&
+          setting.type != "divider" &&
+          setting.description && (
+            <TypographyMuted className="text-sm">
+              {setting.description}
+            </TypographyMuted>
+          )}
+      </div>
       {(imagePreview || imagePreviewBlock || imagePreviewLoading) && (
         <ImagePreview url={imagePreview} block={imagePreviewBlock} />
       )}
