@@ -68,7 +68,7 @@ export default function QuestNarrative({
   agentBaseUrl,
   completeButtonText,
   priorBlocks,
-  generateSuggestions,
+  agentHandle,
   adventureId,
   didFail,
 }: {
@@ -80,7 +80,7 @@ export default function QuestNarrative({
   agentBaseUrl: string;
   completeButtonText?: string;
   priorBlocks?: ExtendedBlock[];
-  generateSuggestions: () => Promise<any>;
+  agentHandle?: string;
   adventureId?: string;
   didFail?: boolean;
 }) {
@@ -302,7 +302,7 @@ export default function QuestNarrative({
                 isLoading={isLoading}
                 isComplete={isComplete}
                 setInput={setInput}
-                generateSuggestions={generateSuggestions}
+                agentHandle={agentHandle}
               />
             ) : (
               <Button

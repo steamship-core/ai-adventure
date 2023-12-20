@@ -22,7 +22,7 @@ export const StartAdventureSection = ({
   return (
     <div className="p-4 md:p-6 flex gap-6 flex-col">
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between flex-col md:flex-row w-full items-start md:items-start">
+        <div className="flex justify-between flex-col md:flex-row w-full items-start md:items-start gap-2">
           <div>
             <TypographyMuted>Adventure name</TypographyMuted>
             <TypographyH1>{adventure.name}</TypographyH1>
@@ -30,7 +30,19 @@ export const StartAdventureSection = ({
           {ownerUserInfo && (
             <div>
               <TypographyMuted>Created by</TypographyMuted>
-              <TypographyH3>{ownerUserInfo.username}</TypographyH3>
+              <div className="flex gap-2 items-center">
+                {ownerUserInfo?.avatarImage && (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      alt={ownerUserInfo.username || "Profile picture"}
+                      src={ownerUserInfo.avatarImage}
+                      className="rounded-md h-12 w-12"
+                    />
+                  </>
+                )}
+                <TypographyH3>{ownerUserInfo.username}</TypographyH3>
+              </div>
             </div>
           )}
         </div>

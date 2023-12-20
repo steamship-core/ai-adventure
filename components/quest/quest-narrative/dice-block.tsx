@@ -1,14 +1,19 @@
-import { recoilContinuationState } from "@/components/providers/recoil";
+import {
+  recoilContinuationState,
+  recoilGameState,
+} from "@/components/providers/recoil";
 import { TypographyH4 } from "@/components/ui/typography/TypographyH4";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
+import { GradientText } from "@/components/ui/typography/gradient-text";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { PointerIcon, XIcon } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { BlockContainer } from "./block-container";
 
 const RollingDie = ({
@@ -16,11 +21,15 @@ const RollingDie = ({
   rolled,
   success,
   disableAnimation,
+  itemUsed,
+  itemUsedId,
 }: {
   required: number;
   rolled: number;
   success: boolean;
   disableAnimation: boolean;
+  itemUsed?: string;
+  itemUsedId?: string;
 }) => {
   const [num, setNum] = useState(disableAnimation ? rolled : 1);
   const [showStatus, setShowStatus] = useState(
@@ -31,6 +40,7 @@ const RollingDie = ({
   );
   const [clickedRollDie, setClickedRollDie] = useState(false);
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
+  const gameState = useRecoilValue(recoilGameState);
 
   const [, setContinuationState] = useRecoilState(recoilContinuationState);
 
@@ -61,6 +71,10 @@ const RollingDie = ({
   const isTwenty = num === 20 && rolled === 20;
   const isOne = num === 1 && rolled === 1;
 
+  const item =
+    itemUsedId &&
+    gameState?.player?.inventory.find((item) => item.id === itemUsedId);
+
   return (
     <BlockContainer
       className="flex flex-col items-center justify-center py-8"
@@ -72,6 +86,29 @@ const RollingDie = ({
         <br />
         You must roll a <b>{required} or higher </b> to succeed.
       </TypographyMuted>
+      {itemUsed && (
+        <div>
+          <TypographyMuted className="text-center my-2">
+            Using the{" "}
+            <GradientText className="font-bold">{itemUsed}</GradientText>
+          </TypographyMuted>
+          {item && item.picture_url && (
+            <div className="items-center flex justify-center">
+              <div className="relative p-[1px] h-20 aspect-square">
+                <div className="relative h-full w-full">
+                  <Image
+                    src={item.picture_url}
+                    alt={itemUsed}
+                    fill
+                    className="object-cover rounded-md"
+                  />
+                </div>
+                <div className="absolute -z-10 top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500 to-fuchsia-500  rounded-md animate-pulse" />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
       <button
         className={cn(
           "relative rounded-md mt-2 aspect-square text-center flex items-center justify-center py-2 hover:cursor-pointer"
@@ -145,6 +182,8 @@ export const DiceRollBlock = ({
       required: number;
       rolled: number;
       success: boolean;
+      item_used?: string;
+      item_used_id?: string;
     };
   } catch (e) {
     return null;
@@ -163,6 +202,8 @@ export const DiceRollBlock = ({
       rolled={rolled}
       success={resultJson.success}
       disableAnimation={disableAnimation}
+      itemUsed={resultJson.item_used}
+      itemUsedId={resultJson.item_used_id}
     />
   );
 };

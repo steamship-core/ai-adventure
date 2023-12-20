@@ -28,22 +28,30 @@ type InteractionOptions = "custom" | "suggest" | "none";
 const SuggestionSheet = ({
   setSelectedOption,
   setInput,
-  generateSuggestions,
+  agentHandle,
   disabled,
 }: {
   setInput: Dispatch<SetStateAction<string>>;
   setSelectedOption: Dispatch<SetStateAction<InteractionOptions>>;
-  generateSuggestions: () => Promise<any>;
+  agentHandle?: string;
   disabled: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState(false);
 
+  const fetchSuggestionsApi = async () => {
+    const response = await fetch(`/api/agent/${agentHandle}/suggestAction`, {
+      method: "POST",
+    });
+    const choices = response.json();
+    return choices;
+  };
+
   const getSuggestions = async () => {
     setIsLoading(true);
     setSuggestions([]);
-    const s = (await generateSuggestions()) as Promise<
+    const s = (await fetchSuggestionsApi()) as Promise<
       string[] | { status: { state: string; statusMessage: string } }
     >;
     if (Array.isArray(s)) {
@@ -124,7 +132,7 @@ const InteractionBox = ({
   isLoading,
   isComplete,
   setInput,
-  generateSuggestions,
+  agentHandle,
 }: {
   formRef: React.RefObject<HTMLFormElement>;
   inputRef: React.RefObject<HTMLTextAreaElement>;
@@ -135,7 +143,7 @@ const InteractionBox = ({
   isLoading: boolean;
   isComplete: boolean;
   setInput: Dispatch<SetStateAction<string>>;
-  generateSuggestions: () => Promise<any>;
+  agentHandle?: string;
 }) => {
   const [selectedOption, setSelectedOption] =
     useState<InteractionOptions>("none");
@@ -157,7 +165,7 @@ const InteractionBox = ({
           <SuggestionSheet
             setSelectedOption={setSelectedOption}
             setInput={setInput}
-            generateSuggestions={generateSuggestions}
+            agentHandle={agentHandle}
             disabled={isLoading || isComplete}
           />
           <Button

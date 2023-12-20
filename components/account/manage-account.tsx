@@ -3,7 +3,6 @@
 import { cn } from "@/lib/utils";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { UserInfo } from "@prisma/client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
@@ -37,13 +36,16 @@ const ManageAccount = ({ userInfo }: { userInfo: UserInfo | null }) => {
           <div className="flex flex-col gap-4">
             <div>
               <Label>Profile Picture</Label>
-              <Image
-                src={user.imageUrl}
-                width={128}
-                height={128}
-                className="w-24 h-24 rounded-lg aspect-square"
-                alt="Profile picture"
-              />
+              {userInfo?.avatarImage && (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    alt={userInfo.username || "Profile picture"}
+                    src={userInfo.avatarImage}
+                    className="rounded-md h-32 w-32"
+                  />
+                </>
+              )}
             </div>
             <UserInfoForm userInfo={userInfo} />
             <Button variant="outline" onClick={() => clerk.openUserProfile()}>
