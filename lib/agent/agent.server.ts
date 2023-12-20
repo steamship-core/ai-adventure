@@ -2,7 +2,10 @@ import { Agents, AvailableAgents } from "@prisma/client";
 import { log } from "next-axiom";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
-import { saveGameState } from "../game/game-state.server";
+import {
+  gameStateSupportsCompletingOnboarding,
+  saveGameState,
+} from "../game/game-state.server";
 import { completeOnboarding } from "../game/onboarding";
 import { GameState } from "../game/schema/game_state";
 import { sendSlackMessage } from "../slack/slack.server";
@@ -158,12 +161,12 @@ export const createAgent = async (
 
     if (!cachedAgent && gameState) {
       // Save the game state
-      console.log(`Saving gamestate ${gameState}`);
       await saveGameState(agent.agentUrl, gameState as GameState);
 
       // Completing onboarding
-      console.log(`Completing onboarding`);
-      await completeOnboarding(agent.agentUrl);
+      if (gameStateSupportsCompletingOnboarding(gameState as GameState)) {
+        await completeOnboarding(agent.agentUrl);
+      }
     }
 
     // Now we need to enqueue a few clones of this agent!

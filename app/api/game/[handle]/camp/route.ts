@@ -1,6 +1,7 @@
 import { getAgent } from "@/lib/agent/agent.server";
 import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { loadExistingCampBlocks } from "@/lib/game/quest.server";
+import { log } from "next-axiom";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -25,6 +26,7 @@ export async function GET(
     return NextResponse.json({ blocks }, { status: 200 });
   } catch (e) {
     console.error(e);
+    log.error(`${e}`);
     return NextResponse.json(
       { error: "Failed to load camp blocks." },
       { status: 500 }
