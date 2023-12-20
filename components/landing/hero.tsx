@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PlayAsCharacterCard from "../adventures/play-character-card";
+import { GradientText } from "../ui/typography/gradient-text";
 import Nav from "./nav";
 
 const FeaturedCharacters = [
@@ -72,13 +73,14 @@ export default function LandingHero() {
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
                   <h1 className="text-4xl font-bold tracking-tigh md:text-6xl">
-                    Where Imagination and AI Merge
+                    Where <GradientText>Imagination and AI</GradientText> Merge
                   </h1>
                   <h2 className="relative mt-6 text-lg leading-8 sm:max-w-md lg:max-w-none">
-                    Step into a universe of player-crafted epics. Or, wield the
-                    power of AI to script your own legendary saga.
+                    Step into a universe of player-crafted text-based
+                    adventures. Or, wield the power of AI to script your own
+                    legendary journeys.
                   </h2>
-                  <div className="mt-10 flex items-center gap-x-6">
+                  <div className="mt-10">
                     <Link
                       href="/adventures"
                       style={{
@@ -86,7 +88,7 @@ export default function LandingHero() {
                       }}
                       className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Explore Adventures
+                      Start Your Adventure
                     </Link>
                   </div>
                 </div>

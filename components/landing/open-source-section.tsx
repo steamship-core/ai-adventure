@@ -5,6 +5,7 @@ import {
   WandIcon,
 } from "lucide-react";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import SectionContainer from "./section-container";
 
 const features = [
   {
@@ -38,7 +39,7 @@ const features = [
 
 export default function OpenSource() {
   return (
-    <div className="bg-background py-24 my-24 sm:py-32">
+    <SectionContainer>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-400">
@@ -73,6 +74,6 @@ export default function OpenSource() {
           </dl>
         </div>
       </div>
-    </div>
+    </SectionContainer>
   );
 }
