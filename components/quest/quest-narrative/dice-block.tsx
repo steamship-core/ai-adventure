@@ -6,6 +6,7 @@ import { TypographyH4 } from "@/components/ui/typography/TypographyH4";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { GradientText } from "@/components/ui/typography/gradient-text";
+import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { PointerIcon, XIcon } from "lucide-react";
