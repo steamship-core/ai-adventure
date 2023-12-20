@@ -266,9 +266,9 @@ export default function SettingElement(props: SettingElementProps) {
         : null;
     setValue((old: any[]) => {
       const arrayWithNewVal = [
-        ...old.slice(0, index),
+        ...(old?.slice(0, index) || []),
         newVal,
-        ...old.slice(index),
+        ...(old?.slice(index) || []),
       ];
       updateFn(setting.name, arrayWithNewVal);
       return arrayWithNewVal;
