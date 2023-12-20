@@ -11,7 +11,7 @@ const backfill = async () => {
           avatarImage: `https://api.dicebear.com/7.x/fun-emoji/svg/?seed=${user.username}`,
         },
         where: {
-          userId: user.id,
+          userId: user.userId,
         },
       });
     } catch (e) {
