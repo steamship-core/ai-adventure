@@ -52,7 +52,6 @@ const backfill = async () => {
         user.emailAddresses.length === 0
           ? undefined
           : user.emailAddresses[0].emailVerified,
-      username,
     };
 
     try {
@@ -60,6 +59,7 @@ const backfill = async () => {
         create: {
           userId: user.id,
           ...data,
+          username,
         },
         update: data,
         where: {
