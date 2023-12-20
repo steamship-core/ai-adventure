@@ -8,10 +8,7 @@ import { getAgent } from "@/lib/agent/agent.server";
 import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import {
-  generateActionChoices,
-  loadExistingQuestBlocks,
-} from "@/lib/game/quest.server";
+import { loadExistingQuestBlocks } from "@/lib/game/quest.server";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -62,13 +59,6 @@ export default async function QuestPage({
     log.error("Error loading existing quest blocks", e);
   }
 
-  async function generateSuggestions() {
-    "use server";
-    console.log("Generating suggestions");
-    const choices = await generateActionChoices(agent?.agentUrl!);
-    return choices;
-  }
-
   return (
     <RecoilProvider
       gameState={gameState}
@@ -83,7 +73,7 @@ export default async function QuestPage({
         agentBaseUrl={agent.agentUrl}
         isDevelopment={agent.isDevelopment || false}
         priorBlocks={priorBlocks}
-        generateSuggestions={generateSuggestions}
+        agentHandle={agent.handle}
         adventureId={agent.adventureId!}
       />
       <DynamicBackgroundAudio />
