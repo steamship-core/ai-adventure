@@ -383,7 +383,7 @@ export default function SettingGroupForm({
           />
         </div>
       ) : sg.href == "magic-mode" ? (
-        <div className="space-y-8">
+        <div className="flex gap-4 flex-col">
           {sg.settings?.map((setting) => (
             <SettingElement
               key={setting.name}
@@ -429,7 +429,7 @@ export default function SettingGroupForm({
           </div>
         </div>
       ) : (
-        <div className="space-y-8">
+        <div className="flex gap-4 flex-col">
           {sg.settings?.map((setting) => (
             <SettingElement
               key={setting.name}
