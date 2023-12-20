@@ -3,7 +3,10 @@ import stringify from "json-stable-stringify";
 import { log } from "next-axiom";
 import { getAdventure } from "../adventure/adventure.server";
 import prisma from "../db";
-import { saveGameState } from "../game/game-state.server";
+import {
+  gameStateSupportsCompletingOnboarding,
+  saveGameState,
+} from "../game/game-state.server";
 import { completeOnboarding } from "../game/onboarding";
 import { GameState } from "../game/schema/game_state";
 import { createAgentInSteamship } from "./agentSteamship.server";
@@ -200,8 +203,9 @@ export const completeAvailableAgentIntent = async (
       log.info(`Saving gameState`);
       await saveGameState(_agentData.agentUrl, gameState as GameState);
 
-      log.info(`Completing onboarding`);
-      await completeOnboarding(_agentData.agentUrl);
+      if (gameStateSupportsCompletingOnboarding(gameState as GameState)) {
+        await completeOnboarding(_agentData.agentUrl);
+      }
 
       const end2 = Date.now();
       log.info(
