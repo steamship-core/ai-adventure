@@ -121,9 +121,9 @@ const AdventureList = ({
 
   return (
     <>
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
         <div className="w-full">
-          <div className="relative">
+          <div className="relative flex flex-col gap-2">
             <Input
               placeholder="Search by title, description, or tag"
               id="search"
@@ -141,53 +141,55 @@ const AdventureList = ({
             )}
           </div>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="w-44">
-            <Button variant="outline" className="capitalize">
-              {sort}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  pathname + "?" + createQueryString("sort", "reactions")
-                );
-              }}
-            >
-              Reactions
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  pathname + "?" + createQueryString("sort", "newest")
-                );
-              }}
-            >
-              Newest
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  pathname + "?" + createQueryString("sort", "oldest")
-                );
-              }}
-            >
-              Oldest
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                router.push(
-                  pathname + "?" + createQueryString("sort", "updated")
-                );
-              }}
-            >
-              Updated
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-col gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="w-44">
+              <Button variant="outline" className="capitalize">
+                {sort}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    pathname + "?" + createQueryString("sort", "reactions")
+                  );
+                }}
+              >
+                Reactions
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    pathname + "?" + createQueryString("sort", "newest")
+                  );
+                }}
+              >
+                Newest
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    pathname + "?" + createQueryString("sort", "oldest")
+                  );
+                }}
+              >
+                Oldest
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(
+                    pathname + "?" + createQueryString("sort", "updated")
+                  );
+                }}
+              >
+                Updated
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {result.data?.pages.map((page, i) => (
           <Fragment key={page.nextPage}>
             {page.results.map((adventure) => (
