@@ -68,7 +68,7 @@ export default async function AdventuresPage() {
       </div>
       {agents.length > 0 && (
         <>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
             {agents.map((agent) => {
               if (!agent?.handle) {
                 // Note: Some old database rows seem to lack this.
