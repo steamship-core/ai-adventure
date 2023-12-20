@@ -21,7 +21,7 @@ import {
   SendIcon,
   SparklesIcon,
 } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 type InteractionOptions = "custom" | "suggest" | "none";
 
@@ -39,21 +39,20 @@ const SuggestionSheet = ({
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState(false);
-  useEffect(() => {
+
+  const getSuggestions = async () => {
     setIsLoading(true);
-    const getSuggestions = async () => {
-      const s = (await generateSuggestions()) as Promise<
-        string[] | { status: { state: string; statusMessage: string } }
-      >;
-      if (Array.isArray(s)) {
-        setSuggestions(s);
-      } else {
-        setError(true);
-      }
-      setIsLoading(false);
-    };
-    getSuggestions();
-  }, []);
+    setSuggestions([]);
+    const s = (await generateSuggestions()) as Promise<
+      string[] | { status: { state: string; statusMessage: string } }
+    >;
+    if (Array.isArray(s)) {
+      setSuggestions(s);
+    } else {
+      setError(true);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <Sheet>
@@ -62,6 +61,7 @@ const SuggestionSheet = ({
           variant="outline"
           className="w-full flex gap-4"
           disabled={disabled}
+          onClick={getSuggestions}
         >
           <SparklesIcon className="h-5" /> Suggest
         </Button>

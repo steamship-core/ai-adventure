@@ -29,8 +29,8 @@ export const saveGameState = async (
 
 export function gameStateSupportsCompletingOnboarding(gameState: GameState) {
   return (
-    typeof gameState.player.name != "undefined" &&
-    typeof gameState.player.description != "undefined" &&
-    typeof gameState.player.background != "undefined"
+    typeof gameState?.player?.name != "undefined" &&
+    typeof gameState?.player?.description != "undefined" &&
+    typeof gameState?.player?.background != "undefined"
   );
 }
