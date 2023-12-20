@@ -1,5 +1,5 @@
 import Link from "next/link";
-import PlayAsCharacterCard from "../adventures/play-character-card";
+import { ParallaxScroll } from "../ui/parallax-scroll";
 import { GradientText } from "../ui/typography/gradient-text";
 import Nav from "./nav";
 
@@ -48,6 +48,15 @@ const FeaturedCharacters = [
     image:
       "https://ywo4zgeb2hydwgmk.public.blob.vercel-storage.com/f961185e-be73-4d50-b69f-beef09979206-2eaa99b8-16ed-474f-a87b-7edb93bc9925-steamshipmax_a_quaint_town_where_all_the_inhabitants_are_bears__04c4eb77-d509-4cf9-be39-1d725bf850a5-TLUS3q0AUPoA9DKhwFSMapfNfN5gVH.png",
   },
+  {
+    alt: "Rock & Bone",
+    title: "Rock & Bone",
+    adventureId: "620c959f-eaa0-4cf8-be6a-4c454b217e99",
+    description:
+      "You be caveman. Use rock make tool. Hunt. Fight big beast. Talk is short.",
+    image:
+      "https://ywo4zgeb2hydwgmk.public.blob.vercel-storage.com/620c959f-eaa0-4cf8-be6a-4c454b217e99-1f369609-0477-40d1-a429-214ac81454db-toast.gg_The_scene_is_set_in_a_sprawling_prehistoric_landscape._884ab8b8-ca2b-4a02-914b-03c66ce376d1-yUQYszgn5wO3OhoYcqMhfDv054KGBB.png",
+  },
 ];
 
 export default function LandingHero() {
@@ -92,7 +101,11 @@ export default function LandingHero() {
                     </Link>
                   </div>
                 </div>
-                <div className="mt-14 flex justify-center gap-8 sm:-mt-36 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
+                <ParallaxScroll
+                  images={FeaturedCharacters}
+                  className="md:-mt-12"
+                />
+                {/* <div className="mt-14 flex justify-center gap-8 sm:-mt-36 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
                   <div className="ml-auto hidden sm:block w-44 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-none xl:pt-80">
                     <div className="relative">
                       <PlayAsCharacterCard {...FeaturedCharacters[0]} />
@@ -119,7 +132,7 @@ export default function LandingHero() {
                       <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-900/10" />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
