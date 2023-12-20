@@ -196,7 +196,6 @@ export const DiceRollBlock = ({
   const required = Math.floor(resultJson.required * 20) + 1;
   const rolled = Math.floor(resultJson.rolled * 20) + 1;
 
-  console.log(resultJson);
   return (
     <RollingDie
       required={required}
