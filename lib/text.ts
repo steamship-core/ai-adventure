@@ -36,7 +36,5 @@ export function addNewlines(text: string): string {
   // And finally we'll replace Mr. Ms. etc
   const mrMs = /((Mr|Mrs|Ms|Dr)\.\s*)\n\n/gmu;
   withNewlines = withNewlines.replace(mrMs, justTheLower);
-  console.log(withNewlines);
-
   return withNewlines;
 }
