@@ -164,18 +164,21 @@ export class Steamship extends ClientBase implements Client {
     delete newConfig.workspace;
     delete newConfig.workspaceId;
 
+    if (!workspace && !workspaceId) {
+      throw new Error("Must provide workspace or workspaceId");
+    }
+
     if (workspace) {
       // Make sure it's created
-      await this.workspace.create({
+      const _wks = await this.workspace.create({
         handle: workspace,
         fetchIfExists: true,
       });
       newConfig.workspace = workspace;
+      newConfig.workspaceId = _wks.id;
+    } else {
+      newConfig.workspaceId = workspaceId;
     }
-
-    newConfig.workspace = workspace;
-    newConfig.workspaceId = workspaceId;
-
     return new Steamship(newConfig);
   }
 

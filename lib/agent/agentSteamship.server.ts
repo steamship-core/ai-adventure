@@ -1,3 +1,5 @@
+"use server";
+
 import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import { v4 as uuidv4 } from "uuid";
@@ -121,4 +123,14 @@ export const getSchema = async (agentBase: string) => {
     console.error(e);
     throw Error("Failed to create agent.");
   }
+};
+
+export const getWorkspaceId = async (workspaceHandle: string) => {
+  const steamship = await getSteamshipClient().switchWorkspace({
+    workspace: workspaceHandle,
+  });
+
+  steamship.config.apiKey = process.env.STEAMSHIP_LOGS_KEY;
+
+  return steamship.config.workspaceId;
 };

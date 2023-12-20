@@ -23,7 +23,7 @@ export class WorkspaceClient implements IWorkspaceClient {
       fetchIfExists,
     });
     const json = await response.json();
-    return json?.workspace as Workspace;
+    return json?.workspace || (json?.data?.workspace as Workspace);
   }
 
   /** Delete a workspace and all data in it. */

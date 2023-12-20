@@ -30,6 +30,9 @@ export const resetDevAgent = async (id: string) => {
     data: {
       ...settingsToSave,
       agentDevConfig: adventure?.agentConfig || {},
+      version: {
+        increment: 1,
+      },
     },
   });
 };
