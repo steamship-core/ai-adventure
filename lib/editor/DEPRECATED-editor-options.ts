@@ -123,7 +123,7 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
 
   if (
     agentConfig["game_engine_version"] &&
-    agentConfig["game_engine_version"].startsWith("ai-adventure@")
+    agentConfig["game_engine_version"].startsWith("ai-adventure")
   ) {
     topLevelUpdates["agentVersion"] = agentConfig["game_engine_version"];
   }
