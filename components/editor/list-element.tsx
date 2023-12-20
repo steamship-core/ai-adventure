@@ -29,7 +29,7 @@ import { Collapsible, CollapsibleContent } from "../ui/collapsible";
 import SettingElement, { SettingElementProps } from "./setting-element";
 
 export function SortableItem(props: any) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!props.title);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: props.id });
 
