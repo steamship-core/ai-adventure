@@ -5,8 +5,12 @@ import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextResponse } from "next/server";
 
+export const maxDuration = 300;
+
 export const POST = withAxiom(async (request: Request) => {
   const { userId } = auth();
+  const startMs = new Date().getTime();
+
   if (!userId) {
     log.error("No user");
     return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -89,6 +93,11 @@ export const POST = withAxiom(async (request: Request) => {
     if (!block.workspaceId) {
       block.workspaceId = devAgent.workspaceId;
     }
+
+    const diffMs = new Date().getTime() - startMs;
+    const diffS = diffMs / 1000.0;
+    log.info(`Generated block ${block.id} in ${diffS} seconds.`);
+    console.log(`Generated block ${block.id} in ${diffS} seconds.`);
 
     return NextResponse.json(block, { status: 200 });
   } catch (e) {
