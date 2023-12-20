@@ -5,6 +5,7 @@ import {
   WandIcon,
 } from "lucide-react";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
+import { GradientText } from "../ui/typography/gradient-text";
 import SectionContainer from "./section-container";
 
 const features = [
@@ -39,15 +40,16 @@ const features = [
 
 export default function OpenSource() {
   return (
-    <SectionContainer>
+    <SectionContainer className="relative bg-dot-white/[0.2] my-24">
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-400">
+          <span className="text-base font-semibold leading-7 text-indigo-400">
             Make your own
+          </span>
+          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
+            Completely <GradientText>open source</GradientText>
           </h2>
-          <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Completely open source
-          </p>
           <TypographyMuted className="mt-6 text-lg leading-8 ">
             AI Adventure is completely open source. You can find the code on our
             GitHub page. Come help us build the future of AI storytelling.
