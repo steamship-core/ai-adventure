@@ -1,8 +1,10 @@
 "use client";
+import { recoilContinuationState } from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { Block } from "@/lib/streaming-client/src";
 import { useMemo } from "react";
+import { useRecoilState } from "recoil";
 import { BlockContainer } from "./block-container";
 import { useBlockStream } from "./use-block-stream";
 
@@ -13,7 +15,12 @@ const CompletionBlock = ({
   block: Block;
   hideOutput: boolean;
 }) => {
-  const { completion } = useBlockStream({ blockId: block.id });
+  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+
+  const { completion } = useBlockStream({
+    blockId: block.id,
+    onFinish: () => setContinuationState(true),
+  });
   if (hideOutput) {
     return null;
   }
