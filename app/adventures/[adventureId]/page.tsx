@@ -1,3 +1,4 @@
+import { AdventureStats } from "@/components/adventures/adventure-stats";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import EmojiPicker from "@/components/adventures/emoji-picker";
 import { StartAdventureSection } from "@/components/adventures/start-adventure-section";
@@ -206,11 +207,15 @@ export default async function AdventurePage({
           </div>
         </div>
       </div>
+      <div className="px-4 md:px-6 flex gap-6 flex-col">
+        <AdventureStats adventureId={params.adventureId} />
+      </div>
       <StartAdventureSection
         adventure={adventure}
         ownerUserInfo={ownerUserInfo}
       />
-      <div className="mt-8">
+
+      <div className="p-4 md:p-6 flex gap-6 flex-col mt-8">
         <TypographyH3>Snippets from this adventure</TypographyH3>
         <TypographyMuted>
           These are snippets that have been shared by other adventurers.
