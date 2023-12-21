@@ -100,6 +100,7 @@ export async function POST(request: NextRequest) {
         privateMetadata: { ...(evt.data.private_metadata as any) },
         publicMetadata: { ...(evt.data.public_metadata as any) },
         unsafeMetadata: { ...(evt.data.unsafe_metadata as any) },
+        avatarImage: `https://api.dicebear.com/7.x/fun-emoji/svg/?seed=${username}`,
       };
 
       await prisma.userInfo.create({ data });
