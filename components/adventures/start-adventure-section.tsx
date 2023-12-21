@@ -46,6 +46,7 @@ export const StartAdventureSection = ({
             </div>
           )}
         </div>
+
         <Sheet>
           <SheetTrigger asChild>
             <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-6 text-2xl flex gap-2 w-full">
