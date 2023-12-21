@@ -1,4 +1,6 @@
 import { recoilBlockHistory } from "@/components/providers/recoil";
+import { MessageTypes, getMessageType } from "@/lib/chat/block-chat-types";
+import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { Block } from "@/lib/streaming-client/src";
 import { useMemo } from "react";
 import { useRecoilState } from "recoil";
@@ -20,7 +22,6 @@ import { QuestSummaryBlock } from "./quest-summary-block";
 import { StreamingBlock } from "./streaming-block";
 import { TextBlock } from "./text-block";
 import { UserInputBlock } from "./user-input-block";
-import { ExtendedBlock, MessageTypes, getMessageType } from "./utils";
 
 export const NarrativeBlock = ({
   blocks,

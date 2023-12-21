@@ -9,14 +9,19 @@ import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { amplitude } from "@/lib/amplitude";
+import {
+  MessageTypes,
+  getMessageType,
+  validTypes,
+} from "@/lib/chat/block-chat-types";
+import { chatMessageJsonlToBlocks } from "@/lib/chat/parse-blocks-from-message";
+import { useBlockChat } from "@/lib/chat/use-block-chat";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
-import { Message } from "ai";
-import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Button } from "../../ui/button";
@@ -25,13 +30,8 @@ import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import SelectedTextOverlay from "./selected-text-overlay";
 import { UserInputBlock } from "./user-input-block";
-import {
-  ExtendedBlock,
-  MessageTypes,
-  getFormattedBlocks,
-  getMessageType,
-  validTypes,
-} from "./utils";
+
+import { ExtendedBlock } from "@/lib/chat/extended-block";
 
 const ScrollButton = () => {
   const { ref, inView } = useInView();
@@ -102,18 +102,10 @@ export default function QuestNarrative({
     setInput,
     isLoading,
     error,
-  } = useChat({
-    onFinish: (message: Message) => {
-      console.log(`onChat call finished`, message);
-    },
-    onError: (error: Error) => {
-      console.log(`onChat call errored`, error);
-    },
-    body: {
-      context_id: id,
-      agentBaseUrl,
-    },
-    id,
+    blocks: formattedBlocks,
+  } = useBlockChat({
+    id: id,
+    agentBaseUrl,
   });
 
   const scrollToBottom = () => {
@@ -151,8 +143,9 @@ export default function QuestNarrative({
   }, [priorBlocks]);
 
   useEffect(() => {
+    console.log("useEffect messages", messages);
     scrollToBottom();
-  }, [messages]);
+  }, [formattedBlocks]);
 
   useEffect(() => {
     const updateGameState = async () => {
@@ -165,14 +158,19 @@ export default function QuestNarrative({
     }
   }, [isComplete]);
 
-  const formattedBlocks = useMemo(() => {
-    const mostRecentMessage =
-      messages.length > 0 ? messages[messages.length - 1] : null;
-    if (!mostRecentMessage) {
-      return [];
-    }
-    return getFormattedBlocks(mostRecentMessage, null);
-  }, [messages]);
+  // const formattedBlocks: Block[] = useMemo(() => {
+  //   console.log("got back messages", messages);
+  //   console.log("messages length", messages?.length);
+
+  //   const mostRecentMessage =
+  //     messages.length > 0 ? messages[messages.length - 1] : null;
+  //   if (!mostRecentMessage) {
+  //     return [];
+  //   }
+  //   return chatMessageJsonlToBlocks(mostRecentMessage, null);
+  // }, [messages]);
+
+  // const { blocks: formattedBlocks } = useBlockChat();
 
   useEffect(() => {
     for (let block of formattedBlocks) {
@@ -227,6 +225,9 @@ export default function QuestNarrative({
       </div>
     );
   }
+
+  const offerUserInteraction: boolean = !nextBlock;
+
   return (
     <>
       <div className="flex h-full overflow-hidden">
@@ -267,7 +268,10 @@ export default function QuestNarrative({
               <NarrativeBlock
                 key={message.id}
                 offerAudio
-                blocks={getFormattedBlocks(message, nonPersistedUserInput)}
+                blocks={chatMessageJsonlToBlocks(
+                  message,
+                  nonPersistedUserInput
+                )}
                 onSummary={onSummary}
                 onComplete={onComplete}
                 orderedBlocks={orderedBlocks}
@@ -291,7 +295,7 @@ export default function QuestNarrative({
           />
         ) : (
           <>
-            {!nextBlock ? (
+            {offerUserInteraction ? (
               <InteractionBox
                 formRef={formRef}
                 inputRef={inputRef}
@@ -323,13 +327,13 @@ export default function QuestNarrative({
                       setChatHistory((prev) => [
                         ...prev,
                         initialBlock.id,
-                        nextBlock.id,
+                        nextBlock!.id,
                       ]);
                     } else {
-                      setChatHistory((prev) => [...prev, nextBlock.id]);
+                      setChatHistory((prev) => [...prev, nextBlock!.id]);
                     }
                   } else {
-                    setChatHistory((prev) => [...prev, nextBlock.id]);
+                    setChatHistory((prev) => [...prev, nextBlock!.id]);
                   }
                   setTimeout(() => {
                     scrollToBottom();

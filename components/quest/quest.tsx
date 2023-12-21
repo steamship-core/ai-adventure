@@ -1,12 +1,12 @@
 "use client";
 import { QuestContainer } from "@/components/quest/shared/components";
+import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { InGameNavigation } from "../navigation/in-game-navigation";
 import QuestNarrative from "./quest-narrative";
-import { ExtendedBlock } from "./quest-narrative/utils";
 
 export default function Quest({
   gameState,

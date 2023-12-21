@@ -1,4 +1,4 @@
-import { ExtendedBlock } from "@/components/quest/quest-narrative/utils";
+import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { log } from "next-axiom";
 import { consumeEnergy, getOrCreateUserEnergy } from "../energy/energy.server";
 import { getSteamshipClient } from "../utils";
