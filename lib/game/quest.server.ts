@@ -1,3 +1,4 @@
+import { getMessageType, validTypes } from "@/lib/chat/block-chat-types";
 import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { log } from "next-axiom";
 import { consumeEnergy, getOrCreateUserEnergy } from "../energy/energy.server";
@@ -75,6 +76,8 @@ export const loadExistingCampBlocks = async (agentBase: string) => {
     return blocks.map((block) => {
       block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
       block.historical = true;
+      block.messageType = getMessageType(block);
+      block.isVisibleInChat = validTypes.includes(block.messageType);
       return block;
     });
   }

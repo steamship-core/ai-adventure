@@ -1,6 +1,6 @@
 import { Message, UseChatHelpers, useChat } from "ai/react";
 import { useMemo } from "react";
-import { Block } from "../streaming-client/src/schema/block";
+import { ExtendedBlock } from "./extended-block";
 import { chatMessagesJsonlToBlocks } from "./parse-blocks-from-message";
 
 /*
@@ -20,7 +20,7 @@ export function useBlockChat({
   agentBaseUrl: string;
   id: string;
   skipIfInputEquals?: string | null;
-}): UseChatHelpers & { blocks: Block[] } {
+}): UseChatHelpers & { blocks: ExtendedBlock[] } {
   const useChatResp = useChat({
     onFinish: (message: Message) => {
       console.log(`onChat call finished`, message);

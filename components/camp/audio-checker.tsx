@@ -1,14 +1,11 @@
 "use client";
 
+import { MessageTypes } from "@/lib/chat/block-chat-types";
+import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { recoilBackgroundAudioUrlState } from "../providers/recoil";
-import {
-  ExtendedBlock,
-  MessageTypes,
-  getMessageType,
-} from "../quest/quest-narrative/utils";
 
 export function AudioChecker({ questId }: { questId?: string }) {
   const initialized = useRef(false);
@@ -26,9 +23,8 @@ export function AudioChecker({ questId }: { questId?: string }) {
       let blocks = ((await response.json()) || {}).blocks as ExtendedBlock[];
       if (blocks && blocks.length > 0) {
         for (let block of blocks.reverse()) {
-          const mt = getMessageType(block);
-          const mtCamp = mt === MessageTypes.CAMP_AUDIO;
-          const mtQuest = mt === MessageTypes.SCENE_AUDIO;
+          const mtCamp = block.messageType === MessageTypes.CAMP_AUDIO;
+          const mtQuest = block.messageType === MessageTypes.SCENE_AUDIO;
           if ((mtCamp && isCampAudio) || (mtQuest && !isCampAudio)) {
             (setAudioUrl as any)(block.streamingUrl);
             break;

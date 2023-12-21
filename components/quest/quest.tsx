@@ -1,6 +1,5 @@
 "use client";
 import { QuestContainer } from "@/components/quest/shared/components";
-import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { GameState } from "@/lib/game/schema/game_state";
 import { Block } from "@/lib/streaming-client/src";
 import { useParams } from "next/navigation";
@@ -14,7 +13,6 @@ export default function Quest({
   workspaceHandle = "",
   gameEngineVersion = "",
   isDevelopment = false,
-  priorBlocks,
   agentHandle,
   adventureId,
 }: {
@@ -23,7 +21,6 @@ export default function Quest({
   isDevelopment: boolean;
   gameEngineVersion?: string;
   workspaceHandle?: string;
-  priorBlocks?: ExtendedBlock[];
   agentHandle: string;
   adventureId?: string;
 }) {
@@ -82,7 +79,6 @@ export default function Quest({
             summary={summary}
             agentBaseUrl={agentBaseUrl}
             completeButtonText={completeButtonText}
-            priorBlocks={priorBlocks}
             agentHandle={agentHandle}
             adventureId={adventureId}
           />

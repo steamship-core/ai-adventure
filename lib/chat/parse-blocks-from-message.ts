@@ -1,6 +1,7 @@
 import { Message } from "ai";
 import { log } from "next-axiom";
-import { Block } from "../streaming-client/src/schema/block";
+import { getMessageType, validTypes } from "./block-chat-types";
+import { ExtendedBlock } from "./extended-block";
 
 /**
  *
@@ -11,7 +12,7 @@ import { Block } from "../streaming-client/src/schema/block";
 export function chatMessageJsonlToBlocks(
   message: Message,
   skipIfInputEquals: string | null
-): Block[] {
+): ExtendedBlock[] {
   const applySkipIfInput =
     skipIfInputEquals != null && skipIfInputEquals.trim().length > 0;
 
@@ -20,7 +21,14 @@ export function chatMessageJsonlToBlocks(
     .map((block) => {
       if (block) {
         try {
-          return JSON.parse(block) as Block;
+          const _block = JSON.parse(block) as ExtendedBlock;
+          if (!_block.streamingUrl) {
+            _block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${_block.id}/raw`;
+          }
+          _block.historical = false;
+          _block.messageType = getMessageType(_block);
+          _block.isVisibleInChat = validTypes.includes(_block.messageType);
+          return _block;
         } catch (e) {
           console.log(
             `Error parsing block: ${e}. Block str was: ${block}. Message was: ${message.content}`
@@ -43,7 +51,7 @@ export function chatMessageJsonlToBlocks(
         return false;
       }
       return true;
-    }) as Block[];
+    }) as ExtendedBlock[];
 
   // At this point, `blocks` is a list of the JSON-parsed lines cast to the Block type
 
@@ -69,8 +77,8 @@ export function chatMessageJsonlToBlocks(
 export function chatMessagesJsonlToBlocks(
   messages: Message[],
   skipIfInputEquals: string | null
-): Block[] {
-  let ret: Block[] = [];
+): ExtendedBlock[] {
+  let ret: ExtendedBlock[] = [];
   for (let msg of messages || []) {
     ret = [...ret, ...chatMessageJsonlToBlocks(msg, skipIfInputEquals)];
   }

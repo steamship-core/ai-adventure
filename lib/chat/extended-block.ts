@@ -11,4 +11,14 @@ export type ExtendedBlock = Block & {
    * The url where the contents cen be streamed from.
    */
   streamingUrl?: string;
+
+  /**
+   * Is this block a visible artifact in the chat?
+   */
+  isVisibleInChat?: boolean;
+
+  /**
+   * What is the message type of this block?
+   */
+  messageType?: string;
 };

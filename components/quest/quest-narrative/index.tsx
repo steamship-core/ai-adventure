@@ -1,21 +1,18 @@
 "use client";
 
+import ErrorBoundary from "@/components/error-boundary";
 import {
   recoilBlockHistory,
   recoilContinuationState,
   recoilGameState,
 } from "@/components/providers/recoil";
+import { MessageTypes } from "@/lib/chat/block-chat-types";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { amplitude } from "@/lib/amplitude";
-import {
-  MessageTypes,
-  getMessageType,
-  validTypes,
-} from "@/lib/chat/block-chat-types";
-import { chatMessageJsonlToBlocks } from "@/lib/chat/parse-blocks-from-message";
-import { useBlockChat } from "@/lib/chat/use-block-chat";
+import { ExtendedBlock } from "@/lib/chat/extended-block";
+import { useBlockChatWithHistoryAndGating } from "@/lib/chat/use-block-chat-with-history-and-gating";
 import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
 import { Block } from "@/lib/streaming-client/src";
@@ -29,9 +26,6 @@ import EndSheet from "../shared/end-sheet";
 import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import SelectedTextOverlay from "./selected-text-overlay";
-import { UserInputBlock } from "./user-input-block";
-
-import { ExtendedBlock } from "@/lib/chat/extended-block";
 
 const ScrollButton = () => {
   const { ref, inView } = useInView();
@@ -67,7 +61,6 @@ export default function QuestNarrative({
   summary,
   agentBaseUrl,
   completeButtonText,
-  priorBlocks,
   agentHandle,
   adventureId,
   didFail,
@@ -79,8 +72,7 @@ export default function QuestNarrative({
   isComplete: boolean;
   agentBaseUrl: string;
   completeButtonText?: string;
-  priorBlocks?: ExtendedBlock[];
-  agentHandle?: string;
+  agentHandle: string;
   adventureId?: string;
   didFail?: boolean;
 }) {
@@ -102,12 +94,22 @@ export default function QuestNarrative({
     setInput,
     isLoading,
     error,
-    blocks: formattedBlocks,
-  } = useBlockChat({
+    historyLoading,
+    blocks,
+    visibleBlocks,
+    initialBlock,
+    nonVisibleBlocks,
+  } = useBlockChatWithHistoryAndGating({
     id: id,
     agentBaseUrl,
+    agentHandle,
+    // skipIfInputEquals = null,
+    userKickoffMessageIfNewChat: "Let's go on an adventure!",
   });
 
+  /**
+   * This is a helper to scroll the chat to the bottom of the page
+   */
   const scrollToBottom = () => {
     const container = document.getElementById("narrative-container");
     if (container) {
@@ -115,37 +117,27 @@ export default function QuestNarrative({
     }
   };
 
-  useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-
-    if (!priorBlocks || priorBlocks.length === 0) {
-      append({
-        id: "000-000-000",
-        content: "Let's go on an adventure!",
-        role: "user",
-      });
-    }
-  }, []);
-
-  // TODO: This is duplicated work.
-  // TODO: Extend to work with dynamically generated blocks -- that will require us to know the STEAMSHIP_API_BASE
-  useEffect(() => {
-    if (setBackgroundMusicUrl) {
-      if (priorBlocks) {
-        for (let block of priorBlocks) {
-          if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-            (setBackgroundMusicUrl as any)(block.streamingUrl);
-          }
+  // This is the handler for blocks we should react to
+  const onBlock = (block: ExtendedBlock) => {
+    if (block.messageType === MessageTypes.SCENE_AUDIO) {
+      if (setBackgroundMusicUrl) {
+        var streamingUrl = (block as any).streamingUrl;
+        if (streamingUrl) {
+          setBackgroundMusicUrl(streamingUrl);
         }
       }
     }
-  }, [priorBlocks]);
+  };
 
   useEffect(() => {
-    console.log("useEffect messages", messages);
     scrollToBottom();
-  }, [formattedBlocks]);
+  }, [visibleBlocks]);
+
+  useEffect(() => {
+    for (let block of blocks) {
+      onBlock(block);
+    }
+  }, [blocks]);
 
   useEffect(() => {
     const updateGameState = async () => {
@@ -158,40 +150,6 @@ export default function QuestNarrative({
     }
   }, [isComplete]);
 
-  // const formattedBlocks: Block[] = useMemo(() => {
-  //   console.log("got back messages", messages);
-  //   console.log("messages length", messages?.length);
-
-  //   const mostRecentMessage =
-  //     messages.length > 0 ? messages[messages.length - 1] : null;
-  //   if (!mostRecentMessage) {
-  //     return [];
-  //   }
-  //   return chatMessageJsonlToBlocks(mostRecentMessage, null);
-  // }, [messages]);
-
-  // const { blocks: formattedBlocks } = useBlockChat();
-
-  useEffect(() => {
-    for (let block of formattedBlocks) {
-      if (getMessageType(block) === MessageTypes.SCENE_AUDIO) {
-        (setBackgroundMusicUrl as any)(
-          `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`
-        );
-      }
-    }
-  }, [formattedBlocks]);
-
-  const orderedBlocks = formattedBlocks.filter((block) => {
-    const messageType = getMessageType(block);
-    return validTypes.includes(messageType);
-  });
-
-  const initialBlock = formattedBlocks.find((block) => {
-    const messageType = getMessageType(block);
-    return validTypes.includes(messageType);
-  });
-
   const [chatHistory, setChatHistory] = useRecoilState(recoilBlockHistory);
   const chatHistoryContainsInitialBlock = chatHistory.includes(
     initialBlock?.id!
@@ -202,11 +160,11 @@ export default function QuestNarrative({
       : initialBlock?.id;
 
   const nextBlockIndex =
-    orderedBlocks.findIndex((block) => block.id === activeBlock) + 1;
+    visibleBlocks.findIndex((block) => block.id === activeBlock) + 1;
 
   const nextBlock =
-    nextBlockIndex < orderedBlocks.length
-      ? orderedBlocks[nextBlockIndex]
+    nextBlockIndex < visibleBlocks.length
+      ? visibleBlocks[nextBlockIndex]
       : null;
 
   let nonPersistedUserInput: string | null = null;
@@ -214,9 +172,9 @@ export default function QuestNarrative({
   if (error) {
     return (
       <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
-        <TypographyH3>An unexpected error occured</TypographyH3>
+        <TypographyH3>An unexpected error occurred</TypographyH3>
         <TypographyP>
-          We encountered an error while attemping to load this chat session.
+          We encountered an error while attempting to load this chat session.
           This can happen while we are experiencing heavy traffic.
         </TypographyP>
         <Button onClick={() => router.refresh()} className="mt-4">
@@ -248,36 +206,27 @@ export default function QuestNarrative({
             divId="quest-narrative-container"
             adventureId={adventureId!}
           />
+          {visibleBlocks.map((block, idx) => {
+            return (
+              <ErrorBoundary key={block.id}>
+                <NarrativeBlock
+                  block={block}
+                  offerAudio
+                  isFirst={idx === 0}
+                  onSummary={onSummary}
+                  onComplete={onComplete}
+                  isPrior
+                />
+              </ErrorBoundary>
+            );
+          })}
 
-          {priorBlocks && (
-            <NarrativeBlock
-              blocks={priorBlocks}
-              offerAudio
-              onSummary={onSummary}
-              onComplete={onComplete}
-              orderedBlocks={orderedBlocks}
-              isPrior
-            />
-          )}
-          {messages.map((message) => {
+          {/* {messages.map((message) => {
             if (message.role === "user") {
               nonPersistedUserInput = message.content;
               return <UserInputBlock text={message.content} key={message.id} />;
             }
-            return (
-              <NarrativeBlock
-                key={message.id}
-                offerAudio
-                blocks={chatMessageJsonlToBlocks(
-                  message,
-                  nonPersistedUserInput
-                )}
-                onSummary={onSummary}
-                onComplete={onComplete}
-                orderedBlocks={orderedBlocks}
-              />
-            );
-          })}
+          })} */}
           {messages.length > 1 &&
             messages[messages.length - 1].role === "user" && (
               <LoaderIcon className="animate-spin" />
