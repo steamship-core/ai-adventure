@@ -80,7 +80,12 @@ export const ImageBlock = ({
   return (
     <BlockContainer>
       {itemName && <TypographyP>{itemName}</TypographyP>}
-      <div className="overflow-hidden rounded-md mt-2">
+      <div
+        className={cn(
+          "overflow-hidden rounded-md mt-2",
+          itemName && "max-w-xl mx-auto"
+        )}
+      >
         {error ? (
           <div
             className={cn(
