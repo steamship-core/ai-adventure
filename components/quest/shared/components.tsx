@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 export const QuestContainer = ({ children }: { children: ReactNode }) => (
   <div
     id="quest-narrative-container"
-    className="h-[100dvh] max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4 overflow-hidden"
+    className="h-[100dvh] max-w-6xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4 overflow-hidden"
   >
     {children}
   </div>
@@ -29,7 +29,7 @@ export const QuestContentContainer = ({
 }: {
   children: ReactNode;
 }) => (
-  <div className="max-w-2xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
+  <div className="max-w-6xl w-full flex flex-col flex-grow mx-auto pt-3 pb-6 px-4">
     {children}
   </div>
 );

@@ -7,7 +7,7 @@ import Link from "next/link";
 export default async function ErrorPage({ params }: { params: {} }) {
   return (
     <main className="w-full h-full">
-      <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-6 gap-2 overflow-auto">
+      <div className="h-full flex flex-col justify-between max-w-6xl mx-auto p-6 gap-2 overflow-auto">
         <div className="flex flex-col gap-2 h-[80%] overflow-hidden">
           <Image
             src={"/error-message.png"}
