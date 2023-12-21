@@ -87,9 +87,9 @@ const SuggestionSheet = ({
               </AlertDescription>
             </Alert>
           ) : (
-            <>
+            <div className="w-full flex items-center justify-center flex-col">
               <SheetTitle>What do you do next?</SheetTitle>
-              <SheetDescription>
+              <SheetDescription className="mb-8">
                 Select an option below to continue your quest.
               </SheetDescription>
               {isLoading && (
@@ -114,7 +114,7 @@ const SuggestionSheet = ({
                   </Button>
                 ))}
               </div>
-            </>
+            </div>
           )}
         </SheetHeader>
       </SheetContent>

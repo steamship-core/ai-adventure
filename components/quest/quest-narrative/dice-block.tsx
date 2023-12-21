@@ -9,7 +9,7 @@ import { GradientText } from "@/components/ui/typography/gradient-text";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { PointerIcon, XIcon } from "lucide-react";
+import { PointerIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
@@ -122,7 +122,8 @@ const RollingDie = ({
           className={cn(
             "h-56 w-56 fill-white",
             isTwenty && doneRolling && "fill-cyan-500",
-            isOne && doneRolling && "fill-red-500"
+            isOne && doneRolling && "fill-red-500",
+            rolled >= required && doneRolling && "fill-green-600"
           )}
         />
 
@@ -133,16 +134,12 @@ const RollingDie = ({
           className={cn(
             "text-4xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 mt-2",
             isTwenty && doneRolling && "text-cyan-500",
-            isOne && doneRolling && "text-red-500"
+            isOne && doneRolling && "text-red-500",
+            rolled >= required && doneRolling && "text-green-600"
           )}
         >
           {num}
         </TypographyLarge>
-        {showStatus && !success && (
-          <div className="w-full absolute top-0 left-0 bg-background/40 h-full flex items-center justify-center">
-            <XIcon className="text-red-600" size={50} />
-          </div>
-        )}
       </button>
       {!clickedRollDie && !disableAnimation && (
         <div className="absolute bottom-0 animate-bounce duration-2000">
