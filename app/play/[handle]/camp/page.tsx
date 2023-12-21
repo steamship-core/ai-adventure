@@ -111,7 +111,7 @@ export default async function CampPage({
       <WelcomeModal />
 
       <main className="w-full h-full">
-        <div className="h-full flex flex-col justify-between max-w-xl mx-auto p-2 md:p-6 gap-2 overflow-hidden">
+        <div className="h-full flex flex-col justify-between max-w-6xl mx-auto p-2 md:p-6 gap-2 overflow-hidden">
           <div className="flex flex-col gap-2 h-full overflow-hidden">
             <InGameNavigation
               isDevelopment={agent.isDevelopment === true}

@@ -28,10 +28,7 @@ const InventorySheet = ({ onClick }: { onClick?: () => void }) => {
           <PackageIcon size={16} />
         </Button>
       </SheetTrigger>
-      <SheetContent
-        side="bottom"
-        className="w-100% h-[100dvh] flex flex-col max-w-4xl mx-auto"
-      >
+      <SheetContent side="bottom" className="w-full h-[100dvh] flex flex-col">
         <SheetHeader>
           <SheetTitle>Inventory</SheetTitle>
           <SheetDescription>

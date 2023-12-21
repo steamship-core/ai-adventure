@@ -188,7 +188,7 @@ export const CharacterSheet = ({
         side="bottom"
         className="w-100% h-[100dvh] flex flex-col pb-4 overflow-y-auto"
       >
-        <div className="flex flex-col gap-4 md:max-w-xl md:mx-auto">
+        <div className="flex flex-col gap-4 md:max-w-6xl md:mx-auto">
           <div className="flex items-center justify-center flex-col w-full gap-2 relative">
             <TypographyH1>{gameState?.player?.name}</TypographyH1>
             <div className="rounded-full overflow-hidden h-44 w-44 border border-yellow-600 shadow-sm shadow-primary">
