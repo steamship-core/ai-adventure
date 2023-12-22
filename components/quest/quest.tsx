@@ -1,9 +1,9 @@
 "use client";
-import { QuestContainer } from "@/components/quest/shared/components";
+import { QuestContainer } from "@/components/quest/components";
 import { useGameState } from "@/lib/recoil-utils";
 import { useParams } from "next/navigation";
+import QuestNarrative from "../chat";
 import { InGameNavigation } from "../navigation/in-game-navigation";
-import QuestNarrative from "./quest-narrative";
 
 export default function Quest({
   agentBaseUrl,

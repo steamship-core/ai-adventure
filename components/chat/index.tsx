@@ -1,7 +1,7 @@
 "use client";
 
 import ErrorBoundary from "@/components/error-boundary";
-import { QuestNarrativeContainer } from "@/components/quest/shared/components";
+import { QuestNarrativeContainer } from "@/components/quest/components";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { amplitude } from "@/lib/amplitude";
@@ -15,8 +15,8 @@ import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import { Button } from "../../ui/button";
-import EndSheet from "../shared/end-sheet";
+import EndSheet from "../quest/shared/end-sheet";
+import { Button } from "../ui/button";
 import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import SelectedTextOverlay from "./selected-text-overlay";
