@@ -63,6 +63,21 @@ const ScrollButton = () => {
   );
 };
 
+/**
+ * A note on IDs:
+ *
+ * The `questId` is NOT the ChatHistory ID. It is a marker WITHIN the chat history that is used
+ * to filter to a sub-section of the ChatHistory.
+ *
+ * If we were to implement a system in which we managed multiple ChatHistory files at this level,
+ * we would need to introduce a different ID here that designated that.
+ *
+ * adventureId is the ID of the Adventure (Game) being played.
+ * agentHandle is the ID of the instance of the Adventure (Game)
+ * agentBaseUrl is the URL of the agent directly, and should probably be removed from this component.
+ *
+ * @returns
+ */
 export default function Chat({
   questId,
   agentBaseUrl,
