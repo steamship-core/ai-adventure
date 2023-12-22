@@ -2,7 +2,7 @@
 import { QuestContainer } from "@/components/quest/components";
 import { useGameState } from "@/lib/recoil-utils";
 import { useParams } from "next/navigation";
-import QuestNarrative from "../chat";
+import Chat from "../chat";
 import { InGameNavigation } from "../navigation/in-game-navigation";
 
 export default function Quest({
@@ -42,7 +42,7 @@ export default function Quest({
             gameEngineVersion={gameEngineVersion || "unknown"}
             className="mb-2"
           />
-          <QuestNarrative
+          <Chat
             id={questId as string}
             agentBaseUrl={agentBaseUrl}
             agentHandle={agentHandle}

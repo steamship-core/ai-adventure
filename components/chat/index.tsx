@@ -15,11 +15,20 @@ import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import EndSheet from "../quest/shared/end-sheet";
+import EndSheet from "../quest/end-sheet";
 import { Button } from "../ui/button";
 import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import SelectedTextOverlay from "./selected-text-overlay";
+
+/**
+ * TODO(eventual) -- This is very close to being a generic chat that could be used for
+ * NPCs, etc. Possibilities to explore that integration appear to be:
+ *
+ * - Make the EndSheet something that's passed in from the caller
+ * - Make the notion of id & questId something that's more easily portable (outerContext, innerContext?)
+ *
+ */
 
 const ScrollButton = () => {
   const { ref, inView } = useInView();
@@ -47,7 +56,7 @@ const ScrollButton = () => {
   );
 };
 
-export default function QuestNarrative({
+export default function Chat({
   id,
   agentBaseUrl,
   agentHandle,
@@ -58,14 +67,11 @@ export default function QuestNarrative({
   agentHandle: string;
   adventureId?: string;
 }) {
-  const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const params = useParams<{ handle: string }>();
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
-  const { gameState, setGameState, refreshGameState } = useGameState(
-    params.handle
-  );
+  const { gameState, refreshGameState } = useGameState(params.handle);
 
   const router = useRouter();
 
@@ -154,6 +160,7 @@ export default function QuestNarrative({
   const completeButtonText = questHasSummary
     ? "See Quest Results"
     : "Complete Quest";
+
   // TODO: we also need to figure out how to historically determine success/failure.
 
   const _showsContinue = !isComplete && showsContinue;
@@ -208,7 +215,10 @@ export default function QuestNarrative({
             );
           })}
 
-          {/* {messages.map((message) => {
+          {/* 
+          TODO: Are we missing the echo back of the user input?
+          
+          {messages.map((message) => {
             if (message.role === "user") {
               nonPersistedUserInput = message.content;
               return <UserInputBlock text={message.content} key={message.id} />;
