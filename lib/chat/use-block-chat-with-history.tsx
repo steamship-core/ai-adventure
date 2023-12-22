@@ -1,5 +1,5 @@
 import { UseChatHelpers } from "ai/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ExtendedBlock } from "./extended-block";
 import { useBlockChat } from "./use-block-chat";
 import { useChatHistory } from "./use-chat-history";
@@ -28,16 +28,8 @@ export function useBlockChatWithHistory({
   visibleBlocks: ExtendedBlock[];
   nonVisibleBlocks: ExtendedBlock[];
   historyLoading: boolean;
-  historyLength: number;
 } {
   const initialized = useRef(false);
-
-  const [historyLength, setHistoryLength] = useState(0);
-
-  let { blocks: history, loading: historyLoading } = useChatHistory({
-    agentHandle,
-    id,
-  });
 
   const useBlockChatResp = useBlockChat({
     agentBaseUrl,
@@ -45,41 +37,23 @@ export function useBlockChatWithHistory({
     skipIfInputEquals,
   });
 
-  /**
-   * This effect is meant to trigger an initial "Let's go on an adventure"
-   * message from the user. This is only triggered if:
-   *
-   * - We have loaded the history, and
-   * - We find that nothing has yet been appended to it
-   */
-  useEffect(() => {
-    // TODO(ted): Move this logic into the useChatHistory HTTP response function.
-    // Plumb down an onHistoryEmpty method
-    // Then the very-top-level component is the thing that will send the message.
-
-    // If no kickoff message, return.
-    if (!userKickoffMessageIfNewChat) return;
-
-    // If we haven't loaded the history, we shouldn't append an initial bock
-    if (historyLoading) return;
-
-    // If we've already initialized, return.
-    if (initialized.current) return;
-    initialized.current = true;
-
-    const isCompletelyNewChat = !history || history.length === 0;
-
-    setHistoryLength(history?.length || 0);
-
-    if (isCompletelyNewChat) {
-      // Kick off the initial part of the conversation!
+  const historyEnabled = typeof useBlockChatResp?.append != "undefined";
+  const onEmptyHistory = () => {
+    if (userKickoffMessageIfNewChat && useBlockChatResp.append) {
       useBlockChatResp.append({
         id: "000-000-000",
         content: userKickoffMessageIfNewChat,
         role: "user",
       });
     }
-  }, [historyLoading, history, userKickoffMessageIfNewChat]);
+  };
+
+  let { blocks: history, isLoading: historyLoading } = useChatHistory({
+    agentHandle,
+    id,
+    enabled: historyEnabled,
+    onEmptyHistory: onEmptyHistory,
+  });
 
   let allBlocks = [...history, ...useBlockChatResp.blocks];
 
@@ -97,6 +71,5 @@ export function useBlockChatWithHistory({
     visibleBlocks,
     nonVisibleBlocks,
     historyLoading,
-    historyLength,
   };
 }

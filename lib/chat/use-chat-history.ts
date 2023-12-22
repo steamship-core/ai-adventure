@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Block } from "../streaming-client/src/schema/block";
 
 /*
@@ -11,38 +11,51 @@ import { Block } from "../streaming-client/src/schema/block";
 export function useChatHistory({
   agentHandle,
   id,
+  enabled,
+  onEmptyHistory = () => {},
 }: {
   agentHandle: string;
   id: string;
-}): { blocks: Block[]; loading: boolean } {
-  const [blocks, setBlocks] = useState<Block[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  enabled: boolean;
+  onEmptyHistory: () => void;
+}): {
+  blocks: Block[];
+  isError: boolean;
+  error: any;
+  isLoading: boolean;
+} {
+  const { data, isLoading, isError, error } = useQuery({
+    enabled: !!agentHandle && !!id && enabled,
+    queryKey: ["chat-history", agentHandle, id],
+    queryFn: async () => {
+      if (!agentHandle) return;
+      if (!id) return;
 
-  const fetchChatHistory = async (handle: string, id: string) => {
-    const resp = await fetch(`/api/agent/${handle}/getChatHistory`, {
-      method: "POST",
-      body: JSON.stringify({
-        id,
-      }),
-    });
+      const res = await fetch(`/api/agent/${agentHandle}/getChatHistory`, {
+        method: "POST",
+        body: JSON.stringify({
+          id,
+        }),
+      });
 
-    if (!resp.ok) {
-      setBlocks([]);
-    }
+      if (!res.ok) {
+        throw new Error(`Failed to fetch chat history.`);
+      }
 
-    const blocksJson = await resp.json();
-    console.log("Got chatHistory", blocksJson);
-    setBlocks(blocksJson);
-    setLoading(false);
+      const blocksJson = await res.json();
+
+      if (!blocksJson || !blocksJson.length) {
+        onEmptyHistory();
+      }
+
+      return blocksJson;
+    },
+  });
+
+  return {
+    blocks: data || [],
+    isLoading,
+    isError,
+    error,
   };
-
-  useEffect(() => {
-    if (id && agentHandle) {
-      fetchChatHistory(agentHandle, id);
-    } else {
-      setBlocks([]);
-    }
-  }, [id, agentHandle]);
-
-  return { blocks, loading };
 }

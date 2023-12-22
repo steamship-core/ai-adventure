@@ -83,6 +83,10 @@ export default function QuestNarrative({
   const [gg, setGameState] = useRecoilState(recoilGameState);
   const router = useRouter();
 
+  const onEmptyHistory = () => {
+    // say it
+  };
+
   const {
     messages,
     append,

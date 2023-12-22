@@ -1,6 +1,6 @@
 import { activeStreams } from "@/components/providers/recoil";
 import { UseChatHelpers } from "ai/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilCounter } from "../recoil-utils";
 import { ExtendedBlock } from "./extended-block";
 import { useBlockChatWithHistory } from "./use-block-chat-with-history";
@@ -45,43 +45,64 @@ export function useBlockChatWithHistoryAndGating({
     userKickoffMessageIfNewChat,
   });
 
-  const { blocks: allBlocks, historyLength } = useBlockChatResp;
-  const [startIdx, setStartIdx] = useState(0);
-  const [endIdx, setEndIdx] = useState(historyLength); // End exclusive!
+  const { blocks: allBlocks } = useBlockChatResp;
 
-  console.log(startIdx, endIdx);
-
-  useEffect(() => {
-    // Note: if we get issues from this effect, we could plumb an onHistoryLoaded callback down.
-    if (historyLength > 0 && endIdx == 0) {
-      setEndIdx(historyLength);
-    }
-  }, [historyLength]);
+  // These are the indices of the VISIBLE BLOCKS!!! Not all blocks
+  const [endIdx, setEndIdx] = useState<number | null>(null); // End exclusive!
 
   const isProcessing = false;
   const currentBlock = null;
 
-  /**
-   * Advances the to the next visible block.
-   */
+  const getVisibleBlockCount = () => {
+    if (!allBlocks || !allBlocks.length) {
+      return null;
+    }
+    var count = 0;
+    for (const block of allBlocks) {
+      if (block.isVisibleInChat) {
+        count++;
+      }
+    }
+    return count;
+  };
 
+  /**
+   * Advances the captured block window.
+   * - In a chat, this is to the next object in the chat.
+   * - In a comic book, this might be to the next scene.
+   */
   const advance = () => {
     setEndIdx((priorVal) => {
-      return priorVal + 1;
+      if (priorVal != null) {
+        return priorVal + 1;
+      }
+      // We initialize to the number of visible blocks + 1 since it's end exclusive.
+      const count = getVisibleBlockCount();
+      if (count != null) {
+        return count + 1;
+      }
+      return null;
     });
   };
 
-  // blocks: ExtendedBlock[];
-  // visibleBlocks: ExtendedBlock[];
-  // nonVisibleBlocks: ExtendedBlock[];
+  let _visibleBlocks: ExtendedBlock[] = [];
+  let _nonVisibleBlocks: ExtendedBlock[] = [];
+  let _blocks: ExtendedBlock[] = [];
 
-  const _blocks = allBlocks.slice(startIdx, endIdx);
-  const _visibleBlocks = _blocks.filter((block: ExtendedBlock) => {
-    return block.isVisibleInChat === true;
-  });
-  const _nonVisibleBlocks = _blocks.filter((block: ExtendedBlock) => {
-    return !(block.isVisibleInChat === true);
-  });
+  for (let block of allBlocks || []) {
+    // Once the number of visible blocks has reached the endIdx if set, we stop.)
+    if (endIdx != null && _visibleBlocks.length <= endIdx) {
+      break;
+    }
+
+    _blocks.push(block);
+    if (block.isVisibleInChat) {
+      _visibleBlocks.push(block);
+    } else {
+      _nonVisibleBlocks.push(block);
+    }
+  }
+
   const _outputWindow = {
     blocks: _blocks,
     visibleBlocks: _visibleBlocks,
