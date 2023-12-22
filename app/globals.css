@@ -222,3 +222,32 @@
 .fadeIn {
   animation: fadeIn 0.5s ease forwards;
 }
+
+@keyframes rain {
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes snowfall {
+  to {
+    transform: translateY(100vh); /* Move across the full viewport height */
+  }
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.6);
+  bottom: 100%;
+  animation: rain linear infinite;
+}
+
+.snowflake {
+  position: absolute;
+  border-radius: 50%; /* Makes the snowflakes circular */
+  opacity: 0.8; /* Slightly transparent */
+  top: -10px; /* Start just off-screen */
+  animation: snowfall linear infinite;
+}

@@ -16,11 +16,13 @@ import { Message } from "ai";
 import { useChat } from "ai/react";
 import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
+import RainEffect from "./effects/rain";
+import SnowEffect from "./effects/snow";
 import InteractionBox from "./interaction-box";
 import { NarrativeBlock } from "./narrative-block";
 import SelectedTextOverlay from "./selected-text-overlay";
@@ -213,6 +215,8 @@ export default function QuestNarrative({
 
   let nonPersistedUserInput: string | null = null;
 
+  const [effect, setEffect] = useState<"snow" | "rain" | null>(null);
+
   if (error) {
     return (
       <div className="flex h-full overflow-hidden items-center justify-center flex-col text-center">
@@ -230,6 +234,14 @@ export default function QuestNarrative({
   return (
     <>
       <div className="flex h-full overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full">
+          {effect === "snow" && <SnowEffect />}
+          {effect === "rain" && <RainEffect />}
+        </div>
+        <div className="absolute bottom-0 left-0 flex gap-2">
+          <Button onClick={() => setEffect("snow")}>Snow</Button>
+          <Button onClick={() => setEffect("rain")}>Rain</Button>
+        </div>
         <div
           className="absolute left-1/2 right-0 bottom-0 -z-10 -ml-24 transform-gpu overflow-hidden blur-3xl lg:ml-24 xl:ml-48"
           aria-hidden="true"
