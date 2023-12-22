@@ -130,7 +130,6 @@ const InteractionBox = ({
   input,
   handleInputChange,
   isLoading,
-  isComplete,
   setInput,
   agentHandle,
 }: {
@@ -141,7 +140,6 @@ const InteractionBox = ({
   input: string;
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   isLoading: boolean;
-  isComplete: boolean;
   setInput: Dispatch<SetStateAction<string>>;
   agentHandle?: string;
 }) => {
@@ -150,7 +148,7 @@ const InteractionBox = ({
 
   return (
     <div className="flex w-full flex-col">
-      {selectedOption !== "none" && !(isLoading || isComplete) && (
+      {selectedOption !== "none" && !isLoading && (
         <div className="flex gap-2">
           <button
             className="flex gap-2 items-center text-sm mb-2"
@@ -166,13 +164,13 @@ const InteractionBox = ({
             setSelectedOption={setSelectedOption}
             setInput={setInput}
             agentHandle={agentHandle}
-            disabled={isLoading || isComplete}
+            disabled={isLoading}
           />
           <Button
             variant="outline"
             className="w-full flex gap-4"
             onClick={() => setSelectedOption("custom")}
-            disabled={isLoading || isComplete}
+            disabled={isLoading}
           >
             <PencilIcon className="h-5" /> Custom
           </Button>
@@ -203,10 +201,10 @@ const InteractionBox = ({
                 formRef?.current?.requestSubmit();
               }
             }}
-            disabled={isLoading || isComplete}
+            disabled={isLoading}
             autoFocus
           />
-          <Button type="submit" disabled={isLoading || isComplete}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading ? (
               <LoaderIcon size={16} className="animate-spin" />
             ) : (

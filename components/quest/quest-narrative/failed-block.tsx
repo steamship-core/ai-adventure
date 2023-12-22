@@ -1,19 +1,8 @@
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
 import { BlockContainer } from "./block-container";
 
-export const FailedBlock = ({
-  block,
-  onComplete,
-}: {
-  block: Block;
-  onComplete: (failed?: boolean) => void;
-}) => {
-  useEffect(() => {
-    onComplete(true);
-  }, []);
-
+export const FailedBlock = ({ block }: { block: Block }) => {
   return (
     <BlockContainer>
       <div

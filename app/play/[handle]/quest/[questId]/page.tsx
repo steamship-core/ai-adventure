@@ -56,7 +56,6 @@ export default async function QuestPage({
       <Quest
         workspaceHandle={agent.handle}
         gameEngineVersion={agent.agentVersion || "Unknown"}
-        gameState={gameState}
         agentBaseUrl={agent.agentUrl}
         isDevelopment={agent.isDevelopment || false}
         agentHandle={agent.handle}

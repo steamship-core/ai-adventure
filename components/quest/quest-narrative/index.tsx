@@ -1,10 +1,6 @@
 "use client";
 
 import ErrorBoundary from "@/components/error-boundary";
-import {
-  recoilBlockHistory,
-  recoilGameState,
-} from "@/components/providers/recoil";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
@@ -12,14 +8,13 @@ import { amplitude } from "@/lib/amplitude";
 import { MessageTypes } from "@/lib/chat/block-chat-types";
 import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { useBlockChatWithHistoryAndGating } from "@/lib/chat/use-block-chat-with-history-and-gating";
-import { getGameState } from "@/lib/game/game-state.client";
 import { useBackgroundMusic } from "@/lib/hooks";
+import { useGameState } from "@/lib/recoil-utils";
 import { Block } from "@/lib/streaming-client/src";
 import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import { useRecoilState } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import InteractionBox from "./interaction-box";
@@ -54,38 +49,25 @@ const ScrollButton = () => {
 
 export default function QuestNarrative({
   id,
-  onSummary,
-  onComplete,
-  isComplete,
-  summary,
   agentBaseUrl,
-  completeButtonText,
   agentHandle,
   adventureId,
-  didFail,
 }: {
   id: string;
-  summary: Block | null;
-  onSummary: (block: Block) => void;
-  onComplete: (failed?: boolean) => void;
-  isComplete: boolean;
   agentBaseUrl: string;
-  completeButtonText?: string;
   agentHandle: string;
   adventureId?: string;
-  didFail?: boolean;
 }) {
   const initialized = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const params = useParams<{ handle: string }>();
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
-  const [gg, setGameState] = useRecoilState(recoilGameState);
-  const router = useRouter();
+  const { gameState, setGameState, refreshGameState } = useGameState(
+    params.handle
+  );
 
-  const onEmptyHistory = () => {
-    // say it
-  };
+  const router = useRouter();
 
   const {
     messages,
@@ -101,8 +83,12 @@ export default function QuestNarrative({
     visibleBlocks,
     initialBlock,
     advance,
+    showsContinue,
     acceptsInput,
     acceptsContinue,
+    isComplete: isCompleteFromStream,
+    isFailed,
+    isSucceeded,
     nonVisibleBlocks,
   } = useBlockChatWithHistoryAndGating({
     id: id,
@@ -134,45 +120,44 @@ export default function QuestNarrative({
     }
   };
 
+  // Scroll to the bottom whenever the blocks change.
   useEffect(() => {
     scrollToBottom();
   }, [visibleBlocks]);
 
+  // Call the onBLock handler for each block, each time the blocks change.
+  // TODO: We should only ever call the onBlock handler once per block -- need to memoize.
   useEffect(() => {
     for (let block of blocks) {
       onBlock(block);
     }
   }, [blocks]);
 
+  // If we're complete, we should refresh the game state
   useEffect(() => {
-    const updateGameState = async () => {
-      const gs = await getGameState(params.handle);
-      setGameState(gs);
-    };
-
-    if (isComplete) {
-      updateGameState();
+    if (isCompleteFromStream) {
+      refreshGameState();
     }
-  }, [isComplete]);
+  }, [isCompleteFromStream]);
 
-  const [chatHistory, setChatHistory] = useRecoilState(recoilBlockHistory);
-  const chatHistoryContainsInitialBlock = chatHistory.includes(
-    initialBlock?.id!
-  );
-  const activeBlock =
-    chatHistory.length > 0 && chatHistoryContainsInitialBlock
-      ? chatHistory[chatHistory.length - 1]
-      : initialBlock?.id;
+  // Important! When we RELOAD the, the QuestEnded block might not be present since agent versions in 2023
+  // didn't mark that with the quest ID. That means loading the historical quest blocks will miss them.
+  // So we need to combine the state from the quest stream with some markers on game_state which will help
+  // us identify that the quest, in fact, is complete.
+  const { questId } = useParams();
+  const quest = gameState?.quests?.find((q) => q.name === questId);
+  const questHasSummary = quest?.text_summary ? true : false;
 
-  const nextBlockIndex =
-    visibleBlocks.findIndex((block) => block.id === activeBlock) + 1;
+  // This is the hack to make sure we realize the quest is complete from the GameState when historical reload
+  // of the quest blocks doesn't have the QuestEnded block.
+  const isComplete = isCompleteFromStream || questHasSummary;
+  const completeButtonText = questHasSummary
+    ? "See Quest Results"
+    : "Complete Quest";
+  // TODO: we also need to figure out how to historically determine success/failure.
 
-  const nextBlock =
-    nextBlockIndex < visibleBlocks.length
-      ? visibleBlocks[nextBlockIndex]
-      : null;
-
-  let nonPersistedUserInput: string | null = null;
+  const _showsContinue = !isComplete && showsContinue;
+  const _acceptsInput = !isComplete && acceptsInput;
 
   if (error) {
     return (
@@ -216,9 +201,8 @@ export default function QuestNarrative({
                   block={block}
                   offerAudio
                   isFirst={idx === 0}
-                  onSummary={onSummary}
-                  onComplete={onComplete}
                   isPrior={block.historical ? true : undefined}
+                  advance={advance}
                 />
               </ErrorBoundary>
             );
@@ -238,50 +222,54 @@ export default function QuestNarrative({
         </QuestNarrativeContainer>
       </div>
       <div className="flex items-end justify-center flex-col w-full gap-2 h-20 mb-2 pt-1 relative">
-        {isComplete && !nextBlock ? (
+        {isComplete && (
           <EndSheet
             isEnd={true}
-            summary={summary}
+            summary={
+              {
+                text: quest?.text_summary || "",
+              } as Block
+            }
             completeButtonText={completeButtonText}
-            didFail={didFail}
+            didFail={isFailed}
           />
-        ) : (
-          <>
-            {acceptsInput ? (
-              <InteractionBox
-                formRef={formRef}
-                inputRef={inputRef}
-                handleSubmit={handleSubmit}
-                scrollToBottom={scrollToBottom}
-                input={input}
-                handleInputChange={handleInputChange}
-                isLoading={isLoading}
-                isComplete={isComplete}
-                setInput={setInput}
-                agentHandle={agentHandle}
-              />
-            ) : (
-              <Button
-                disabled={!acceptsContinue}
-                onClick={() => {
-                  amplitude.track("Button Click", {
-                    buttonName: "Continue",
-                    location: "Quest",
-                    action: "continue-quest",
-                    questId: id,
-                    workspaceHandle: params.handle,
-                  });
-                  advance();
-                  setTimeout(() => {
-                    scrollToBottom();
-                  }, 150);
-                }}
-                className="w-full"
-              >
-                Continue <ArrowRightIcon size={18} />
-              </Button>
-            )}
-          </>
+        )}
+        {_acceptsInput && (
+          <InteractionBox
+            formRef={formRef}
+            inputRef={inputRef}
+            handleSubmit={(e) => {
+              advance();
+              handleSubmit(e);
+            }}
+            scrollToBottom={scrollToBottom}
+            input={input}
+            handleInputChange={handleInputChange}
+            isLoading={isLoading}
+            setInput={setInput}
+            agentHandle={agentHandle}
+          />
+        )}
+        {_showsContinue && (
+          <Button
+            disabled={!acceptsContinue}
+            onClick={() => {
+              amplitude.track("Button Click", {
+                buttonName: "Continue",
+                location: "Quest",
+                action: "continue-quest",
+                questId: id,
+                workspaceHandle: params.handle,
+              });
+              advance();
+              setTimeout(() => {
+                scrollToBottom();
+              }, 150);
+            }}
+            className="w-full"
+          >
+            Continue <ArrowRightIcon size={18} />
+          </Button>
         )}
       </div>
     </>

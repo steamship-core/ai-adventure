@@ -5,11 +5,20 @@ import { useBlockChat } from "./use-block-chat";
 import { useChatHistory } from "./use-chat-history";
 
 /*
- * Wraps useBlockChat with code that additionally loads in the existing chat history
- * for a conversation.
+ * useBlockChatWithHistory wraps the following two hooks:
  *
- * This provides handling for both "the conversation already had" and also "the conversation evolving in realtime"
+ *  - useBlockChat
+ *  - useChatHistory
  *
+ * ... to create a unified window into a chat session with both prior history and the ability to push that
+ * history forward with new messages.
+ *
+ * This hook is thus the single endpoint for a persisted conversation.
+ *
+ * The `blocks` output of the hook:
+ * - is a unified list of Steamship Blocks, both historical and new (possibly streaming)
+ * - is entirely the `ExtendedBlock` subtype, which includes additional information about the block
+ *   with respect to its role in driving the user interface.
  */
 export function useBlockChatWithHistory({
   agentBaseUrl,

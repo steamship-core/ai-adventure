@@ -2,15 +2,24 @@ import { activeStreams } from "@/components/providers/recoil";
 import { UseChatHelpers } from "ai/react";
 import { useState } from "react";
 import { useRecoilCounter } from "../recoil-utils";
+import { MessageTypes } from "./block-chat-types";
 import { ExtendedBlock } from "./extended-block";
 import { useBlockChatWithHistory } from "./use-block-chat-with-history";
 
 /*
- * Wraps useBlockChatWithHistory with code that additionally
+ * useBlockChatWithHistoryAndGating wraps useBlockChatWithHistory with code that manages
+ * the logic for a user interface layered atop a chat that commingles blocks of several types.
  *
- * - Adds a notion of currentBlock
- * - Adds in bits for acceptsContinue, acceptsMessage, isProcessing
- * - Adds in helpers for continue,
+ * The output blocks of this hook ARE NOT the entire chat history.
+ * Rather, they are the output of the chat history which is appropriate for the current UI.
+ *
+ * Additionally, this hook adds the following properties to the output for UI management:
+ *
+ * - acceptsContinue - whether displaying a `continue` button is appropriate
+ * - acceptsInput - whether displaying an `input` element is appropriate
+ * - advance() - which advances the window of displayed blocks forward
+ *
+ * As well as others whose purpose can be inferred from variable names..
  *
  */
 export function useBlockChatWithHistoryAndGating({
@@ -32,9 +41,13 @@ export function useBlockChatWithHistoryAndGating({
   historyLoading: boolean;
   initialBlock: ExtendedBlock | null;
   currentBlock: ExtendedBlock | null;
+  showsContinue: boolean;
   acceptsContinue: boolean;
   acceptsInput: boolean;
   isProcessing: boolean;
+  isComplete: boolean;
+  isFailed: boolean;
+  isSucceeded: boolean;
   advance: () => void;
 } {
   const useBlockChatResp = useBlockChatWithHistory({
@@ -45,54 +58,74 @@ export function useBlockChatWithHistoryAndGating({
     userKickoffMessageIfNewChat,
   });
 
-  const { blocks: allBlocks } = useBlockChatResp;
+  const { blocks: allBlocks, visibleBlocks: allVisibleBlocks } =
+    useBlockChatResp;
 
-  // These are the indices of the VISIBLE BLOCKS!!! Not all blocks
+  /**
+   * endIdx is the desired end index (0-indexed; exclusive) with respect to user input unfolding.
+   * In practice this means VISIBLE BLOCKS. Each time it is incremented, a new BLOCK will be shown
+   * if available. An endIdx of null is equivalent to an endIdx of Infinity.
+   */
   const [endIdx, setEndIdx] = useState<number | null>(null); // End exclusive!
 
   const isProcessing = false;
   const currentBlock = null;
-
-  const getVisibleBlockCount = () => {
-    if (!allBlocks || !allBlocks.length) {
-      return null;
-    }
-    var count = 0;
-    for (const block of allBlocks) {
-      if (block.isVisibleInChat) {
-        count++;
-      }
-    }
-    return count;
-  };
 
   /**
    * Advances the captured block window.
    * - In a chat, this is to the next object in the chat.
    * - In a comic book, this might be to the next scene.
    */
-  const advance = () => {
+  const advance = (byAmount: number = 1) => {
     setEndIdx((priorVal) => {
+      // If we already have a non-null endIdx, advance by `byAmount`
       if (priorVal != null) {
-        return priorVal + 1;
+        console.log(
+          `Advance narrative from endIdx ${priorVal} to ${priorVal + byAmount}.`
+        );
+        return priorVal + byAmount;
       }
-      // We initialize to the number of visible blocks + 1 since it's end exclusive.
-      const count = getVisibleBlockCount();
-      if (count != null) {
-        return count + 1;
-      }
-      return null;
+
+      // If here, the prior val was null.
+      const count = allVisibleBlocks?.length || 0;
+      console.log(
+        `Setting endIdx ${priorVal} to end+offset = ${count + byAmount}.`
+      );
+      return count + byAmount;
     });
   };
 
+  /*
+   * Here we calculate which blocks to return for the scene provided to the user.
+   * For now, the startIdx is always 0, inclusive.
+   * We push blocks onto the return object until we've reached the end of the blocks or the
+   * endIdx, exclusive, of the visible blocks.
+   */
   let _visibleBlocks: ExtendedBlock[] = [];
   let _nonVisibleBlocks: ExtendedBlock[] = [];
   let _blocks: ExtendedBlock[] = [];
 
+  let isComplete = false;
+  let isFailed = false;
+  let isSucceeded = false;
+
+  let _endIdx = endIdx || allVisibleBlocks?.length || 0;
+
   for (let block of allBlocks || []) {
     // Once the number of visible blocks has reached the endIdx if set, we stop.)
-    if (endIdx != null && _visibleBlocks.length <= endIdx) {
+    if (_visibleBlocks.length >= _endIdx) {
+      console.log(
+        `Returning ${_visibleBlocks.length}/${allVisibleBlocks?.length} visible blocks (endIdx = ${_endIdx})`
+      );
       break;
+    }
+
+    if (block.messageType == MessageTypes.QUEST_FAILED) {
+      isComplete = true;
+      isFailed = true;
+    } else if (block.messageType == MessageTypes.QUEST_COMPLETE) {
+      isComplete = true;
+      isSucceeded = true;
     }
 
     _blocks.push(block);
@@ -116,17 +149,41 @@ export function useBlockChatWithHistoryAndGating({
     _visibleBlocks.length > 0 &&
     _visibleBlocks[_visibleBlocks.length - 1].isInputElement;
 
+  const moreVisibleBlocksToRender =
+    _visibleBlocks?.length < (allVisibleBlocks?.length || 0);
+
   // We can send input the block window extends to the end of the available blocks.
   const acceptsInput =
-    (endIdx == null || endIdx == _visibleBlocks?.length) &&
-    !lastVisibleBlockIsInput;
+    !moreVisibleBlocksToRender && !lastVisibleBlockIsInput && !isComplete;
 
-  console.log("acceptsInput", endIdx, _visibleBlocks?.length, acceptsInput);
+  console.log(
+    `moreVisibleBlocksToRender ${moreVisibleBlocksToRender}; lastVisibleBlockIsInput: ${lastVisibleBlockIsInput}; isComplete: ${isComplete} -> acceptsInput: ${acceptsInput}`
+  );
 
-  // We are allowed to continue if there are no active streams being played to the user, and we're not accepting input, and the last block isn't accepting input either.
-  const { count: activeStreamCount } = useRecoilCounter(activeStreams);
-  const acceptsContinue =
-    activeStreamCount == 0 && !lastVisibleBlockIsInput && !acceptsInput;
+  // Check if the last visible block is busy streaming content or blocking on user input.
+  const { isStreaming } = useRecoilCounter(activeStreams);
+  let lastActiveBlockIsBusy = false;
+  if (
+    _visibleBlocks &&
+    _visibleBlocks.length > 0 &&
+    isStreaming(_visibleBlocks[_visibleBlocks.length - 1].id)
+  ) {
+    lastActiveBlockIsBusy = true;
+  }
+
+  // We should offer a continue button if we're not waiting for input, we're not busy, and there's more to show
+  const showsContinue =
+    !acceptsInput && moreVisibleBlocksToRender && !isComplete;
+
+  console.log(
+    `acceptsInput: ${acceptsInput}; moreVisibleBlocksToRender: ${moreVisibleBlocksToRender}; isComplete: ${isComplete} ->  showsContinue: ${showsContinue}`
+  );
+
+  const acceptsContinue = showsContinue && !lastActiveBlockIsBusy;
+
+  console.log(
+    `showsContinue: ${showsContinue}; lastActiveBlockIsBusy: ${lastActiveBlockIsBusy}; ->  acceptsContinue: ${acceptsContinue}`
+  );
 
   const ret = {
     ...useBlockChatResp,
@@ -136,6 +193,10 @@ export function useBlockChatWithHistoryAndGating({
     acceptsInput,
     acceptsContinue,
     currentBlock,
+    isComplete,
+    showsContinue,
+    isFailed,
+    isSucceeded,
   };
 
   console.log("Output Window", _outputWindow);

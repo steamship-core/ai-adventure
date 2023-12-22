@@ -20,6 +20,7 @@ const RollingDie = ({
   success,
   disableAnimation,
   itemUsed,
+  advance,
   itemUsedId,
 }: {
   required: number;
@@ -28,6 +29,7 @@ const RollingDie = ({
   disableAnimation: boolean;
   itemUsed?: string;
   itemUsedId?: string;
+  advance?: () => void;
 }) => {
   const [num, setNum] = useState(disableAnimation ? rolled : 1);
   const [showStatus, setShowStatus] = useState(
@@ -60,6 +62,9 @@ const RollingDie = ({
       setShowSuccessAnimation(rolled >= required);
       if (!disableAnimation) {
         streamEnd("dice");
+        if (advance) {
+          advance();
+        }
       }
       setDoneRolling(true);
     }, 2000);
@@ -169,9 +174,11 @@ const RollingDie = ({
 export const DiceRollBlock = ({
   block,
   disableAnimation,
+  advance,
 }: {
   block: Block;
   disableAnimation: boolean;
+  advance: () => void;
 }) => {
   let resultJson = null;
   try {
@@ -201,6 +208,7 @@ export const DiceRollBlock = ({
       disableAnimation={disableAnimation}
       itemUsed={resultJson.item_used}
       itemUsedId={resultJson.item_used_id}
+      advance={advance}
     />
   );
 };

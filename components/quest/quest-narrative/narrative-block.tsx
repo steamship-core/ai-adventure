@@ -1,6 +1,5 @@
 import { MessageTypes } from "@/lib/chat/block-chat-types";
 import { ExtendedBlock } from "@/lib/chat/extended-block";
-import { Block } from "@/lib/streaming-client/src";
 import { CompletionBlock } from "./completion-block";
 import {
   BackgroundAudioBlock,
@@ -21,19 +20,17 @@ import { TextBlock } from "./text-block";
 import { UserInputBlock } from "./user-input-block";
 
 export const NarrativeBlock = ({
-  onSummary,
-  onComplete,
   block,
   offerAudio,
   isPrior,
   isFirst,
+  advance,
 }: {
   block: ExtendedBlock;
-  onSummary: (block: Block) => void;
-  onComplete: (failed?: boolean) => void;
   offerAudio?: boolean;
   isPrior?: boolean;
   isFirst?: boolean;
+  advance?: () => void;
 }) => {
   let hideOutput = !(isFirst || block.historical);
   switch (block.messageType) {
@@ -54,6 +51,7 @@ export const NarrativeBlock = ({
           key={block.id}
           block={block}
           disableAnimation={isPrior === true}
+          advance={advance}
         />
       );
     case MessageTypes.STATUS_MESSAGE:
@@ -91,17 +89,11 @@ export const NarrativeBlock = ({
         />
       );
     case MessageTypes.QUEST_COMPLETE:
-      return (
-        <CompletionBlock key={block.id} block={block} onComplete={onComplete} />
-      );
+      return <CompletionBlock key={block.id} block={block} />;
     case MessageTypes.QUEST_FAILED:
-      return (
-        <FailedBlock key={block.id} block={block} onComplete={onComplete} />
-      );
+      return <FailedBlock key={block.id} block={block} />;
     case MessageTypes.QUEST_SUMMARY:
-      return (
-        <QuestSummaryBlock key={block.id} block={block} onSummary={onSummary} />
-      );
+      return <QuestSummaryBlock key={block.id} block={block} />;
     case MessageTypes.ITEM_GENERATION_CONTENT:
       return (
         <ItemGenerationBlock
