@@ -1,5 +1,5 @@
 import { UseChatHelpers } from "ai/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ExtendedBlock } from "./extended-block";
 import { useBlockChat } from "./use-block-chat";
 import { useChatHistory } from "./use-chat-history";
@@ -28,8 +28,11 @@ export function useBlockChatWithHistory({
   visibleBlocks: ExtendedBlock[];
   nonVisibleBlocks: ExtendedBlock[];
   historyLoading: boolean;
+  historyLength: number;
 } {
   const initialized = useRef(false);
+
+  const [historyLength, setHistoryLength] = useState(0);
 
   let { blocks: history, loading: historyLoading } = useChatHistory({
     agentHandle,
@@ -50,6 +53,10 @@ export function useBlockChatWithHistory({
    * - We find that nothing has yet been appended to it
    */
   useEffect(() => {
+    // TODO(ted): Move this logic into the useChatHistory HTTP response function.
+    // Plumb down an onHistoryEmpty method
+    // Then the very-top-level component is the thing that will send the message.
+
     // If no kickoff message, return.
     if (!userKickoffMessageIfNewChat) return;
 
@@ -61,6 +68,8 @@ export function useBlockChatWithHistory({
     initialized.current = true;
 
     const isCompletelyNewChat = !history || history.length === 0;
+
+    setHistoryLength(history?.length || 0);
 
     if (isCompletelyNewChat) {
       // Kick off the initial part of the conversation!
@@ -88,5 +97,6 @@ export function useBlockChatWithHistory({
     visibleBlocks,
     nonVisibleBlocks,
     historyLoading,
+    historyLength,
   };
 }

@@ -3,14 +3,13 @@
 import ErrorBoundary from "@/components/error-boundary";
 import {
   recoilBlockHistory,
-  recoilContinuationState,
   recoilGameState,
 } from "@/components/providers/recoil";
-import { MessageTypes } from "@/lib/chat/block-chat-types";
 import { QuestNarrativeContainer } from "@/components/quest/shared/components";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
 import { amplitude } from "@/lib/amplitude";
+import { MessageTypes } from "@/lib/chat/block-chat-types";
 import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { useBlockChatWithHistoryAndGating } from "@/lib/chat/use-block-chat-with-history-and-gating";
 import { getGameState } from "@/lib/game/game-state.client";
@@ -20,7 +19,7 @@ import { ArrowDown, ArrowRightIcon, LoaderIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { Button } from "../../ui/button";
 import EndSheet from "../shared/end-sheet";
 import InteractionBox from "./interaction-box";
@@ -82,7 +81,6 @@ export default function QuestNarrative({
   const params = useParams<{ handle: string }>();
   const { setUrl: setBackgroundMusicUrl } = useBackgroundMusic();
   const [gg, setGameState] = useRecoilState(recoilGameState);
-  const isContinuationEnabled = useRecoilValue(recoilContinuationState);
   const router = useRouter();
 
   const {
@@ -98,6 +96,9 @@ export default function QuestNarrative({
     blocks,
     visibleBlocks,
     initialBlock,
+    advance,
+    acceptsInput,
+    acceptsContinue,
     nonVisibleBlocks,
   } = useBlockChatWithHistoryAndGating({
     id: id,
@@ -184,8 +185,6 @@ export default function QuestNarrative({
     );
   }
 
-  const offerUserInteraction: boolean = !nextBlock;
-
   return (
     <>
       <div className="flex h-full overflow-hidden">
@@ -215,7 +214,7 @@ export default function QuestNarrative({
                   isFirst={idx === 0}
                   onSummary={onSummary}
                   onComplete={onComplete}
-                  isPrior
+                  isPrior={block.historical ? true : undefined}
                 />
               </ErrorBoundary>
             );
@@ -244,7 +243,7 @@ export default function QuestNarrative({
           />
         ) : (
           <>
-            {offerUserInteraction ? (
+            {acceptsInput ? (
               <InteractionBox
                 formRef={formRef}
                 inputRef={inputRef}
@@ -259,7 +258,7 @@ export default function QuestNarrative({
               />
             ) : (
               <Button
-                disabled={!isContinuationEnabled}
+                disabled={!acceptsContinue}
                 onClick={() => {
                   amplitude.track("Button Click", {
                     buttonName: "Continue",
@@ -268,22 +267,7 @@ export default function QuestNarrative({
                     questId: id,
                     workspaceHandle: params.handle,
                   });
-                  if (initialBlock?.id) {
-                    const containsInitialBlock = chatHistory.includes(
-                      initialBlock?.id
-                    );
-                    if (!containsInitialBlock) {
-                      setChatHistory((prev) => [
-                        ...prev,
-                        initialBlock.id,
-                        nextBlock!.id,
-                      ]);
-                    } else {
-                      setChatHistory((prev) => [...prev, nextBlock!.id]);
-                    }
-                  } else {
-                    setChatHistory((prev) => [...prev, nextBlock!.id]);
-                  }
+                  advance();
                   setTimeout(() => {
                     scrollToBottom();
                   }, 150);

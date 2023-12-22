@@ -1,8 +1,6 @@
-import { useRecoilState } from "recoil";
 import { BlockContainer } from "./block-container";
 import { NarrationPlayer } from "./narration-player";
 
-import { recoilContinuationState } from "@/components/providers/recoil";
 import { addNewlines } from "@/lib/text";
 import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
@@ -95,12 +93,7 @@ export const TextBlockInner = ({
   isPrior?: boolean;
   onFinishedRendering?: () => void;
 }) => {
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
   const [isHover, setIsHover] = useState(false);
-
-  useEffect(() => {
-    setContinuationState(false);
-  }, []);
 
   const _text = addNewlines(text);
 

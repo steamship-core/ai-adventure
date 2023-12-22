@@ -1,8 +1,8 @@
 "use client";
-import { recoilContinuationState } from "@/components/providers/recoil";
+import { activeStreams } from "@/components/providers/recoil";
+import { useRecoilCounter } from "@/lib/recoil-utils";
 import { Block } from "@/lib/streaming-client/src";
-import { useMemo, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useEffect, useMemo, useState } from "react";
 import { TextBlock } from "./text-block";
 import { useBlockStream } from "./use-block-stream";
 
@@ -17,7 +17,7 @@ const CompletionBlock = ({
   hideOutput?: boolean;
   isPrior?: boolean;
 }) => {
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+  const { streamStart, streamEnd } = useRecoilCounter(activeStreams);
 
   const [didComplete, setDidComplete] = useState(false);
   const alreadyFinishedAndOfferAudio =
@@ -28,9 +28,15 @@ const CompletionBlock = ({
     setFinishedAndOfferAudio(offerAudio === true);
   };
 
+  useEffect(() => {
+    if (block.id) {
+      streamStart(block.id);
+    }
+  }, [block]);
+
   const onFinishedRendering = () => {
     setDidComplete(true);
-    setContinuationState(true);
+    streamEnd(block.id);
   };
 
   const { completion } = useBlockStream({ blockId: block.id, onFinish });

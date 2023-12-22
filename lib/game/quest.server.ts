@@ -58,6 +58,8 @@ export const loadExistingQuestBlocks = async (
     return blocks.map((block) => {
       block.streamingUrl = `${process.env.NEXT_PUBLIC_STEAMSHIP_API_BASE}block/${block.id}/raw`;
       block.historical = true;
+      block.messageType = getMessageType(block);
+      block.isVisibleInChat = validTypes.includes(block.messageType);
       return block;
     });
   }
