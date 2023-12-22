@@ -57,20 +57,6 @@ const MessageDisplay = ({
 };
 
 export const TextBlock = ({
-  ...rest
-}: {
-  text: string;
-  blockId?: string;
-  offerAudio?: boolean;
-  didComplete?: boolean;
-  wasAlreadyComplete?: boolean;
-  isPrior?: boolean;
-  onFinishedRendering?: () => void;
-}) => {
-  return <TextBlockInner {...rest} />;
-};
-
-export const TextBlockInner = ({
   text,
   blockId,
   offerAudio,
