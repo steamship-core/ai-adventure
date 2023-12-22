@@ -28,6 +28,13 @@ import SelectedTextOverlay from "./selected-text-overlay";
  * - Make the EndSheet something that's passed in from the caller
  * - Make the notion of id & questId something that's more easily portable (outerContext, innerContext?)
  *
+ * Further possibilities:
+ *
+ * - Have a standard <OutputBlock> interface (props, etc)
+ * - Have a standard <InputWidget> interface (text, options, dice roll)
+ * - Have a standard <WorldModifier> interface (weather, etc) which might also work with a map-view (??)
+ *
+ * Such that we can more easily
  */
 
 const ScrollButton = () => {
