@@ -178,7 +178,7 @@ export const DiceRollBlock = ({
 }: {
   block: Block;
   disableAnimation: boolean;
-  advance: () => void;
+  advance?: () => void;
 }) => {
   let resultJson = null;
   try {

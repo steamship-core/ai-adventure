@@ -32,7 +32,6 @@ export const NarrativeBlock = ({
   isFirst?: boolean;
   advance?: () => void;
 }) => {
-  let hideOutput = !(isFirst || block.historical);
   switch (block.messageType) {
     case MessageTypes.TEXT:
       return (
@@ -41,7 +40,6 @@ export const NarrativeBlock = ({
           offerAudio={offerAudio}
           blockId={block.id}
           text={block.text!}
-          hideOutput={hideOutput}
           isPrior={isPrior}
         />
       );
@@ -84,7 +82,6 @@ export const NarrativeBlock = ({
           key={block.id}
           offerAudio={offerAudio}
           block={block}
-          hideOutput={hideOutput}
           isPrior={isPrior}
         />
       );
@@ -95,17 +92,9 @@ export const NarrativeBlock = ({
     case MessageTypes.QUEST_SUMMARY:
       return <QuestSummaryBlock key={block.id} block={block} />;
     case MessageTypes.ITEM_GENERATION_CONTENT:
-      return (
-        <ItemGenerationBlock
-          key={block.id}
-          block={block}
-          hideOutput={hideOutput}
-        />
-      );
+      return <ItemGenerationBlock key={block.id} block={block} />;
     case MessageTypes.IMAGE:
-      return (
-        <ImageBlock key={block.id} block={block} hideOutput={hideOutput} />
-      );
+      return <ImageBlock key={block.id} block={block} />;
     case MessageTypes.SCENE_AUDIO:
       return <BackgroundAudioBlock key={block.id} block={block} />;
     case MessageTypes.QUEST_ARC:

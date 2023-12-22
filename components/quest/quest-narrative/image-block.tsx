@@ -34,13 +34,7 @@ const ImageWithFallback = ({
     />
   );
 };
-export const ImageBlock = ({
-  block,
-  hideOutput,
-}: {
-  block: Block;
-  hideOutput?: boolean;
-}) => {
+export const ImageBlock = ({ block }: { block: Block }) => {
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const gameState = useRecoilValue(recoilGameState);
 
@@ -69,9 +63,6 @@ export const ImageBlock = ({
   );
 
   const itemName = item?.value?.["string-value"];
-  if (hideOutput) {
-    return null;
-  }
 
   const imageContainerClasses = cn(
     "overflow-hidden rounded-md w-full relative mt-4",

@@ -9,12 +9,10 @@ import { useBlockStream } from "./use-block-stream";
 const CompletionBlock = ({
   block,
   offerAudio,
-  hideOutput,
   isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
-  hideOutput?: boolean;
   isPrior?: boolean;
 }) => {
   const { streamStart, streamEnd } = useRecoilCounter(activeStreams);
@@ -48,7 +46,6 @@ const CompletionBlock = ({
       text={completion}
       wasAlreadyComplete={false}
       didComplete={didComplete}
-      hideOutput={hideOutput}
       isPrior={isPrior}
       onFinishedRendering={onFinishedRendering}
     />
@@ -58,12 +55,10 @@ const CompletionBlock = ({
 export const StreamingBlock = ({
   block,
   offerAudio,
-  hideOutput,
   isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
-  hideOutput?: boolean;
   isPrior?: boolean;
 }) => {
   const wasAlreadyComplete = useMemo(
@@ -74,9 +69,6 @@ export const StreamingBlock = ({
   const alreadyFinishedAndOfferAudio =
     block?.streamState === "complete" && offerAudio === true;
 
-  if (hideOutput) {
-    return null;
-  }
   if (wasAlreadyComplete) {
     return (
       <TextBlock
@@ -85,18 +77,12 @@ export const StreamingBlock = ({
         text={block.text!}
         wasAlreadyComplete={true}
         didComplete={true}
-        hideOutput={hideOutput}
         isPrior={isPrior}
       />
     );
   }
 
   return (
-    <CompletionBlock
-      block={block}
-      offerAudio={offerAudio}
-      hideOutput={hideOutput}
-      isPrior={isPrior}
-    />
+    <CompletionBlock block={block} offerAudio={offerAudio} isPrior={isPrior} />
   );
 };

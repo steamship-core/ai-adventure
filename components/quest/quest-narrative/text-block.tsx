@@ -57,22 +57,16 @@ const MessageDisplay = ({
 };
 
 export const TextBlock = ({
-  hideOutput,
   ...rest
 }: {
   text: string;
   blockId?: string;
   offerAudio?: boolean;
-  hideOutput?: boolean;
   didComplete?: boolean;
   wasAlreadyComplete?: boolean;
   isPrior?: boolean;
   onFinishedRendering?: () => void;
 }) => {
-  if (hideOutput) {
-    return null;
-  }
-
   return <TextBlockInner {...rest} />;
 };
 
