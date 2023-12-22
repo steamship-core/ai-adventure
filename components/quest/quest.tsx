@@ -43,7 +43,7 @@ export default function Quest({
             className="mb-2"
           />
           <Chat
-            id={questId as string}
+            questId={questId as string}
             agentBaseUrl={agentBaseUrl}
             agentHandle={agentHandle}
             adventureId={adventureId}

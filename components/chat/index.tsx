@@ -64,12 +64,12 @@ const ScrollButton = () => {
 };
 
 export default function Chat({
-  id,
+  questId,
   agentBaseUrl,
   agentHandle,
   adventureId,
 }: {
-  id: string;
+  questId: string;
   agentBaseUrl: string;
   agentHandle: string;
   adventureId?: string;
@@ -81,6 +81,11 @@ export default function Chat({
   const { gameState, refreshGameState } = useGameState(params.handle);
 
   const router = useRouter();
+
+  /**
+   * On IDs and QuestIDs
+   * The ID here is
+   */
 
   const {
     messages,
@@ -102,7 +107,7 @@ export default function Chat({
     isSucceeded,
     nonVisibleBlocks,
   } = useBlockChatWithHistoryAndGating({
-    id: id,
+    id: questId,
     agentBaseUrl,
     agentHandle,
     // skipIfInputEquals = null,
@@ -155,7 +160,6 @@ export default function Chat({
   // didn't mark that with the quest ID. That means loading the historical quest blocks will miss them.
   // So we need to combine the state from the quest stream with some markers on game_state which will help
   // us identify that the quest, in fact, is complete.
-  const { questId } = useParams();
   const quest = gameState?.quests?.find((q) => q.name === questId);
   const questHasSummary = quest?.text_summary ? true : false;
 
