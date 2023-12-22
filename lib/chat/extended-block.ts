@@ -18,6 +18,11 @@ export type ExtendedBlock = Block & {
   isVisibleInChat?: boolean;
 
   /**
+   * Is this block an input element?
+   */
+  isInputElement?: boolean;
+
+  /**
    * What is the message type of this block?
    */
   messageType?: string;

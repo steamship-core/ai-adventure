@@ -1,4 +1,8 @@
-import { getMessageType, validTypes } from "@/lib/chat/block-chat-types";
+import {
+  getMessageType,
+  inputTypes,
+  validTypes,
+} from "@/lib/chat/block-chat-types";
 import { ExtendedBlock } from "@/lib/chat/extended-block";
 import { log } from "next-axiom";
 import { consumeEnergy, getOrCreateUserEnergy } from "../energy/energy.server";
@@ -60,6 +64,7 @@ export const loadExistingQuestBlocks = async (
       block.historical = true;
       block.messageType = getMessageType(block);
       block.isVisibleInChat = validTypes.includes(block.messageType);
+      block.isInputElement = inputTypes.includes(block.messageType);
       return block;
     });
   }
@@ -80,6 +85,7 @@ export const loadExistingCampBlocks = async (agentBase: string) => {
       block.historical = true;
       block.messageType = getMessageType(block);
       block.isVisibleInChat = validTypes.includes(block.messageType);
+      block.isInputElement = inputTypes.includes(block.messageType);
       return block;
     });
   }

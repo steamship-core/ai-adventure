@@ -27,6 +27,8 @@ export const validTypes = [
   MessageTypes.DICE_ROLL,
 ] as string[];
 
+export const inputTypes = [MessageTypes.DICE_ROLL] as string[];
+
 export const getMessageType = (block: Block) => {
   if (block.tags?.find((tag) => tag.name === "dice_roll")) {
     return MessageTypes.DICE_ROLL;

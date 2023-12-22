@@ -110,12 +110,23 @@ export function useBlockChatWithHistoryAndGating({
     initialBlock: _visibleBlocks.length > 0 ? _visibleBlocks[0] : null,
   };
 
-  // We are allowed to continue if there are no active streams being played to the user.
-  const { count: activeStreamCount } = useRecoilCounter(activeStreams);
-  const acceptsContinue = activeStreamCount == 0;
+  // Is the last visible block an input block?
+  const lastVisibleBlockIsInput =
+    _visibleBlocks &&
+    _visibleBlocks.length > 0 &&
+    _visibleBlocks[_visibleBlocks.length - 1].isInputElement;
 
   // We can send input the block window extends to the end of the available blocks.
-  const acceptsInput = endIdx == allBlocks.length;
+  const acceptsInput =
+    (endIdx == null || endIdx == _visibleBlocks?.length) &&
+    !lastVisibleBlockIsInput;
+
+  console.log("acceptsInput", endIdx, _visibleBlocks?.length, acceptsInput);
+
+  // We are allowed to continue if there are no active streams being played to the user, and we're not accepting input, and the last block isn't accepting input either.
+  const { count: activeStreamCount } = useRecoilCounter(activeStreams);
+  const acceptsContinue =
+    activeStreamCount == 0 && !lastVisibleBlockIsInput && !acceptsInput;
 
   const ret = {
     ...useBlockChatResp,

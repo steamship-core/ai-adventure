@@ -1,6 +1,6 @@
 import { Message } from "ai";
 import { log } from "next-axiom";
-import { getMessageType, validTypes } from "./block-chat-types";
+import { getMessageType, inputTypes, validTypes } from "./block-chat-types";
 import { ExtendedBlock } from "./extended-block";
 
 /**
@@ -28,6 +28,8 @@ export function chatMessageJsonlToBlocks(
           _block.historical = false;
           _block.messageType = getMessageType(_block);
           _block.isVisibleInChat = validTypes.includes(_block.messageType);
+          _block.isInputElement = inputTypes.includes(_block.messageType);
+
           return _block;
         } catch (e) {
           console.log(
