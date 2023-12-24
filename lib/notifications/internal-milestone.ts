@@ -32,14 +32,13 @@ export const notifyOnInternalMilestones = async () => {
       },
     },
   });
-  // round down to the nearest 1000
+
   const rounded = Math.floor(agentCount / 1000) * 1000;
   const emailSent = await kv.get<boolean>(`emailSent-${rounded}`);
   if (emailSent) {
     return Response.json({ success: true });
   }
 
-  // send email
   await sendInternalMilestoneEmail(rounded);
   await kv.set(`emailSent-${rounded}`, true);
 };
