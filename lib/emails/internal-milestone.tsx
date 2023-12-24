@@ -17,7 +17,7 @@ interface AdventureMilestoneEmailProps {
   numAdventures: number;
 }
 
-const defaultTitle = `Holy cow would you look at that!`
+const defaultTitle = `Holy cow! Would you look at that!`;
 
 export const InternalMilestoneEmail = ({
   title = defaultTitle,
@@ -63,8 +63,8 @@ export async function sendInternalMilestoneEmail(numAdventures: number) {
 
   await resend.emails.send({
     from: "AI Adventure <updates@ai-adventure.steamship.com>",
-    to: "max@steamship.com",
-    subject: defaultTitle,
+    to: "developers@steamship.com",
+    subject: `${numAdventures} Adventures played! 🎉 👏 🍾 🍾 🍾 `,
     react: reactContent,
   });
 }
