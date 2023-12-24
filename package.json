@@ -12,7 +12,7 @@
     "postinstall": "prisma generate",
     "costs": "dotenv -e .env.local tsx ./lib/scripts/costs.ts",
     "backfill": "dotenv -e .env.local tsx ./lib/scripts/backfill_avatars.ts",
-    "prod:update-agents": "dotenv -e .env.production.local tsx ./lib/scripts/update-agent-version.ts"
+    "prod:update-agents": "dotenv -e .env.production.local tsx ./lib/scripts/update-agent-version.ts",
     "test": "jest"
   },
   "dependencies": {
