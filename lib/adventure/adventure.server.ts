@@ -2,7 +2,7 @@ import { Adventure } from "@prisma/client";
 import { log } from "next-axiom";
 import { createAgent } from "../agent/agent.server";
 import prisma from "../db";
-import { getTopLevelUpdatesFromAdventureConfig } from "../editor/DEPRECATED-editor-options";
+import { getTopLevelUpdatesFromAdventureConfig } from "../editor/editor-types";
 import { getOrCreateUserApprovals } from "../editor/user-approvals.server";
 import { sendSlackMessage } from "../slack/slack.server";
 import {

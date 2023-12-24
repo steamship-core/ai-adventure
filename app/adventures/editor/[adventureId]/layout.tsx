@@ -14,7 +14,7 @@ import { getSchema } from "@/lib/agent/agentSteamship.server";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,
-} from "@/lib/editor/DEPRECATED-editor-options";
+} from "@/lib/editor/editor-types";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { PlayIcon } from "lucide-react";
