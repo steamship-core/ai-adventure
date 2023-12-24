@@ -17,30 +17,33 @@ const Card = ({
   fastOnboard,
   variant = "landing",
   onClick,
+  className = null,
 }: {
   adventureId?: string;
   children: React.ReactNode;
   onboardingParams?: Record<string, any>;
   fastOnboard?: boolean;
   variant: "landing" | "adventure";
+  className?: string | null;
   onClick: (e: any) => void;
 }) => {
   let url = `/adventures/${adventureId}`;
 
-  const className = cn(
+  const _className = cn(
     `block group relative aspect-[2/3] w-full rounded-xl bg-gray-900/5 overflow-hidden shadow-lg`,
     adventureId ? "cursor-pointer" : "",
-    variant == "landing" ? "" : "h-72"
+    variant == "landing" ? "" : "h-72",
+    className
   );
 
   if (adventureId) {
     return (
-      <a className={className} href={url} onClick={onClick}>
+      <a className={_className} href={url} onClick={onClick}>
         {children}
       </a>
     );
   } else {
-    return <div className={className}>{children}</div>;
+    return <div className={_className}>{children}</div>;
   }
 };
 

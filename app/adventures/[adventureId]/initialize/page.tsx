@@ -4,7 +4,7 @@ import { getSchema } from "@/lib/agent/agentSteamship.server";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,
-} from "@/lib/editor/DEPRECATED-editor-options";
+} from "@/lib/editor/editor-types";
 import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";

@@ -6,7 +6,7 @@ import { AutoResizeTextarea } from "@/components/ui/textarea";
 import { TypographyLead } from "@/components/ui/typography/TypographyLead";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
-import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Setting } from "@/lib/editor/editor-types";
 import { suggestField } from "@/lib/editor/suggest-field";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { cn } from "@/lib/utils";

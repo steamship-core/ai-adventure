@@ -1,6 +1,9 @@
 "use client";
-import { CUSTOM_CHARACTER_NAME } from "@/lib/characters";
-import { Character } from "@/lib/game/schema/characters";
+import {
+  useAdventureCharacters,
+  useAdventureSingleNoun,
+  usePlayerSingularNoun,
+} from "@/lib/adventure/use-characters.client";
 import { Adventure } from "@prisma/client";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -9,18 +12,12 @@ import { TypographyH2 } from "../ui/typography/TypographyH2";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 import CharacterMap from "./character-map";
 
-const getAgentConfig = (adventure: Adventure) => {
-  if (!adventure?.agentConfig) return null;
-  return adventure.agentConfig as {
-    characters?: Character[];
-    adventure_player_singular_noun?: string;
-  };
-};
-
 const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
-  const characters = getAgentConfig(adventure)?.characters || [];
-  const playerSingularNoun =
-    getAgentConfig(adventure)?.adventure_player_singular_noun || "Player";
+  const playerSingularNoun = usePlayerSingularNoun(adventure);
+  const adventureSingleNoun = useAdventureSingleNoun(adventure);
+
+  const characters = useAdventureCharacters(adventure);
+
   const [loading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const isDevelopment = searchParams.get("isDevelopment") === "true";
@@ -33,8 +30,8 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
             Choose your {playerSingularNoun.toLocaleLowerCase()}
           </TypographyH2>
           <TypographyMuted className="text-lg">
-            Select or create a {playerSingularNoun.toLocaleLowerCase()} whos
-            profile will influence gameplay and outcomes.
+            Your {playerSingularNoun.toLocaleLowerCase()} profile influences
+            gameplay and outcomes.
           </TypographyMuted>
         </div>
         <div className="overflow-auto max-h-[50vh]">
@@ -42,21 +39,14 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
             setIsLoading={setIsLoading}
             isDevelopment={isDevelopment}
             enabled={!loading}
-            characters={[
-              // @ts-ignore
-              ...(characters || []),
-              // @ts-ignore
-              {
-                name: CUSTOM_CHARACTER_NAME,
-                tagline: "Create your own character",
-                custom: true,
-              },
-            ]}
+            characters={characters}
             adventureId={adventure.id}
           />
         </div>
       </div>
-      {loading && <LoadingScreen title="Creating Adventure ..." />}
+      {loading && (
+        <LoadingScreen title={`Creating ${adventureSingleNoun} ...`} />
+      )}
     </>
   );
 };

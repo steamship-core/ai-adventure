@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Setting } from "@/lib/editor/editor-types";
 import { Input } from "../ui/input";
 import { TypographyMuted } from "../ui/typography/TypographyMuted";
 

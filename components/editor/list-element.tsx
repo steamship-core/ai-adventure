@@ -1,4 +1,4 @@
-import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Setting } from "@/lib/editor/editor-types";
 import {
   DndContext,
   KeyboardSensor,
