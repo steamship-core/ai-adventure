@@ -10,7 +10,7 @@
     },
     {
       "path": "/api/cron/notify-stats",
-      "schedule": "0 12 * * *"
+      "schedule": "0 */2 * * *"
     }
   ]
 }
