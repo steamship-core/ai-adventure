@@ -1,5 +1,6 @@
 "use client";
 
+import { useAdventureSingleNoun } from "@/lib/adventure/use-characters.client";
 import { Adventure, UserInfo } from "@prisma/client";
 import { PlayIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -19,6 +20,9 @@ export const StartAdventureSection = ({
   adventure: Adventure;
   ownerUserInfo: UserInfo | null;
 }) => {
+  const adventureSingleNoun = useAdventureSingleNoun(adventure);
+  const adventureSingleNounLc = adventureSingleNoun.toLocaleLowerCase();
+
   return (
     <div className="p-4 md:p-6 flex gap-6 flex-col">
       <div className="flex flex-col gap-4">
@@ -51,7 +55,7 @@ export const StartAdventureSection = ({
           <SheetTrigger asChild>
             <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-6 text-2xl flex gap-2 w-full">
               <PlayIcon />
-              Start adventure
+              Start
             </Button>
           </SheetTrigger>
           <SheetContent side="bottom">

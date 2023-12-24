@@ -29,7 +29,7 @@ const CharacterCreationComplete = ({ config }: { config: CharacterConfig }) => {
             autoFocus
             ref={ref}
           >
-            Start Adventure
+            Start {adventureSingleNounLc}
           </Button>
         </CreationActions>
       </CreationContent>
