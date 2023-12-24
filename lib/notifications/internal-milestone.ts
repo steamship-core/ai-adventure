@@ -33,7 +33,8 @@ export const notifyOnInternalMilestones = async () => {
     },
   });
 
-  const rounded = Math.floor(agentCount / 1000) * 1000;
+  const rounded = Math.floor(agentCount / 250) * 250;
+
   const emailSent = await kv.get<boolean>(`emailSent-${rounded}`);
   if (emailSent) {
     return Response.json({ success: true });
