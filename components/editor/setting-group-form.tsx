@@ -1,7 +1,7 @@
 "use client";
 
 import { amplitude } from "@/lib/amplitude";
-import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { SettingGroup } from "@/lib/editor/editor-types";
 import { suggestField } from "@/lib/editor/suggest-field";
 import { useEditorRouting } from "@/lib/editor/use-editor";
 import { Block } from "@/lib/streaming-client/src";

@@ -1,4 +1,4 @@
-import { Setting, SettingGroup } from "./DEPRECATED-editor-options";
+import { Setting, SettingGroup } from "./editor-types";
 
 const excludedSettings = ["description", "image"];
 export const getRequiredFields = (settingGroups: SettingGroup[]) => {
