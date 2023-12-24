@@ -28,7 +28,7 @@ export const StartAdventureSection = ({
       <div className="flex flex-col gap-4">
         <div className="flex justify-between flex-col md:flex-row w-full items-start md:items-start gap-2">
           <div>
-            <TypographyMuted>Adventure name</TypographyMuted>
+            <TypographyMuted>{adventureSingleNoun} name</TypographyMuted>
             <TypographyH1>{adventure.name}</TypographyH1>
           </div>
           {ownerUserInfo && (
