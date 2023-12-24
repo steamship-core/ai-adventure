@@ -17,12 +17,10 @@ interface AdventureMilestoneEmailProps {
   numAdventures: number;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_WEB_BASE_URL
-  ? process.env.NEXT_PUBLIC_WEB_BASE_URL
-  : "";
+const defaultTitle = `Holy cow would you look at that!`
 
 export const InternalMilestoneEmail = ({
-  title = `Holy cow would you look at that!`,
+  title = defaultTitle,
   numAdventures = 0,
 }: AdventureMilestoneEmailProps) => {
   const previewText = title;
@@ -44,7 +42,7 @@ export const InternalMilestoneEmail = ({
               />
             </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              Holy cow would look at that! {numAdventures} Adventures played!!
+              {title} {numAdventures} Adventures played!!
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
               Hey there! 👋
@@ -66,7 +64,7 @@ export async function sendInternalMilestoneEmail(numAdventures: number) {
   await resend.emails.send({
     from: "AI Adventure <updates@ai-adventure.steamship.com>",
     to: "max@steamship.com",
-    subject: `Holy cow would you look at that!`,
+    subject: defaultTitle,
     react: reactContent,
   });
 }
