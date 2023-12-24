@@ -1,5 +1,3 @@
-"use client";
-
 import { CUSTOM_CHARACTER_NAME } from "@/lib/characters";
 import { Adventure } from "@prisma/client";
 import { Character } from "../game/schema/characters";
@@ -14,11 +12,11 @@ export const useAgentConfig = (adventure: Adventure) => {
   };
 };
 
-export const usePlayerSingularNoun = (adventure: Adventure) => {
+export const usePlayerSingularNoun = (adventure: Adventure): String => {
   return useAgentConfig(adventure)?.adventure_player_singular_noun || "Player";
 };
 
-export const useAdventureSingleNoun = (adventure: Adventure) => {
+export const useAdventureSingleNoun = (adventure: Adventure): string => {
   return useAgentConfig(adventure)?.adventure_singular_noun || "Adventure";
 };
 
@@ -34,20 +32,24 @@ export const useAdventureCharacters = (adventure: Adventure): Character[] => {
   const noCustomCharacter =
     config.forbid_custom_characters === true && premadeCharactersExist;
 
-  const customCharacterOffer = noCustomCharacter
-    ? []
-    : [
-        {
-          name: CUSTOM_CHARACTER_NAME,
-          tagline: "Create your own character",
-          custom: true,
-        } as Character,
-      ];
+  const customCharacterOffer =
+    noCustomCharacter && characters.length > 0
+      ? []
+      : [
+          {
+            name: CUSTOM_CHARACTER_NAME,
+            tagline: "Create your own character",
+            custom: true,
+          } as Character,
+        ];
 
-  return [
+  const returnCharacters = [
     // @ts-ignore
     ...(characters || []),
     // @ts-ignore
     ...customCharacterOffer,
   ];
+
+  console.log(returnCharacters);
+  return returnCharacters;
 };

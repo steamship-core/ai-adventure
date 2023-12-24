@@ -21,7 +21,6 @@ export const StartAdventureSection = ({
   ownerUserInfo: UserInfo | null;
 }) => {
   const adventureSingleNoun = useAdventureSingleNoun(adventure);
-  const adventureSingleNounLc = adventureSingleNoun.toLocaleLowerCase();
 
   return (
     <div className="p-4 md:p-6 flex gap-6 flex-col">

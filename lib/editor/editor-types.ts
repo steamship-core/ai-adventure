@@ -195,6 +195,22 @@ export const GeneralOptions: Setting[] = [
     type: "text",
     default: "Player",
   },
+  {
+    name: "adventure_singular_noun",
+    label: "Noun for 'Adventure'",
+    description:
+      "The singular noun used to refer the game itself (Adventure, Quiz, Character, etc.)",
+    type: "text",
+    default: "Adventure",
+  },
+  {
+    name: "forbid_custom_characters",
+    label: "Forbid custom characters?",
+    description:
+      "If true, and a pre-made character exist, hides the option to play as a custom character",
+    type: "boolean",
+    default: false,
+  },
 ];
 
 export const storyOptionsToDisplay = [

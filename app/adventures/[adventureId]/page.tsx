@@ -225,7 +225,7 @@ export default async function AdventurePage({
         {adventure?.NarrativeSnippet.length === 0 && (
           <div className="w-full mt-8 text-center">
             <TypographyMuted>
-              There are no snippets for this adventure yet.
+              There are no snippets for this {adventureSingleNounLc} yet.
             </TypographyMuted>
           </div>
         )}
