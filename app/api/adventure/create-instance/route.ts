@@ -3,6 +3,7 @@ import { createAgent } from "@/lib/agent/agent.server";
 import { anonAuth } from "@/lib/anon-auth/anon-auth-server";
 import prisma from "@/lib/db";
 import { sendAdventureMilestoneEmail } from "@/lib/emails/adventure-creation";
+import { getGameState } from "@/lib/game/game-state.server";
 import { auth } from "@clerk/nextjs";
 import { log, withAxiom } from "next-axiom";
 import { NextRequest, NextResponse } from "next/server";
@@ -75,10 +76,13 @@ export const POST = withAxiom(async (request: NextRequest) => {
     }
 
     // Finally, we redirect either to camp or to the character-creation based on whether we're in fast-create mode.
-    if (gameState) {
-      if (gameState.active_mode == "quest") {
+
+    const newGameState = await getGameState(agent.agentUrl);
+
+    if (newGameState) {
+      if (newGameState.active_mode == "quest") {
         return NextResponse.json(
-          { url: `/play/${agent.handle}/quest/${gameState.current_quest}` },
+          { url: `/play/${agent.handle}/quest/${newGameState.current_quest}` },
           { status: 200 }
         );
       } else {
