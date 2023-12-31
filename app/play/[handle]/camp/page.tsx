@@ -57,6 +57,8 @@ export default async function CampPage({
   }
 
   if (gameState?.active_mode == "onboarding") {
+    console.log("Redirecting from camp to character-creation");
+
     redirect(`/play/${params.handle}/character-creation`);
   }
 
@@ -90,6 +92,9 @@ export default async function CampPage({
 
   const onStartQuest = async () => {
     "use server";
+
+    console.log("Start quest");
+
     // If the game state says we're currently in a quest, then we should re-direct ot that quest.
     if (gameState?.active_mode === "quest" && gameState?.current_quest) {
       log.debug(`Activating existing quest: ${gameState?.current_quest}`);

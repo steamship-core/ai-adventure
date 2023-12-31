@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { TopLevelSpecialCases } from "@/lib/editor/DEPRECATED-editor-options";
+import { TopLevelSpecialCases } from "@/lib/editor/editor-types";
 import { auth } from "@clerk/nextjs";
 
 export const resetDevAgent = async (id: string) => {
