@@ -43,8 +43,6 @@ export const POST = withAxiom(async (request: NextRequest) => {
       );
     }
 
-    console.log("Game state", gameState);
-
     const useAvailableAgentCache = true;
 
     const agent = await createAgent(
@@ -78,10 +76,17 @@ export const POST = withAxiom(async (request: NextRequest) => {
 
     // Finally, we redirect either to camp or to the character-creation based on whether we're in fast-create mode.
     if (gameState) {
-      return NextResponse.json(
-        { url: `/play/${agent.handle}/camp` },
-        { status: 200 }
-      );
+      if (gameState.active_mode == "quest") {
+        return NextResponse.json(
+          { url: `/play/${agent.handle}/quest/${gameState.current_quest}` },
+          { status: 200 }
+        );
+      } else {
+        return NextResponse.json(
+          { url: `/play/${agent.handle}/camp` },
+          { status: 200 }
+        );
+      }
     } else {
       return NextResponse.json(
         { url: `/play/${agent.handle}/character-creation` },

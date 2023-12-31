@@ -10,6 +10,7 @@ export const getAgentConfig = (adventure: Adventure) => {
     forbid_custom_characters?: boolean;
     skip_character_selection?: boolean;
     adventure_singular_noun?: string;
+    auto_start_first_quest?: boolean;
   };
 };
 
@@ -23,6 +24,10 @@ export const useAdventureSingleNoun = (adventure: Adventure): string => {
 
 export const shouldSkipCharacterSelection = (adventure: Adventure): boolean => {
   return getAgentConfig(adventure)?.skip_character_selection === true;
+};
+
+export const shouldAutoStartFirstQuest = (adventure: Adventure): boolean => {
+  return getAgentConfig(adventure)?.auto_start_first_quest === true;
 };
 
 export const DEFAULT_CHARACTER = {

@@ -165,6 +165,9 @@ export const createAgent = async (
 
       // Completing onboarding
       if (gameStateSupportsCompletingOnboarding(gameState as GameState)) {
+        log.error(
+          `Completing onboarding for non-cached agent because provided game state supported it.`
+        );
         await completeOnboarding(agent.agentUrl);
       }
     }
