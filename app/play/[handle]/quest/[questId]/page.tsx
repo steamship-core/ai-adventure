@@ -3,12 +3,10 @@ export const dynamic = "force-dynamic";
 import { DynamicBackgroundAudio } from "@/components/audio/dynamic-background-audio";
 import RecoilProvider from "@/components/providers/recoil";
 import Quest from "@/components/quest/quest";
-import { ExtendedBlock } from "@/components/quest/quest-narrative/utils";
 import { getAgent } from "@/lib/agent/agent.server";
 import { getUserIdFromClerkOrAnon } from "@/lib/anon-auth/anon-auth-server";
 import { getOrCreateUserEnergy } from "@/lib/energy/energy.server";
 import { getGameState } from "@/lib/game/game-state.server";
-import { loadExistingQuestBlocks } from "@/lib/game/quest.server";
 import { log } from "next-axiom";
 import { redirect } from "next/navigation";
 
@@ -47,17 +45,6 @@ export default async function QuestPage({
   }
 
   let energyState = (await getOrCreateUserEnergy(userId))?.energy || 0;
-  let priorBlocks: ExtendedBlock[] = [];
-  try {
-    priorBlocks =
-      ((await loadExistingQuestBlocks(
-        agent!.agentUrl,
-        params.questId
-      )) as ExtendedBlock[]) || [];
-  } catch (e) {
-    // @ts-ignore
-    log.error("Error loading existing quest blocks", e);
-  }
 
   return (
     <RecoilProvider
@@ -69,10 +56,8 @@ export default async function QuestPage({
       <Quest
         workspaceHandle={agent.handle}
         gameEngineVersion={agent.agentVersion || "Unknown"}
-        gameState={gameState}
         agentBaseUrl={agent.agentUrl}
         isDevelopment={agent.isDevelopment || false}
-        priorBlocks={priorBlocks}
         agentHandle={agent.handle}
         adventureId={agent.adventureId!}
       />

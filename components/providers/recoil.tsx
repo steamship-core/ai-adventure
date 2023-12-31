@@ -38,9 +38,9 @@ export const recoilEnergyState = atom({
   default: 0 as number,
 });
 
-export const recoilContinuationState = atom({
-  key: "ContinuationState",
-  default: false,
+export const activeStreams = atom({
+  key: "ActiveStreams",
+  default: {} as Record<string, boolean>,
 });
 
 export const recoilErrorModalState = atom<ErrorDetails | undefined>({

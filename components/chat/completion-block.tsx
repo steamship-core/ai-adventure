@@ -1,18 +1,7 @@
 import { Block } from "@/lib/streaming-client/src";
-import { useEffect } from "react";
 import { DebugBlock } from "./debug-blocks";
 
-export const CompletionBlock = ({
-  block,
-  onComplete,
-}: {
-  block: Block;
-  onComplete: () => void;
-}) => {
-  useEffect(() => {
-    onComplete();
-  }, []);
-
+export const CompletionBlock = ({ block }: { block: Block }) => {
   return (
     <DebugBlock
       block={block}
