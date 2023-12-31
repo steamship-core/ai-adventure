@@ -6,6 +6,9 @@ import { NextResponse } from "next/server";
 
 export const POST = withAxiom(
   async (request: Request, { params }: { params: { handle: string } }) => {
+    log.info(`/api/agent/${params.handle}/completeOnboarding`);
+    console.log(`/api/agent/${params.handle}/completeOnboarding`);
+
     const { userId } = auth();
     if (!userId) {
       log.error("No user");
