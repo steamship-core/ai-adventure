@@ -1,6 +1,6 @@
 "use client";
 import {
-  useAdventureCharacters,
+  getAdventureCharacters,
   useAdventureSingleNoun,
   usePlayerSingularNoun,
 } from "@/lib/adventure/use-characters.client";
@@ -16,7 +16,7 @@ const CharacterTemplatesSection = ({ adventure }: { adventure: Adventure }) => {
   const playerSingularNoun = usePlayerSingularNoun(adventure);
   const adventureSingleNoun = useAdventureSingleNoun(adventure);
 
-  const characters = useAdventureCharacters(adventure);
+  const characters = getAdventureCharacters(adventure);
 
   const [loading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
