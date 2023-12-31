@@ -8,8 +8,9 @@ export const QuestSummaryBlock = ({ block }: { block: Block }) => {
     block.text = result;
   };
 
+  const { completion } = useBlockStream({ blockId: block.id, onFinish });
+
   if (!block.text && block.id) {
-    const { completion } = useBlockStream({ blockId: block.id, onFinish });
     block.text = completion;
   }
 
