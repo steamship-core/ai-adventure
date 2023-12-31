@@ -1,6 +1,6 @@
 import { getAdventureForUser } from "@/lib/adventure/adventure.server";
 import { getSchema } from "@/lib/agent/agentSteamship.server";
-import { DEPRECATEDSettingGroups } from "@/lib/editor/DEPRECATED-editor-options";
+import { DEPRECATEDSettingGroups } from "@/lib/editor/editor-types";
 import { auth } from "@clerk/nextjs";
 import { log } from "next-axiom";
 import { NextResponse } from "next/server";

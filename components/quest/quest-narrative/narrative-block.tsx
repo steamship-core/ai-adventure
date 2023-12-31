@@ -66,6 +66,7 @@ export const NarrativeBlock = ({
   // }
 
   // Begin Debug Information State Management
+  console.log(sortedBlocks);
   try {
     return sortedBlocks.map((block) => {
       let hideOutput = false;

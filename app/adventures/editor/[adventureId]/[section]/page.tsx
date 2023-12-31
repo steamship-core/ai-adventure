@@ -5,7 +5,7 @@ import prisma from "@/lib/db";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,
-} from "@/lib/editor/DEPRECATED-editor-options";
+} from "@/lib/editor/editor-types";
 import { getRequiredFields } from "@/lib/editor/get-required-fields";
 import { getVersion } from "@/lib/get-version";
 import { getNonNullMetadata } from "@/lib/metadata";

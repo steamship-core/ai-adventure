@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Setting } from "@/lib/editor/editor-types";
 import { Block } from "@/lib/streaming-client/src";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { AlertTriangleIcon, ChevronsUpDownIcon, Loader2 } from "lucide-react";

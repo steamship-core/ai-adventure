@@ -1,3 +1,4 @@
+import { AdventureStats } from "@/components/adventures/adventure-stats";
 import AdventureTag from "@/components/adventures/adventure-tag";
 import EmojiPicker from "@/components/adventures/emoji-picker";
 import { StartAdventureSection } from "@/components/adventures/start-adventure-section";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { TypographyH3 } from "@/components/ui/typography/TypographyH3";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
+import { useAdventureSingleNoun } from "@/lib/adventure/use-characters.client";
 import prisma from "@/lib/db";
 import { getNonNullMetadata } from "@/lib/metadata";
 import { auth } from "@clerk/nextjs";
@@ -79,6 +81,9 @@ export default async function AdventurePage({
   if (!adventure) {
     redirect(`/adventures`);
   }
+
+  const adventureSingleNoun = useAdventureSingleNoun(adventure);
+  const adventureSingleNounLc = adventureSingleNoun.toLocaleLowerCase();
 
   const addEmoji = async (formData: FormData) => {
     "use server";
@@ -206,19 +211,21 @@ export default async function AdventurePage({
           </div>
         </div>
       </div>
+      <div className="px-4 md:px-6 flex gap-6 flex-col">
+        <AdventureStats adventureId={params.adventureId} />
+      </div>
       <StartAdventureSection
         adventure={adventure}
         ownerUserInfo={ownerUserInfo}
       />
-      <div className="mt-8">
-        <TypographyH3>Snippets from this adventure</TypographyH3>
-        <TypographyMuted>
-          These are snippets that have been shared by other adventurers.
-        </TypographyMuted>
+
+      <div className="p-4 md:p-6 flex gap-6 flex-col mt-8">
+        <TypographyH3>Snippets from this {adventureSingleNounLc}</TypographyH3>
+        <TypographyMuted>These are snippets shared by others.</TypographyMuted>
         {adventure?.NarrativeSnippet.length === 0 && (
           <div className="w-full mt-8 text-center">
             <TypographyMuted>
-              There are no snippets for this adventure yet.
+              There are no snippets for this {adventureSingleNounLc} yet.
             </TypographyMuted>
           </div>
         )}

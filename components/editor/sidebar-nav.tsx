@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { SettingGroup } from "@/lib/editor/editor-types";
 import { cn } from "@/lib/utils";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";

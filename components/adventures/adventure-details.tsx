@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  StoryOptions,
-  storyOptionsToDisplay,
-} from "@/lib/editor/DEPRECATED-editor-options";
+import { StoryOptions, storyOptionsToDisplay } from "@/lib/editor/editor-types";
 import { Adventure } from "@prisma/client";
 import { AlertCircleIcon } from "lucide-react";
 import { TypographyH2 } from "../ui/typography/TypographyH2";
