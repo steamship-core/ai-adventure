@@ -120,7 +120,13 @@ export default function CharacterCreation({
         );
       } else if (gameState.active_mode !== "onboarding") {
         clearInterval(interval);
-        router.push(`/play/${params.handle}/camp`);
+        if (gameState.active_mode == "quest") {
+          router.push(
+            `/play/${params.handle}/quest/${gameState.current_quest}`
+          );
+        } else {
+          router.push(`/play/${params.handle}/camp`);
+        }
       }
     }, 2000);
   };

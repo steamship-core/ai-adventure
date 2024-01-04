@@ -123,7 +123,7 @@ export function getTopLevelUpdatesFromAdventureConfig(agentConfig: any) {
 
   if (
     agentConfig["game_engine_version"] &&
-    agentConfig["game_engine_version"].startsWith("ai-adventure@")
+    agentConfig["game_engine_version"].startsWith("ai-adventure")
   ) {
     topLevelUpdates["agentVersion"] = agentConfig["game_engine_version"];
   }
@@ -194,6 +194,22 @@ export const GeneralOptions: Setting[] = [
       "The singular noun used to refer to the pre-made player options. E.g.: Choose your Player (Adventurer, Hero, etc.)",
     type: "text",
     default: "Player",
+  },
+  {
+    name: "adventure_singular_noun",
+    label: "Noun for 'Adventure'",
+    description:
+      "The singular noun used to refer the game itself (Adventure, Quiz, Character, etc.)",
+    type: "text",
+    default: "Adventure",
+  },
+  {
+    name: "forbid_custom_characters",
+    label: "Forbid custom characters?",
+    description:
+      "If true, and a pre-made character exist, hides the option to play as a custom character",
+    type: "boolean",
+    default: false,
   },
 ];
 

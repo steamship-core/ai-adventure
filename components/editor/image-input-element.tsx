@@ -1,5 +1,5 @@
 "use client";
-import { Setting } from "@/lib/editor/DEPRECATED-editor-options";
+import { Setting } from "@/lib/editor/editor-types";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Input } from "../ui/input";

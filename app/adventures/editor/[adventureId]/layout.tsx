@@ -1,4 +1,5 @@
 import CharacterTemplatesSection from "@/components/adventures/character-templates-section";
+import { PlayAsCharacterButton } from "@/components/adventures/play-character-card";
 import EditorActions from "@/components/editor/layout/actions";
 import EditorTutorial from "@/components/editor/layout/tutorial";
 import EditorUnsavedChangesModal from "@/components/editor/layout/unsaved-changes-modal";
@@ -10,11 +11,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { TypographyH1 } from "@/components/ui/typography/TypographyH1";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { getAdventure } from "@/lib/adventure/adventure.server";
+import {
+  DEFAULT_CHARACTER,
+  getAdventureCharacters,
+  getAgentConfig,
+  shouldSkipCharacterSelection,
+} from "@/lib/adventure/use-characters.client";
 import { getSchema } from "@/lib/agent/agentSteamship.server";
 import {
   DEPRECATEDSettingGroups,
   SettingGroup,
-} from "@/lib/editor/DEPRECATED-editor-options";
+} from "@/lib/editor/editor-types";
 import { objectEquals } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import { PlayIcon } from "lucide-react";
@@ -64,6 +71,13 @@ export default async function EditorLayout({
     revalidatePath("/adventures/editor/[adventureId]", "layout");
   };
 
+  // TODO: This is where we conditionally
+  const config = getAgentConfig(adventure);
+  const skipCharacterSelection = shouldSkipCharacterSelection(adventure);
+  const player1 = skipCharacterSelection
+    ? { ...DEFAULT_CHARACTER, ...getAdventureCharacters(adventure)[0] }
+    : {};
+
   return (
     <RecoilProvider>
       <div className="flex flex-grow flex-col gap-6 px-4 md:px-6">
@@ -76,17 +90,25 @@ export default async function EditorLayout({
           </div>
         </div>
         <div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-4 text-lg flex gap-2">
-                <PlayIcon />
-                Start adventure
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="bottom">
-              <CharacterTemplatesSection adventure={adventure} />
-            </SheetContent>
-          </Sheet>
+          {skipCharacterSelection ? (
+            <PlayAsCharacterButton
+              adventureId={adventure?.id}
+              onboardingParams={player1}
+              fastOnboard={true}
+            />
+          ) : (
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button className="text-white bg-indigo-500 hover:bg-indigo-700 p-4 text-lg flex gap-2">
+                  <PlayIcon />
+                  Start adventure
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="bottom">
+                <CharacterTemplatesSection adventure={adventure} />
+              </SheetContent>
+            </Sheet>
+          )}
         </div>
         <EditorActions
           hasUnpublishedChanges={hasUnpublishedChanges}

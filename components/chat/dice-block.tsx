@@ -1,11 +1,9 @@
-import {
-  recoilContinuationState,
-  recoilGameState,
-} from "@/components/providers/recoil";
+import { activeStreams, recoilGameState } from "@/components/providers/recoil";
 import { TypographyH4 } from "@/components/ui/typography/TypographyH4";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyMuted } from "@/components/ui/typography/TypographyMuted";
 import { GradientText } from "@/components/ui/typography/gradient-text";
+import { useRecoilCounter } from "@/lib/recoil-utils";
 import { Block } from "@/lib/streaming-client/src";
 import { cn } from "@/lib/utils";
 import { Player } from "@lottiefiles/react-lottie-player";
@@ -13,7 +11,7 @@ import { PointerIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { BlockContainer } from "./block-container";
 
 const RollingDie = ({
@@ -22,6 +20,7 @@ const RollingDie = ({
   success,
   disableAnimation,
   itemUsed,
+  advance,
   itemUsedId,
 }: {
   required: number;
@@ -30,6 +29,7 @@ const RollingDie = ({
   disableAnimation: boolean;
   itemUsed?: string;
   itemUsedId?: string;
+  advance?: () => void;
 }) => {
   const [num, setNum] = useState(disableAnimation ? rolled : 1);
   const [showStatus, setShowStatus] = useState(
@@ -42,11 +42,11 @@ const RollingDie = ({
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const gameState = useRecoilValue(recoilGameState);
 
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+  const { streamStart, streamEnd } = useRecoilCounter(activeStreams);
 
   useEffect(() => {
     if (!disableAnimation) {
-      setContinuationState(false);
+      streamStart("dice");
     }
   }, []);
 
@@ -60,7 +60,12 @@ const RollingDie = ({
       clearInterval(interval);
       setNum(rolled);
       setShowSuccessAnimation(rolled >= required);
-      setContinuationState(true);
+      if (!disableAnimation) {
+        streamEnd("dice");
+        if (advance) {
+          advance();
+        }
+      }
       setDoneRolling(true);
     }, 2000);
     setTimeout(() => {
@@ -169,9 +174,11 @@ const RollingDie = ({
 export const DiceRollBlock = ({
   block,
   disableAnimation,
+  advance,
 }: {
   block: Block;
   disableAnimation: boolean;
+  advance?: () => void;
 }) => {
   let resultJson = null;
   try {
@@ -201,6 +208,7 @@ export const DiceRollBlock = ({
       disableAnimation={disableAnimation}
       itemUsed={resultJson.item_used}
       itemUsedId={resultJson.item_used_id}
+      advance={advance}
     />
   );
 };

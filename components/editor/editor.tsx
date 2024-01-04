@@ -1,6 +1,6 @@
 "use client";
 
-import { SettingGroup } from "@/lib/editor/DEPRECATED-editor-options";
+import { SettingGroup } from "@/lib/editor/editor-types";
 import GeneratingView from "./generating-view";
 import SettingGroupForm from "./setting-group-form";
 

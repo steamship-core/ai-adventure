@@ -1,29 +1,27 @@
 "use client";
-import { recoilContinuationState } from "@/components/providers/recoil";
+import { activeStreams } from "@/components/providers/recoil";
 import { TypographyLarge } from "@/components/ui/typography/TypographyLarge";
 import { TypographyP } from "@/components/ui/typography/TypographyP";
+import { useRecoilCounter } from "@/lib/recoil-utils";
 import { Block } from "@/lib/streaming-client/src";
-import { useMemo } from "react";
-import { useRecoilState } from "recoil";
+import { useEffect, useMemo } from "react";
 import { BlockContainer } from "./block-container";
 import { useBlockStream } from "./use-block-stream";
 
-const CompletionBlock = ({
-  block,
-  hideOutput,
-}: {
-  block: Block;
-  hideOutput: boolean;
-}) => {
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+const CompletionBlock = ({ block }: { block: Block }) => {
+  const { streamStart, streamEnd } = useRecoilCounter(activeStreams);
 
+  useEffect(() => {
+    if (block.id) {
+      streamStart(block.id);
+    }
+  }, [block]);
   const { completion } = useBlockStream({
     blockId: block.id,
-    onFinish: () => setContinuationState(true),
+    onFinish: () => {
+      streamEnd(block.id);
+    },
   });
-  if (hideOutput) {
-    return null;
-  }
   return (
     <BlockContainer
       className={"p-4 border border-foreground/50 rounded-md flex flex-col"}
@@ -36,13 +34,7 @@ const CompletionBlock = ({
   );
 };
 
-export const ItemGenerationBlock = ({
-  block,
-  hideOutput,
-}: {
-  block: Block;
-  hideOutput: boolean;
-}) => {
+export const ItemGenerationBlock = ({ block }: { block: Block }) => {
   const wasAlreadyComplete = useMemo(
     () => block?.streamState === "complete",
     []
@@ -59,5 +51,5 @@ export const ItemGenerationBlock = ({
       </BlockContainer>
     );
   }
-  return <CompletionBlock block={block} hideOutput={hideOutput} />;
+  return <CompletionBlock block={block} />;
 };

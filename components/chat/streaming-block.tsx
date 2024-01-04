@@ -1,23 +1,21 @@
 "use client";
-import { recoilContinuationState } from "@/components/providers/recoil";
+import { activeStreams } from "@/components/providers/recoil";
+import { useRecoilCounter } from "@/lib/recoil-utils";
 import { Block } from "@/lib/streaming-client/src";
-import { useMemo, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useEffect, useMemo, useState } from "react";
 import { TextBlock } from "./text-block";
 import { useBlockStream } from "./use-block-stream";
 
 const CompletionBlock = ({
   block,
   offerAudio,
-  hideOutput,
   isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
-  hideOutput?: boolean;
   isPrior?: boolean;
 }) => {
-  const [, setContinuationState] = useRecoilState(recoilContinuationState);
+  const { streamStart, streamEnd } = useRecoilCounter(activeStreams);
 
   const [didComplete, setDidComplete] = useState(false);
   const alreadyFinishedAndOfferAudio =
@@ -28,9 +26,15 @@ const CompletionBlock = ({
     setFinishedAndOfferAudio(offerAudio === true);
   };
 
+  useEffect(() => {
+    if (block.id) {
+      streamStart(block.id);
+    }
+  }, [block]);
+
   const onFinishedRendering = () => {
     setDidComplete(true);
-    setContinuationState(true);
+    streamEnd(block.id);
   };
 
   const { completion } = useBlockStream({ blockId: block.id, onFinish });
@@ -42,7 +46,6 @@ const CompletionBlock = ({
       text={completion}
       wasAlreadyComplete={false}
       didComplete={didComplete}
-      hideOutput={hideOutput}
       isPrior={isPrior}
       onFinishedRendering={onFinishedRendering}
     />
@@ -52,12 +55,10 @@ const CompletionBlock = ({
 export const StreamingBlock = ({
   block,
   offerAudio,
-  hideOutput,
   isPrior,
 }: {
   block: Block;
   offerAudio?: boolean;
-  hideOutput?: boolean;
   isPrior?: boolean;
 }) => {
   const wasAlreadyComplete = useMemo(
@@ -68,9 +69,6 @@ export const StreamingBlock = ({
   const alreadyFinishedAndOfferAudio =
     block?.streamState === "complete" && offerAudio === true;
 
-  if (hideOutput) {
-    return null;
-  }
   if (wasAlreadyComplete) {
     return (
       <TextBlock
@@ -79,18 +77,12 @@ export const StreamingBlock = ({
         text={block.text!}
         wasAlreadyComplete={true}
         didComplete={true}
-        hideOutput={hideOutput}
         isPrior={isPrior}
       />
     );
   }
 
   return (
-    <CompletionBlock
-      block={block}
-      offerAudio={offerAudio}
-      hideOutput={hideOutput}
-      isPrior={isPrior}
-    />
+    <CompletionBlock block={block} offerAudio={offerAudio} isPrior={isPrior} />
   );
 };
