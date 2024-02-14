@@ -184,7 +184,7 @@ If the modifications you with to make are beyond the provided settings of the of
 
 This is an open source effort -- come join our quest!
 
-We hang out in the [Steamship Discord](https://steamship.com/discord)
+* Email us!  support [at] steamship [dot] com.
 
 Related Repositories:
 

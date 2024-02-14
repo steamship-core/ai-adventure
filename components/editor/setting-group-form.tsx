@@ -430,26 +430,30 @@ export default function SettingGroupForm({
         </div>
       ) : (
         <div className="flex gap-4 flex-col">
-          {sg.settings?.map((setting) => (
-            <SettingElement
-              key={setting.name}
-              setting={setting}
-              updateFn={setKeyValue}
-              adventureId={adventureId as string}
-              valueAtLoad={existing ? existing[setting.name] : null}
-              existingDynamicThemes={existingThemes}
-              keypath={[setting.name]}
-              isUserApproved={isUserApproved}
-              isApprovalRequested={
-                setting.approvalRequestedField
-                  ? existing[setting.approvalRequestedField] === true
-                  : false
-              }
-              suggestField={onSuggestField}
-              previewField={previewField}
-              latestAgentVersion={existing.gameEngineVersionAvailable}
-            />
-          ))}
+          {sg.settings?.map((setting) => {
+            // Don't show the public setting. Hack for backwards compatibility.
+            if (setting.name === "adventure_public") return null;
+            return (
+              <SettingElement
+                key={setting.name}
+                setting={setting}
+                updateFn={setKeyValue}
+                adventureId={adventureId as string}
+                valueAtLoad={existing ? existing[setting.name] : null}
+                existingDynamicThemes={existingThemes}
+                keypath={[setting.name]}
+                isUserApproved={isUserApproved}
+                isApprovalRequested={
+                  setting.approvalRequestedField
+                    ? existing[setting.approvalRequestedField] === true
+                    : false
+                }
+                suggestField={onSuggestField}
+                previewField={previewField}
+                latestAgentVersion={existing.gameEngineVersionAvailable}
+              />
+            );
+          })}
           {submittedAt && isSuccess ? (
             <div className="text-sm text-muted-foreground flex items-center gap-2">
               <CheckIcon size={14} />
