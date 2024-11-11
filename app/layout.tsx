@@ -1,5 +1,6 @@
 import QueryProvider from "@/components/providers/react-query";
 import { OpenAIBanner } from "@/components/status-banners/open-ai";
+import { ShutdownNotice } from "@/components/status-banners/shutdown-notice";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { AmplitudeAnalytics } from "@/lib/amplitude";
@@ -85,6 +86,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <OpenAIBanner />
+              <ShutdownNotice />
               {children}
               <Analytics />
               <AmplitudeAnalytics />
